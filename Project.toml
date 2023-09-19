@@ -1,0 +1,9 @@
+name = "standreg"
+
+[deps]
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+LIBSVMdata = "e26130ba-f664-4e1e-a986-1cbf7dd5bec7"
+
+[compat]
+DrWatson = "2.12.7"
+julia = "1.9.2"
