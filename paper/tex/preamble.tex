@@ -1,0 +1,80 @@
+\PassOptionsToPackage{unicode,pdfusetitle}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+
+\documentclass[english,a4paper]{article}
+
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath,amsthm,mathtools,isomath}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp} % provide euro and other symbols
+\usepackage{babel}
+
+\usepackage{upquote} %straight quotes in verbatim environments
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage{bookmark}
+\usepackage{csquotes}
+
+\usepackage{listings}
+
+\lstset{
+  basicstyle=\ttfamily, % print whole listing small
+  %keywordstyle=\color{black}\bfseries\underbar, % underlined bold black keywords
+  %commentstyle=\color{grey}, % white comments
+  keepspaces = true % no special string spaces
+}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = Maroon,
+  filecolor  = Maroon,
+  citecolor  = Blue,
+  urlcolor   = Blue,
+  breaklinks = true
+}
+
+\usepackage{longtable,booktabs}
+
+\usepackage{etoolbox}
+
+% Allow footnotes in longtable head/foot
+\usepackage{footnotehyper}
+\makesavenoteenv{longtable}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+% % tikz
+% \usepackage{pgfplots}
+% \pgfplotsset{width=7cm,compat=1.16}
+% \usepgfplotslibrary{external}
+% \tikzexternalize 
+
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage{pdfpages}
+\usepackage{algorithm,algpseudocode}
+
+\usepackage[]{authblk}
+\renewcommand\Affilfont{\itshape\small}
+
+% Options for packages loaded elsewhere
+
+% % bibliography
+% \makeatletter
+% \def\blx@nowarnpolyglossia{}
+% \makeatother
+% \usepackage[citestyle=alphabetic,language=english]{biblatex}
+% \addbibresource{references.bib}
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
