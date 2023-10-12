@@ -1,6 +1,7 @@
-name = "standreg"
+name = "normreg"
 
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
 GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 LIBSVMdata = "e26130ba-f664-4e1e-a986-1cbf7dd5bec7"
