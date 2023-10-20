@@ -10,11 +10,6 @@ using DataFrames
 using Lasso
 using Plots
 
-using Convex
-using SCS
-using GLPK
-using COSMO
-
 include(srcdir("preprocessing.jl"))
 include(srcdir("lasso_utils.jl"))
 include(srcdir("generate_twodim_data.jl"))
@@ -91,15 +86,6 @@ for i in 1:m
     λ = lambda / n,
     intercept = true,
   )
-
-  # λlist = 0:0.5:10
-  # βpath = zeros(p + 1, length(λlist))
-  # βhat are optimization variables
-  # β = Variable(size(x, 2))
-  # β0 = Variable(1)
-  # problem = minimize(norm(y - x_std * β - β0) + lambda * norm(β, 1))
-  # solve!(problem, COSMO.Optimizer)
-  # betas[:, i] = [β0.value; β.value]
 
   betas[:, i] = [model.b0; model.coefs]
   intercept, std_beta = unstandardize_coefficients([0.0], model.coefs, centers, scales)
