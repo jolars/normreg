@@ -1,5 +1,5 @@
 using DrWatson
-@quickactivate "standreg"
+@quickactivate "normreg"
 
 include(srcdir("preprocessing.jl"))
 include(srcdir("plotting.jl"))

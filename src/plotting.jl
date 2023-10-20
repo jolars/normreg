@@ -1,3 +1,5 @@
+using Plots
+
 function plot_path(coefs, var_ind)
   n_var = size(coefs, 1)
   n_lambda = size(coefs, 2)

@@ -1,14 +1,27 @@
-"""
-    standardize_matrix(matrix::AbstractMatrix, method::String)
+using LinearAlgebra
 
-Standardizes the given matrix using the specified method.
+function find_binary_features(x)
+  p = size(x, 2)
+  binary = zeros(Bool, p)
+
+  for j in 1:p
+    binary[j] = length(unique(x[:, j])) == 2
+  end
+
+  return binary
+end
+
+"""
+    normalize(matrix::AbstractMatrix, method::String)
+
+Normalizes the given matrix using the specified method.
 
 # Arguments
-- `matrix::AbstractMatrix`: The matrix to be standardized.
+- `matrix::AbstractMatrix`: The matrix to be normalized.
 - `method::String`: The method to be used for standardization. Valid options are "mean_std" and "max_abs".
 
 # Returns
-- `standardized_matrix::Matrix`: The standardized matrix.
+- `normalize::Matrix`: The normalized matrix.
 
 # Examples
 ```julia
@@ -18,46 +31,76 @@ julia> matrix = [1 2 3; 4 5 6; 7 8 9]
  4  5  6
  7  8  9
 
-julia> standardize_matrix(matrix, "mean_std")
+julia> normalize(matrix, "mean_std")
 3×3 Matrix{Float64}:
  -1.0  -1.0  -1.0
   0.0   0.0   0.0
   1.0   1.0   1.0
 
-julia> standardize_matrix(matrix, "max_abs")
+julia> normalize(matrix, "max_abs")
 3×3 Matrix{Float64}:
- 0.142857  0.25  0.333333
- 0.571429  0.625  0.666667
- 1.0       1.0    1.0
+0.142857  0.25  0.333333
+0.571429  0.625  0.666667
+1.0       1.0    1.0
 ```
 """
-function standardize_matrix(matrix::AbstractMatrix, method::String)
+function normalize(x::AbstractMatrix, method::String = "mean_std")
+  p = size(x, 2)
+  centers = zeros(1, p)
+  scales = ones(1, p)
+
   if method == "mean_std"
-    centers = mean(matrix, dims=1)
-    scales = std(matrix, dims=1)
-    scales[findall(scales .== 0.0)] .= 1.0
-    out_matrix = (Matrix(matrix) .- centers) ./ scales
+    centers = mean(x, dims = 1)
+    scales = std(x, dims = 1)
+  elseif method == "l1"
+    centers = mean(x, dims = 1)
+    scales = Matrix([norm(x[:, j]) for j in 1:p]')
+  elseif method == "mean_var"
+    centers = mean(x, dims = 1)
+    binary = find_binary_features(x)
+
+    for j in 1:p
+      if binary[j]
+        scales[j] = var(x[:, j])
+      else
+        scales[j] = 0.5 * std(x[:, j])
+      end
+    end
+  elseif method == "continuous_mean_std"
+    # Center all features
+    centers = mean(x, dims = 1)
+
+    # Only scale continuous features
+    binary = find_binary_features(x)
+
+    for j in 1:p
+      if !binary[j]
+        scales[j] = 2 * std(x[:, j])
+      end
+    end
   elseif method == "max_abs"
-    centers = zeros(size(matrix, 2))
-    scales = maximum(abs.(matrix), dims=1)
-    scales[findall(scales .== 0.0)] .= 1.0
-    out_matrix = Matrix(matrix ./ scales)
+    scales .= maximum(abs.(x), dims = 1)
+  elseif method == "none"
+    # No scaling or centering
   else
-    error("Invalid method. Choose either 'mean_std' or 'max_abs'.")
+    error(
+      "Invalid method. Choose either 'mean_std', 'continuous_mean_std', or 'max_abs'.",
+    )
   end
 
-  return out_matrix, centers, scales
-end
+  x_normalized = (Matrix(x) .- centers) ./ scales
 
+  return x_normalized, centers, scales
+end
 
 function unstandardize_coefficients(
   beta0::AbstractVector,
   beta::AbstractMatrix,
-  centers::AbstractVector,
-  scales::AbstractVector)
-
-  beta_out = Array(beta)
-  beta0_out = Array(beta0)
+  centers::AbstractMatrix,
+  scales::AbstractMatrix,
+)
+  beta_out = deepcopy(beta)
+  beta0_out = deepcopy(beta0)
 
   for m in axes(beta, 2)
     x_bar_beta_sum = 0.0
@@ -68,6 +111,5 @@ function unstandardize_coefficients(
     beta0_out[m] -= x_bar_beta_sum
   end
 
-
-  (beta0_out, beta_out)
+  return beta0_out, beta_out
 end

@@ -1,5 +1,5 @@
 using DrWatson, Test
-@quickactivate "standreg"
+@quickactivate "normreg"
 
 # Here you include files using `srcdir`
 # include(srcdir("file.jl"))
@@ -8,7 +8,7 @@ using DrWatson, Test
 println("Starting tests")
 ti = time()
 
-@testset "standreg tests" begin
+@testset "normreg tests" begin
     @test 1 == 1
 end
 

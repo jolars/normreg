@@ -25,7 +25,7 @@
 
 When the data you want to model is high-dimensional, that is, the number of features \(p\) exceed the number of observations \(n\), it is impossible to apply classical statistical models such as standard linear regression since the design matrix \(\mat X\) is no longer of full rank. A common remedy to this problem is to \emph{regularize} the model by adding a term to the objective function that punishes models with large coefficients (\(\vec\beta\)). If we let \(h(\vec\beta; \mat X, \vec y)\) be the original objective function---which when minimized improves the model's fit to the data (\(\mat X, \vec y\))---then
 \[
-  f(\vec\beta; \mat X, \vec y) = h(\vec\beta; \mat X, \vec y) + g(\vec\beta)
+  f(\beta_0, \vec\beta; \mat X, \vec y) = h(\beta_0, \vec\beta; \mat X, \vec y) + g(\vec\beta)
 \]
 is a composite function within which we have added a penalty term \(g(\vec\beta)\). As you can see, this penalty term, in contrast to \(h\), depends only on the coefficients (in fact typically only on the absolute values thereof).
 
@@ -35,7 +35,7 @@ Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, t
 
 The problem with this type of regularizing is that the penalty term \(g\) is sensitive to the scales of the features in \(\mat X\). As a initial example of this, let us take \(h\) to be the lasso objective, where \(f\) is the ordinary least-squares objective and \(h\) the \(\ell_1\) norm and consider a one-dimensional problem, that is, the composite objective is
 \[
-  \frac{1}{2} \sum_{i=1}^n(y_i - \vec{x}^T_i \vec\beta)^2 + \lambda \lvert \vec\beta \rvert.
+  \frac{1}{2} \sum_{i=1}^n(y_i - \beta_0 - \vec{x}^T_i \vec\beta)^2 + \lambda \lvert \vec\beta \rvert.
 \]
 
 Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), with \(s_j > 0\) and an \(n \times p\) large translation matrix \(\mat T\) where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then \(\tilde{\mat X} = (\mat X - \mat T) \mat S^{-1}\) is the normalized design matrix.
@@ -47,7 +47,7 @@ Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), wi
 \begin{proposition}
   If \(\mat X^\T \mat X\) is diagonal, then
   \[
-    \hat{\beta}_j = \frac{s_j\softthreshold\big((\vec x_j - \vec{1}t_j)^\T\vec{y}; s_j\lambda\big)}{\lVert \vec x_j - \vec{1}t_j\rVert_2^2},
+    \hat{\beta}_j = \frac{s_j\softthreshold\big((\vec x_j - \vec{1}t_j)^\T\vec{y}; s_j\lambda\big)}{\lVert \vec x_j - \vec{1}t_j\rVert_2^2} \text{ for all } j \in [p],
   \]
   where \(\softthreshold(\beta; \lambda) = \sign(\beta)\max\big(\lvert \beta \rvert - \lambda, 0\big)\) is the \emph{soft thresholding operator}.
 \end{proposition}
@@ -59,9 +59,9 @@ Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), wi
   where \(g\) is the subgradient of the \(\ell_1\) norm.
   If \(\mat{X}^\T\mat{X}\) is diagonal, then this condition resolves into \(p\) piecewise conditions given by
   \[
-    0 \in \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j\beta_j - \tilde{\vec{x}}_j^\T\vec{y} + \lambda g_j.
+    0 \in \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j\beta_j - \tilde{\vec{x}}_j^\T\vec{y} + \lambda g \quad \forall\, j \in [p]\).
   \]
-  The subdifferential of the \(\ell_1\) norm is \([-1, 1]\) and it is well-known that the solution to the equation above is
+  The subdifferential of the \(\ell_1\) norm is \([-1, 1]\), that is, \(g \in [-1, 1]\), and it is well-known that the solution to the equation above is
   given by
   \[
     \frac{\softthreshold(\tilde{\vec{x}}_j^\T \vec{y}; \lambda)}{\lVert \tilde{\vec{x}}_j\rVert_2^2} =
@@ -69,13 +69,22 @@ Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), wi
   \]
 \end{proof}
 
+\section{Binary Data}
+
+Normalization attempts to place variables on a similar---optimally identical---scale. In the case when all the features come from continuous variables and particularly if they are, for instance, normally distributed, succeeding in this is reasonable to assume. But it is harder to justify in the case when the features are composed of a mix of binary and continuous data.
+
+For simplicity, let's start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence. When \(p = 0.5\), that is, classes are completely balanced, then the population standard deviation for \(\vec{x}_2\) is 0.5 and for \(x_1\) 1. After standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. We will not discuss whether this is a reasonable way to normalize these two variables; there is certainly justification for it, but it's not obvious that it is the best way for all data.
+
+A definite issue arises, however, as
+
 \section{To Do}
 
 \begin{itemize}
-  \item Use homotopy path algorithm to express upcoming critical \(\lambda\) values as a function of the scaling of the features.
+  \item Use homotopy path algorithm to express upcoming critical \(\lambda\) values as a function oDiscussing whether or not this is a reasonable transformation that indeed should place these variables on a similar scale is f the scaling of the features.
   \item Solve two-dimensional ridge regression problem with correlation to examine the effects of correlation between a binary and a continuous variable.
   \item Solve a two-dimensional lasso problem, without correlation, to observe the relative effect of standard deviation.
   \item Use Fisher–Tippett–Gnedenko theorem to say something about the effect of max-abs-scaling when used with gaussian and bernoulli variables.
+  \item Consider the relationship to adaptive lasso.
 \end{itemize}
 
 \section{Insights}
@@ -97,7 +106,6 @@ Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), wi
   \item Relationship to adaptive lasso?
   \item We standardize unconditionally, but interpret regression coefficients conditionally
 \end{itemize}
-
 
 % \printbibliography
 

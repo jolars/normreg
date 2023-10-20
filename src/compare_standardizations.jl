@@ -4,8 +4,8 @@ include("plotting.jl")
 function compare_standardizations(x, y; dist=GLM.Normal())
   x = Array(x)
 
-  x_std, x_std_center, x_std_scale = standardize_matrix(x, "mean_std")
-  x_max, x_max_center, x_max_scale = standardize_matrix(x, "max_abs")
+  x_std, x_std_center, x_std_scale = normalize(x, "mean_std")
+  x_max, x_max_center, x_max_scale = normalize(x, "max_abs")
 
   res_std = Lasso.fit(Lasso.LassoPath, x_std, y, dist, standardize=false)
   res_max = Lasso.fit(Lasso.LassoPath, x_max, y, dist, standardize=false)
