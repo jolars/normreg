@@ -43,7 +43,7 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
       if binary[j]
         scales[j] = var(x[:, j])
       else
-        scales[j] = 0.5 * std(x[:, j])
+        scales[j] = std(x[:, j])
       end
     end
   elseif method == "continuous_mean_std"
