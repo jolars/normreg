@@ -22,26 +22,6 @@ Normalizes the given matrix using the specified method.
 
 # Returns
 - `normalize::Matrix`: The normalized matrix.
-
-# Examples
-```julia
-julia> matrix = [1 2 3; 4 5 6; 7 8 9]
-3×3 Matrix{Int64}:
- 1  2  3
- 4  5  6
- 7  8  9
-
-julia> normalize(matrix, "mean_std")
-3×3 Matrix{Float64}:
- -1.0  -1.0  -1.0
-  0.0   0.0   0.0
-  1.0   1.0   1.0
-
-julia> normalize(matrix, "max_abs")
-3×3 Matrix{Float64}:
-0.142857  0.25  0.333333
-0.571429  0.625  0.666667
-1.0       1.0    1.0
 ```
 """
 function normalize(x::AbstractMatrix, method::String = "mean_std")
