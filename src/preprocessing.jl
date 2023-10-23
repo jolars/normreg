@@ -68,6 +68,8 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
     )
   end
 
+  scales[scales.==0] .= 1
+
   x_normalized = (Matrix(x) .- centers) ./ scales
 
   return x_normalized, centers, scales
