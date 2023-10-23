@@ -52,8 +52,8 @@ s = zeros(m)
 p_real = zeros(m)
 
 for i in 1:m
-  x = generate_twodim_data(n, ρ = 0, μ = 0, σ = 1, p = ps[i])
-  beta = [2, 1.0]
+  x = generate_twodim_data(n, ρ = 0, μ = 0, σ = sigma, p = ps[i])
+  beta = [1, 1.0]
 
   y = x * beta
 

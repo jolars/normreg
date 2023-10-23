@@ -2,6 +2,7 @@ using DrWatson
 @quickactivate "normreg"
 
 include(srcdir("preprocessing.jl"))
+include(srcdir("fit_lasso.jl"))
 
 using Random
 using Distributions
@@ -15,65 +16,52 @@ function expvalue_gev(n)
   return sqrt(log(n^2 / (2 * π * log(n^2 / (2 * π))))) * (1 + γ / log(n))
 end
 
-ns = Int64.(round.(range(10, 1000, length=1000)))
+n_ns = 100
 
-# ev = expvalue_gev.(ns)
-#
-# plot(ns, ev, ylims=[0, Inf])
-
+ns = Int64.(round.(range(10, 500, length = 100)))
 
 Random.seed!(1234)
 
-m = 100
-
 sigma = 0.5
-p = 0.5
+prob = 0.5
 
 d_normal = Normal(0, sigma)
-d_binary = Bernoulli(p)
+d_binary = Bernoulli(prob)
 
-betas = zeros(2, length(ns))
+betas = zeros(p, length(ns))
 
+beta = [1.0, 1.0]
 lambda = [0.2]
+
+n_iter = 100
 
 for i in eachindex(ns)
   n = ns[i]
-  x1 = rand(d_normal, n)
-  x2 = rand(d_binary, n)
+  beta_std_means = zeros(2)
 
-  x = [x1 x2]
-  beta = [1.0, 1.0]
+  for it in 1:n_iter
+    x1 = rand(d_normal, n)
+    x2 = rand(d_binary, n)
 
-  y = x * beta + rand(Normal(0, 1), n)
+    x = [x1 x2]
 
-  x, centers, scales = normalize(x, "max_abs")
-  model = Lasso.fit(Lasso.LassoPath, x, y, Normal(), standardize=false, λ=lambda)
-  betas[:, i] = model.coefs
+    y = x * beta + rand(Normal(0, 1), n)
+
+    x_std, centers, scales = normalize(x, "max_abs")
+
+    model =
+      Lasso.fit(Lasso.LassoPath, x_std, y, Normal(), standardize = false, λ = lambda)
+    beta0_hat = model.b0
+    beta_hat = model.coefs
+
+    beta0_std, beta_std =
+      unstandardize_coefficients(beta0_hat, beta_hat, centers, scales)
+
+    beta_std_means .+= beta_std / n_iter
+  end
+
+  betas[:, i] = beta_std_means
 end
 
-# fit = Lasso.fit(Lasso.LassoPath, x, y, Normal(), standardize=false, λ=lambda)
-# fit.coefs
-#
-plot(ns, betas[1, :], label="normal")
-plot!(ns, betas[2, :], label="binary")
-
-
-n = 100
-
-x1 = rand(d_normal, n)
-x2 = rand(d_binary, n)
-
-x = [x1 x2]
-beta = [1.0, 1.0]
-
-y = x * beta + rand(Normal(0, 1), n)
-y = y .- mean(y)
-
-# x, centers, scales = normalize(x, "max_abs")
-y = x * beta
-x = [x1 / 100 x2]
-
-modelnew = (x'x) \ x'y
-model = Lasso.fit(Lasso.LassoPath, x, y, Normal(), standardize=false, λ=[0.001], intercept=false)
-model.coefs
-
+plot(ns, betas[1, :], label = "normal")
+plot!(ns, betas[2, :], label = "binary")
