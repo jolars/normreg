@@ -2,7 +2,7 @@ using Random
 using Distributions
 
 """
-    generate_twodim_data(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
+    generate_binary_gaussian_features(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
 
 Generate two-dimensional data consisting of a feature with normally dsitributed
 data with mean `μ` and standard deviation `σ`, and a binary feature with Bernoulli
@@ -17,13 +17,8 @@ distributed data with parameter `p`.
 
 # Returns
 - `Array{Float64, 2}`: Generated data points. The first column represent the normally distributed data, and the second the Bernoulli distributed data.
-
-# Examples
-```julia
-x = generate_twodim_data(1000, μ=2, σ=0.5, p=0.8, ρ=0.3)
-```
 """
-function generate_twodim_data(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
+function generate_binary_gaussian_features(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
   X = Normal(0, 1)
 
   x = rand(X, n)
