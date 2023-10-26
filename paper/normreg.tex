@@ -59,7 +59,7 @@ Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), wi
   where \(g\) is the subgradient of the \(\ell_1\) norm.
   If \(\mat{X}^\T\mat{X}\) is diagonal, then this condition resolves into \(p\) piecewise conditions given by
   \[
-    0 \in \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j\beta_j - \tilde{\vec{x}}_j^\T\vec{y} + \lambda g \quad \forall\, j \in [p]\).
+    0 \in \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j\beta_j - \tilde{\vec{x}}_j^\T\vec{y} + \lambda g \quad \forall\, j \in [p].
   \]
   The subdifferential of the \(\ell_1\) norm is \([-1, 1]\), that is, \(g \in [-1, 1]\), and it is well-known that the solution to the equation above is
   given by
@@ -75,15 +75,22 @@ Normalization attempts to place variables on a similar---optimally identical---s
 
 For simplicity, let's start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence. When \(p = 0.5\), that is, classes are completely balanced, then the population standard deviation for \(\vec{x}_2\) is 0.5 and for \(x_1\) 1. After standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. We will not discuss whether this is a reasonable way to normalize these two variables; there is certainly justification for it, but it's not obvious that it is the best way for all data.
 
-A definite issue arises, however, as
-
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/dummy-plot.pdf}
+  \includegraphics[]{plots/lasso_ridge_twodim.pdf}
   \caption{%
     Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\). The ridge estimator is unaffected by \(q\), but the lasso estimator is not.
   }
-  \label{fig:}
+  \label{fig:lasso-ridge-comparison}
+\end{figure}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/realdata_paths.pdf}
+  \caption{%
+    The union of the first ten predictors selected by the lasso for each type of standardization.
+  }
+  \label{fig:realdata_paths}
 \end{figure}
 
 \section{To Do}

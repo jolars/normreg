@@ -2,7 +2,9 @@ using DrWatson
 
 @quickactivate "normreg"
 
-# DrWatson._wsave(s, fig::Figure) = fig.savefig(s, dpi = 300, transparent = false)
+include(srcdir("preprocessing.jl"))
+include(srcdir("lasso_utils.jl"))
+include(srcdir("generate_data.jl"))
 
 using Random
 using LinearAlgebra
@@ -11,10 +13,6 @@ using Statistics
 using DataFrames
 using Lasso
 using Plots
-
-include(srcdir("preprocessing.jl"))
-include(srcdir("lasso_utils.jl"))
-include(srcdir("generate_data.jl"))
 
 function binary_gaussian_simulation(
   σ = 0.5,
@@ -73,30 +71,23 @@ function binary_gaussian_simulation(
   return betas, ps
 end
 
-# betas, ps = binary_gaussian_simulation(0.5, 0, 1, "mean_std")
-
 param_dict = Dict(
   "sigma" => 0.5,
   "rho" => [0, 0.2],
-  "alpha" => [0, 1],     # single element inside vector; no expansion
-  "normalization" => "mean_std", # not in vector = not expanded, even if naturally iterable
+  "alpha" => [0, 1],
+  "normalization" => "mean_std",
 )
 
-function makesim(d::Dict)
+expanded_params = dict_list(param_dict)
+
+for (i, d) in enumerate(expanded_params)
   @unpack sigma, rho, alpha, normalization = d
 
   betas, ps = binary_gaussian_simulation(sigma, rho, alpha, normalization)
 
-  fulld = copy(d)
-  fulld["betas"] = betas
-  fulld["ps"] = ps
+  d_exp = copy(d)
+  d_exp["betas"] = betas
+  d_exp["ps"] = ps
 
-  return fulld
-end
-
-params_dict_list = dict_list(param_dict)
-
-for (i, d) in enumerate(params_dict_list)
-  f = makesim(d)
-  wsave(datadir("dummy-variables", savename(d, "jld2")), f)
+  wsave(datadir("lasso_ridge_twodim", savename(d, "jld2")), d_exp)
 end

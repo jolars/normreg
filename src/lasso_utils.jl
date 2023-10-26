@@ -1,5 +1,7 @@
 using LinearAlgebra
 
+include("preprocessing.jl")
+
 function softThreshold(x, λ)
   return sign(x) * max(abs(x) - λ, 0)
 end
@@ -15,4 +17,12 @@ function orthogonalSolution(x, y, λ, centers, scales)
   end
 
   out
+end
+
+
+function get_lambdamax(x, y, normalization = "mean_std"; intercept = true)
+  n = size(x, 1)
+  λmax = maximum(abs.(x' * (y .- mean(y) * Int(intercept)))) / n 
+
+  return λmax
 end
