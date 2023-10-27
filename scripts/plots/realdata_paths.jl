@@ -85,4 +85,3 @@ plot_output = plot(plots..., layout = (2, 3), size = (450, 350))
 file_name = "realdata_paths"
 
 savefig(plot_output, plotsdir(file_name * ".pdf"))
-savefig(plot_output, plotsdir(file_name * ".svg"))

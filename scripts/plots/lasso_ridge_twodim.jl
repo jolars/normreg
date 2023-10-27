@@ -31,4 +31,3 @@ plot_output = plot(plots..., layout = 2, ylim = (0, 0.9), size = (400, 180))
 file_name = "lasso_ridge_twodim"
 
 savefig(plot_output, plotsdir(file_name * ".pdf"))
-savefig(plot_output, plotsdir(file_name * ".svg"))

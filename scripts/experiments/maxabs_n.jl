@@ -5,11 +5,11 @@ using DrWatson
 include(srcdir("preprocessing.jl"))
 include(srcdir("lasso_utils.jl"))
 
+using DataFrames
 using Random
 using Distributions
 using Statistics
 using Lasso
-using Plots
 
 # function expvalue_gev(n)
 #   γ = 0.57721566490153286060651209008240243 # Euler-Mascheroni constant
@@ -37,7 +37,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
 
   λmax = get_lambdamax(x_std, y)
 
-  lambda = λmax * 0.5
+  lambda = λmax * 0.9
 
   for i in eachindex(ns)
     n = ns[i]
@@ -73,25 +73,22 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
   return betas, ns
 end
 
-param_dict = Dict{String,Any}(
-  "sigma" => 0.5,
-  "q" => 0.5,
-  "model" => "lasso"
-)
+param_dict = Dict{String,Any}("sigma" => 0.5, "q" => 0.5, "model" => "lasso")
 
-betas, ns = maxabs_n_simulation(0.5, 0.5)
 param_expanded = dict_list(param_dict)
 
 for (i, d) in enumerate(param_expanded)
   @unpack sigma, q, model = d
 
-  betas, ns = maxabs_n_simulation(sigma, q)
+  betas, ns = maxabs_n_simulation(sigma, q, n_iter = 700)
+
+  # Create a wide data frame
+  input = [ns betas']
+  beta_wide = DataFrame([ns betas'], ["n", "Normal", "Bernoulli"])
+  beta_long = stack(beta_wide, Not(:n))
 
   d_exp = copy(d)
-  d_exp["ns"] = ns
-  d_exp["beta1"] = betas[1, :]
-  d_exp["beta2"] = betas[2, :]
+  d_exp["data"] = beta_long
 
-  wsave(datadir("maxabs_n", savename(d, "jld2")), d_exp)
+  safesave(datadir("maxabs_n", savename(d, "jld2")), d_exp)
 end
-

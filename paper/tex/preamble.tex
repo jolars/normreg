@@ -1,6 +1,6 @@
 \PassOptionsToPackage{unicode,pdfusetitle}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 
 \documentclass[english,a4paper]{article}
 
@@ -40,6 +40,8 @@
   breaklinks = true
 }
 
+\usepackage{cleveref}
+
 \usepackage{longtable,booktabs}
 
 \usepackage{etoolbox}
@@ -50,12 +52,6 @@
 
 \usepackage{graphicx}
 \usepackage{subcaption}
-
-% % tikz
-% \usepackage{pgfplots}
-% \pgfplotsset{width=7cm,compat=1.16}
-% \usepgfplotslibrary{external}
-% \tikzexternalize 
 
 % Set default figure placement to htbp
 \makeatletter

@@ -90,7 +90,20 @@ For simplicity, let's start by assuming that we have a two-dimensional problem a
   \caption{%
     A display over the first predictors selected by the lasso for each type of normalization. Each panel shows the union of the first five predictors picked by either type of normalization.
   }
-  \label{fig:realdata_paths}
+  \label{fig:realdata-paths}
+\end{figure}
+
+\section{Maximum Absolute Value Scaling}
+
+In \cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/maxabs_n.pdf}
+  \caption{%
+    Effects of maximum absolute value scaling.
+  }
+  \label{fig:maxabs-n}
 \end{figure}
 
 \section{To Do}

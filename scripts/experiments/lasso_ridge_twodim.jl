@@ -89,5 +89,5 @@ for (i, d) in enumerate(expanded_params)
   d_exp["betas"] = betas
   d_exp["ps"] = ps
 
-  wsave(datadir("lasso_ridge_twodim", savename(d, "jld2")), d_exp)
+  safesave(datadir("lasso_ridge_twodim", savename(d, "jld2")), d_exp)
 end
