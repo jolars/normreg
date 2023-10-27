@@ -27,31 +27,55 @@ When the data you want to model is high-dimensional, that is, the number of feat
 \[
   f(\beta_0, \vec\beta; \mat X, \vec y) = h(\beta_0, \vec\beta; \mat X, \vec y) + g(\vec\beta)
 \]
-is a composite function within which we have added a penalty term \(g(\vec\beta)\). As you can see, this penalty term, in contrast to \(h\), depends only on the coefficients (in fact typically only on the absolute values thereof).
+is a composite function within which we have added a penalty term \(g(\vec\beta)\). As you can see, this penalty term, in contrast to \(h\), depends only on the coefficients (\(\vec{\beta}s\)). The intercept in this model, \(\beta_0\) is not typically penalized.
 
 Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, that is \(g(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(g(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, result in lasso and ridge (Tikhonov) regression respectively. Other common penalities include SLOPE, MCP, hinge loss (used in support vector machines) and SCAD. Many of these penalities---in fact all of the previously mentioned ones---penalize coefficients through shrinkage.
 
 % TODO: Maybe say something about ℓ₀ (best subset) regularization
 
-The problem with this type of shrinkage is that the penalty term \(g\) is typically sensitive to the scales of the features in \(\mat X\) and, as we will show in this paper, the interplay between the particular choice of penalties and scaling.
+The problem with this type of shrinkage is that the penalty term \(g\) is typically sensitive to the scales and locations of the features in \(\mat X\).
+It is therefore common practice to \emph{normalize} the features before fitting the model by translating and dividing each column by a translation and scaling factor, respectively.
+For some problems, such factors may arise naturally from knowledge of the problem at hand.
+But often they must be estimated from the data.
+The most popular choices for this type of scaling are based only on the marginal distributions of the features.
+Some types of normalization, such as that applied in the adaptive lasso\footnote{The adaptive lasso typically uses ordinary least square estimates of the regression coefficients to scale the features with.}, however, are based on the conditional distributions of the features and the response.
+After fitting the model, the estimated coefficients are then usually returned to their original scale.
+
+Another reason for normalizing the features is to improve the performance and stability of optimization algorithms used to fit the model.
+We will not cover this aspect in this paper, but note that it is an important one.
 
 \section{Theory}
 
 \subsection{Terminology}
 
-We begin with a section on terminology in order to avoid confusion regarding the varied use of key terms in the literature. First, we define \emph{normalization} as the process of translating and scaling the feature matrix.
+We begin with a section on terminology in order to avoid confusion regarding the varied use of key terms in the field. The terms \emph{scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably in the literature.
 
+Here, we define \emph{normalization} as the process of translating and scaling the feature matrix.
 More formally, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), with \(s_j > 0\) and an \(n \times p\) large translation matrix \(\mat T\) where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then \(\tilde{\mat X} = (\mat X - \mat T) \mat S^{-1}\) is the normalized design matrix.
 
-Some authors use \emph{standardization} to refer to this procedure, but in this paper we will use standardization only for the case in \Cref{ex:standardization}.
+Some authors use \emph{standardization} or \emph{scaling} to refer to this procedure, but in this paper we will define scaling only as defined above and standardization as the particular case in \Cref{tab:normalization-types}.
 
-\begin{example}
-  \label{ex:standardization}
-  If \(s_j\) and \(t_j\) are the standard deviation and sample mean of the \(j\)th column of \(\mat X\) respectively, then \(\tilde{\mat X}\) is the standardized design matrix.
-\end{example}
-
-% TODO: Perhaps we can just ignore translation altogether and only consider scaling, since translation doesn't actually affect the solution?
-Another popular term for the translation part of normalization is \emph{centering}.
+\begin{table}[hbt]
+  \centering
+  \caption{Common ways to normalize a matrix of features.}
+  \label{tab:normalization-types}
+  \begin{tabular}{lll}
+    \toprule
+    Normalization    & Translation (\(t_j\))              & Scaling (\(s_j\))                                         \\
+    \midrule
+    Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    \addlinespace
+    Min--Max         & \(\min_i(x_{ij})\)                 & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    \addlinespace
+    Unit Vector (L2) & 0                                  & \(\sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
+    \addlinespace
+    Max Abs          & 0                                  & \(\max_i(|x_{ij}|)\)                                      \\
+    \addlinespace
+    Adaptive Lasso   & 0                                  & \(\beta_j^\text{OLS}\)                                    \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:normalization}
+\end{table}
 
 \subsection{The Lasso}
 
@@ -149,7 +173,6 @@ In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally
   \item Should dummy variables be standardized?
   \item In which situations is standardization of type x useful? What about type y?
   \item Is this only a problem for simpler models? I.e., does it matter for neural networks, for instance? Probably not.
-  \item What about optimization?
   \item Adaptive lasso can be seen as a type of pre-processing. How does it compare? Does it fix the problems here?
   \item We standardize unconditionally, but interpret regression coefficients conditionally
   \item Can we quantify how strong a given feature's RMSE needs to be for it to be selected?
