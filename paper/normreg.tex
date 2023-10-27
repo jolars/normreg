@@ -52,7 +52,7 @@ Some authors use \emph{standardization} to refer to this procedure, but in this 
 
 Another popular term for the translation part of normalization is \emph{centering}.
 
-\section{The Lasso}
+\subsection{The Lasso}
 
 As a initial example of this, let us take \(h\) to be the lasso objective, where \(f\) is the ordinary least-squares objective and \(h\) the \(\ell_1\) norm and consider a one-dimensional problem, that is, the composite objective is
 \[
@@ -84,7 +84,7 @@ As a initial example of this, let us take \(h\) to be the lasso objective, where
   \]
 \end{proof}
 
-\section{Binary Data}
+\subsection{Binary Data}
 
 Normalization attempts to place variables on a similar---optimally identical---scale. In the case when all the features come from continuous variables and particularly if they are, for instance, normally distributed, succeeding in this is reasonable to assume. But it is harder to justify in the case when the features are composed of a mix of binary and continuous data.
 
@@ -108,7 +108,7 @@ For simplicity, let's start by assuming that we have a two-dimensional problem a
   \label{fig:realdata-paths}
 \end{figure}
 
-\section{Maximum Absolute Value Scaling}
+\subsection{Maximum Absolute Value Scaling}
 
 In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
 
@@ -129,6 +129,7 @@ In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally
   \item Solve a two-dimensional lasso problem, without correlation, to observe the relative effect of standard deviation.
   \item Use Fisher–Tippett–Gnedenko theorem to say something about the effect of max-abs-scaling when used with gaussian and bernoulli variables.
   \item Consider the relationship to adaptive lasso.
+  \item Consider other penalties to generalize and appeal to a broader audience: MCP, SCAD, hinge loss.
 \end{itemize}
 
 \section{Insights}
