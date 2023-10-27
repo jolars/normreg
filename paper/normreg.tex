@@ -29,20 +29,35 @@ When the data you want to model is high-dimensional, that is, the number of feat
 \]
 is a composite function within which we have added a penalty term \(g(\vec\beta)\). As you can see, this penalty term, in contrast to \(h\), depends only on the coefficients (in fact typically only on the absolute values thereof).
 
-Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, that is \(g(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(g(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, result in lasso and ridge (Tikhonov) regression respectively. Other common penalities include SLOPE, MCP, and SCAD. Many of these penalities---in fact all of the previously mentioned ones---penalize coefficients through shrinkage.
+Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, that is \(g(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(g(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, result in lasso and ridge (Tikhonov) regression respectively. Other common penalities include SLOPE, MCP, hinge loss (used in support vector machines) and SCAD. Many of these penalities---in fact all of the previously mentioned ones---penalize coefficients through shrinkage.
 
-% TODO: Maybe say something about ℓ₀ (best subset) regularization?
+% TODO: Maybe say something about ℓ₀ (best subset) regularization
 
-The problem with this type of regularizing is that the penalty term \(g\) is sensitive to the scales of the features in \(\mat X\). As a initial example of this, let us take \(h\) to be the lasso objective, where \(f\) is the ordinary least-squares objective and \(h\) the \(\ell_1\) norm and consider a one-dimensional problem, that is, the composite objective is
+The problem with this type of shrinkage is that the penalty term \(g\) is typically sensitive to the scales of the features in \(\mat X\) and, as we will show in this paper, the interplay between the particular choice of penalties and scaling.
+
+\section{Theory}
+
+\subsection{Terminology}
+
+We begin with a section on terminology in order to avoid confusion regarding the varied use of key terms in the literature. First, we define \emph{normalization} as the process of translating and scaling the feature matrix.
+
+More formally, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), with \(s_j > 0\) and an \(n \times p\) large translation matrix \(\mat T\) where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then \(\tilde{\mat X} = (\mat X - \mat T) \mat S^{-1}\) is the normalized design matrix.
+
+Some authors use \emph{standardization} to refer to this procedure, but in this paper we will use standardization only for the case in \Cref{ex:standardization}.
+
+\begin{example}
+  \label{ex:standardization}
+  If \(s_j\) and \(t_j\) are the standard deviation and sample mean of the \(j\)th column of \(\mat X\) respectively, then \(\tilde{\mat X}\) is the standardized design matrix.
+\end{example}
+
+Another popular term for the translation part of normalization is \emph{centering}.
+
+\section{The Lasso}
+
+As a initial example of this, let us take \(h\) to be the lasso objective, where \(f\) is the ordinary least-squares objective and \(h\) the \(\ell_1\) norm and consider a one-dimensional problem, that is, the composite objective is
 \[
   \frac{1}{2} \sum_{i=1}^n(y_i - \beta_0 - \vec{x}^T_i \vec\beta)^2 + \lambda \lvert \vec\beta \rvert.
 \]
-
-Next, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), with \(s_j > 0\) and an \(n \times p\) large translation matrix \(\mat T\) where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then \(\tilde{\mat X} = (\mat X - \mat T) \mat S^{-1}\) is the normalized design matrix.
-
-\begin{example}
-  If \(s_j\) and \(t_j\) are the standard deviation and sample mean of the \(j\)th column of \(\mat X\) respectively, then \(\tilde{\mat X}\) is the standardized design matrix.
-\end{example}
 
 \begin{proposition}
   If \(\mat X^\T \mat X\) is diagonal, then
@@ -95,7 +110,7 @@ For simplicity, let's start by assuming that we have a two-dimensional problem a
 
 \section{Maximum Absolute Value Scaling}
 
-In \cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
+In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
 
 \begin{figure}[htpb]
   \centering
