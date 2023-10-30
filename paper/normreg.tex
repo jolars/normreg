@@ -11,10 +11,7 @@
 \date{\today}
 
 % % bibliography
-% \makeatletter
-% \def\blx@nowarnpolyglossia{}
-% \makeatother
-% \usepackage[citestyle=alphabetic,language=english]{biblatex}
+% \usepackage[citestyle=alphabetic]{biblatex}
 % \addbibresource{normreg.bib}
 
 \begin{document}
@@ -27,16 +24,21 @@ When the data you want to model is high-dimensional, that is, the number of feat
 \[
   f(\beta_0, \vec\beta; \mat X, \vec y) = h(\beta_0, \vec\beta; \mat X, \vec y) + g(\vec\beta)
 \]
-is a composite function within which we have added a penalty term \(g(\vec\beta)\). As you can see, this penalty term, in contrast to \(h\), depends only on the coefficients (\(\vec{\beta}s\)). The intercept in this model, \(\beta_0\) is not typically penalized.
+is a composite function within which we have added a penalty term \(g(\vec\beta)\).
+In contrast to \(h\), this penalty depends only on the coefficients (\(\vec{\beta}s\)).
+The intercept, \(\beta_0\), is not typically penalized.
 
-Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, that is \(g(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(g(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, result in lasso and ridge (Tikhonov) regression respectively. Other common penalities include SLOPE, MCP, hinge loss (used in support vector machines) and SCAD. Many of these penalities---in fact all of the previously mentioned ones---penalize coefficients through shrinkage.
+Some of the most common penalties are the \(\ell_1\) and \(\ell_2\) penalties, that is \(g(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(g(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, represent lasso and ridge (Tikhonov) regression respectively.
+Other common penalities include SLOPE, MCP, hinge loss (used in support vector machines) and SCAD.
+Many of these penalities---indeed all of the previously mentioned ones---shrink coefficients in proportion to their sizes.
 
 % TODO: Maybe say something about ℓ₀ (best subset) regularization
 
-The problem with this type of shrinkage is that the penalty term \(g\) is typically sensitive to the scales and locations of the features in \(\mat X\).
-It is therefore common practice to \emph{normalize} the features before fitting the model by translating and dividing each column by a translation and scaling factor, respectively.
+The issue with this type of shrinkage is that it is typically sensitive to the scales and locations of the features in \(\mat X\).
+A common remedy is to \emph{normalize} the features before fitting the model by translating and dividing each column by respective translation and scaling factors.
 For some problems, such factors may arise naturally from knowledge of the problem at hand.
-But often they must be estimated from the data.
+A researcher may for instance have collected data on coordinates within a limited area and know that the coordinates are measured in meters.
+Often, however, these scaling and location factors must be estimated from data.
 The most popular choices for this type of scaling are based only on the marginal distributions of the features.
 Some types of normalization, such as that applied in the adaptive lasso\footnote{The adaptive lasso typically uses ordinary least square estimates of the regression coefficients to scale the features with.}, however, are based on the conditional distributions of the features and the response.
 After fitting the model, the estimated coefficients are then usually returned to their original scale.
