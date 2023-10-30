@@ -1,69 +1,49 @@
 \PassOptionsToPackage{unicode,pdfusetitle}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+\PassOptionsToPackage{dvipsnames}{xcolor}
 
 \documentclass[english,a4paper]{article}
 
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath,amsthm,mathtools,isomath}
-
+% Font settings
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{textcomp} % provide euro and other symbols
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath,amsthm,mathtools,isomath}
+\usepackage{textcomp}
 \usepackage{babel}
-
-\usepackage{upquote} %straight quotes in verbatim environments
-\usepackage[]{microtype}
+\usepackage{upquote}
+\usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 
+% Colors
 \usepackage{xcolor}
+
+% Hyperlinks, urls, etc
 \usepackage{xurl}
-\usepackage{bookmark}
-\usepackage{csquotes}
-
-\usepackage{listings}
-
-\lstset{
-  basicstyle=\ttfamily, % print whole listing small
-  %keywordstyle=\color{black}\bfseries\underbar, % underlined bold black keywords
-  %commentstyle=\color{grey}, % white comments
-  keepspaces = true % no special string spaces
-}
 
 \usepackage{hyperref}
 \hypersetup{
   colorlinks = true,
-  linkcolor  = Maroon,
-  filecolor  = Maroon,
-  citecolor  = Blue,
-  urlcolor   = Blue,
-  breaklinks = true
+  breaklinks = true,
+  linkcolor  = black,
+  filecolor  = MidnightBlue,
+  citecolor  = MidnightBlue,
+  urlcolor   = MidnightBlue
 }
 
 \usepackage{cleveref}
 
-\usepackage{longtable,booktabs}
-
-\usepackage{etoolbox}
-
-% Allow footnotes in longtable head/foot
-\usepackage{footnotehyper}
-\makesavenoteenv{longtable}
-
+% Floats
 \usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
 \usepackage{subcaption}
 
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-
-\usepackage{pdfpages}
+% Algorithms
 \usepackage{algorithm,algpseudocode}
 
+% Title Page
 \usepackage[]{authblk}
 \renewcommand\Affilfont{\itshape\small}
-
-% Options for packages loaded elsewhere
 
 \setlength{\emergencystretch}{3em} % prevent overfull lines
