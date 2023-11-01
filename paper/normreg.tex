@@ -52,10 +52,14 @@ We will not cover this aspect in this paper, but note that it is an important on
 
 We begin with a section on terminology in order to avoid confusion regarding the varied use of key terms in the field. The terms \emph{scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably in the literature.
 
-Here, we define \emph{normalization} as the process of translating and scaling the feature matrix.
-More formally, we introduce a scaling matrix \(\mat S = \diag(s_1, s_2, \dots, s_p)\), with \(s_j > 0\) and an \(n \times p\) large translation matrix \(\mat T\) where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then \(\tilde{\mat X} = (\mat X - \mat T) \mat S^{-1}\) is the normalized design matrix.
+Here, we define \emph{normalization} as the process of translating and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
 
-Some authors use \emph{standardization} or \emph{scaling} to refer to this procedure, but in this paper we will define scaling only as defined above and standardization as the particular case in \Cref{tab:normalization-types}.
+\begin{definition}[Normalization]
+  \label{def:normalization}
+  Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat T\) be the \emph{translation matrix}, which is an \(n \times p\) matrix with entries where \(t_{ij} = t_{kj}\) for all \(i,k \in [n]\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat T)\mat S\).
+\end{definition}
+
+Some authors define this procedure as \emph{standardization} or \emph{scaling}, but here we will define scaling only as defined above and standardization as the particular case in \Cref{tab:normalization-types}.
 
 \begin{table}[hbt]
   \centering
@@ -63,17 +67,17 @@ Some authors use \emph{standardization} or \emph{scaling} to refer to this proce
   \label{tab:normalization-types}
   \begin{tabular}{lll}
     \toprule
-    Normalization    & Translation (\(t_j\))              & Scaling (\(s_j\))                                         \\
+    Normalization    & Translation (\(t_{kj}\))           & Scaling (\(s_j\))                                             \\
     \midrule
-    Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(1 / \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
     \addlinespace
-    Min--Max         & \(\min_i(x_{ij})\)                 & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    Min--Max         & \(\min_i(x_{ij})\)                 & \(1 / \max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
     \addlinespace
-    Unit Vector (L2) & 0                                  & \(\sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
+    Unit Vector (L2) & 0                                  & \(1 / \sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
     \addlinespace
-    Max Abs          & 0                                  & \(\max_i(|x_{ij}|)\)                                      \\
+    Max Abs          & 0                                  & \(1 / \max_i(|x_{ij}|)\)                                      \\
     \addlinespace
-    Adaptive Lasso   & 0                                  & \(\beta_j^\text{OLS}\)                                    \\
+    Adaptive Lasso   & 0                                  & \(1 / \beta_j^\text{OLS}\)                                    \\
     \bottomrule
   \end{tabular}
 \end{table}
