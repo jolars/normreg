@@ -154,42 +154,6 @@ In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally
   \label{fig:maxabs-n}
 \end{figure}
 
-\section{To Do}
-
-\begin{itemize}
-  \item Use homotopy path algorithm to express upcoming critical \(\lambda\) values as a function oDiscussing whether or not this is a reasonable transformation that indeed should place these variables on a similar scale is f the scaling of the features.
-  \item Solve two-dimensional ridge regression problem with correlation to examine the effects of correlation between a binary and a continuous variable.
-  \item Solve a two-dimensional lasso problem, without correlation, to observe the relative effect of standard deviation.
-  \item Use Fisher–Tippett–Gnedenko theorem to say something about the effect of max-abs-scaling when used with gaussian and bernoulli variables.
-  \item Consider the relationship to adaptive lasso.
-  \item Consider other penalties to generalize and appeal to a broader audience: MCP, SCAD, hinge loss.
-\end{itemize}
-
-\section{Insights}
-
-\begin{itemize}
-  \item Rare traits (especially in binary data), will ``never'' be selected
-  \item Outliers can cause variables to not be selected.
-  \item Scaling with maximum absolute value means that for a Gaussian variable, the importance of a variable decrease with the number of samples (since the change of encountering a high value increases).
-\end{itemize}
-
-\section{Open Questions}
-
-\begin{itemize}
-  \item What effect does standardization have when it is used in the presence of dummy variables?
-  \item Should dummy variables be standardized?
-  \item In which situations is standardization of type x useful? What about type y?
-  \item Is this only a problem for simpler models? I.e., does it matter for neural networks, for instance? Probably not.
-  \item Adaptive lasso can be seen as a type of pre-processing. How does it compare? Does it fix the problems here?
-  \item We standardize unconditionally, but interpret regression coefficients conditionally
-  \item Can we quantify how strong a given feature's RMSE needs to be for it to be selected?
-  \item How is prediction performance affected by this?
-  \item How is false discovery rate affected by this?
-  \item How is cross-validation affected by this?
-  \item Can we mitigate the effect through stratification of the features?
-  \item Can we mitigate the effect through some type of normalization?
-\end{itemize}
-
 \printbibliography
 
 \end{document}
