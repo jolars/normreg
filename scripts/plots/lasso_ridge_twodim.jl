@@ -9,7 +9,8 @@ include(srcdir("plot_settings.jl"))
 default(titlefontsize = 12)
 
 df = collect_results(datadir("lasso_ridge_twodim"))
-df_subset = subset(df, :rho => r -> r .== 0.0)
+df_subset =
+  subset(df, :rho => r -> r .== 0.0, :normalization => norm -> norm .== "mean_std")
 
 plots = []
 for d in groupby(df_subset, :alpha)
