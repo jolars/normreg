@@ -6,6 +6,7 @@
 - Use Fisher–Tippett–Gnedenko theorem to say something about the effect of max-abs-scaling when used with gaussian and bernoulli variables.
 - Consider the relationship to adaptive lasso.
 - Consider other penalties to generalize and appeal to a broader audience: MCP, SCAD, hinge loss.
+- Consider developing a package (in python/R maybe?) that features symbolic design matrices, such that it automatically does just-in-time normalization for sparse and permanent-storage (hard drive) design matrices. So that you can say write a gradient descent method without caring about doing the JIT normalization yourself.
 
 ## Insights
 
