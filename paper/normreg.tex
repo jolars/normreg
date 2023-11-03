@@ -71,7 +71,7 @@ Some authors define this procedure as \emph{standardization} or \emph{scaling}, 
     \midrule
     Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(1 / \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
     \addlinespace
-    Min--Max         & \(\min_i(x_{ij})\)                 & \(1 / \max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    Min--Max         & \(\min_i(x_{ij})\)                 & \(1 / \left(\max_i(x_{ij}) - \min_i(x_{ij})\right)\)          \\
     \addlinespace
     Unit Vector (L2) & 0                                  & \(1 / \sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
     \addlinespace
@@ -82,38 +82,43 @@ Some authors define this procedure as \emph{standardization} or \emph{scaling}, 
   \end{tabular}
 \end{table}
 
-\subsection{The Lasso}
+\subsection{The Elastic Net}
 
-As a initial example of this, let us take \(h\) to be the lasso objective, where \(f\) is the ordinary least-squares objective and \(h\) the \(\ell_1\) norm and consider a one-dimensional problem, that is, the composite objective is
+For the remainder of this section, we will focus on the elastic net objective, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
+\begin{equation}
+  \label{eq:elastic-net}
+  \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2.
+\end{equation}
+When \(\alpha = 1\), the elastic net is equivalent to the lasso, and when \(\alpha = 0\), it is equivalent to ridge regression.
+
+We also assume that our data is coming from a linear model, that is,
 \[
-  \frac{1}{2} \sum_{i=1}^n(y_i - \beta_0 - \vec{x}^T_i \vec\beta)^2 + \lambda \lvert \vec\beta \rvert.
+  \vec y = \mat X\vec\beta + \vec\epsilon,
 \]
+where \(\vec\epsilon \sim \normal(\vec 0, \sigma^2\mat I)\).
 
-% TODO: Convert this into a theorem about elastic net instead.
-\begin{proposition}
-  If \(\mat X^\T \mat X\) is diagonal, then
-  \[
-    \hat{\beta}_j = \frac{s_j\softthreshold\big((\vec x_j - \vec{1}t_j)^\T\vec{y}; s_j\lambda\big)}{\lVert \vec x_j - \vec{1}t_j\rVert_2^2} \text{ for all } j \in [p],
-  \]
-  where \(\softthreshold(\beta; \lambda) = \sign(\beta)\max\big(\lvert \beta \rvert - \lambda, 0\big)\) is the \emph{soft thresholding operator}.
-\end{proposition}
-\begin{proof}
-  The KKT stationarity condition for the normalized lasso problem is
-  \[
-    \vec{0} \in \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} - \vec{y}) + \lambda g,
-  \]
-  where \(g\) is the subgradient of the \(\ell_1\) norm.
-  If \(\mat{X}^\T\mat{X}\) is diagonal, then this condition resolves into \(p\) piecewise conditions given by
-  \[
-    0 \in \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j\beta_j - \tilde{\vec{x}}_j^\T\vec{y} + \lambda g \quad \forall\, j \in [p].
-  \]
-  The subdifferential of the \(\ell_1\) norm is \([-1, 1]\), that is, \(g \in [-1, 1]\), and it is well-known that the solution to the equation above is
-  given by
-  \[
-    \frac{\softthreshold(\tilde{\vec{x}}_j^\T \vec{y}; \lambda)}{\lVert \tilde{\vec{x}}_j\rVert_2^2} =
-    \frac{s_j\softthreshold\big((\vec{x}_j - \vec{1}t_j)^\T\vec{y}; s_j\lambda\big)}{\lVert \vec{x}_j - \vec{1}t_j\rVert_2^2}.
-  \]
-\end{proof}
+Expanding \eqref{eq:elastic-net}, we have
+\[
+  \begin{aligned}
+    \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2 \\
+  \end{aligned}
+\]
+Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT stationarity condition yields the following system of equations.
+\[
+  \begin{cases}
+    \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0 - \vec{y}) + \alpha\lambda g + (1 - \alpha)\lambda \vec\beta \ni \vec{0}, \\
+    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} - \vec{y}^\T \vec{1} = 0.
+  \end{cases}
+\]
+Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) such that
+\[
+  g_i \in
+  \begin{cases}
+    \{\sign{\beta_i}\} & \text{if } \beta_i \neq 0, \\
+    [-1, 1]            & \text{otherwise}.
+  \end{cases}
+\]
+There is no closed-form solution to this system of equations unless \(\alpha = 0\) (ridge regression) or \(\tilde{\mat{X}}^\T\tilde{\mat{X}}\) is diagonal. The latter is only the case for artificially constructed problems.
 
 \subsection{Binary Data}
 
