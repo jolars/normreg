@@ -48,22 +48,28 @@ We will not cover this aspect in this paper, but note that it is an important on
 
 \section{Theory}
 
-\subsection{Terminology}
+\subsection{Setup, Notation and Terminology}
 
-We begin with a section on terminology in order to avoid confusion regarding the varied use of key terms in the field. The terms \emph{scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably in the literature.
+Throughout this paper, we assume that the data is generated from a linear model, that is,
+\[
+  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i,
+\]
+where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\) is the \(n \times p\) design matrix with columns \(\vec x_j\) and \(\vec y\) the \(n \times 1\) response vector.
 
-Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
+Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
+
+There is confusion regarding many of the key terms in the field of normalization. \emph{scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably in the literature. Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
 
 \begin{definition}[Normalization]
   \label{def:normalization}
   Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with entries where \(c_{ij} = c_{kj}\) for all \(i,k \in [n]\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
 \end{definition}
 
-Some authors define this procedure as \emph{standardization} or \emph{scaling}, but here we will define scaling only as defined above and standardization as the particular case in \Cref{tab:normalization-types}.
+Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the particular case in the first row of \Cref{tab:normalization-types}.
 
 \begin{table}[hbt]
   \centering
-  \caption{Common ways to normalize a matrix of features.}
+  \caption{Common ways to normalize a matrix of features}
   \label{tab:normalization-types}
   \begin{tabular}{lll}
     \toprule
@@ -82,7 +88,11 @@ Some authors define this procedure as \emph{standardization} or \emph{scaling}, 
   \end{tabular}
 \end{table}
 
-We will also define \(\tilde{\vec{y}}\) as the standardized response vector, defined analogously. To avoid confusion, we let \(c^{(y)}\) and \(s^{(y)}\) be the centering and scaling factors for the response, respectively.
+Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain these, we transform the standardized coefficients, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
+\[
+  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
+\]
+There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
 
 \subsection{The Elastic Net}
 
@@ -92,12 +102,6 @@ For the remainder of this section, we will focus on the elastic net objective, w
   \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2.
 \end{equation}
 When \(\alpha = 1\), the elastic net is equivalent to the lasso, and when \(\alpha = 0\), it is equivalent to ridge regression.
-
-We also assume that our data is coming from a linear model, that is,
-\[
-  \vec y = \mat X\vec\beta + \vec\epsilon,
-\]
-where \(\vec\epsilon \sim \normal(\vec 0, \sigma^2\mat I)\).
 
 Expanding \eqref{eq:elastic-net}, we have
 \[
@@ -126,15 +130,26 @@ There is no closed-form solution to this system of equations unless \(\alpha = 0
 
 We begin by considering the simplest possible problem, which is a one-dimensional elastic net problem. That is, we have a single feature \(\vec{x}\) and response \(\vec{y}\). The elastic net objective in this case is
 \[
-  \frac 1 2 \lVert \vec{y} - \beta_0 - \vec{x} \beta \rVert_2^2 + \frac{(1 - \alpha)\lambda}{2}\beta^2 + \alpha\lambda \lVert \beta \rVert .
+  \frac 1 2 \lVert \vec{y} - \beta_0 - \vec{x} \beta \rVert_2^2 + \frac{(1 - \alpha)\lambda}{2}\beta^2 + \alpha\lambda | \beta |.
 \]
-The stationarity condition for this problem is
+The stationarity condition for this problem is the following system of equations
 \[
   \begin{cases}
-
+    -\vec{y}^\T \tilde{\vec{x}} + \tilde{\vec{x}}^\T \tilde{\vec{x}} \hat\beta + \tilde{\vec{x}}^\T \ones \hat\beta_0 + (1 - \alpha) \lambda \hat \beta + \alpha \lambda g \ni 0, \\
+    n \hat\beta_0 + \tilde{\vec{x}}^\T \ones\hat\beta -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
-
+The solution to this system is well-known~\parencite{donoho1994}:
+\[
+  \begin{aligned}
+    \hat\beta   & = \frac{\softthreshold{\left(\tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{\tilde{\vec{x}}^\T \tilde{\vec{x}} - \frac{1}{n}(\tilde{\vec{x}}^\T \ones)^2 + (1 - \alpha) \lambda}, \\
+    \hat\beta_0 & = \frac{\vec{y}^\T \ones - \tilde{\vec{x}}^\T \ones\hat\beta}{n},
+  \end{aligned}
+\]
+where \(\softthreshold\) is the soft-thresholding operator, defined as
+\[
+  \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
+\]
 
 \subsection{Binary Data}
 
