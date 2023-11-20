@@ -142,7 +142,7 @@ The stationarity condition for this problem is the following system of equations
 The solution to this system is well-known~\parencite{donoho1994}:
 \[
   \begin{aligned}
-    \hat\beta   & = \frac{\softthreshold{\left(\tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{\tilde{\vec{x}}^\T \tilde{\vec{x}} - \frac{1}{n}(\tilde{\vec{x}}^\T \ones)^2 + (1 - \alpha) \lambda}, \\
+    \hat\beta   & = \frac{\softthreshold{\left(\tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{s\left(\tilde{\vec{x}}^\T \tilde{\vec{x}} - \frac{1}{n}(\tilde{\vec{x}}^\T \ones)^2 + (1 - \alpha) \lambda\right)}, \\
     \hat\beta_0 & = \frac{\vec{y}^\T \ones - \tilde{\vec{x}}^\T \ones\hat\beta}{n},
   \end{aligned}
 \]
@@ -151,11 +151,22 @@ where \(\softthreshold\) is the soft-thresholding operator, defined as
   \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
 \]
 
-\subsection{Binary Data}
+In the sequel, we assume that \(c = \sum_{i=1}^n x_i / n\), which means that the locations of the features have no impact on the coefficients in the normalized space.
 
-The validity of normalization implicitly assumes that we can put the features in our design on an identical, or at least similar, scale. For data coming from continuous variables, this assumption is often tenable. But it is harder to justify when faced with a mix of continuous and binary data.
+Now, we start with the simplest case, where all entries in \(\mat{X} = \vec{x}\) are independently sampled from a normally distributed random variable \(X\sim \operatorname{Normal}(\mu,\sigma)\). Furthermore, we let \(\mu = 0\) and assume that we are using standardization, that is, mean and standad deviation normalization. In this case, we have
+\[
+  \E \hat\beta = \frac{\softthreshold{\left( \frac{n \beta}{\sigma} ; \alpha\lambda\right)}}{\sigma^2 \left( n + (1-\alpha)\lambda\right)}
+\]
 
-First, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will assume that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. We argue that this is a reasonable way to match these variables---one which has support elsewhere~\parencite{gelman2008}.
+Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
+
+We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
+\[
+  \E \hat\beta = \frac{\softthreshold{\left( n\beta\sqrt{q(1-q)} ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
+\]
+This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just be a scaled version of the ordinary least squares coefficient.
+
+\subsection{Two-Dimensional Problem}
 
 Let us start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence between either the features or the observations. When \(q = 0.5\), the classes are completely balanced, and the population standard deviations become 0.5 and 1 for \(\vec{x}_2\) and \(\vec{x}_1\) respectively. And if we choose to normalize with mean and standard deviation, then, after standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. If the true model is \(y = \mat{X}\vec{\beta}\) and \(\beta = [1,1]^\T\), then shrinkage will be applied equally across the coefficients of the two features.
 
