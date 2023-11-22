@@ -128,7 +128,7 @@ There is no closed-form solution to this system of equations unless \(\alpha = 0
 
 \subsection{One-Dimensional Problem}
 
-We begin by considering the simplest possible problem, which is a one-dimensional elastic net problem. That is, we have a single feature \(\vec{x}\) and response \(\vec{y}\). The elastic net objective in this case is
+We begin by considering a one-dimensional elastic net problem. That is, we have a single feature \(\vec{x}\) and response \(\vec{y}\). The elastic net objective in this case is
 \[
   \frac 1 2 \lVert \vec{y} - \beta_0 - \vec{x} \beta \rVert_2^2 + \frac{(1 - \alpha)\lambda}{2}\beta^2 + \alpha\lambda | \beta |.
 \]
@@ -167,6 +167,8 @@ We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli
 This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just be a scaled version of the ordinary least squares coefficient.
 
 \subsection{Two-Dimensional Problem}
+
+The previous section served only to introduce some of the main results. Here, we check if they persist when we mix continuous and binary features.
 
 Let us start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence between either the features or the observations. When \(q = 0.5\), the classes are completely balanced, and the population standard deviations become 0.5 and 1 for \(\vec{x}_2\) and \(\vec{x}_1\) respectively. And if we choose to normalize with mean and standard deviation, then, after standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. If the true model is \(y = \mat{X}\vec{\beta}\) and \(\beta = [1,1]^\T\), then shrinkage will be applied equally across the coefficients of the two features.
 
