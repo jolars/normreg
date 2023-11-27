@@ -151,14 +151,16 @@ where \(\softthreshold\) is the soft-thresholding operator, defined as
   \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
 \]
 
-In the sequel, we assume that \(c = \sum_{i=1}^n x_i / n\), which means that the locations of the features have no impact on the coefficients in the normalized space.
+In the sequel, we assume that our feature is centered, that is, \(c = \sum_{i=1}^n x_i / n\). This means that the locations of the features have no impact on the coefficients in the normalized space. In addition, we let our feature be sampled from a random variable \(X\), and let \(\tilde X\) be the normalized version of this random variable.
 
-Now, we start with the simplest case, where all entries in \(\mat{X} = \vec{x}\) are independently sampled from a normally distributed random variable \(X\sim \operatorname{Normal}(\mu,\sigma)\). Furthermore, we let \(\mu = 0\) and assume that we are using standardization, that is, mean and standad deviation normalization. In this case, we have
+Now, under the assumption that \(y_i = \sum_i x_{ij} \beta_j + \varepsilon_i\) with \(\E \varepsilon_i = 0\), we have
 \[
-  \E \hat\beta = \frac{\softthreshold{\left( \frac{n \beta}{\sigma} ; \alpha\lambda\right)}}{\sigma^2 \left( n + (1-\alpha)\lambda\right)}
+  \E \hat\beta = \frac{\softthreshold{\left( n \beta\var{\tilde{X}}; \alpha\lambda\right)}}{s\left(n\var{\tilde X} + (1-\alpha)\lambda\right)}
 \]
+since \(\E \tilde X = 0\).
 
 Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
+
 
 We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 \[
@@ -194,6 +196,32 @@ As long as the classes are balanced, the procedure we used in the previous secti
   \label{fig:realdata-paths}
 \end{figure}
 
+\subsection{Which Predictor Enters First?}
+
+Given our previous results on shrinkage of coefficients of binary features, a natural follow-up question is: how large does the true regression coefficient of a binary feature need to be in order to still be selected?
+
+To begin to probe this question, we first bring the following standard result to attention.
+
+\begin{proposition}
+  The first predictor to enter the elastic net path if given by
+  \[
+    \argmin_j\left| \tilde{\vec{x}}_j^\T\left(\vec{y} - \frac{1}{n}\sum_i y_i \right)\right|.
+  \]
+\end{proposition}
+\begin{proof}
+  See x for a proof.
+\end{proof}
+
+Assuming that \(\beta_1\) is the coefficient for a normally distributed feature with mean 0 and standard deviation 0.5, taking the expectation and solving for \(\beta_2\), we find
+\[
+  \beta_2 = \frac{1}{2 \sqrt{q(1 - q)}}.
+\]
+This, for instance means that if \(q = 0.1\), the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five.
+
+\subsection{Relative Size of Predictors in Model}
+
+The next question we now ask ourselves is: given that both features are in the model, what are their respective sizes given differences in class balance (\(q\))?
+
 \subsection{Maximum Absolute Value Scaling}
 
 In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
@@ -206,6 +234,7 @@ In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally
   }
   \label{fig:maxabs-n}
 \end{figure}
+
 
 \printbibliography
 
