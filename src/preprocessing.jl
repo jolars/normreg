@@ -32,6 +32,7 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
   centers = zeros(1, p)
   scales = ones(1, p)
 
+  # TODO: Add l1 and l2 norm methods too.
   if method == "mean_std"
     centers = mean(x, dims = 1)
     scales = std(x, dims = 1)
