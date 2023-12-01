@@ -205,7 +205,7 @@ To begin to probe this question, we first bring the following standard result to
 \begin{proposition}
   The first predictor to enter the elastic net path if given by
   \[
-    \argmin_j\left| \tilde{\vec{x}}_j^\T\left(\vec{y} - \frac{1}{n}\sum_i y_i \right)\right|.
+    \argmax_j\left| \tilde{\vec{x}}_j^\T\left(\vec{y} - \frac{1}{n}\sum_i y_i \right)\right|.
   \]
 \end{proposition}
 \begin{proof}
@@ -217,6 +217,9 @@ Assuming that \(\beta_1\) is the coefficient for a normally distributed feature 
   \beta_2 = \frac{1}{2 \sqrt{q(1 - q)}}.
 \]
 This, for instance means that if \(q = 0.1\), the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five.
+
+
+
 
 \subsection{Relative Size of Predictors in Model}
 
