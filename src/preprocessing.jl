@@ -1,4 +1,5 @@
 using LinearAlgebra
+using Statistics
 
 function find_binary_features(x)
   p = size(x, 2)
@@ -17,10 +18,12 @@ end
 Normalizes the given matrix using the specified method.
 
 # Arguments
+
 - `matrix::AbstractMatrix`: The matrix to be normalized.
 - `method::String`: The method to be used for standardization. Valid options are "mean_std" and "max_abs".
 
 # Returns
+
 - `normalize::Matrix`: The normalized matrix.
 ```
 """
@@ -59,12 +62,15 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
       end
     end
   elseif method == "max_abs"
-    scales .= maximum(abs.(x), dims = 1)
+    scales = maximum(abs.(x), dims = 1)
+  elseif method == "min_max"
+    centers = minimum(x, dims = 1)
+    scales = maximum(abs.(x), dims = 1) - centers
   elseif method == "none"
     # No scaling or centering
   else
     error(
-      "Invalid method. Choose either 'mean_std', 'continuous_mean_std', or 'max_abs'.",
+      "Invalid method. Choose either 'mean_std', 'continuous_mean_std', 'max_abs', or 'min_max'.",
     )
   end
 
