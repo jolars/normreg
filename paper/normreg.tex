@@ -65,8 +65,9 @@ There is confusion regarding many of the key terms in the field of normalization
   Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with entries where \(c_{ij} = c_{kj}\) for all \(i,k \in [n]\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
 \end{definition}
 
-Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the particular case in the first row of \Cref{tab:normalization-types}.
+Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the particular case in the first row of \Cref{tab:normalization-types}. In other places (scikit-learn), normalization is defined as the process of scaling the samples (rather than the features).
 
+% TODO: Maybe consider power transformations too?
 \begin{table}[hbt]
   \centering
   \caption{Common ways to normalize a matrix of features}
@@ -209,17 +210,49 @@ To begin to probe this question, we first bring the following standard result to
   \]
 \end{proposition}
 \begin{proof}
-  See x for a proof.
+  The proof is a simple consequence of the KKT conditions for the elastic net problem. The first predictor to enter the path is the one that has the largest gradient of the objective function at the origin.
 \end{proof}
 
-Assuming that \(\beta_1\) is the coefficient for a normally distributed feature with mean 0 and standard deviation 0.5, taking the expectation and solving for \(\beta_2\), we find
+If we expand the argument inside he absolute value operator, we have
 \[
-  \beta_2 = \frac{1}{2 \sqrt{q(1 - q)}}.
+  \tilde{\vec{x}}_j^\T\left( \vec{y} - \frac{1}{n}\ones{}^\T \vec{y}\right) = \frac{1}{s_j}\left(\vec{x}_j^\T \vec{y} - \frac{1}{n}\ones^\T \vec{y} \ones^\T \vec{x}_j\right)
 \]
-This, for instance means that if \(q = 0.1\), the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five.
+Assuming that \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon}\) as before, and that the entries of each feature \(\vec{x}_j\) in the design matrix are sampled independently and identically from a corresponding random variable \(X_j\), we can take the expected value of the expression, yielding
+% FIXME: We're not really allowed to compute the exected value like this. So we need to motivate it somehow. Maybe assume that the scaling and centering factors are fixed or something?
+\[
+  \frac{1}{\E s_j}\left( n \beta^*_j \E X_j^2 - n \beta^*_j (\E X_j)^2 \right) = \frac{n \beta^*_j\var X_j}{\E s_j}.
+\]
+Assuming that we have two features in our design, they enter the model at exactly the same time if
+\[
+  \begin{aligned}
+    \frac{n \beta^*_1\var X_1}{\E s_1} & = \frac{n \beta^*_2\var X_2}{\E s_2} \implies                     \\
+    \beta^*_1                          & = \frac{\beta^*_2\var X_2}{\E s_2} \times \frac{\E s_1}{\var X_1}
+  \end{aligned}
+\]
 
+Next, assume that \(X_1 \sim \bernoulli{(q)}\) and \(X_2 \sim \normal{(0, 0.5)}\) and that \(\beta^*_2 = 1\). In this case, how large does \(\beta^*_1\) be in order for the first feature to enter the model at the same time as the second one?
 
+First, observe that \(\var{X_1} = q(1 - q)\) and \(\var{X_2} = 0.25\). In other words, we have
+\begin{equation}
+  \label{eq:beta1star}
+  \beta^*_1 = \frac{\E s_1}{4q(1-q)\E s_2}
+\end{equation}
 
+\paragraph{Standardization} If the features are standardized, then \eqref{eq:beta1star} is
+\[
+  \beta^*_1 = \frac{1}{2\sqrt{q(1-q)}}
+\]
+If the classes are balanced, \(q = 0.5\), then this means that the coefficients are expected to be the same. If, however, for instance \(q = 0.1\), then the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five.
+
+\paragraph{Max-Abs Normalization} In this case, we get
+\[
+  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \max | X_{12}, \dots,  X_{n2} |}.
+\]
+
+\paragraph{Min-Max Normalization} In this case, we get
+\[
+  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \left(\max | X_{12}, \dots,  X_{n2}| - \min | X_{12}, \dots,  X_{n2} |\right)}.
+\]
 
 \subsection{Relative Size of Predictors in Model}
 
