@@ -35,9 +35,6 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
   if method == "mean_std"
     centers = mean(x, dims = 1)
     scales = std(x, dims = 1)
-  elseif method == "l1"
-    centers = mean(x, dims = 1)
-    scales = Matrix([norm(x[:, j]) for j in 1:p]')
   elseif method == "mean_var"
     centers = mean(x, dims = 1)
     binary = find_binary_features(x)
