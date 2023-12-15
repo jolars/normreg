@@ -181,84 +181,84 @@ Let us start by assuming that we have a two-dimensional problem and that \(x_{i1
 Consider the two dimensional problem
 
 \[
-\frac 1 2 \lVert \vec{y} - \vec{x}_1 \beta_1 -\vec{x}_1 \beta_1 \rVert_2^2 + \lambda \left( | \beta_1 | + |\beta_2| \right).
+  \frac 1 2 \lVert \vec{y} - \vec{x}_1 \beta_1 -\vec{x}_1 \beta_1 \rVert_2^2 + \lambda \left( | \beta_1 | + |\beta_2| \right).
 \]
 Assume without loss of generality that $|\mv{y}^\T\mv{x}_1|> |\mv{y}^\T\mv{x}_2|$ (what about equal?)
 \begin{proof}
-Note that the problem can be reformulated as
-\[ l(\mv{\beta}) = 
- \frac 1 2 \begin{bmatrix}
- 	\beta_1 \\ \beta_2
- \end{bmatrix}^\T \mv{H} \begin{bmatrix}
- \beta_1 \\ \beta_2
- \end{bmatrix}  -  
- \mv{b}^\T \begin{bmatrix}
- \beta_1 \\ \beta_2
- \end{bmatrix} + \lambda  \mv{1}^\T \left| \begin{bmatrix}
- \beta_1 \\ \beta_2
- \end{bmatrix}  \right|.
-\]
-where 
-$$
-\mv{b} = \begin{bmatrix}
-	\mv{y}^\T \mv{x}_1 &  \mv{y}^\T \mv{x}_2
-\end{bmatrix} , \mv{H}  =
-\begin{bmatrix}
-	\mv{x}_1^\T \mv{x}_1 &  \mv{x}_1^\T \mv{x}_2 \\
-	\mv{x}_2^\T \mv{x}_1 &  \mv{x}_2^\T \mv{x}_2 \\
-\end{bmatrix} .
-$$
-The first we do is standardize the problem by considering the variable 
-$$
- \begin{bmatrix}
-\tilde	\beta_1 \\ \tilde \beta_2
-\end{bmatrix} =  \begin{bmatrix}
-\sqrt{H_{11}} & 0 \\
-0 & \sqrt{H_{22}}  
-\end{bmatrix} \begin{bmatrix}
-\beta_1 \\ \beta_2
-\end{bmatrix},
-$$
-Now the transformed problem is 
-\[ l( \mv{\tilde \beta }) = 
-\frac 1 2 \begin{bmatrix}
-\tilde	\beta_1 \\ \tilde \beta_2
-\end{bmatrix}^\T   \mv{ \tilde H} \begin{bmatrix}
-\tilde	\beta_1 \\  \tilde\beta_2
-\end{bmatrix}  
--  \mv{\tilde b}^\T \begin{bmatrix}
-\tilde	\beta_1 \\ \tilde \beta_2
-\end{bmatrix} + {\tilde \lambda}^\T \left| \begin{bmatrix}
-\tilde	\beta_1 \\ \tilde \beta_2
-\end{bmatrix}  \right|.
-\]
-where now
-$$
-\mv{ \tilde b} = \begin{bmatrix}
-	\frac{\mv{y}^\T \mv{x}_1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{\mv{y}^\T \mv{x}_2}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
-\end{bmatrix} , \mv{ \tilde H}  =
-\begin{bmatrix}
-	1 &  \rho \\
-	\rho & 1\\
-\end{bmatrix}, \tilde \lambda  = \lambda  \begin{bmatrix}
-\frac{1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{1}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
-\end{bmatrix} .
-$$
-The sub differential of $ l( \mv{\tilde \beta }) $ is equal to
-$$
-\partial l( \mv{\tilde \beta })  = \mv{ \tilde H} \begin{bmatrix}
-	\tilde	\beta_1 \\  \tilde\beta_2
-\end{bmatrix}  -   \mv{\tilde b}  + {\tilde \lambda} \cdot \partial \left| \begin{bmatrix}
-\tilde	\beta_1 \\ \tilde \beta_2
-\end{bmatrix}  \right|.
-$$
+  Note that the problem can be reformulated as
+  \[ l(\mv{\beta}) =
+    \frac 1 2 \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}^\T \mv{H} \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}  -
+    \mv{b}^\T \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix} + \lambda  \mv{1}^\T \left| \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}  \right|.
+  \]
+  where
+  $$
+    \mv{b} = \begin{bmatrix}
+      \mv{y}^\T \mv{x}_1 & \mv{y}^\T \mv{x}_2
+    \end{bmatrix} , \mv{H}  =
+    \begin{bmatrix}
+      \mv{x}_1^\T \mv{x}_1 & \mv{x}_1^\T \mv{x}_2 \\
+      \mv{x}_2^\T \mv{x}_1 & \mv{x}_2^\T \mv{x}_2 \\
+    \end{bmatrix} .
+  $$
+  The first we do is standardize the problem by considering the variable
+  $$
+    \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix} =  \begin{bmatrix}
+      \sqrt{H_{11}} & 0             \\
+      0             & \sqrt{H_{22}}
+    \end{bmatrix} \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix},
+  $$
+  Now the transformed problem is
+  \[ l( \mv{\tilde \beta }) =
+    \frac 1 2 \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}^\T   \mv{ \tilde H} \begin{bmatrix}
+      \tilde	\beta_1 \\  \tilde\beta_2
+    \end{bmatrix}
+    -  \mv{\tilde b}^\T \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix} + {\tilde \lambda}^\T \left| \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}  \right|.
+  \]
+  where now
+  $$
+    \mv{ \tilde b} = \begin{bmatrix}
+      \frac{\mv{y}^\T \mv{x}_1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{\mv{y}^\T \mv{x}_2}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
+    \end{bmatrix} , \mv{ \tilde H}  =
+    \begin{bmatrix}
+      1    & \rho \\
+      \rho & 1    \\
+    \end{bmatrix}, \tilde \lambda  = \lambda  \begin{bmatrix}
+      \frac{1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{1}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
+    \end{bmatrix} .
+  $$
+  The sub differential of $ l( \mv{\tilde \beta }) $ is equal to
+  $$
+    \partial l( \mv{\tilde \beta })  = \mv{ \tilde H} \begin{bmatrix}
+      \tilde	\beta_1 \\  \tilde\beta_2
+    \end{bmatrix}  -   \mv{\tilde b}  + {\tilde \lambda} \cdot \partial \left| \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}  \right|.
+  $$
 
-CASE 0: all zero.
-CASE 1:
-First consider the situation where only one $\tilde \beta$ is non-zero. Assume that the first coeffienct is non-zero,then $\hat \beta_1 =  \tilde b_1 -  {\tilde \lambda}_1 sign( \tilde b_1 )$. The gradient of the likelihood of the second component is
-$$
-\rho \hat \beta_1  -  \tilde b_2 \in [-\tilde \lambda_2,\tilde \lambda_2 ]
-$$
+  CASE 0: all zero.
+  CASE 1:
+  First consider the situation where only one $\tilde \beta$ is non-zero. Assume that the first coeffienct is non-zero,then $\hat \beta_1 =  \tilde b_1 -  {\tilde \lambda}_1 sign( \tilde b_1 )$. The gradient of the likelihood of the second component is
+  $$
+    \rho \hat \beta_1  -  \tilde b_2 \in [-\tilde \lambda_2,\tilde \lambda_2 ]
+  $$
 \end{proof}
 
 \subsubsection{Class Imbalances}
