@@ -62,6 +62,7 @@ where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and 
 
 Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
 
+
 There is ambiguity regarding many of the key terms in the field of normalization. \emph{Scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably throughout the literature. Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
 
 \begin{definition}[Normalization]
@@ -69,7 +70,20 @@ There is ambiguity regarding many of the key terms in the field of normalization
   Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with entries where \(c_{ij} = c_{kj}\) for all \(i,k \in [n]\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
 \end{definition}
 
-Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the particular case in the first row of \Cref{tab:normalization-types}. In other places (scikit-learn), normalization is defined as the process of scaling the samples (rather than the features).
+Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the case when scaling and centering with standard deviations and means respectively. Also note that normalization is sometimes defined as the process of scaling the samples (rather than the features).
+
+\subsubsection{Rescaling Regression Coefficients}
+
+Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain these, we transform the standardized coefficients, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
+\[
+  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
+\]
+There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
+
+\subsection{Types of Normalization}
+
+There are naturally a multitude of different strategies for normalizing the design matrix. In this paper, we will focus on the ones outlined in \Cref{tab:normalization-types}.
+In the following sections, we will discuss some basic properties of these normalization strategies that will be useful in subsequent sections of the paper.
 
 % TODO: Maybe consider power transformations too?
 \begin{table}[hbt]
@@ -93,11 +107,27 @@ Some authors refer to this procedure as \emph{standardization} or \emph{scaling}
   \end{tabular}
 \end{table}
 
-Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain these, we transform the standardized coefficients, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
-\[
-  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
-\]
-There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
+\subsubsection{Standardization}
+
+Standardization is perhaps the most common type of normalization, at least in the field of statistics. It is also sometimes known as \emph{z-scoring} or \emph{z-transformation}. One of the benefits of using standardization is that it simplifies certain aspects of fitting the model. For instance, the intercept term \(\hat\beta_0\) is equal to the mean of the response \(\vec y\).
+
+For regularized methods, it is typically the case that we standardize with the uncorrected sample standard deviation (division by \(n\)).
+
+The downside of standardization is that it involves centering by the mean, which typically destroys sparsity in the data structure. This is not a problem when the data is stored as a dense matrix, but when the data is sparse, this can lead to a significant increase in memory usage and computational time.
+
+\subsubsection{Maximum Absolute Value Scaling}
+
+A common alternative to standardization is to scale the features by their maximum absolute value. This is sometimes called \emph{max-abs scaling}. This type of scaling typically has no impact on binary data (since the maximum absolute value is usually 1), and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\).
+
+This type of scaling is naturally sensitive to outliers, since a single outlier can dominate the scaling factor.
+
+One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
+
+% TODO: derive the expected value of the maximum absolute value of a normal distribution (folded normal distribution)
+
+\subsubsection{Min-Max Normalization}
+
+Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and is also sensitive to outliers.
 
 \subsection{The Elastic Net}
 
