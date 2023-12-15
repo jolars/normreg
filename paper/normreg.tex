@@ -161,7 +161,6 @@ since \(\E \tilde X = 0\).
 
 Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
 
-
 We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 \[
   \E \hat\beta = \frac{\softthreshold{\left( n\beta\sqrt{q(1-q)} ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
