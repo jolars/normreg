@@ -153,6 +153,10 @@ where \(\softthreshold\) is the soft-thresholding operator, defined as
   \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
 \]
 
+Next, we consider what this one-dimensional solution under various forms of normalization.
+
+\subsubsection{Standardization}
+
 Now, under the assumption that \(y_i = \sum_i x_{ij} \beta_j + \varepsilon_i\) with \(\E \varepsilon_i = 0\), we have
 \[
   \E \hat\beta = \frac{\softthreshold{\left( n \beta\var{\tilde{X}}; \alpha\lambda\right)}}{s\left(n\var{\tilde X} + (1-\alpha)\lambda\right)}
