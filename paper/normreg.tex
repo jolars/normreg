@@ -153,8 +153,6 @@ where \(\softthreshold\) is the soft-thresholding operator, defined as
   \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
 \]
 
-In the sequel, we assume that our feature is centered, that is, \(c = \sum_{i=1}^n x_i / n\). This means that the locations of the features have no impact on the coefficients in the normalized space. In addition, we let our feature be sampled from a random variable \(X\), and let \(\tilde X\) be the normalized version of this random variable.
-
 Now, under the assumption that \(y_i = \sum_i x_{ij} \beta_j + \varepsilon_i\) with \(\E \varepsilon_i = 0\), we have
 \[
   \E \hat\beta = \frac{\softthreshold{\left( n \beta\var{\tilde{X}}; \alpha\lambda\right)}}{s\left(n\var{\tilde X} + (1-\alpha)\lambda\right)}
