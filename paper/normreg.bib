@@ -1,102 +1,117 @@
 @article{gelman2008,
-  title = {Scaling Regression Inputs by Dividing by Two Standard Deviations},
-  author = {Gelman, Andrew},
-  volume = {27},
-  number = {15},
-  pages = {2865--2873},
-  doi = {10.1002/sim.3107},
-  issn = {02776715, 10970258},
-  url = {https://onlinelibrary.wiley.com/doi/10.1002/sim.3107},
-  urldate = {2023-09-27},
-  date = {2008-07-10},
-  journaltitle = {Statistics in Medicine},
-  shortjournal = {Statist. Med.},
-  abstract = { Interpretation of regression coefficients is sensitive to the
-              scale of the inputs. One method often used to place input variables
-              on a common scale is to divide each numeric variable by its
-              standard deviation. Here we propose dividing each numeric variable
-              by two times its standard deviation, so that the generic comparison
-              is with inputs equal to the mean \pm{}1 standard deviation. The
-              resulting coefficients are then directly comparable for
-              untransformed binary predictors. We have implemented the procedure
-              as a function in R. We illustrate the method with two simple
-              analyses that are typical of applied modeling: a linear regression
-              of data from the National Election Study and a multilevel logistic
-              regression of data on the prevalence of rodents in New York City
-              apartments. We recommend our rescaling as a default option--an
-              improvement upon the usual approach of including variables in
-              whatever way they are coded in the data file--so that the
-              magnitudes of coefficients can be directly compared as a matter of
-              routine statistical practice. Copyright q 2007 John Wiley \& Sons,
-              Ltd. },
-  langid = {english},
+  title         = {Scaling Regression Inputs by Dividing by Two Standard Deviations},
+  author        = {Gelman, Andrew},
+  volume        = {27},
+  number        = {15},
+  pages         = {2865--2873},
+  doi           = {10.1002/sim.3107},
+  issn          = {02776715, 10970258},
+  url           = {https://onlinelibrary.wiley.com/doi/10.1002/sim.3107},
+  urldate       = {2023-09-27},
+  date          = {2008-07-10},
+  journaltitle  = {Statistics in Medicine},
+  shortjournal  = {Statist. Med.},
+  abstract      = {
+    Interpretation of regression coefficients is sensitive to the scale of the inputs.
+    One method often used to place input variables on a common scale is to divide each
+    numeric variable by its standard deviation. Here we propose dividing each numeric
+    variable by two times its standard deviation, so that the generic comparison is
+    with inputs equal to the mean \pm{}1 standard deviation. The resulting coefficients
+    are then directly comparable for untransformed binary predictors. We have
+    implemented the procedure as a function in R. We illustrate the method with two
+    simple analyses that are typical of applied modeling: a linear regression of data
+    from the National Election Study and a multilevel logistic regression of data on
+    the prevalence of rodents in New York City apartments. We recommend our rescaling
+    as a default option--an improvement upon the usual approach of including variables
+    in whatever way they are coded in the data file--so that the magnitudes of
+    coefficients can be directly compared as a matter of routine statistical practice.
+    Copyright q 2007 John Wiley \& Sons, Ltd.
+  },
+  langid        = {english}
 }
 
 @article{friedman2007,
-  title = {Pathwise Coordinate Optimization},
-  author = {Friedman, Jerome and Hastie, Trevor and H\"{o}fling, Holger and
-            Tibshirani, Robert},
-  volume = {1},
-  number = {2},
-  pages = {302--332},
-  doi = {10/d88g8c},
-  issn = {1932-6157},
-  url = {https://projecteuclid.org/euclid.aoas/1196438020},
-  urldate = {2018-03-12},
-  date = {2007-12},
-  journaltitle = {The Annals of Applied Statistics},
-  shortjournal = {Ann. Appl. Stat.},
-  abstract = { We consider ``one-at-a-time'' coordinate-wise descent algorithms
-              for a class of convex optimization problems. An algorithm of this
-              kind has been proposed for the L1-penalized regression (lasso) in
-              the literature, but it seems to have been largely ignored. Indeed,
-              it seems that coordinate-wise algorithms are not often used in
-              convex optimization. We show that this algorithm is very
-              competitive with the well-known LARS (or homotopy) procedure in
-              large lasso problems, and that it can be applied to related methods
-              such as the garotte and elastic net. It turns out that
-              coordinate-wise descent does not work in the ``fused lasso,''
-              however, so we derive a generalized algorithm that yields the
-              solution in much less time that a standard convex optimizer.
-              Finally, we generalize the procedure to the two-dimensional fused
-              lasso, and demonstrate its performance on some image smoothing
-              problems. },
-  langid = {english},
+  title         = {Pathwise Coordinate Optimization},
+  author        = {Friedman, Jerome and Hastie, Trevor and H\"{o}fling, Holger and Tibshirani, Robert},
+  volume        = {1},
+  number        = {2},
+  pages         = {302--332},
+  doi           = {10/d88g8c},
+  issn          = {1932-6157},
+  url           = {https://projecteuclid.org/euclid.aoas/1196438020},
+  urldate       = {2018-03-12},
+  date          = {2007-12},
+  journaltitle  = {The Annals of Applied Statistics},
+  shortjournal  = {Ann. Appl. Stat.},
+  abstract      = {
+    We consider ``one-at-a-time'' coordinate-wise descent algorithms for a class of
+    convex optimization problems. An algorithm of this kind has been proposed for the
+    L1-penalized regression (lasso) in the literature, but it seems to have been
+    largely ignored. Indeed, it seems that coordinate-wise algorithms are not often
+    used in convex optimization. We show that this algorithm is very competitive with
+    the well-known LARS (or homotopy) procedure in large lasso problems, and that it
+    can be applied to related methods such as the garotte and elastic net. It turns out
+    that coordinate-wise descent does not work in the ``fused lasso,'' however, so we
+    derive a generalized algorithm that yields the solution in much less time that a
+    standard convex optimizer. Finally, we generalize the procedure to the
+    two-dimensional fused lasso, and demonstrate its performance on some image
+    smoothing problems.
+  },
+  langid        = {english}
 }
 
 @article{donoho1994,
-  title = {Ideal Spatial Adaptation by Wavelet Shrinkage},
-  author = {Donoho, David L. and Johnstone, Iain M.},
-  date = {1994-08},
-  journaltitle = {Biometrika},
-  volume = {81},
-  number = {3},
-  eprint = {2337118},
-  eprinttype = {jstor},
-  pages = {425--455},
-  issn = {0006-3444},
-  doi = {10.2307/2337118},
-  url = {https://www.jstor.org/stable/2337118},
-  urldate = {2023-10-06},
-  abstract = {With ideal spatial adaptation, an oracle furnishes information
-              about how best to adapt a spatially variable estimator, whether
-              piecewise constant, piecewise polynomial, variable knot spline, or
-              variable bandwidth kernel, to the unknown function. Estimation with
-              the aid of an oracle offers dramatic advantages over traditional
-              linear estimation by nonadaptive kernels; however, it is a priori
-              unclear whether such performance can be obtained by a procedure
-              relying on the data alone. We describe a new principle for
-              spatially-adaptive estimation: selective wavelet reconstruction. We
-              show that variable-knot spline fits and piecewise-polynomial fits,
-              when equipped with an oracle to select the knots, are not
-              dramatically more powerful than selective wavelet reconstruction
-              with an oracle. We develop a practical spatially adaptive method,
-              RiskShrink, which works by shrinkage of empirical wavelet
-              coefficients. RiskShrink used in connection with sample rotation.
-              Inclusion probabilities of any order can be written explicitly in
-              closed form. Second-order inclusion probabilities πij satisfy the
-              condition \$0 {$<$} \textbackslash pi\_\{ij\} {$<$} \textbackslash
-              pi\_\{i\}\textbackslash pi\_j\$, which guarantees Yates \& Grundy's
-              variance estimator to be unbiased, definable for all samples and
-              always nonnegative for any sample size.},
+  title         = {Ideal Spatial Adaptation by Wavelet Shrinkage},
+  author        = {Donoho, David L. and Johnstone, Iain M.},
+  volume        = {81},
+  number        = {3},
+  pages         = {425--455},
+  doi           = {10.2307/2337118},
+  issn          = {0006-3444},
+  url           = {https://www.jstor.org/stable/2337118},
+  urldate       = {2023-10-06},
+  date          = {1994-08},
+  journaltitle  = {Biometrika},
+  eprint        = {2337118},
+  eprinttype    = {jstor},
+  abstract      = {
+    With ideal spatial adaptation, an oracle furnishes information about how best to
+    adapt a spatially variable estimator, whether piecewise constant, piecewise
+    polynomial, variable knot spline, or variable bandwidth kernel, to the unknown
+    function. Estimation with the aid of an oracle offers dramatic advantages over
+    traditional linear estimation by nonadaptive kernels; however, it is a priori
+    unclear whether such performance can be obtained by a procedure relying on the data
+    alone. We describe a new principle for spatially-adaptive estimation: selective
+    wavelet reconstruction. We show that variable-knot spline fits and
+    piecewise-polynomial fits, when equipped with an oracle to select the knots, are
+    not dramatically more powerful than selective wavelet reconstruction with an
+    oracle. We develop a practical spatially adaptive method, RiskShrink, which works
+    by shrinkage of empirical wavelet coefficients. RiskShrink used in connection with
+    sample rotation. Inclusion probabilities of any order can be written explicitly in
+    closed form. Second-order inclusion probabilities \ensuremath{\pi}ij satisfy the
+    condition \$0 {$<\$} \textbackslash pi\_\{ij\} {\$<\$} \textbackslash
+    pi\_\{i\}\textbackslash pi\_j\$, which guarantees Yates \& Grundy's variance
+    estimator to be unbiased, definable for all samples and always nonnegative for any
+    sample size.
+  }
+}
+
+@book{nagaraja2003,
+  title         = {Order Statistics},
+  shorttitle    = {Order {{Statistics}}},
+  author        = {Nagaraja, Haikady N. and David, Herbert A.},
+  location      = {{Hoboken, N.J}},
+  publisher     = {{John Wiley \& Sons Inc}},
+  series        = {Wiley Series in Probability and Statistics},
+  isbn          = {978-0-471-38926-2},
+  date          = {2003-07-21},
+  edition       = {3},
+  abstract      = {
+    Considerable changes have occurred in the field of order statistics in the nearly
+    20 years since "Order Statistics", second edition was published. This third edition
+    gives a helpful account of order statistics, useful to students as well as those
+    needing a guide to the extensive literature.
+  },
+  langid        = {english},
+  pagetotal     = {458}
 }
