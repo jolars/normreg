@@ -123,7 +123,42 @@ This type of scaling is naturally sensitive to outliers, since a single outlier 
 
 One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
 
-% TODO: derive the expected value of the maximum absolute value of a normal distribution (folded normal distribution)
+\begin{theorem}
+  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with \(\mu\) and standard deviation \(\sigma\). Then
+  \[
+    \E \max_i |X_i| \approx \mu_n + \gamma \sigma_n,
+  \]
+  where
+  \[
+    \mu_n = F_Y^{-1}(1 - 1/n), \quad a_n = \frac{1}{n f_Y(\mu_n)},
+  \]
+  \(\gamma\) is the Euler-Mascheroni constant, and \(f_Y\) and \(F_Y^{-1}\) are the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
+\end{theorem}
+\begin{proof}
+  If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution for a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continous cumulative distribution function~\parencite[Theorem 10.5.2]{nagaraja2003} is
+  \[
+    \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
+  \]
+  We have
+  \[
+    \begin{aligned}
+      \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
+                                & = \frac{2 - \Phi\left(\frac{x - \mu}{\sigma}\right) - \Phi\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\phi\left(\frac{x - \mu}{\sigma}\right) + \phi\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
+                                & \rightarrow \frac{\sigma(1 - \Phi(x))}{\phi(x)} =  \text{ as } n \rightarrow n,
+    \end{aligned}
+  \]
+  where \(\phi\) and \(\Phi\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
+  Next, we follow \textcite[example 10.5.3]{nagaraja2003} and observe that
+  \[
+    \frac{d}{dx} \frac{\sigma(1 - \Phi(x))}{\phi(x)} = \frac{\sigma x (1 - \Phi(x))}{\phi(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
+  \]
+  since
+  \[
+    \frac{1 - \Phi(x)}{\phi(x)} \sim \frac{1}{x}.
+  \]
+  In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
+
+\end{proof}
 
 \subsubsection{Min-Max Normalization}
 
