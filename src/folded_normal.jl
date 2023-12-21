@@ -26,8 +26,8 @@ end
 function Distributions.quantile(d::FoldedNormal, p::Real)
   f(q) = cdf(d, q) - p
 
-  lo = d.μ - 4 * d.σ
-  hi = d.μ + 4 * d.σ
+  lo = d.μ - 5 * d.σ
+  hi = d.μ + 5 * d.σ
 
-  find_zero(f, (-lo, hi), Bisection())
+  find_zero(f, (lo, hi), Bisection())
 end
