@@ -11,12 +11,6 @@ using Distributions
 using Statistics
 using Lasso
 
-# function expvalue_gev(n)
-#   γ = 0.57721566490153286060651209008240243 # Euler-Mascheroni constant
-#
-#   return sqrt(log(n^2 / (2 * π * log(n^2 / (2 * π))))) * (1 + γ / log(n))
-# end
-
 function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter = 100)
   ns = Int64.(round.(range(n_min, n_max, length = n_ns)))
 
