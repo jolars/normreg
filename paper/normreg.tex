@@ -332,12 +332,12 @@ Assume without loss of generality that $|\mv{y}^\T\mv{x}_1|> |\mv{y}^\T\mv{x}_2|
 As long as the classes are balanced, the procedure we used in the previous section, standardization, will yield unbiased estimates of the two coefficients. But what if the classes of the binary feature are imbalanced? That is, what if \(q\) is larger than \(0.5\)? It turns out that the results vary depending on the type of penalty used.
 
 \begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/lasso_ridge_twodim.pdf}
   \caption{%
     Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\) and the features are standardized. The ridge estimator is unaffected by \(q\), but the lasso estimator is not.
   }
   \label{fig:lasso-ridge-comparison}
-  \centering
-  \includegraphics[]{plots/lasso_ridge_twodim.pdf}
 \end{figure}
 
 \begin{figure}[htpb]
