@@ -410,12 +410,21 @@ If the classes are balanced, \(q = 0.5\), then this means that the coefficients 
 
 The next question we now ask ourselves is: given that both features are in the model, what are their respective sizes given differences in class balance (\(q\))?
 
+To begin to answer this question, we conduct simulations on a two-dimensional problem. Along with our previous reasoning, we sample one feature from \(\normal(0, 0.5)\) and the other from \(\bernoulli(q)\), varying \(q\) in \([0.5, 0.99]\) to simulate the effect of class imbalance on the estimates from the model. We compare four different strategies of normalization:
+\begin{description}
+  \item[Mean-Std] Standardization
+  \item[Mean-StdVar] Mean centering and scaling the normal feature by standard deviation and the binary feature by variance
+  \item[Mean-Var] Mean centering and scaling each feature by its variance
+  \item[None] No normalization
+\end{description}
+
+The results~(\Cref{fig:lasso-ridge-comparison}) show that when it comes to ridge, standardization creates class balance-insensitive estimates, whereas for the lasso, this is not the case. For the lasso, it is instead the Mean-StdVar and Mean-Var normalization methods that generate estimates that are insensitive to class imbalances.
+
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/lasso_ridge_twodim.pdf}
   \caption{%
-    Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\) and the features are standardized. The ridge estimator is unaffected by \(q\), but the lasso estimator is not.
-  }
+    Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\) and the features are normalized in various ways.}
   \label{fig:lasso-ridge-comparison}
 \end{figure}
 
