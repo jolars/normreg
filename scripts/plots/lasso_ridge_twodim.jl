@@ -37,6 +37,7 @@ for (i, d) in enumerate(groups)
     yguideposition = yguideposition,
     legend = legend,
     label = labels,
+    xticks = 0.5:0.25:1.0,
   )
 
   if i <= ceil(length(groups) / 2)
