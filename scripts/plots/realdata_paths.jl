@@ -1,15 +1,14 @@
-using DrWatson
-
-@quickactivate "normreg"
-
 using DataFrames
-
 using Plots
-gr()
+using NormReg
 
-include(srcdir("plot_settings.jl"))
+NormReg.setPlotSettings()
 
-df = collect_results(datadir("realdata_paths"))
+json_data = JSON.parsefile(here("data", "realdata_paths.json"))
+
+df = DataFrame(json_data)
+
+df_flat = DataFrames.flatten(df, [:betas])
 
 plots = []
 
@@ -17,7 +16,8 @@ for (i, d) in enumerate(groupby(df, :normalization))
   for (j, dd) in enumerate(groupby(d, :dataset))
     normalization = unique(dd.normalization)[1]
     dataset = unique(dd.dataset)[1]
-    betas = Array(dd.betas[1])
+
+    betas = Float64.(mapreduce(permutedims, vcat, dd.betas[1]))'
 
     normalization =
       replace(normalization, "mean_std" => "Mean-SD", "max_abs" => "Max-Abs")
@@ -83,5 +83,6 @@ end
 plot_output = plot(plots..., layout = (2, 3), size = (450, 350))
 
 file_name = "realdata_paths"
+file_path = here("plots", file_name * ".pdf")
 
-savefig(plot_output, plotsdir(file_name * ".pdf"))
+savefig(plot_output, file_path)

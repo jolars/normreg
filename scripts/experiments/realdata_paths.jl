@@ -1,13 +1,10 @@
-using DrWatson
-
-@quickactivate "normreg"
-
 using GLM
+using DrWatson
 using LIBSVMdata
+using JSON
 using Lasso
 using Statistics
-
-include(srcdir("preprocessing.jl"))
+using NormReg
 
 function path_simulation(dataset, normalization, model = "gaussian")
   if model == "gaussian"
@@ -20,7 +17,7 @@ function path_simulation(dataset, normalization, model = "gaussian")
 
   x, y = load_dataset(dataset, dense = true, replace = false, verbose = false)
 
-  x_norm, centers, scales = normalize(Array(x), normalization)
+  x_norm, centers, scales = NormReg.normalize(Array(x), normalization)
 
   res = fit(LassoPath, x_norm, y, dist, standardize = false)
 
@@ -36,8 +33,9 @@ param_dict = Dict{String,Any}(
   "alpha" => 1.0,
 )
 
-# betas, ns = maxabs_n_simulation(0.5, 0.5)
 param_expanded = dict_list(param_dict)
+
+results = []
 
 for (i, d) in enumerate(param_expanded)
   @unpack dataset, normalization, model, alpha = d
@@ -47,5 +45,11 @@ for (i, d) in enumerate(param_expanded)
   d_exp = copy(d)
   d_exp["betas"] = betas
 
-  safesave(datadir("realdata_paths", savename(d, "jld2")), d_exp)
+  push!(results, d_exp)
+end
+
+outfile = here("data", "realdata_paths.json")
+
+open(outfile, "w") do f
+  write(f, JSON.json(results))
 end

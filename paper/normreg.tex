@@ -48,7 +48,18 @@ After fitting the model, the estimated coefficients are then usually returned to
 Another reason for normalizing the features is to improve the performance and stability of optimization algorithms used to fit the model.
 We will not cover this aspect in this paper, but note that it is an important one.
 
-In most sources and discussions on regularized methods, normalization is typically treated as a preprocessing step---separate from modeling. As we will show in this paper, however, the type of normalization used can have a critical effect on the estimated model, sometimes leading to entirely different conclusions with regard to feature importance as well as predictive performance. In addition, discussions on the choice of normalization are often focused on computational aspects and data storage requirements, rather than on the statistical properties of the choice of normalization. In our paper, we will argue that normalization should rather we considered as an integral part of the model. And that it for instance is unreasonable to base the choice of normalization on the type of data storage, which implicitly encodes the belief that a data set stored as a sparse matrix is somehow fundamentally different from a data set stored as a dense matrix.
+In most sources and discussions on regularized methods, normalization is typically treated as a preprocessing step---separate from modeling. As we will show in this paper, however, the type of normalization used can have a critical effect on the estimated model, sometimes leading to entirely different conclusions with regard to feature importance as well as predictive performance. As a first example of this, consider \Cref{fig:realdata-paths}, which displays the lasso paths for three real data sets and three different types of normalization. Each panel shows the union of the first five predictors picked by either type of normalization. As we can see, the choice of normalization can have a significant impact on the estimated model. In the case of the \texttt{leukemia} data set, for instance, the models are starkly different with respect to both the identities of the features selected as well as their signs and magnitudes.
+
+\begin{figure}[bpt]
+  \centering
+  \includegraphics[]{plots/realdata_paths.pdf}
+  \caption{%
+    A display over the first predictors selected by the lasso for each type of normalization. Each panel shows the union of the first five predictors picked by either type of normalization.
+  }
+  \label{fig:realdata-paths}
+\end{figure}
+
+In addition, discussions on the choice of normalization are often focused on computational aspects and data storage requirements, rather than on the statistical properties of the choice of normalization. In our paper, we will argue that normalization should rather we considered as an integral part of the model. And that it for instance is unreasonable to base the choice of normalization on the type of data storage, which implicitly encodes the belief that a data set stored as a sparse matrix is somehow fundamentally different from a data set stored as a dense matrix.
 
 \section{Theory}
 
@@ -330,15 +341,6 @@ Assume without loss of generality that $|\mv{y}^\T\mv{x}_1|> |\mv{y}^\T\mv{x}_2|
 \subsubsection{Class Imbalances}
 
 As long as the classes are balanced, the procedure we used in the previous section, standardization, will yield unbiased estimates of the two coefficients. But what if the classes of the binary feature are imbalanced? That is, what if \(q\) is larger than \(0.5\)? It turns out that the results vary depending on the type of penalty used.
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/realdata_paths.pdf}
-  \caption{%
-    A display over the first predictors selected by the lasso for each type of normalization. Each panel shows the union of the first five predictors picked by either type of normalization.
-  }
-  \label{fig:realdata-paths}
-\end{figure}
 
 \subsection{Which Predictor Enters First?}
 

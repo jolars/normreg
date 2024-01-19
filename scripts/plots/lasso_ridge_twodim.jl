@@ -1,17 +1,20 @@
-using DrWatson
-
-@quickactivate "normreg"
-
 using DataFrames
+using NormReg
+using JSON
+using LaTeXStrings
+using Plots
 
-include(srcdir("plot_settings.jl"))
+json = JSON.parsefile(here("data", "lasso_ridge_twodim.json"))
 
-df = collect_results(datadir("lasso_ridge_twodim"))
+df = DataFrame(json)
+
 df_subset = subset(df, :rho => r -> r .== 0.0)
 
 plots = []
 
-groups = (groupby(df_subset, [:alpha, :normalization], sort = false))
+groups = (groupby(df_subset, [:alpha, :normalization], sort = true))
+
+NormReg.setPlotSettings()
 
 for (i, d) in enumerate(groups)
   lasso = d.alpha[1] == 1
@@ -30,9 +33,11 @@ for (i, d) in enumerate(groups)
     yguide = L"\beta"
   end
 
+  betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
+
   plot!(
     d.ps[1],
-    d.betas[1]',
+    betas,
     yguide = yguide,
     yguideposition = yguideposition,
     legend = legend,
@@ -55,6 +60,6 @@ n_cols = length(unique(df.normalization))
 plot_output =
   plot(plots..., layout = (n_rows, n_cols), ylim = (0, 0.9), size = (450, 400))
 
-file_name = "lasso_ridge_twodim"
+file_path = here("plots", "lasso_ridge_twodim.pdf")
 
-savefig(plot_output, plotsdir(file_name * ".pdf"))
+savefig(plot_output, file_path)

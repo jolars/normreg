@@ -1,15 +1,12 @@
-using DrWatson
-
-@quickactivate "normreg"
-
-include(srcdir("preprocessing.jl"))
-include(srcdir("lasso_utils.jl"))
-
 using DataFrames
 using Random
 using Distributions
 using Statistics
 using Lasso
+using DrWatson
+using JSON
+
+using NormReg
 
 function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter = 100)
   ns = Int64.(round.(range(n_min, n_max, length = n_ns)))
@@ -27,7 +24,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
   x2 = rand(d_binary, 500)
   x = [x1 x2]
   y = x * beta
-  x_std, _, _ = normalize(x, "max_abs")
+  x_std, _, _ = NormReg.normalize(x, "max_abs")
 
   λmax = get_lambdamax(x_std, y)
 
@@ -45,7 +42,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
 
       y = x * beta + rand(Normal(0, 1), n)
 
-      x_std, centers, scales = normalize(x, "max_abs")
+      x_std, centers, scales = NormReg.normalize(x, "max_abs")
 
       model = Lasso.fit(
         Lasso.LassoPath,
@@ -71,6 +68,8 @@ param_dict = Dict{String,Any}("sigma" => 0.5, "q" => 0.5, "model" => "lasso")
 
 param_expanded = dict_list(param_dict)
 
+results = []
+
 for (i, d) in enumerate(param_expanded)
   @unpack sigma, q, model = d
 
@@ -82,7 +81,15 @@ for (i, d) in enumerate(param_expanded)
   beta_long = stack(beta_wide, Not(:n))
 
   d_exp = copy(d)
-  d_exp["data"] = beta_long
+  d_exp["n"] = beta_long.n
+  d_exp["distribution"] = beta_long[:, 2]
+  d_exp["beta"] = beta_long[:, 3]
 
-  safesave(datadir("maxabs_n", savename(d, "jld2")), d_exp)
+  push!(results, d_exp)
+end
+
+outfile = here("data", "maxabs_n.json")
+
+open(outfile, "w") do f
+  write(f, JSON.json(results))
 end

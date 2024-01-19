@@ -1,10 +1,8 @@
-using DrWatson
+# include(srcdir("preprocessing.jl"))
+# include(srcdir("lasso_utils.jl"))
+# include(srcdir("generate_data.jl"))
 
-@quickactivate "normreg"
-
-include(srcdir("preprocessing.jl"))
-include(srcdir("lasso_utils.jl"))
-include(srcdir("generate_data.jl"))
+using NormReg
 
 using Random
 using LinearAlgebra

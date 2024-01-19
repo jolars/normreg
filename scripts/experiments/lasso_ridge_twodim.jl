@@ -1,18 +1,14 @@
-using DrWatson
-
-@quickactivate "normreg"
-
-include(srcdir("preprocessing.jl"))
-include(srcdir("lasso_utils.jl"))
-include(srcdir("generate_data.jl"))
-
 using Random
 using LinearAlgebra
 using Distributions
+using DrWatson
 using Statistics
 using DataFrames
 using Lasso
 using Plots
+using JSON
+
+using NormReg
 
 function binary_gaussian_simulation(
   σ = 0.5,
@@ -31,7 +27,7 @@ function binary_gaussian_simulation(
   # Generate data once to compute lambda_max
   x = generate_binary_gaussian_features(n, ρ = ρ, μ = 0, σ = σ, p = 0.5)
   y = x * beta
-  x_std, _, _ = normalize(x, normalization)
+  x_std, _, _ = NormReg.normalize(x, normalization)
   λmax = maximum(abs.(x_std' * (y .- mean(y))))
   λ = λmax * 0.75 / n
 
@@ -46,7 +42,7 @@ function binary_gaussian_simulation(
       y = x * beta
       # y = x * beta .+ rand(Normal(0, 1))
 
-      x_std, centers, scales = normalize(x, normalization)
+      x_std, centers, scales = NormReg.normalize(x, normalization)
 
       model = Lasso.fit(
         Lasso.LassoPath,
@@ -80,6 +76,8 @@ param_dict = Dict(
 
 expanded_params = dict_list(param_dict)
 
+results = []
+
 for (i, d) in enumerate(expanded_params)
   @unpack sigma, rho, alpha, normalization = d
 
@@ -89,5 +87,11 @@ for (i, d) in enumerate(expanded_params)
   d_exp["betas"] = betas
   d_exp["ps"] = ps
 
-  safesave(datadir("lasso_ridge_twodim", savename(d, "jld2")), d_exp)
+  push!(results, d_exp)
+end
+
+outfile = here("data", "lasso_ridge_twodim.json")
+
+open(outfile, "w") do f
+  write(f, JSON.json(results))
 end

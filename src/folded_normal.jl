@@ -46,9 +46,8 @@ Compute the quantile function (inverse CDF) of a Folded Normal distribution `d` 
 function Distributions.quantile(d::FoldedNormal, p::Real)
   f(q) = cdf(d, q) - p
 
-  lo = d.μ - 5 * d.σ
-  hi = d.μ + 5 * d.σ
+  lo = d.μ - 10 * d.σ
+  hi = d.μ + 10 * d.σ
 
   find_zero(f, (lo, hi), Bisection())
 end
-```

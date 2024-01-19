@@ -3,8 +3,14 @@ using LaTeXStrings
 
 using PythonPlot: matplotlib
 
-default(titlefontsize = 11)
+function setPlotSettings()
+  default(titlefontsize = 12, thickness_scaling = 1)
 
-pythonplot()
+  pythonplot()
+  # gr()
 
-matplotlib.rcParams["text.usetex"] = true
+  # font = Plots.font("Helvetica", 18)
+
+  matplotlib.rcParams["text.usetex"] = true
+  matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}"
+end

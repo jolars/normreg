@@ -1,25 +1,27 @@
-using DrWatson
-
-@quickactivate "normreg"
-
 using DataFrames
 using StatsPlots
+using NormReg
+using LaTeXStrings
+using JSON
 
-include(srcdir("plot_settings.jl"))
+NormReg.setPlotSettings()
 
-res = collect_results(datadir("maxabs_n"))
+json_data = JSON.parsefile(here("data", "maxabs_n.json"))
 
-df = res.data[1]
+df = DataFrame(json_data)
 
-pl = @df df plot(
+df_flat = DataFrames.flatten(df, [:n, :beta, :distribution])
+
+pl = @df df_flat plot(
   :n,
-  :value,
-  groups = :variable,
+  :beta,
+  groups = :distribution,
   ylabel = L"\beta",
   xlabel = L"n",
-  size = (230, 175),
+  size = (235, 175),
 )
 
 file_name = "maxabs_n"
+file_path = here("plots", file_name * ".pdf")
 
-savefig(pl, plotsdir(file_name * ".pdf"))
+savefig(pl, file_path)

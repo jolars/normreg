@@ -1,4 +1,4 @@
-JULIA := julia
+JULIA := julia --project=.
 
 DATA_DIR := data
 PAPER_PLOTS_DIR := paper/plots
