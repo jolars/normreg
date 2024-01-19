@@ -72,7 +72,7 @@ function binary_gaussian_simulation(
 end
 
 param_dict = Dict(
-  "sigma" => 1,
+  "sigma" => 0.5,
   "rho" => [0],
   "alpha" => [0, 1],
   "normalization" => ["none", "mean_std", "mean_var", "mean_stdvar"],
