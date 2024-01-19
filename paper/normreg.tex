@@ -410,6 +410,15 @@ If the classes are balanced, \(q = 0.5\), then this means that the coefficients 
 
 The next question we now ask ourselves is: given that both features are in the model, what are their respective sizes given differences in class balance (\(q\))?
 
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/lasso_ridge_twodim.pdf}
+  \caption{%
+    Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\) and the features are standardized. The ridge estimator is unaffected by \(q\), but the lasso estimator is not.
+  }
+  \label{fig:lasso-ridge-comparison}
+\end{figure}
+
 \subsection{Maximum Absolute Value Scaling}
 
 In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
