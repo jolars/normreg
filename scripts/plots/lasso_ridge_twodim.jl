@@ -6,28 +6,53 @@ using DataFrames
 
 include(srcdir("plot_settings.jl"))
 
-default(titlefontsize = 12)
-
 df = collect_results(datadir("lasso_ridge_twodim"))
-df_subset =
-  subset(df, :rho => r -> r .== 0.0, :normalization => norm -> norm .== "mean_std")
+df_subset = subset(df, :rho => r -> r .== 0.0)
 
 plots = []
-for d in groupby(df_subset, :alpha)
+
+groups = (groupby(df_subset, [:alpha, :normalization], sort = false))
+
+for (i, d) in enumerate(groups)
   lasso = d.alpha[1] == 1
-  title = lasso ? "lasso" : "ridge"
-  plot_legend = copy(lasso)
-  p = plot(d.ps[1], d.betas[1][1, :], legend = plot_legend)
-  plot!(d.ps[1], d.betas[1][2, :], legend = plot_legend)
-  xlabel!(L"q")
-  if !lasso
-    ylabel!(L"\beta")
+  p = plot(legend = false)
+
+  labels = ["normal" "binary"]
+  legend = i == 4 ? true : false
+
+  yguideposition = :left
+  yguide = ""
+
+  if mod(i, 4) == 0
+    yguide = d.alpha[1] == 1 ? "lasso" : "ridge"
+    yguideposition = :right
+  elseif mod(i + 3, 4) == 0
+    yguide = L"\beta"
   end
-  title!(title)
+
+  plot!(
+    d.ps[1],
+    d.betas[1]',
+    yguide = yguide,
+    yguideposition = yguideposition,
+    legend = legend,
+    label = labels,
+  )
+
+  if i <= ceil(length(groups) / 2)
+    title!(string(d.normalization[1]))
+  else
+    xlabel!(L"q")
+  end
+
   push!(plots, p)
 end
 
-plot_output = plot(plots..., layout = 2, ylim = (0, 0.9), size = (400, 180))
+n_rows = length(unique(df.alpha))
+n_cols = length(unique(df.normalization))
+
+plot_output =
+  plot(plots..., layout = (n_rows, n_cols), ylim = (0, 0.9), size = (450, 400))
 
 file_name = "lasso_ridge_twodim"
 

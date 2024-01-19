@@ -72,10 +72,10 @@ function binary_gaussian_simulation(
 end
 
 param_dict = Dict(
-  "sigma" => 0.5,
-  "rho" => [0, 0.2],
+  "sigma" => 1,
+  "rho" => [0],
   "alpha" => [0, 1],
-  "normalization" => ["none", "mean_std"],
+  "normalization" => ["none", "mean_std", "mean_var", "mean_stdvar"],
 )
 
 expanded_params = dict_list(param_dict)
