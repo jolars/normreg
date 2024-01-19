@@ -3,7 +3,7 @@ using LaTeXStrings
 
 using PythonPlot: matplotlib
 
-default(titlefontsize = 12)
+default(titlefontsize = 11)
 
 pythonplot()
 
