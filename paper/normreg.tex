@@ -244,7 +244,7 @@ Next, we see how this situation compares with a case where we have a binary, ins
 
 We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 \[
-  \E \hat\beta = \frac{\softthreshold{\left( n\beta\sqrt{q(1-q)} ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
+  \E \hat\beta = \frac{\softthreshold{\left( n\beta q(1-q) ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
 \]
 This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just, due to the ridge penalty, be a scaled version of the ordinary least squares coefficient.
 
