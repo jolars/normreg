@@ -70,7 +70,7 @@ param_dict = Dict(
   "sigma" => 0.5,
   "rho" => [0],
   "alpha" => [0, 1],
-  "normalization" => ["none", "mean_std", "mean_var", "mean_stdvar"],
+  "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
 )
 
 expanded_params = dict_list(param_dict)

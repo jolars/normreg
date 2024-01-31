@@ -49,7 +49,7 @@ function normalize(x::AbstractMatrix, method::String = "mean_std")
 
     for j in 1:p
       if binary[j]
-        scales[j] = var(x[:, j])
+        scales[j] = 2 * var(x[:, j])
       else
         scales[j] = std(x[:, j])
       end

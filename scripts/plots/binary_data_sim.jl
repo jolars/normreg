@@ -51,6 +51,7 @@ plot_output = @df avg_value groupedbar(
   :err_mean,
   group = :normalization,
   yerror = :err_confidence_error,
+  legend = :outerright,
   ylabel = "Mean-Squared Error",
   xlabel = "Class Balance of Signals",
   size = (450, 240),
