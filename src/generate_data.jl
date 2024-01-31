@@ -1,5 +1,8 @@
 using Random
 using Distributions
+using Base
+
+logspace(start, last, count) = Iterators.map(exp, range(log(start), log(last), count))
 
 """
     generate_binary_gaussian_features(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
@@ -18,7 +21,7 @@ distributed data with parameter `p`.
 # Returns
 - `Array{Float64, 2}`: Generated data points. The first column represent the normally distributed data, and the second the Bernoulli distributed data.
 """
-function generate_binary_gaussian_features(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
+function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, p = 0.5, ρ = 0)
   X = Normal(0, 1)
 
   x = rand(X, n)
@@ -36,4 +39,38 @@ function generate_binary_gaussian_features(n; μ = 0, σ = 1, p = 0.5, ρ = 0)
   b = Int64.(x .>= q)
 
   return [y b]
+end
+
+function generate_mixed_data(n, p, k, q_type; μ = 0, σ = 0.5)
+  x = zeros(n, p)
+
+  β = zeros(p)
+  β[1:k] .= 1
+
+  q = collect(logspace(0.5, 0.99, k))
+
+  for i in 1:p
+    if  i <= k
+      if q_type == "decreasing"
+        X = Bernoulli(q[i])
+      elseif q_type == "balanced"
+        X = Bernoulli(0.5)
+      elseif q_type == "imbalanced"
+        X = Bernoulli(0.9)
+      elseif q_type == "very_imbalanced"
+        X = Bernoulli(0.99)
+      else
+        error("q_type not supported")
+      end
+    else
+      q_i = rand(Uniform(0.5, 0.99), 1)
+      X = Bernoulli(q_i[1])
+    end
+
+    x[:, i] = rand(X, n)
+  end
+
+  y = x * β .+ rand(Normal(0, 0.5), n)
+
+  return x, y, β
 end
