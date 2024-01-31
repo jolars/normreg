@@ -7,7 +7,7 @@ using DataFrames
 using Lasso
 using Plots
 using JSON
-
+using ProjectRoot
 using NormReg
 
 function binary_gaussian_simulation(
@@ -22,34 +22,33 @@ function binary_gaussian_simulation(
 )
   Random.seed!(seed)
 
-  beta = [1, 1]
+  beta = [1, 1, 0.25]
 
-  # Generate data once to compute lambda_max
-  x = generate_binary_gaussian_features(n, ρ = ρ, μ = 0, σ = σ, p = 0.5)
-  y = x * beta
-  x_std, _, _ = NormReg.normalize(x, normalization)
-  λmax = maximum(abs.(x_std' * (y .- mean(y))))
-  λ = λmax * 0.75 / n
-
-  betas = zeros(2, n_ps)
+  betas = zeros(3, n_ps)
   ps = range(0.5, 0.99, length = n_ps)
 
   for i in 1:n_ps
-    beta_hat = zeros(2)
+    beta_hat = zeros(3)
     for _ in 1:n_it
       x = generate_binary_gaussian_features(n, ρ = ρ, μ = 0, σ = σ, p = ps[i])
+      x3 = rand(Normal(0, 2), n)
+      x = [x x3]
 
       y = x * beta
       # y = x * beta .+ rand(Normal(0, 1))
 
       x_std, centers, scales = NormReg.normalize(x, normalization)
 
+      λmax = maximum(abs.(x_std' * (y .- mean(y))))
+
+      λ = α == 0 ? λmax * 0.25 / n : λmax * 0.15 / n
+
       model = Lasso.fit(
         Lasso.LassoPath,
         x_std,
         y,
-        α = α,
         Normal(),
+        α = α,
         standardize = false,
         λ = [λ],
         intercept = true,
@@ -61,7 +60,7 @@ function binary_gaussian_simulation(
       # Compute the average across the iterations
       beta_hat += beta_hat_it / n_it
     end
-    betas[:, i] = beta_hat
+    betas[:, i] = beta_hat ./ beta
   end
 
   return betas, ps
@@ -90,7 +89,7 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = here("data", "lasso_ridge_twodim.json")
+outfile = @projectroot("data", "lasso_ridge_twodim.json")
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

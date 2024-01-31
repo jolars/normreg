@@ -3,8 +3,9 @@ using NormReg
 using JSON
 using LaTeXStrings
 using Plots
+using ProjectRoot
 
-json = JSON.parsefile(here("data", "lasso_ridge_twodim.json"))
+json = JSON.parsefile(@projectroot("data", "lasso_ridge_twodim.json"))
 
 df = DataFrame(json)
 
@@ -20,7 +21,7 @@ for (i, d) in enumerate(groups)
   lasso = d.alpha[1] == 1
   p = plot(legend = false)
 
-  labels = ["normal" "binary"]
+  labels = ["normal_0.5" "binary" "normal_1"]
   legend = i == 4 ? true : false
 
   yguideposition = :left
@@ -58,8 +59,8 @@ n_rows = length(unique(df.alpha))
 n_cols = length(unique(df.normalization))
 
 plot_output =
-  plot(plots..., layout = (n_rows, n_cols), ylim = (0, 0.9), size = (450, 400))
+  plot(plots..., layout = (n_rows, n_cols), ylim = (0, 1), size = (450, 380))
 
-file_path = here("plots", "lasso_ridge_twodim.pdf")
+file_path = @projectroot("paper", "plots", "lasso_ridge_twodim.pdf")
 
 savefig(plot_output, file_path)
