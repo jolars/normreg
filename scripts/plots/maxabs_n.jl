@@ -3,10 +3,11 @@ using StatsPlots
 using NormReg
 using LaTeXStrings
 using JSON
+using ProjectRoot
 
 NormReg.setPlotSettings()
 
-json_data = JSON.parsefile(here("data", "maxabs_n.json"))
+json_data = JSON.parsefile(@projectroot("data", "maxabs_n.json"))
 
 df = DataFrame(json_data)
 
@@ -22,6 +23,6 @@ pl = @df df_flat plot(
 )
 
 file_name = "maxabs_n"
-file_path = here("plots", file_name * ".pdf")
+file_path = @projectroot("paper", "plots", file_name * ".pdf")
 
 savefig(pl, file_path)

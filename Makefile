@@ -12,12 +12,12 @@ PDF_FILES := $(patsubst $(SCRIPTS_PLOTS_DIR)/%.jl, $(PLOTS_DIR)/%.pdf, $(PLOT_SC
 
 all: $(addprefix $(PAPER_PLOTS_DIR)/,$(notdir $(PDF_FILES))) $(PDF_FILES)
 
-$(PLOTS_DIR)/%.pdf: $(DATA_DIR)/% $(SCRIPTS_PLOTS_DIR)/%.jl
+$(PLOTS_DIR)/%.pdf: $(DATA_DIR)/%.json $(SCRIPTS_PLOTS_DIR)/%.jl
 	@mkdir -p $(@D)
 	$(eval STEM=$(patsubst $(PLOTS_DIR)/%.pdf,%,$@))
 	$(JULIA) $(SCRIPTS_PLOTS_DIR)/$(STEM).jl
 
-$(DATA_DIR)/%: $(SCRIPTS_EXP_DIR)/%.jl
+$(DATA_DIR)/%.json: $(SCRIPTS_EXP_DIR)/%.jl
 	$(JULIA) $<
 
 $(PAPER_PLOTS_DIR)/%.pdf: $(PLOTS_DIR)/%.pdf

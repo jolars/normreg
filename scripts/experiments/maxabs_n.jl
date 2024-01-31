@@ -5,7 +5,6 @@ using Statistics
 using Lasso
 using DrWatson
 using JSON
-
 using NormReg
 
 function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter = 100)

@@ -1,10 +1,13 @@
 using DataFrames
 using Plots
+using LaTeXStrings
 using NormReg
+using JSON
+using ProjectRoot
 
 NormReg.setPlotSettings()
 
-json_data = JSON.parsefile(here("data", "realdata_paths.json"))
+json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"))
 
 df = DataFrame(json_data)
 
@@ -39,7 +42,6 @@ for (i, d) in enumerate(groupby(df, :normalization))
     grey_vars = setdiff(var_grey, var_ind)
 
     p = plot(legend = false)
-    print(var_grey)
 
     for i in grey_vars
       plot!(Array(x_var), coefs[i, :], legend = false, color = :gray90)
@@ -83,6 +85,6 @@ end
 plot_output = plot(plots..., layout = (2, 3), size = (450, 350))
 
 file_name = "realdata_paths"
-file_path = here("plots", file_name * ".pdf")
+file_path = @projectroot("paper", "plots", file_name * ".pdf")
 
 savefig(plot_output, file_path)
