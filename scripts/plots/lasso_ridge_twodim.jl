@@ -4,10 +4,9 @@ using JSON
 using LaTeXStrings
 using Plots
 using ProjectRoot
-using FileIO
 
-json = JSON.parsefile(@projectroot("data", "lasso_ridge_twodim.json"));
-df = DataFrame(json);
+json_data = JSON.parsefile(@projectroot("data", "lasso_ridge_twodim.json"));
+df = DataFrame(json_data);
 df_subset = subset(df, :rho => r -> r .== 0.0);
 
 NormReg.setPlotSettings("pyplot")
@@ -17,13 +16,21 @@ df_ridge = subset(df_subset, :alpha => a -> a .== 0.0)
 
 groups = (groupby(df_subset, [:normalization], sort = true))
 
+norm_map = Dict(
+  "none" => "None",
+  "mean_std" => "Std",
+  "mean_stdvar" => "Adapt",
+  "max_abs" => "Max-Abs",
+)
+
 function make_plot(df_subset)
   plots = []
   groups = groupby(df_subset, :normalization, sort = true)
   for (i, d) in enumerate(groups)
     p = plot(legend = false)
 
-    labels = ["normal_0.5" "binary" "normal_2"]
+    labels =
+      [L"\operatorname{Normal}(0,0.5)" L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0, 2)"]
     legend = i == 4 ? :outerright : false
 
     yguide = L"\hat\beta / \beta^*"
@@ -40,14 +47,14 @@ function make_plot(df_subset)
       xticks = 0.5:0.2:1.0,
     )
 
-    title!(string(d.normalization[1]))
+    title!(norm_map[string(d.normalization[1])])
 
     xlabel!(L"q")
 
     push!(plots, p)
   end
 
-  plot(plots..., layout = (1, 4), size = (480, 200), ylim = (0, 1))
+  plot(plots..., layout = (1, 4), size = (480, 150), ylim = (0, 1))
 end
 
 p_lasso = make_plot(df_lasso)

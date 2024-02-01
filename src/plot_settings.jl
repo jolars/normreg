@@ -21,6 +21,6 @@ function setPlotSettings(backend = "pyplot")
     default(titlefontsize = 11, thickness_scaling = 1, framestyle = :box)
     pythonplot()
     matplotlib.rcParams["text.usetex"] = true
-    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}"
+    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}\\usepackage{mathtools}"
   end
 end
