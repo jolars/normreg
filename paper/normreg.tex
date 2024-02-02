@@ -222,33 +222,46 @@ The stationarity condition for this problem is the following system of equations
 The solution to this system is well-known~\parencite{donoho1994}:
 \[
   \begin{aligned}
-    \hat\beta   & = \frac{\softthreshold{\left(\tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{s\left(\tilde{\vec{x}}^\T \tilde{\vec{x}} - \frac{1}{n}(\tilde{\vec{x}}^\T \ones)^2 + (1 - \alpha) \lambda\right)}, \\
+    \label{eq:one-dim-solution}
+    \hat\beta   & = \frac{\st{\left(\tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{s\left(\tilde{\vec{x}}^\T \tilde{\vec{x}} - \frac{1}{n}(\tilde{\vec{x}}^\T \ones)^2 + (1 - \alpha) \lambda\right)}, \\
     \hat\beta_0 & = \frac{\vec{y}^\T \ones - \tilde{\vec{x}}^\T \ones\hat\beta}{n},
   \end{aligned}
 \]
-where \(\softthreshold\) is the soft-thresholding operator, defined as
+where \(\st\) is the soft-thresholding operator, defined as
 \[
-  \softthreshold{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
+  \st{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
 \]
 
-Next, we consider what this one-dimensional solution looks like under various forms of normalization.
-
-\subsubsection{Standardization}
-
-Now, under the assumption that \(y_i = \sum_i x_{ij} \beta_j + \varepsilon_i\) with \(\E \varepsilon_i = 0\), we have
-% FIXME: This is not corrent.
+Now, assume that \(\vec{x}\) and \(\beta\) are fixed and that \(y_i = x_i\beta + \varepsilon_i\). We are interested in the expected value of \eqref{eq:one-dim-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones\) and observe that
 \[
-  \E \hat\beta = \frac{\softthreshold{\left( n \beta\var{\tilde{X}}; \alpha\lambda\right)}}{s\left(n\var{\tilde X} + (1-\alpha)\lambda\right)}
+  \begin{aligned}
+    \E \st{\left(Z; \alpha\lambda \right)} & = \int_{-\infty}^\infty \st(z; \alpha\lambda) f_Z(z) \du z                                                                      \\
+                                           & = \int_{-\infty}^\infty \ind{|z| > \alpha\lambda} (z -\sign(z)\alpha\lambda) f_Z(z) \du z                                       \\
+                                           & = \int_{-\infty}^{-\alpha\lambda}(z + \alpha\lambda)f_Z(z) \du z + \int_{\alpha\lambda}^\infty (z - \alpha\lambda)f_Z(z) \du z,
+  \end{aligned}
 \]
-since \(\E \tilde X = 0\).
-
-Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
-
-We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
+Next, since \(Z\) is a linear combination of normal random variables, it is itself normally distributed with mean \(\mu_Z\) and standad deviation \(\sigma_Z\) according to
 \[
-  \E \hat\beta = \frac{\softthreshold{\left( n\beta q(1-q) ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
+  \mu_Z = \tilde{\vec{x}}^\T\vec{x} \beta - \frac{1}{n} \tilde{\vec{x}}^\T\ones \vec{x}^\T\ones  \beta,
+  \qquad
+  \sigma_Z = \lVert \tilde{\vec{x}}\rVert_2 \sigma_\varepsilon + \frac{1}{\sqrt{n}}|\tilde{\vec{x}}^\T \ones| \sigma_\varepsilon.
 \]
-This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just, due to the ridge penalty, be a scaled version of the ordinary least squares coefficient.
+This means that we can compute the expected value of solution to the one-dimensional elastic net problem analytically.
+
+% TODO: I guess it might be possible to also compute the bias of the solution here with respect to the true coefficient and the noise level.
+
+Assuming that \(\vec{x}\) is centered, such that \(\vec{x}^\T \ones = 0\), then
+\[
+  Z \sim \normal\left(\tilde{\vec{x}}^\T\vec{x} \beta, \lVert \tilde{\vec{x}}\rVert_2 \sigma_\varepsilon\right).
+\]
+
+% Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
+
+% We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
+% \[
+%   \E \hat\beta = \frac{\st{\left( n\beta q(1-q) ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
+% \]
+% This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just, due to the ridge penalty, be a scaled version of the ordinary least squares coefficient.
 
 \subsection{Two-Dimensional Problem}
 
