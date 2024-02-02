@@ -5,13 +5,11 @@ using NormReg
 using JSON
 using ProjectRoot
 
-NormReg.setPlotSettings()
+NormReg.setPlotSettings("pyplot");
 
-json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"))
-
-df = DataFrame(json_data)
-
-df_flat = DataFrames.flatten(df, [:betas])
+json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"));
+df = DataFrame(json_data);
+df_flat = DataFrames.flatten(df, [:betas]);
 
 plots = []
 
@@ -84,7 +82,6 @@ end
 
 plot_output = plot(plots..., layout = (2, 3), size = (450, 350))
 
-file_name = "realdata_paths"
-file_path = @projectroot("paper", "plots", file_name * ".pdf")
+file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
 
 savefig(plot_output, file_path)
