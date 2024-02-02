@@ -70,9 +70,8 @@ Throughout this paper, we assume that the data is generated from a linear model,
   y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i,
 \]
 where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\) is the \(n \times p\) design matrix with columns \(\vec x_j\) and \(\vec y\) the \(n \times 1\) response vector.
-
 Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
-
+Unless otherwise stated, we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
 
 There is ambiguity regarding many of the key terms in the field of normalization. \emph{Scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably throughout the literature. Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
 
@@ -85,11 +84,27 @@ Some authors refer to this procedure as \emph{standardization} or \emph{scaling}
 
 \subsubsection{Rescaling Regression Coefficients}
 
-Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain these, we transform the standardized coefficients, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
+Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
 \[
   \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
 \]
 There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
+
+\subsubsection{Comparing Effects of Continuous and Binary Features}
+
+Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
+
+Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) is equivalent to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+
+\begin{example}
+  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
+\end{example}
+
+Our particular choice of two standard deviations is not critical for our results. Other choices, as long as they are linear with respect to the standard deviation of the normally distributed variable, would have only superficial effects on our results.
+
+On the hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
+
+We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
 
 \subsection{Types of Normalization}
 
@@ -255,7 +270,6 @@ Assuming that \(\vec{x}\) is centered, such that \(\vec{x}^\T \ones = 0\), then
   Z \sim \normal\left(\tilde{\vec{x}}^\T\vec{x} \beta, \lVert \tilde{\vec{x}}\rVert_2 \sigma_\varepsilon\right).
 \]
 
-% Next, we see how this situation compares with a case where we have a binary, instead of continuous, feature. First, however, we need to determine how to match a flip of the binary variable (a one unit change) with an equivalent amount of change in the continuous variable. There are several possibilities, and none are unequivocally correct. For the sequel, we will suppose that moving two standard deviations on the continuous variable is equivalent to flipping the binary variable. If the continuous variable comes from a normal distribution, this means that having the class represented by the binary feature or not is equivalent to being in the lower versus upper 16\% of the distribution of the continuous variable. This is naturally not a valid comparison for every kind of feature, but as in \textcite{gelman2008} we argue that it is a reasonable default.
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 % \[
