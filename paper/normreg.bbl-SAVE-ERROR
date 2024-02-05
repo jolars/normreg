@@ -1,0 +1,168 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global}
+    \entry{donoho1994}{article}{}
+      \name{author}{2}{}{%
+        {{hash=9fb99e5502c0b871a6067b55fcaf8986}{%
+           family={Donoho},
+           familyi={D\bibinitperiod},
+           given={David\bibnamedelima L.},
+           giveni={D\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+        {{hash=d33878bd1793b4205330399a82713174}{%
+           family={Johnstone},
+           familyi={J\bibinitperiod},
+           given={Iain\bibnamedelima M.},
+           giveni={I\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      }
+      \strng{namehash}{36faaec97aef73de9907e6936b3035f8}
+      \strng{fullhash}{36faaec97aef73de9907e6936b3035f8}
+      \strng{bibnamehash}{36faaec97aef73de9907e6936b3035f8}
+      \strng{authorbibnamehash}{36faaec97aef73de9907e6936b3035f8}
+      \strng{authornamehash}{36faaec97aef73de9907e6936b3035f8}
+      \strng{authorfullhash}{36faaec97aef73de9907e6936b3035f8}
+      \field{labelalpha}{DJ94}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{With ideal spatial adaptation, an oracle furnishes information about how best to adapt a spatially variable estimator, whether piecewise constant, piecewise polynomial, variable knot spline, or variable bandwidth kernel, to the unknown function. Estimation with the aid of an oracle offers dramatic advantages over traditional linear estimation by nonadaptive kernels; however, it is a priori unclear whether such performance can be obtained by a procedure relying on the data alone. We describe a new principle for spatially-adaptive estimation: selective wavelet reconstruction. We show that variable-knot spline fits and piecewise-polynomial fits, when equipped with an oracle to select the knots, are not dramatically more powerful than selective wavelet reconstruction with an oracle. We develop a practical spatially adaptive method, RiskShrink, which works by shrinkage of empirical wavelet coefficients. RiskShrink used in connection with sample rotation. Inclusion probabilities of any order can be written explicitly in closed form. Second-order inclusion probabilities \ensuremath{\pi}ij satisfy the condition \$0 {$<\$} \textbackslash pi\_\{ij\} {\$<\$} \textbackslash pi\_\{i\}\textbackslash pi\_j\$, which guarantees Yates \& Grundy's variance estimator to be unbiased, definable for all samples and always nonnegative for any sample size.}
+      \field{eprinttype}{jstor}
+      \field{issn}{0006-3444}
+      \field{journaltitle}{Biometrika}
+      \field{month}{8}
+      \field{number}{3}
+      \field{title}{Ideal Spatial Adaptation by Wavelet Shrinkage}
+      \field{urlday}{6}
+      \field{urlmonth}{10}
+      \field{urlyear}{2023}
+      \field{volume}{81}
+      \field{year}{1994}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{425\bibrangedash 455}
+      \range{pages}{31}
+      \verb{doi}
+      \verb 10.2307/2337118
+      \endverb
+      \verb{eprint}
+      \verb 2337118
+      \endverb
+      \verb{urlraw}
+      \verb https://www.jstor.org/stable/2337118
+      \endverb
+      \verb{url}
+      \verb https://www.jstor.org/stable/2337118
+      \endverb
+    \endentry
+    \entry{gelman2008}{article}{}
+      \name{author}{1}{}{%
+        {{hash=1e1eb60e3b6e222217bf8e9b24070b28}{%
+           family={Gelman},
+           familyi={G\bibinitperiod},
+           given={Andrew},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \strng{fullhash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \strng{bibnamehash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \strng{authorbibnamehash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \strng{authornamehash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \strng{authorfullhash}{1e1eb60e3b6e222217bf8e9b24070b28}
+      \field{labelalpha}{Gel08}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Interpretation of regression coefficients is sensitive to the scale of the inputs. One method often used to place input variables on a common scale is to divide each numeric variable by its standard deviation. Here we propose dividing each numeric variable by two times its standard deviation, so that the generic comparison is with inputs equal to the mean \pm{}1 standard deviation. The resulting coefficients are then directly comparable for untransformed binary predictors. We have implemented the procedure as a function in R. We illustrate the method with two simple analyses that are typical of applied modeling: a linear regression of data from the National Election Study and a multilevel logistic regression of data on the prevalence of rodents in New York City apartments. We recommend our rescaling as a default option--an improvement upon the usual approach of including variables in whatever way they are coded in the data file--so that the magnitudes of coefficients can be directly compared as a matter of routine statistical practice. Copyright q 2007 John Wiley \& Sons, Ltd.}
+      \field{day}{10}
+      \field{issn}{02776715, 10970258}
+      \field{journaltitle}{Statistics in Medicine}
+      \field{langid}{english}
+      \field{month}{7}
+      \field{number}{15}
+      \field{shortjournal}{Statist. Med.}
+      \field{title}{Scaling Regression Inputs by Dividing by Two Standard Deviations}
+      \field{urlday}{27}
+      \field{urlmonth}{9}
+      \field{urlyear}{2023}
+      \field{volume}{27}
+      \field{year}{2008}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2865\bibrangedash 2873}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1002/sim.3107
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/sim.3107
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1002/sim.3107
+      \endverb
+    \endentry
+    \entry{nagaraja2003}{book}{}
+      \name{author}{2}{}{%
+        {{hash=386197d1c35ce2d51ec08ce6635b6b2c}{%
+           family={Nagaraja},
+           familyi={N\bibinitperiod},
+           given={Haikady\bibnamedelima N.},
+           giveni={H\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=dc6a503d9fadb9cfba763a71d8072981}{%
+           family={David},
+           familyi={D\bibinitperiod},
+           given={Herbert\bibnamedelima A.},
+           giveni={H\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Hoboken, N.J}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons Inc}%
+      }
+      \strng{namehash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \strng{fullhash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \strng{bibnamehash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \strng{authorbibnamehash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \strng{authornamehash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \strng{authorfullhash}{44726b8dcd297b7aa233c039bc7b84b9}
+      \field{labelalpha}{ND03}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{Considerable changes have occurred in the field of order statistics in the nearly 20 years since "Order Statistics", second edition was published. This third edition gives a helpful account of order statistics, useful to students as well as those needing a guide to the extensive literature.}
+      \field{day}{21}
+      \field{edition}{3}
+      \field{isbn}{978-0-471-38926-2}
+      \field{langid}{english}
+      \field{month}{7}
+      \field{pagetotal}{458}
+      \field{series}{Wiley Series in Probability and Statistics}
+      \field{shorttitle}{Order {{Statistics}}}
+      \field{title}{Order Statistics}
+      \field{year}{2003}
+      \field{dateera}{ce}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

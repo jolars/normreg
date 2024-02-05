@@ -41,7 +41,7 @@ function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, p = 0.5, ρ = 0)
   return [y b]
 end
 
-function generate_mixed_data(n, p, k, q_type; μ = 0, σ = 0.5)
+function generate_binary_data(n, p, k, q_type)
   x = zeros(n, p)
 
   β = zeros(p)
@@ -50,7 +50,7 @@ function generate_mixed_data(n, p, k, q_type; μ = 0, σ = 0.5)
   q = collect(logspace(0.5, 0.99, k))
 
   for i in 1:p
-    if  i <= k
+    if i <= k
       if q_type == "decreasing"
         X = Bernoulli(q[i])
       elseif q_type == "balanced"

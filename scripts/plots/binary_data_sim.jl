@@ -7,7 +7,6 @@ using LaTeXStrings
 using Plots
 using Distributions
 using ProjectRoot
-
 using Statistics
 
 function confidence_interval(x, level = 0.95)
@@ -28,23 +27,13 @@ function confidence_error(x, level = 0.95)
   return q * se
 end
 
-json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"))
+NormReg.setPlotSettings("pyplot");
 
-df = DataFrame(json)
+json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
+df = DataFrame(json);
+groups = groupby(df, [:q_type, :normalization], sort = true);
 
-df_subset = df
-
-plots = []
-
-groups = groupby(df_subset, [:q_type, :normalization], sort = true)
-
-NormReg.setPlotSettings()
-
-d = groups[1]
-
-sublevels = groupby(d, [:normalization], sort = true)
-
-avg_value = combine(groups, :err .=> [mean, confidence_error])
+avg_value = combine(groups, :err .=> [mean, confidence_error]);
 
 plot_output = @df avg_value groupedbar(
   :q_type,
@@ -59,3 +48,6 @@ plot_output = @df avg_value groupedbar(
 
 file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)
+
+# subset(df, :normalization .=> n -> n .== "mean_std", :q_type .=> q -> q .== "imbalanced")
+# subset(df, :normalization .=> n -> n .== "mean_stdvar", :q_type .=> q -> q .== "imbalanced")

@@ -5,7 +5,7 @@ export FoldedNormal
 
 include("generate_data.jl")
 export generate_binary_gaussian_features
-export generate_mixed_data
+export generate_binary_data
 
 include("lasso_utils.jl")
 export orthogonalSolution, softThreshold, get_lambdamax
