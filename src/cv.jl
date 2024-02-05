@@ -23,6 +23,8 @@ end
 function getError(y_pred, y_true, target = "mse")
   if target == "mse"
     return mean((y_pred .- y_true) .^ 2)
+  elseif target == "nmse"
+    return mean((y_pred .- y_true) .^ 2) / var(y_true)
   elseif target == "mae"
     return mean(abs.(y_pred .- y_true))
   else

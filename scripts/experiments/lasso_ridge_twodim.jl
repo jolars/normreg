@@ -23,7 +23,6 @@ function binary_gaussian_simulation(
   Random.seed!(seed)
 
   beta = [1, 1, 0.25]
-
   betas = zeros(3, n_ps)
   ps = range(0.5, 0.99, length = n_ps)
 
@@ -73,9 +72,9 @@ param_dict = Dict(
   "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
 )
 
-expanded_params = dict_list(param_dict)
+expanded_params = dict_list(param_dict);
 
-results = []
+results = [];
 
 for (i, d) in enumerate(expanded_params)
   @unpack sigma, rho, alpha, normalization = d
@@ -89,7 +88,7 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "lasso_ridge_twodim.json")
+outfile = @projectroot("data", "lasso_ridge_twodim.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

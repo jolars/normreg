@@ -11,17 +11,17 @@ df_subset = subset(df, :rho => r -> r .== 0.0);
 
 NormReg.setPlotSettings("pyplot")
 
-df_lasso = subset(df_subset, :alpha => a -> a .== 1.0)
-df_ridge = subset(df_subset, :alpha => a -> a .== 0.0)
+df_lasso = subset(df_subset, :alpha => a -> a .== 1.0);
+df_ridge = subset(df_subset, :alpha => a -> a .== 0.0);
 
-groups = (groupby(df_subset, [:normalization], sort = true))
+groups = (groupby(df_subset, [:normalization], sort = true));
 
 norm_map = Dict(
   "none" => "None",
   "mean_std" => "Std",
   "mean_stdvar" => "Adapt",
   "max_abs" => "Max-Abs",
-)
+);
 
 function make_plot(df_subset)
   plots = []
@@ -60,8 +60,8 @@ end
 p_lasso = make_plot(df_lasso)
 p_ridge = make_plot(df_ridge)
 
-file_path_lasso = @projectroot("paper", "plots", "lasso_twodim.pdf")
-file_path_ridge = @projectroot("paper", "plots", "ridge_twodim.pdf")
+file_path_lasso = @projectroot("paper", "plots", "lasso_twodim.pdf");
+file_path_ridge = @projectroot("paper", "plots", "ridge_twodim.pdf");
 
 savefig(p_lasso, file_path_lasso)
 savefig(p_ridge, file_path_ridge)

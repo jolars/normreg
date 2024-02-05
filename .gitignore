@@ -416,3 +416,5 @@ $RECYCLE.BIN/
 .CondaPkg
 
 _wip/
+
+*.bbl-SAVE-ERROR

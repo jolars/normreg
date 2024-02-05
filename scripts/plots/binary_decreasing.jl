@@ -10,7 +10,7 @@ using ProjectRoot
 
 using Statistics
 
-function confidence_interval(x, level = 0.95)
+function confidence_interval(x, level = 0.05)
   n = length(x)
 
   q = quantile(TDist(n - 1), 1 - level / 2)
@@ -19,7 +19,7 @@ function confidence_interval(x, level = 0.95)
   return (mean(x) - q * se, mean(x) + q * se)
 end
 
-function confidence_error(x, level = 0.95)
+function confidence_error(x, level = 0.05)
   n = length(x)
 
   q = quantile(TDist(n - 1), 1 - level / 2)
@@ -30,40 +30,23 @@ end
 
 NormReg.setPlotSettings("pyplot");
 
-json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
+json_data = JSON.parsefile(@projectroot("data", "binary_data_decreasing.json"));
+df = DataFrame(json_data);
 
-df = DataFrame(json);
+groups = groupby(df, [:normalization, :snr], sort = true)
+avg_value = combine(groups, :err .=> [mean, confidence_error]);
 
-df_subset = subset(df, :q_type .=> q -> q .== "decreasing");
+pl = @df avg_value plot(
+  :snr,
+  :err_mean,
+  group = :normalization,
+  xlabel = "SNR",
+  ylabel = "Normalized Mean-Squared Error",
+  legend = :topright,
+  xaxis = :log,
+  size = (450, 240),
+  ribbon = :err_confidence_error,
+)
 
-groups = groupby(df_subset, [:normalization], sort = true)
-
-plots = []
-
-for (i, d) in enumerate(groups)
-  b = d.betas
-  res = dropdims(mapreduce(permutedims, hcat, b), dims = 1)
-  out = Float64.(mapreduce(permutedims, vcat, res))[:, 1:40]
-  pl = boxplot(
-    1:size(out, 1),
-    out,
-    fillcolor = :lightgrey,
-    markercolor = :black,
-    markersize = 1,
-    legend = false,
-    xformatter = i == length(groups) ? :auto : _ -> "",
-  )
-  title!(pl, d.normalization[1], ylims = (-0.5, 2))
-  ylabel!(pl, L"\hat\beta")
-
-  if i == length(groups)
-    xlabel!(pl, "Feature Index")
-  end
-
-  push!(plots, pl)
-end
-
-plots = plot(plots..., layout = (4, 1), size = (450, 400))
-
-file_path = @projectroot("paper", "plots", "binary_decreasing.pdf")
-savefig(plots, file_path)
+file_path = @projectroot("paper", "plots", "binary_decreasing_snr.pdf")
+savefig(pl, file_path)

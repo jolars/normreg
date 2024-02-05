@@ -41,11 +41,20 @@ function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, p = 0.5, ρ = 0)
   return [y b]
 end
 
-function generate_binary_data(n, p, k, q_type)
+function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
   x = zeros(n, p)
 
   β = zeros(p)
-  β[1:k] .= 1
+
+  if beta_type == "constant"
+    β[1:k] .= 1
+  elseif beta_type == "linear"
+    β[1:k] .= collect(range(1, 0.1, length = k))
+  elseif beta_type == "geometric"
+    β[1:k] .= collect(logspace(1.0, 0.0, k))
+  else
+    error("beta_type not supported")
+  end
 
   q = collect(logspace(0.5, 0.99, k))
 
@@ -70,7 +79,8 @@ function generate_binary_data(n, p, k, q_type)
     x[:, i] = rand(X, n)
   end
 
-  y = x * β .+ rand(Normal(0, 0.5), n)
+  σ = √(var(x * β) / snr)
+  y = x * β .+ rand(Normal(0, σ), n)
 
   return x, y, β
 end
