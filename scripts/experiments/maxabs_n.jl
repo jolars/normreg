@@ -3,6 +3,7 @@ using Random
 using Distributions
 using Statistics
 using Lasso
+using ProjectRoot
 using DrWatson
 using JSON
 using NormReg
@@ -87,7 +88,7 @@ for (i, d) in enumerate(param_expanded)
   push!(results, d_exp)
 end
 
-outfile = here("data", "maxabs_n.json")
+outfile = @projectroot("data", "maxabs_n.json")
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

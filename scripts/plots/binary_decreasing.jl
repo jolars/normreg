@@ -5,28 +5,8 @@ using StatsPlots
 using JSON
 using LaTeXStrings
 using Plots
-using Distributions
 using ProjectRoot
-
 using Statistics
-
-function confidence_interval(x, level = 0.05)
-  n = length(x)
-
-  q = quantile(TDist(n - 1), 1 - level / 2)
-  se = std(x) / sqrt(n)
-
-  return (mean(x) - q * se, mean(x) + q * se)
-end
-
-function confidence_error(x, level = 0.05)
-  n = length(x)
-
-  q = quantile(TDist(n - 1), 1 - level / 2)
-  se = std(x) / sqrt(n)
-
-  return q * se
-end
 
 NormReg.setPlotSettings("pyplot");
 

@@ -1,5 +1,6 @@
 using GLM
 using DrWatson
+using ProjectRoot
 using LIBSVMdata
 using JSON
 using Lasso
@@ -48,7 +49,7 @@ for (i, d) in enumerate(param_expanded)
   push!(results, d_exp)
 end
 
-outfile = here("data", "realdata_paths.json")
+outfile = @projectroot("data", "realdata_paths.json")
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

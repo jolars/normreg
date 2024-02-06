@@ -23,6 +23,7 @@ include("cv.jl")
 export crossValidate
 
 include("utils.jl")
-export here
+export confidence_interval
+export confidence_error
 
 end

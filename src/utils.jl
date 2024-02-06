@@ -1,16 +1,25 @@
-using FilePathsBase
+using Distributions
+using Statistics
 
-# Return the root of the project
-function project_root(current_dir = @__DIR__)
-  while current_dir != "/"
-    if isdir(joinpath(current_dir, ".git")) ||
-       isfile(joinpath(current_dir, "Project.toml"))
-      return current_dir
-    end
-    current_dir = dirname(current_dir)
-  end
-  error("Project root not found")
+function confidence_interval(x, level = 0.95)
+  n = length(x)
+
+  alpha = 1 - level
+
+  q = quantile(TDist(n - 1), 1 - alpha / 2)
+  se = std(x) / sqrt(n)
+
+  return (mean(x) - q * se, mean(x) + q * se)
 end
 
-# Construct paths relative to the project root
-here(args...) = joinpath(project_root(), args...)
+function confidence_error(x, level = 0.95)
+  n = length(x)
+
+  alpha = 1 - level
+
+  q = quantile(TDist(n - 1), 1 - alpha / 2)
+  se = std(x) / sqrt(n)
+
+  return q * se
+end
+
