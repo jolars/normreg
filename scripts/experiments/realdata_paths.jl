@@ -18,7 +18,7 @@ function path_simulation(dataset, normalization, model = "gaussian")
 
   x, y = load_dataset(dataset, dense = true, replace = false, verbose = false)
 
-  x_norm, centers, scales = NormReg.normalize(Array(x), normalization)
+  x_norm, centers, scales = normalize_features(Array(x), normalization)
 
   res = fit(LassoPath, x_norm, y, dist, standardize = false)
 

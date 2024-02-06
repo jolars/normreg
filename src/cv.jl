@@ -52,7 +52,7 @@ function crossValidate(
   x_train, y_train, x_test, y_test = split_data(x, y, train_size)
 
   # fit once to obtain lambas for path
-  x_train_norm, _, _ = NormReg.normalize(x_train, normalization)
+  x_train_norm, _, _ = normalize_features(x_train, normalization)
   res_full = fit(LassoPath, x_train_norm, y_train, dist, standardize = false)
   lambda = res_full.λ
   n_lambda = length(lambda)
@@ -66,7 +66,7 @@ function crossValidate(
     x_val = x[setdiff(1:n, fold), :]
     y_val = y[setdiff(1:n, fold)]
 
-    x_train_fold_norm, _, _ = NormReg.normalize(x_train_fold, normalization)
+    x_train_fold_norm, _, _ = normalize_features(x_train_fold, normalization)
 
     res = fit(
       LassoPath,
@@ -79,7 +79,7 @@ function crossValidate(
       maxncoef = p,
     )
 
-    x_val_norm, _, _ = NormReg.normalize(x_val, normalization)
+    x_val_norm, _, _ = normalize_features(x_val, normalization)
 
     pred_array = predict(res, x_val_norm; select = AllSeg())
 
@@ -92,7 +92,7 @@ function crossValidate(
   best_ind = argmin(avg_error)
   best_lambda = lambda[best_ind]
 
-  x_test_norm, centers_test, scales_test = NormReg.normalize(x_test, normalization)
+  x_test_norm, centers_test, scales_test = normalize_features(x_test, normalization)
 
   res_test = fit(
     LassoPath,

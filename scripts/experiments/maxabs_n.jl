@@ -24,7 +24,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
   x2 = rand(d_binary, 500)
   x = [x1 x2]
   y = x * beta
-  x_std, _, _ = NormReg.normalize(x, "max_abs")
+  x_std, _, _ = normalize_features(x, "max_abs")
 
   λmax = get_lambdamax(x_std, y)
 
@@ -42,7 +42,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
 
       y = x * beta + rand(Normal(0, 1), n)
 
-      x_std, centers, scales = NormReg.normalize(x, "max_abs")
+      x_std, centers, scales = normalize_features(x, "max_abs")
 
       model = Lasso.fit(
         Lasso.LassoPath,

@@ -36,7 +36,7 @@ function binary_gaussian_simulation(
       y = x * beta
       # y = x * beta .+ rand(Normal(0, 1))
 
-      x_std, centers, scales = NormReg.normalize(x, normalization)
+      x_std, centers, scales = normalize_features(x, normalization)
 
       λmax = maximum(abs.(x_std' * (y .- mean(y))))
 

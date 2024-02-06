@@ -12,22 +12,7 @@ function find_binary_features(x)
   return binary
 end
 
-"""
-    normalize(matrix::AbstractMatrix, method::String)
-
-Normalizes the given matrix using the specified method.
-
-# Arguments
-
-- `matrix::AbstractMatrix`: The matrix to be normalized.
-- `method::String`: The method to be used for standardization. Valid options are "mean_std" and "max_abs".
-
-# Returns
-
-- `normalize::Matrix`: The normalized matrix.
-```
-"""
-function normalize(x::AbstractMatrix, method::String = "mean_std")
+function normalize_features(x::AbstractMatrix, method::String = "mean_std")
   p = size(x, 2)
   centers = zeros(1, p)
   scales = ones(1, p)
