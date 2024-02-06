@@ -20,7 +20,7 @@ function split_data(x, y, train_size = 0.75)
   return x_train, y_train, x_test, y_test
 end
 
-function getError(y_pred, y_true, target = "mse")
+function get_error(y_pred, y_true, target = "mse")
   if target == "mse"
     return mean((y_pred .- y_true) .^ 2)
   elseif target == "nmse"
@@ -84,7 +84,7 @@ function cross_validate(
     pred_array = predict(res, x_val_norm; select = AllSeg())
 
     for j in 1:n_lambda
-      err[j, i] = getError(pred_array[:, j], y_val)
+      err[j, i] = get_error(pred_array[:, j], y_val)
     end
   end
 
@@ -109,7 +109,7 @@ function cross_validate(
 
   y_pred = beta0_unstandardized .+ x_test * coefs_unstandardized
 
-  test_error = getError(y_pred, y_test, target)
+  test_error = get_error(y_pred, y_test, target)
 
   return test_error, beta0_unstandardized, coefs_unstandardized
 end

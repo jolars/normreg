@@ -4,7 +4,7 @@ using PlotThemes
 
 using PythonPlot: matplotlib
 
-function setPlotSettings(backend = "pyplot")
+function set_plot_defaults(backend = "pyplot")
   if backend == "gr"
     gr()
     default(

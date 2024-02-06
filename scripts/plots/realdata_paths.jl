@@ -5,7 +5,7 @@ using NormReg
 using JSON
 using ProjectRoot
 
-NormReg.setPlotSettings("pyplot");
+NormReg.set_plot_defaults("pyplot");
 
 json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"));
 df = DataFrame(json_data);

@@ -11,7 +11,7 @@ include("lasso_utils.jl")
 export orthogonalSolution, softThreshold, get_lambdamax
 
 include("plot_settings.jl")
-export setPlotSettings
+export set_plot_defaults
 
 include("plotting.jl")
 export plotPath

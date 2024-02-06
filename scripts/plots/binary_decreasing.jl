@@ -8,7 +8,7 @@ using Plots
 using ProjectRoot
 using Statistics
 
-NormReg.setPlotSettings("pyplot");
+NormReg.set_plot_defaults("pyplot");
 
 json_data = JSON.parsefile(@projectroot("data", "binary_data_decreasing.json"));
 df = DataFrame(json_data);

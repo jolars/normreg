@@ -9,7 +9,7 @@ using Distributions
 using ProjectRoot
 using Statistics
 
-NormReg.setPlotSettings("pyplot");
+NormReg.set_plot_defaults("pyplot");
 
 json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
 df = DataFrame(json);

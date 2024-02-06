@@ -6,7 +6,7 @@ using LaTeXStrings
 using JSON
 using ProjectRoot
 
-NormReg.setPlotSettings()
+NormReg.set_plot_defaults()
 
 json_data = JSON.parsefile(@projectroot("data", "maxabs_n.json"));
 df = DataFrame(json_data);

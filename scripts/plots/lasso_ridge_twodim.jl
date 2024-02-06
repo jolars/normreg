@@ -9,7 +9,7 @@ json_data = JSON.parsefile(@projectroot("data", "lasso_ridge_twodim.json"));
 df = DataFrame(json_data);
 df_subset = subset(df, :rho => r -> r .== 0.0);
 
-NormReg.setPlotSettings("pyplot")
+NormReg.set_plot_defaults("pyplot")
 
 df_lasso = subset(df_subset, :alpha => a -> a .== 1.0);
 df_ridge = subset(df_subset, :alpha => a -> a .== 0.0);
