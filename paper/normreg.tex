@@ -150,6 +150,7 @@ This type of scaling is naturally sensitive to outliers, since a single outlier 
 One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
 
 \begin{theorem}
+  \label{thm:maxabs-gev}
   Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then
   \[
     \E \max_{i \in [n]} |X_i| \approx \mu_n + \gamma \sigma_n,
@@ -184,6 +185,29 @@ One interesting property of maximum absolute value scaling is that it can be sen
   \]
   In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
 \end{proof}
+
+In \Cref{fig:maxabs-gev}, we verify that the results from \Cref{thm:maxabs-gev} hold in practice.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/maxabs_gev.pdf}
+  \caption{%
+    Theoretical versus empirical distribution of the maximum absolute value of normally distributed random variables.
+  }
+  \label{fig:maxabs-gev}
+\end{figure}
+
+In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/maxabs_n.pdf}
+  \caption{%
+    Effects of maximum absolute value scaling.
+  }
+  \label{fig:maxabs-n}
+\end{figure}
+
 
 \subsubsection{Min-Max Normalization}
 
@@ -494,19 +518,6 @@ The results~(\Cref{fig:binary-sim}) show that standardization performs best amon
     Prediction performance of an experiment with geometrically decreasing class balances for signals and varying signal to noise ratios.
   }
   \label{fig:binary-decreasing-snr}
-\end{figure}
-
-\subsection{Maximum Absolute Value Scaling}
-
-In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/maxabs_n.pdf}
-  \caption{%
-    Effects of maximum absolute value scaling.
-  }
-  \label{fig:maxabs-n}
 \end{figure}
 
 

@@ -21,14 +21,12 @@ end
 
 set_plot_defaults()
 
-μ = -15
-σ = 10
+μ = -15;
+σ = 10;
 
-n_n = 100
-
-n = Int.(range(10, 1000, length = n_n))
-
-n_it = 1000
+n_n = 100;
+n = Int.(range(10, 1000, length = n_n));
+n_it = 1000;
 
 X = Normal(μ, σ)
 
@@ -37,10 +35,9 @@ gamma = -digamma(1)
 # Mises
 Y = FoldedNormal(μ, σ)
 
-y = gev_mean.(n, Ref(Y))
-
-y_true = zeros(n_n)
-y_err = zeros(n_n)
+y = gev_mean.(n, Ref(Y));
+y_true = zeros(n_n);
+y_err = zeros(n_n);
 
 for i in 1:n_n
   tmp = [max_abs(n[i], X) for _ in 1:n_it]
@@ -49,10 +46,19 @@ for i in 1:n_n
 end
 
 # Calculate the standard error
-lo = y_true .- y_err
-hi = y_true .+ y_err
+lo = y_true .- y_err;
+hi = y_true .+ y_err;
 
-plot(n, y_true; ribbon = (y_err, y_err), label = "Empirical")
+pl = plot(
+  n,
+  y_true; ribbon = (y_err, y_err),
+  label = "Empirical",
+  size = (235, 175),
+  legend = :bottomright
+)
 plot!(n, y, color = :red, label = "Theoretical")
 xaxis!(L"n")
 yaxis!(L"\max_i |x_i|")
+
+file_path = @projectroot("paper", "plots", "maxabs_gev.pdf")
+savefig(pl, file_path)
