@@ -73,7 +73,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
     end
 
     if mod(j - 1, 3) == 0
-      ylabel!(L"\beta")
+      ylabel!(L"\hat\beta")
     end
 
     push!(plots, p)
