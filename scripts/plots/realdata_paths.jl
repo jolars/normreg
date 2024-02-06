@@ -5,7 +5,7 @@ using NormReg
 using JSON
 using ProjectRoot
 
-NormReg.set_plot_defaults("pyplot");
+set_plot_defaults("pyplot");
 
 json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"));
 df = DataFrame(json_data);
@@ -80,7 +80,9 @@ for (i, d) in enumerate(groupby(df, :normalization))
   end
 end
 
-plot_output = plot(plots..., layout = (2, 3), size = (450, 350))
+width = get_full_width()
+
+plot_output = plot(plots..., layout = (2, 3), size = (width, 350))
 
 file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
 

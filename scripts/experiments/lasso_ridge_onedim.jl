@@ -18,7 +18,7 @@ function onedim_solution(x, y, c, s, λ, α)
   a = x_norm'y - mean(x_norm) * sum(y)
   b = x_norm'x_norm - sum(x_norm)^2 / n + (1 - α) * λ
 
-  unstandardized_beta = softThreshold(a, λ * α) / b
+  unstandardized_beta = soft_threshold(a, λ * α) / b
 
   return unstandardized_beta / s
 end

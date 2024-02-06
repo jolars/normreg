@@ -1,6 +1,6 @@
 using Plots
 
-function plotPath(coefs, var_ind)
+function plot_lasso_path(coefs, var_ind)
   n_var = size(coefs, 1)
   n_lambda = size(coefs, 2)
   x_var = 1:n_lambda

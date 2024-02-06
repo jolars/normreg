@@ -4,6 +4,10 @@ using PlotThemes
 
 using PythonPlot: matplotlib
 
+function get_full_width()
+  return 470
+end
+
 function set_plot_defaults(backend = "pyplot")
   if backend == "gr"
     gr()

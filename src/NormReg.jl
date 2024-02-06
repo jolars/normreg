@@ -8,13 +8,14 @@ export generate_binary_gaussian_features
 export generate_binary_data
 
 include("lasso_utils.jl")
-export orthogonalSolution, softThreshold, get_lambdamax
+export orthogonal_solution, soft_threshold, get_lambdamax
 
 include("plot_settings.jl")
-export set_plot_defaults
+export set_plot_defaults, get_full_width
+export get_full_width
 
 include("plotting.jl")
-export plotPath
+export plot_lasso_path
 
 include("preprocessing.jl")
 export find_binary_features, normalize, unstandardize_coefficients
