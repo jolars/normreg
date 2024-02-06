@@ -32,7 +32,7 @@ function getError(y_pred, y_true, target = "mse")
   end
 end
 
-function crossValidate(
+function cross_validate(
   x::Array{Float64,2},
   y::Array{Float64,1},
   dist = Normal(),

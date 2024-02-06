@@ -16,7 +16,7 @@ function binary_simulation_varyq_experiment(n, p, s, normalization, q_type)
   k = 10
   train_size = 0.75
 
-  err, _, β_est = crossValidate(x, y, Normal(), normalization, k, train_size, "mse")
+  err, _, β_est = cross_validate(x, y, Normal(), normalization, k, train_size, "mse")
 
   return err, β_est, β_true
 end

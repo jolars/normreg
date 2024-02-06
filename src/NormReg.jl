@@ -20,7 +20,7 @@ include("preprocessing.jl")
 export find_binary_features, normalize, unstandardize_coefficients
 
 include("cv.jl")
-export crossValidate
+export cross_validate
 
 include("utils.jl")
 export confidence_interval
