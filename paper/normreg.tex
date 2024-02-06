@@ -244,7 +244,7 @@ The solution to this system is well-known~\parencite{donoho1994}:
 \]
 where \(\st\) is the soft-thresholding operator, defined as
 \[
-  \st{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0).
+  \st{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0) = \ind{|x|>\lambda}\big(x - \sign(x)\lambda\big).
 \]
 
 Now, assume that \(\vec{x}\) and \(\beta\) are fixed and that \(y_i = x_i\beta + \varepsilon_i\). We are interested in the expected value of \eqref{eq:one-dim-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}^\T \ones \vec{y}^\T \ones\) and observe that
