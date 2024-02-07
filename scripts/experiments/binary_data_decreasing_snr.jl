@@ -16,12 +16,14 @@ function binary_simulation_varyq_experiment(n, p, s, normalization, q_type, snr)
   return err, β_est, β_true
 end
 
+snr = collect(logspace(0.05, 6, 5))
+
 param_dict = Dict(
-  "it" => collect(1:50),
+  "it" => collect(1:30),
   "n" => 300,
   "p" => [500],
   "s" => [20],
-  "snr" => [6],
+  "snr" => snr,
   "normalization" => ["none", "mean_std", "mean_stdvar"],
   "q_type" => ["decreasing"],
 )
@@ -45,10 +47,8 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "binary_data_decreasing.json");
+outfile = @projectroot("data", "binary_data_decreasing_snr.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
-
-include(@projectroot("scripts", "plots", "binary_decreasing.jl"))

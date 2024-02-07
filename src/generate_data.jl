@@ -67,3 +67,60 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
 
   return x, y, β
 end
+
+function generate_mixed_data(n, p, k, q_type, beta_type, snr)
+  x = zeros(n, p)
+
+  β = zeros(p)
+
+  k_half = Int64(floor(k / 2))
+
+  if beta_type == "constant"
+    β[1:k] .= 1
+  elseif beta_type == "linear"
+    β[1:k_half] .= collect(range(10, 0.5, length = k_half))
+    β[(k_half+1):k] .= collect(range(10, 0.5, length = k - k_half))
+  else
+    error("beta_type not supported")
+  end
+
+  if q_type == "linear"
+    q = collect(range(0.5, 0.99, length = k))
+  elseif q_type == "geometric"
+    q = collect(logspace(0.5, 0.99, k))
+  end
+
+  for i in 1:p
+    if i <= k_half
+      # First half of the signals are Normally distributed
+      X = Normal(0, 0.5)
+    elseif i <= k
+      # Second half of the signals are Bernoulli distributed
+      if q_type in ["linear", "geometric"]
+        X = Bernoulli(q[i])
+      elseif q_type == "balanced"
+        X = Bernoulli(0.5)
+      elseif q_type == "imbalanced"
+        X = Bernoulli(0.9)
+      elseif q_type == "very_imbalanced"
+        X = Bernoulli(0.99)
+      else
+        error("q_type not supported")
+      end
+    else
+      if i % 2 == 0
+        X = Normal(0, 0.5)
+      else
+        q_i = rand(Uniform(0.5, 0.99), 1)
+        X = Bernoulli(q_i[1])
+      end
+    end
+
+    x[:, i] = rand(X, n)
+  end
+
+  σ = √(var(x * β) / snr)
+  y = x * β .+ rand(Normal(0, σ), n)
+
+  return x, y, β
+end
