@@ -100,9 +100,9 @@ Starting with normally distributed variables, we will here assume that the effec
   If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
 \end{example}
 
-Our particular choice of two standard deviations is not critical for our results. Other choices, as long as they are linear with respect to the standard deviation of the normally distributed variable, would have only superficial effects on our results.
+Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
 
-On the hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
+On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
 
 We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
 
@@ -293,7 +293,6 @@ Assuming that \(\vec{x}\) is centered, such that \(\vec{x}^\T \ones = 0\), then
 \[
   Z \sim \normal\left(\tilde{\vec{x}}^\T\vec{x} \beta, \lVert \tilde{\vec{x}}\rVert_2 \sigma_\varepsilon\right).
 \]
-
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 % \[
