@@ -254,31 +254,21 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
   \end{cases}
 \]
 The solution to this system is well-known~\parencite{donoho1994}:
-\[
-  \begin{aligned}
-    \label{eq:orthogonal-solution}
-    \hat\beta_j & = \frac{\st{\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones; \alpha\lambda \right)}}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}, \\
-    \hat\beta_0 & = \frac{\left(\vec{y}-  \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
-  \end{aligned}
-\]
+\begin{align}
+  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}\label{eq:orthogonal-solution}                                                                                                  \\
+              & = \st_{\frac{\alpha\lambda}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}\right), \\
+  \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
+\end{align}
 where \(\st\) is the soft-thresholding operator, defined as
 \[
-  \st{(x; \lambda)} = \sign(x) \max(|x| - \lambda, 0) = \ind{|x|>\lambda}\big(x - \sign(x)\lambda\big).
+  \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
 
-Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\) and observe that
+Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\) with mean \(\mu\). We have
 \[
   \begin{aligned}
-    \E \st{\left(Z; \alpha\lambda \right)} & = \int_{-\infty}^\infty \st(z; \alpha\lambda) f_Z(z) \du z                                                                      \\
-                                           & = \int_{-\infty}^\infty \ind{|z| > \alpha\lambda} (z -\sign(z)\alpha\lambda) f_Z(z) \du z                                       \\
-                                           & = \int_{-\infty}^{-\alpha\lambda}(z + \alpha\lambda)f_Z(z) \du z + \int_{\alpha\lambda}^\infty (z - \alpha\lambda)f_Z(z) \du z.
-  \end{aligned}
-\]
-We have expected value
-\[
-  \begin{aligned}
-    \E Z & = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right) \\
-         & = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j - \frac{1}{n} \tilde{\vec{x}}^\T \ones (\tilde{\vec{x}}_j\beta_j)^\T\ones.
+    \mu = \E Z & = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right) \\
+               & = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j - \frac{1}{n} \tilde{\vec{x}}^\T \ones (\tilde{\vec{x}}_j\beta_j)^\T\ones.
   \end{aligned}
 \]
 And for the variance, we get
@@ -289,14 +279,58 @@ And for the variance, we get
   \end{aligned}
 \]
 
-\subsubsection{Normally Distributed Noise}
+The expected value of the soft-thresholding estimator is
+\[
+  \begin{aligned}
+    \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                     \\
+                      & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                           \\
+                      & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
+  \end{aligned}
+\]
+
+The mean-squared error of soft-thresholding of a random variable \(Z\) with mean \(\mu\) is
+\[
+  \E\big( \st_\lambda(Z) - \mu\big)^2  = \int_{-\infty}^{-\lambda}(z + \lambda - \mu)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - \mu)^2 f_Z(z)\du z + \mu^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+\]
+
+\subsubsection{Mean-Centering and Normally Distributed Noise}
 
 Next, assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
-  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \lVert \tilde{\vec{x}}_j\rVert_2 \sigma_\varepsilon\right).
+  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2\lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
+\]
+Let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And now
+\[
+  \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \phi(u)\du u +
+  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \phi(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \phi(u)\du u.
+\]
+Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squared error.
+\begin{equation}
+  \label{eq:mse-bound1}
+  \begin{aligned}
+     & \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu)                                                                                                                                                                                                                                                                                                                \\
+     & =  \lim_{\mu \rightarrow \infty}\left(\sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \phi(u)\du u - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^\frac{-\lambda - \mu}{\sigma} u \phi(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \phi(u)\du u + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \phi(u) \du u \right) \\
+     & = \sigma^2 + \lambda^2.
+  \end{aligned}
+\end{equation}
+where \(\phi(u)\) is the probability density function of the standard normal distribution. So for a given \(\lambda\) we have \(r(\lambda, \mu) \leq \sigma^2 + \mu^2\).
+
+Next, observe that
+\begin{equation}
+  \label{eq:mse-bound2}
+  \risk(\lambda, \mu) - \risk(\lambda, 0) = -2\mu \E \st_\lambda(z) + \mu^2 \leq \mu^2
+\end{equation}
+under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref{eq:mse-bound2}, we have
+\[
+  \risk(\lambda,\mu) \leq \min\big(\sigma^2 + \lambda^2, \risk(\lambda, 0) + \mu^2\big) \leq \risk(\lambda, 0) + \min(\mu^2, \sigma^2 + \lambda^2).
 \]
 
-% TODO: I guess it might be possible to also compute the bias of the solution here with respect to the true coefficient and the noise level.
+% TODO: Not strictly true since we are scaling here.
+Returning to the problem of computing the mean squared error across multiple features, we have
+\[
+  \E \big(\hat\beta - \beta) = \sum_{j = 1}^p \risk(\lambda, \mu) \leq p \risk(\lambda, 0) + \sum_{j=1}^p \min(\sigma^2 + \lambda^2, \mu^2)
+\]
+
 
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
