@@ -264,7 +264,7 @@ where \(\st\) is the soft-thresholding operator, defined as
   \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
 
-Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\) with mean \(\mu\). We have
+Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\) with mean \(\mu\). We have
 \[
   \begin{aligned}
     \mu = \E Z & = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right) \\
@@ -275,7 +275,7 @@ And for the variance, we get
 \[
   \begin{aligned}
     \var Z & = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) + \left(\frac{1}{n}\tilde{\vec{x}}_j^\T \ones\right)^2 n \var(\varepsilon) \\
-           & = \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 \sigma_\varepsilon^2.
+           & = \sigma^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 \sigma^2.
   \end{aligned}
 \]
 
@@ -297,25 +297,28 @@ The mean-squared error of soft-thresholding of a random variable \(Z\) with mean
 
 Next, assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
-  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2\lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
+  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma^2\lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
-Let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And now
+Let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
 \[
   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \phi(u)\du u +
-  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \phi(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \phi(u)\du u.
+  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \phi(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \phi(u)\du u,
 \]
-Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squared error.
+where \(\phi(u)\) is the probability density function of the standard normal distribution. Expanding the integrals, we have
+\[
+  \begin{aligned}
+    R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \phi(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \phi(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \phi(u)\du u \\
+                   & \phantom{=} - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^{\infty} u \phi(u)\du u + \lambda^2 \int_{-\infty}^\frac{-\lambda-\mu}{\sigma} \phi(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \phi(u)\du u \\
+                   & \phantom{=} + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \phi(u) \du u.
+  \end{aligned}
+\]
+
+Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squared error. First, observe that
 \begin{equation}
   \label{eq:mse-bound1}
-  \begin{aligned}
-     & \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu)                                                                                                                                                                                                                                                                                                                \\
-     & =  \lim_{\mu \rightarrow \infty}\left(\sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \phi(u)\du u - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^\frac{-\lambda - \mu}{\sigma} u \phi(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \phi(u)\du u + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \phi(u) \du u \right) \\
-     & = \sigma^2 + \lambda^2.
-  \end{aligned}
+  \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu) = \sigma^2 + \lambda^2.
 \end{equation}
-where \(\phi(u)\) is the probability density function of the standard normal distribution. So for a given \(\lambda\) we have \(r(\lambda, \mu) \leq \sigma^2 + \mu^2\).
-
-Next, observe that
+Next, we see that
 \begin{equation}
   \label{eq:mse-bound2}
   \risk(\lambda, \mu) - \risk(\lambda, 0) = -2\mu \E \st_\lambda(z) + \mu^2 \leq \mu^2
@@ -326,10 +329,11 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 \]
 
 % TODO: Not strictly true since we are scaling here.
-Returning to the problem of computing the mean squared error across multiple features, we have
+We now turn to the problem of computing the mean squared error across multiple features corresponding to signals and noise. We have
 \[
-  \E \big(\hat\beta - \beta) = \sum_{j = 1}^p \risk(\lambda, \mu) \leq p \risk(\lambda, 0) + \sum_{j=1}^p \min(\sigma^2 + \lambda^2, \mu^2)
+  \E \big(\hat\beta - \beta) = \sum_{j = 1}^p \risk(\lambda, \mu) \leq p \risk(\lambda, 0) + \sum_{j=1}^p \min(\sigma^2 + \lambda^2, \mu_j^2)
 \]
+
 
 
 
