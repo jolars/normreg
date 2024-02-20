@@ -264,18 +264,18 @@ where \(\st\) is the soft-thresholding operator, defined as
   \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
 
-Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\) with mean \(\mu\). We have
+Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\). We have
 \[
   \begin{aligned}
-    \mu = \E Z & = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right) \\
+    \E Z = \mu & = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right) \\
                & = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j - \frac{1}{n} \tilde{\vec{x}}^\T \ones (\tilde{\vec{x}}_j\beta_j)^\T\ones.
   \end{aligned}
 \]
 And for the variance, we get
 \[
   \begin{aligned}
-    \var Z & = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) + \left(\frac{1}{n}\tilde{\vec{x}}_j^\T \ones\right)^2 n \var(\varepsilon) \\
-           & = \sigma^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 \sigma^2.
+    \var Z = \sigma & = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) + \left(\frac{1}{n}\tilde{\vec{x}}_j^\T \ones\right)^2 n \var(\varepsilon) \\
+                    & = \frac{\sigma_\varepsilon^2}{n}\big( \lVert \tilde{\vec{x}}_j\rVert_2^2 +(\tilde{\vec{x}}_j^\T \ones)^2\big).
   \end{aligned}
 \]
 
@@ -295,16 +295,25 @@ The mean-squared error of soft-thresholding of a random variable \(Z\) with mean
 
 \subsubsection{Mean-Centering and Normally Distributed Noise}
 
-Next, assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
+Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
-  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma^2\lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
+  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \frac{\sigma_\varepsilon^2}{n} \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
-Let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
+Starting with the bias, we have
+\begin{align}
+  \label{eq:mean-centering-bias}
+  \E \st_\lambda(Z) - \mu & = \int_{-\infty}^\frac{-\lambda -\mu}{\sigma} (\sigma u + \lambda + \mu) \phi(u) \du u + \int_\frac{\lambda - \mu}{\sigma}^\infty (\sigma u - \lambda + \mu) \phi(u) \du u - \mu \\
+                          & = (-\lambda - \mu) \Phi\left(\frac{-\lambda-\mu}{\sigma}\right) + \sigma \phi\left(\frac{-\lambda-\mu}{\sigma}\right)                                                            \\
+                          & \phantom{=} + (\mu - \lambda) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma \phi\left(\frac{\mu-\lambda}{\sigma}\right) - \mu.
+\end{align}
+where \(\phi(u)\) and \(\Phi(u)\) are the probability and cumulative density functions of the standard normal distribution.
+
+Next, for the mean-squared error, let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
 \[
   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \phi(u)\du u +
   \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \phi(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \phi(u)\du u,
 \]
-where \(\phi(u)\) is the probability density function of the standard normal distribution. Expanding the integrals, we have
+Expanding, we have
 \[
   \begin{aligned}
     R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \phi(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \phi(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \phi(u)\du u \\
@@ -318,6 +327,7 @@ Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squ
   \label{eq:mse-bound1}
   \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu) = \sigma^2 + \lambda^2.
 \end{equation}
+% We need some condition on the last integral for this to hold, since mu^2 may also get lar0/000ge.
 Next, we see that
 \begin{equation}
   \label{eq:mse-bound2}
@@ -328,13 +338,20 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
   \risk(\lambda,\mu) \leq \min\big(\sigma^2 + \lambda^2, \risk(\lambda, 0) + \mu^2\big) \leq \risk(\lambda, 0) + \min(\mu^2, \sigma^2 + \lambda^2).
 \]
 
-% TODO: Not strictly true since we are scaling here.
-We now turn to the problem of computing the mean squared error across multiple features corresponding to signals and noise. We have
+Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then, abusing notation, we let
 \[
-  \E \big(\hat\beta - \beta) = \sum_{j = 1}^p \risk(\lambda, \mu) \leq p \risk(\lambda, 0) + \sum_{j=1}^p \min(\sigma^2 + \lambda^2, \mu_j^2)
+  \mu(q) = \frac{nq(1 - q)}{s}, \qquad \sigma^2(q) = \frac{\sigma_\varepsilon^2q(1 - q)}{s^2}.
 \]
 
-
+% \begin{theorem}
+%   If \(\vec{x}\) is a binary feature with class balance \(q\), then \(\E \st_\lambda(Z) - \mu\) is constant with respect to \(q\) if and only if \(s \propto q(1 - q)\).
+% \end{theorem}
+% \begin{proof}
+%   Assume that \(s = f(q)q(1 - q)\). Then
+%   \[
+%     \lim_{q \rightarrow 1} \mu = \frac{n\beta_j}{\lim_{q \rightarrow } f(q)},\quad\lim_{q \rightarrow 1} \sigma^2 = \frac{\sigma_\varepsilon^2 n}{\lim_{q \rightarrow 1} f(q)q(1-q)}.
+%   \]
+% \end{proof}
 
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is

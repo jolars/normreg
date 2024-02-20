@@ -1,4 +1,6 @@
 using Distributions
+using LinearAlgebra
+using QuadGK
 
 function st(x, λ)
   return sign(x) * max(abs(x) - λ, 0)
@@ -10,38 +12,71 @@ function integrate(f, d, a = -15, b = -15; n = 100_000)
   return sum(f.(x) .* pdf.(d, x) * dx)
 end
 
+function int(f, a, b)
+  return quadgk(f, a, b)[1]
+end
+
+# function bias(μ, σ)
+# mua * cdf(snorm, mua / σ) + σ * pdf(snorm, mua / σ)
+#
+# mub = -(λ + μ)
+#
+# mub * cdf(snorm, mub / σ) + σ * pdf(snorm, mub / σ)
+
 snorm = Normal()
 ϕ(x) = pdf(Normal(), x)
 Φ(x) = cdf(Normal(), x)
 
-μ = 2.5;
 # μ = 1e7;
-σ = 1.8;
 dist = Normal(μ, σ);
 
-λ = 2
+q = 0.999
+inf = 5
+β = 3
+σe = 4;
+n = 100
 
-inf = 50
+x = zeros(n)
+x[1:ceil(Int, n * q)] .= 1
 
-x = rand(dist, 100_000);
+xs = (x .- mean(x)) / var(x)
 
-st_x = st.(x, λ);
-bias_emp = mean(st_x) - μ
-var_emp = var(st_x)
-mse_emp = mean((st_x .- μ) .^ 2) # var_emp + bias_emp^2
+y = x * β + rand(Normal(0, σe), n)
+z = xs' * y
 
-bias_th = integrate(x -> x + λ, dist, -inf, -λ) + integrate(x -> x - λ, dist, λ, inf) - μ
-e2 = integrate(x -> (x + λ)^2, dist, -inf, -λ) + integrate(x -> (x - λ)^2, dist, λ, inf)
-var_th = e2 - bias_th^2
+s = q * (1 - q)
 
-# theoretical MSE
-integrate(x -> (x + λ - μ)^2, dist, -inf, -λ) +
-integrate(x -> (x - λ - μ)^2, dist, λ, inf) +
-μ^2 * integrate(x -> 1, dist, -λ, λ)
+μ = β * n * q * (1 - q) / s
 
-μ = 100
+σ2 = σe^2 * q * (1 - q) / s^2
+σ = sqrt(σ2)
 
-r =
-  integrate(x -> (σ * x + λ)^2, snorm, -inf, (-λ - μ) / σ) +
-  integrate(x -> (σ * x - λ)^2, snorm, (λ - μ) / σ, inf) +
-  μ^2 * integrate(x -> 1, snorm, (-λ - μ) / σ, (λ - μ) / σ)
+Y = Normal()
+Z = Normal(μ, σ)
+
+λ = 0.5*μ
+
+n_z = 10_000
+
+z = rand(Z, n_z)
+
+st_z = st.(z, λ);
+bias_emp = mean(st_z) - μ
+var_emp = var(st_z)
+mse_emp = mean((st_z .- μ) .^ 2) # var_emp + bias_emp^2
+
+# bias_th = integrate(x -> x + λ, dist, -inf, -λ) + integrate(x -> x - λ, dist, λ, inf) - μ
+
+lo = (-λ - μ) / σ
+up = (λ - μ) / σ
+bias_th = integrate(x -> σ*x + λ + μ, snorm, -inf, lo) + integrate(x -> σ * x - λ + μ, snorm, up, inf) - μ
+
+int(x -> (σ * x + λ + μ) * pdf(Normal(), x), -Inf, lo)
+int(x -> (σ * x - λ + μ) * pdf(Normal(), x), up, Inf)
+
+mua = μ - λ
+mub = -(λ + μ)
+
+-(mub * cdf(snorm, mub / σ) + σ * pdf(snorm, mub / σ)) +
+mua * cdf(snorm, mua / σ) + σ * pdf(snorm, mua / σ) - μ
+
