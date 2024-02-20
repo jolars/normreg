@@ -71,12 +71,12 @@ lo = (-λ - μ) / σ
 up = (λ - μ) / σ
 bias_th = integrate(x -> σ*x + λ + μ, snorm, -inf, lo) + integrate(x -> σ * x - λ + μ, snorm, up, inf) - μ
 
-int(x -> (σ * x + λ + μ) * pdf(Normal(), x), -Inf, lo)
-int(x -> (σ * x - λ + μ) * pdf(Normal(), x), up, Inf)
+# int(x -> (σ * x + λ + μ) * pdf(Normal(), x), -Inf, lo)
+# int(x -> (σ * x - λ + μ) * pdf(Normal(), x), up, Inf)
 
 mua = μ - λ
 mub = -(λ + μ)
 
--(mub * cdf(snorm, mub / σ) + σ * pdf(snorm, mub / σ)) +
+(λ + μ) * cdf(snorm, mub / σ) - σ * pdf(snorm, mub / σ)) +
 mua * cdf(snorm, mua / σ) + σ * pdf(snorm, mua / σ) - μ
 

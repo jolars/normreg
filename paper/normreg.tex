@@ -303,7 +303,7 @@ Starting with the bias, we have
 \begin{align}
   \label{eq:mean-centering-bias}
   \E \st_\lambda(Z) - \mu & = \int_{-\infty}^\frac{-\lambda -\mu}{\sigma} (\sigma u + \lambda + \mu) \phi(u) \du u + \int_\frac{\lambda - \mu}{\sigma}^\infty (\sigma u - \lambda + \mu) \phi(u) \du u - \mu \\
-                          & = (-\lambda - \mu) \Phi\left(\frac{-\lambda-\mu}{\sigma}\right) + \sigma \phi\left(\frac{-\lambda-\mu}{\sigma}\right)                                                            \\
+                          & = (\lambda + \mu) \Phi\left(\frac{-\lambda-\mu}{\sigma}\right) - \sigma \phi\left(\frac{-\lambda-\mu}{\sigma}\right)                                                             \\
                           & \phantom{=} + (\mu - \lambda) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma \phi\left(\frac{\mu-\lambda}{\sigma}\right) - \mu.
 \end{align}
 where \(\phi(u)\) and \(\Phi(u)\) are the probability and cumulative density functions of the standard normal distribution.
