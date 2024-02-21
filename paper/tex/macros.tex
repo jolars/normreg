@@ -1,9 +1,9 @@
 % operators
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator{\E}{\mathrm{E}}
+\DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\var}{Var}
-\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\cov}{Cov}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\range}{range}
@@ -20,13 +20,19 @@
 \DeclareMathOperator{\risk}{R}
 % \DeclareMathOperator{\I}{I}
 % \DeclareMathOperator{\T}{}
-
+%
+% \DeclareMathSymbol{\phi}{\mathalpha}{operators}{0}
+\DeclareMathOperator{\pdf}{\phi}
+\DeclareMathOperator{\cdf}{\Phi}
 % commands
-\renewcommand{\vec}{\vectorsym}
-\newcommand{\mat}{\matrixsym}
-\newcommand{\du}{\mathrm{d}}
+% \newcommand{\vec}{\vectorsym}
+% \newcommand{\mat}{\matrixsym}
+\renewcommand{\vec}{\boldsymbol}
+\newcommand{\mat}{\boldsymbol}
+\newcommand*\du{\mathop{}\!\mathrm{d}}
 \newcommand{\T}{\mathsf{T}}
-\newcommand{\ones}{\vectorsym{1}}
+% \newcommand{\ones}{\vectorsym{1}}
+\newcommand{\ones}{\boldsymbol{1}}
 % \newcommand{\T}{\intercal}
 % \newcommand{\T}[1]{{1}^{\mathsf{T}}}
 \newcommand{\ind}[1]{\operatorname{I}_{#1}}

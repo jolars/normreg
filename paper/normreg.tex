@@ -169,18 +169,18 @@ One interesting property of maximum absolute value scaling is that it can be sen
   \[
     \begin{aligned}
       \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
-                                & = \frac{2 - \Phi\left(\frac{x - \mu}{\sigma}\right) - \Phi\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\phi\left(\frac{x - \mu}{\sigma}\right) + \phi\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
-                                & \rightarrow \frac{\sigma(1 - \Phi(x))}{\phi(x)} \text{ as } n \rightarrow n,
+                                & = \frac{2 - \cdf\left(\frac{x - \mu}{\sigma}\right) - \cdf\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\pdf\left(\frac{x - \mu}{\sigma}\right) + \pdf\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
+                                & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
     \end{aligned}
   \]
-  where \(\phi\) and \(\Phi\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
+  where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
   Next, we follow \textcite[example 10.5.3]{nagaraja2003} and observe that
   \[
-    \frac{d}{dx} \frac{\sigma(1 - \Phi(x))}{\phi(x)} = \frac{\sigma x (1 - \Phi(x))}{\phi(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
+    \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
   \]
   since
   \[
-    \frac{1 - \Phi(x)}{\phi(x)} \sim \frac{1}{x}.
+    \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
   \]
   In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
 \end{proof}
@@ -302,23 +302,25 @@ Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\
 Starting with the bias, we have
 \begin{align}
   \label{eq:mean-centering-bias}
-  \E \st_\lambda(Z) - \mu & = \int_{-\infty}^\frac{-\lambda -\mu}{\sigma} (\sigma u + \lambda + \mu) \phi(u) \du u + \int_\frac{\lambda - \mu}{\sigma}^\infty (\sigma u - \lambda + \mu) \phi(u) \du u - \mu \\
-                          & = (\lambda + \mu) \Phi\left(\frac{-\lambda-\mu}{\sigma}\right) - \sigma \phi\left(\frac{-\lambda-\mu}{\sigma}\right)                                                             \\
-                          & \phantom{=} + (\mu - \lambda) \Phi\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma \phi\left(\frac{\mu-\lambda}{\sigma}\right) - \mu.
+  \E \st_\lambda(Z) - \mu & = \int_{-\infty}^\frac{-\lambda -\mu}{\sigma} (\sigma u + \lambda + \mu) \pdf(u) \du u + \int_\frac{\lambda - \mu}{\sigma}^\infty (\sigma u - \lambda + \mu) \pdf(u) \du u - \mu \\
+                          & = (\lambda + \mu) \cdf\left(\frac{-\lambda-\mu}{\sigma}\right) - \sigma \pdf\left(\frac{-\lambda-\mu}{\sigma}\right)                                                             \\
+                          & \phantom{=} + (\mu - \lambda) \cdf\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma \pdf\left(\frac{\mu-\lambda}{\sigma}\right) - \mu.
 \end{align}
-where \(\phi(u)\) and \(\Phi(u)\) are the probability and cumulative density functions of the standard normal distribution.
+where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
+
+And we have
 
 Next, for the mean-squared error, let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
 \[
-  \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \phi(u)\du u +
-  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \phi(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \phi(u)\du u,
+  \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
+  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u,
 \]
 Expanding, we have
 \[
   \begin{aligned}
-    R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \phi(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \phi(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \phi(u)\du u \\
-                   & \phantom{=} - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^{\infty} u \phi(u)\du u + \lambda^2 \int_{-\infty}^\frac{-\lambda-\mu}{\sigma} \phi(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \phi(u)\du u \\
-                   & \phantom{=} + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \phi(u) \du u.
+    R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \pdf(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \pdf(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \pdf(u)\du u \\
+                   & \phantom{=} - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^{\infty} u \pdf(u)\du u + \lambda^2 \int_{-\infty}^\frac{-\lambda-\mu}{\sigma} \pdf(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \pdf(u)\du u \\
+                   & \phantom{=} + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \pdf(u) \du u.
   \end{aligned}
 \]
 
