@@ -295,7 +295,7 @@ And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
   \E \hat\beta_j - \beta_j^*  = \frac{\E \st_\lambda(Z)}{d} - \beta^*_j.
 \end{equation}
 
-The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is
+The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is\todojl{Maybe better to define/compute variance instead at this point.}
 \[
   \begin{multlined}
     \E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
@@ -349,10 +349,12 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 
 \subsubsection{Binary Features}
 
-Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then, abusing notation, we let
+Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then we have
 \[
-  \mu(q) = \frac{nq(1 - q)}{s}, \qquad \sigma^2(q) = \frac{\sigma_\varepsilon^2q(1 - q)}{s^2}.
+  \mu = \frac{\beta^*_j nq(1 - q)}{s}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2q(1 - q)}{s^2}, \qquad d = \frac{1}{s} \left(nq(1 -q) + (1-\alpha)\lambda\right).
 \]
+Next, we allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\) as well. Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), is
+
 
 % \begin{theorem}
 %   If \(\vec{x}\) is a binary feature with class balance \(q\), then \(\E \st_\lambda(Z) - \mu\) is constant with respect to \(q\) if and only if \(s \propto q(1 - q)\).
