@@ -61,9 +61,7 @@ In most sources and discussions on regularized methods, normalization is typical
 
 In addition, discussions on the choice of normalization are often focused on computational aspects and data storage requirements, rather than on the statistical properties of the choice of normalization. In our paper, we will argue that normalization should rather we considered as an integral part of the model. And that it for instance is unreasonable to base the choice of normalization on the type of data storage, which implicitly encodes the belief that a data set stored as a sparse matrix is somehow fundamentally different from a data set stored as a dense matrix.
 
-\section{Theory}
-
-\subsection{Setup, Notation and Terminology}
+\section{Setup, Notation and Terminology}
 
 Throughout this paper, we assume that the data is generated from a linear model, that is,
 \[
@@ -207,14 +205,13 @@ In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally
   \label{fig:maxabs-n}
 \end{figure}
 
-
 \subsubsection{Min-Max Normalization}
 
 Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and is also sensitive to outliers.
 
 \subsection{The Elastic Net}
 
-For the remainder of this section, we will focus on the elastic net objective, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
+From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
 \begin{equation}
   \label{eq:elastic-net}
   \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2.
@@ -255,14 +252,19 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
 \]
 The solution to this system is well-known~\parencite{donoho1994}:
 \begin{align}
-  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}\label{eq:orthogonal-solution}                                                                                                  \\
-              & = \st_{\frac{\alpha\lambda}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}\right), \\
+  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}\label{eq:orthogonal-solution} = \st_{\alpha\lambda/d}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d}\right), \\
   \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
 \end{align}
-where \(\st\) is the soft-thresholding operator, defined as
+with
+\[
+  d = \frac{\alpha\lambda}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}
+\]
+and where \(\st\) is the soft-thresholding operator, defined as
 \[
   \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
+
+\section{Bias and Variance}
 
 Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\) with \(\varepsilon_i\) being identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \eqref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\). We have
 \[
@@ -293,7 +295,7 @@ The mean-squared error of soft-thresholding of a random variable \(Z\) with mean
   \E\big( \st_\lambda(Z) - \mu\big)^2  = \int_{-\infty}^{-\lambda}(z + \lambda - \mu)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - \mu)^2 f_Z(z)\du z + \mu^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
 \]
 
-\subsubsection{Mean-Centering and Normally Distributed Noise}
+\subsection{Mean-Centering and Normally Distributed Noise}
 
 Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
@@ -307,9 +309,8 @@ Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expecte
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
-And we have
-
-Next, for the mean-squared error, let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
+% TODO: Compute variance here instead?
+Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
 \[
   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
   \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u,
@@ -338,6 +339,8 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 \[
   \risk(\lambda,\mu) \leq \min\big(\sigma^2 + \lambda^2, \risk(\lambda, 0) + \mu^2\big) \leq \risk(\lambda, 0) + \min(\mu^2, \sigma^2 + \lambda^2).
 \]
+
+\subsubsection{Binary Features}
 
 Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then, abusing notation, we let
 \[

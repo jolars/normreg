@@ -44,14 +44,8 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
 
       x_std, centers, scales = normalize_features(x, "max_abs")
 
-      model = Lasso.fit(
-        Lasso.LassoPath,
-        x_std,
-        y,
-        Normal(),
-        standardize = false,
-        λ = [lambda],
-      )
+      model =
+        Lasso.fit(Lasso.LassoPath, x_std, y, Normal(), standardize = false, λ = [lambda])
 
       _, beta_hat = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
 
