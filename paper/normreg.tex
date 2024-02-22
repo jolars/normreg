@@ -312,8 +312,8 @@ Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\
 Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
   \label{eq:mean-centered-eval}
-  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u \\
-                    & = -\theta \cdf(\theta) - \sigma \pdf(\theta) + \gamma \cdf(\gamma) + \sigma \pdf(\gamma)
+  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                                \\
+                    & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
