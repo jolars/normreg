@@ -292,12 +292,15 @@ The expected value of the soft-thresholding estimator is
 And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
 \begin{equation}
   \label{eq:bias}
-  \E \hat\beta_j - \beta_j^*  = \E \frac{1}{d} = \frac{1}{d}\E \st_\lambda(Z) - \beta^*_j = \frac{1}{d}\E \st_{\lambda}(Z) - \beta^*_j.
+  \E \hat\beta_j - \beta_j^*  = \frac{\E \st_\lambda(Z)}{d} - \beta^*_j.
 \end{equation}
 
-The mean-squared error of soft-thresholding of a random variable \(Z\) with mean \(\mu\) is\todojl{Not sure if this is interesting at all.}
+The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is
 \[
-  \E\big( \st_\lambda(Z) - \mu\big)^2  = \int_{-\infty}^{-\lambda}(z + \lambda - \mu)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - \mu)^2 f_Z(z)\du z + \mu^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+  \begin{multlined}
+    \E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
+    \frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) + \beta_j^*^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+  \end{multlined}
 \]
 
 \subsection{Mean-Centering and Normally Distributed Noise}
@@ -314,8 +317,7 @@ Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expecte
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
-% TODO: Compute variance here instead?
-Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that
+Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that\todojl{Not sure if this is interesting at all.}
 \[
   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
   \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u,
