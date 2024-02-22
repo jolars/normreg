@@ -79,13 +79,13 @@ Z = Normal(μ, σ)
 # mua * cdf(snorm, mua / σ) +
 # σ * pdf(snorm, mua / σ) - μ
 
-function bias(μ, σ, λ)
+function st_expected_value(μ, σ, λ)
   X = Normal()
 
   θ = μ - λ
   γ = -(λ + μ)
 
-  return -γ * cdf(X, γ / σ) - σ * pdf(X, γ / σ) + θ * cdf(X, θ / σ) + σ * pdf(X, θ / σ) - μ
+  return -γ * cdf(X, γ / σ) - σ * pdf(X, γ / σ) + θ * cdf(X, θ / σ) + σ * pdf(X, θ / σ)
 end
 
 function bias_simulation(q::Float64, σe::Float64, method::String, λ::Real = 0.5)
@@ -124,9 +124,9 @@ function bias_simulation(q::Float64, σe::Float64, method::String, λ::Real = 0.
   end
 
   μ = β * q * (1 - q) / s
-  σ2 = σe^2 * q * (1 - q) / (n * s^2)
+  σ = sqrt(σe^2 * q * (1 - q) / (n * s^2))
 
-  err = bias(μ, sqrt(σ), λ * n)
+  expected_value = st_expected_value(μ, σ, λ)
 
   return err
 end
