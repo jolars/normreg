@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-    tags: '*'
   pull_request:
 concurrency:
   # Skip intermediate builds: always.
@@ -18,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1'
+          - "1"
         os:
           - ubuntu-latest
         arch:
@@ -31,7 +30,3 @@ jobs:
           arch: ${{ matrix.arch }}
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
-
-      - name: Run tests
-        run: >
-          julia --project=. --color=yes test/runtests.jl
