@@ -299,12 +299,11 @@ Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\
 \[
   Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \frac{\sigma_\varepsilon^2}{n} \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
-Starting with the bias, we have
+Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
-  \label{eq:mean-centering-bias}
-  \E \st_\lambda(Z) - \mu & = \int_{-\infty}^\frac{-\lambda -\mu}{\sigma} (\sigma u + \lambda + \mu) \pdf(u) \du u + \int_\frac{\lambda - \mu}{\sigma}^\infty (\sigma u - \lambda + \mu) \pdf(u) \du u - \mu \\
-                          & = (\lambda + \mu) \cdf\left(\frac{-\lambda-\mu}{\sigma}\right) - \sigma \pdf\left(\frac{-\lambda-\mu}{\sigma}\right)                                                             \\
-                          & \phantom{=} + (\mu - \lambda) \cdf\left(\frac{\mu - \lambda}{\sigma}\right) + \sigma \pdf\left(\frac{\mu-\lambda}{\sigma}\right) - \mu.
+  \label{eq:mean-centered-eval}
+  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u \\
+                    & = -\theta \cdf(\theta) - \sigma \pdf(\theta) + \gamma \cdf(\gamma) + \sigma \pdf(\gamma)
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
