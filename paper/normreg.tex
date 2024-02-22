@@ -289,8 +289,13 @@ The expected value of the soft-thresholding estimator is
                       & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
   \end{aligned}
 \]
+And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
+\begin{equation}
+  \label{eq:bias}
+  \E \hat\beta_j - \beta_j^*  = \E \frac{1}{d} = \frac{1}{d}\E \st_\lambda(Z) - \beta^*_j = \frac{1}{d}\E \st_{\lambda}(Z) - \beta^*_j.
+\end{equation}
 
-The mean-squared error of soft-thresholding of a random variable \(Z\) with mean \(\mu\) is
+The mean-squared error of soft-thresholding of a random variable \(Z\) with mean \(\mu\) is\todojl{Not sure if this is interesting at all.}
 \[
   \E\big( \st_\lambda(Z) - \mu\big)^2  = \int_{-\infty}^{-\lambda}(z + \lambda - \mu)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - \mu)^2 f_Z(z)\du z + \mu^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
 \]
