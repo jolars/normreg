@@ -75,7 +75,7 @@ There is ambiguity regarding many of the key terms in the field of normalization
 
 \begin{definition}[Normalization]
   \label{def:normalization}
-  Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with entries where \(c_{ij} = c_{kj}\) for all \(i,k \in [n]\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
+  Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with entries where \textcolor{red}{\(c_{ij} = c_{j1}\) for all \(i \in [n]\)}. Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
 \end{definition}
 
 Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the case when scaling and centering with standard deviations and means respectively. Also note that normalization is sometimes defined as the process of scaling the samples (rather than the features).
@@ -92,7 +92,7 @@ There is a similar transformation for the normalized intercept which we omit her
 
 Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
 
-Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) is equivalent to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) is equivalent (\textcolor{red}{I would use something more than just equivalent, as equivalent is a strong word}) to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
 
 \begin{example}
   If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
@@ -115,7 +115,7 @@ In the following sections, we will discuss some basic properties of these normal
   \label{tab:normalization-types}
   \begin{tabular}{lll}
     \toprule
-    Normalization    & Centering (\(c_{kj}\))             & Scaling (\(s_j\))                                         \\
+    Normalization    & Centering (\(c_{1j}\))             & Scaling (\(s_j\))                                         \\
     \midrule
     Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
     \addlinespace
@@ -148,7 +148,7 @@ One interesting property of maximum absolute value scaling is that it can be sen
 
 \begin{theorem}
   \label{thm:maxabs-gev}
-  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then
+  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then \textcolor{red}{Define $\approx$ if you are going to prove anything.}
   \[
     \E \max_{i \in [n]} |X_i| \approx \mu_n + \gamma \sigma_n,
   \]
@@ -250,12 +250,12 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
-The solution to this system is well-known~\parencite{donoho1994}:
+The solution to this system is well-known~\parencite{donoho1994}: \textcolor{red}{$s_j?$ Also maybe mention what it is, also $d_j$}
 \begin{align}
   \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}\label{eq:orthogonal-solution} = \st_{\alpha\lambda/d}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d}\right), \\
   \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
 \end{align}
-with
+with \textcolor{red}{Is this $d$ really correct?}
 \[
   d = \frac{\alpha\lambda}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}
 \]
@@ -292,15 +292,15 @@ The expected value of the soft-thresholding estimator is
 And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
 \begin{equation}
   \label{eq:bias}
-  \E \hat\beta_j - \beta_j^*  = \frac{\E \st_\lambda(Z)}{d} - \beta^*_j.
+  \E \left( \hat\beta_j - \beta_j^* \right) = \frac{\E \st_\lambda(Z)}{d} - \beta^*_j.
 \end{equation}
 
 The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is\todojl{Maybe better to define/compute variance instead at this point.}
 \[
-  \begin{multlined}
-    \E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
-    \frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) + \beta_j^*^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
-  \end{multlined}
+\begin{multlined}
+	\E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
+	\frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+\end{multlined}
 \]
 
 \subsection{Mean-Centering and Normally Distributed Noise}
@@ -348,7 +348,7 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 \]
 
 \subsubsection{Binary Features}
-
+\textcolor{red}{Define above more general with also in sample variance and then we get as a direct consequence below}
 Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then we have
 \[
   \mu = \frac{\beta^*_j nq(1 - q)}{s}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2}, \qquad d = \frac{1}{s} \left(nq(1 -q) + (1-\alpha)\lambda\right).
@@ -487,7 +487,7 @@ If we expand the argument inside the absolute value operator, we have
 \[
   \tilde{\vec{x}}_j^\T\left( \vec{y} - \frac{1}{n}\ones{}^\T \vec{y}\right) = \frac{1}{s_j}\left(\vec{x}_j^\T \vec{y} - \frac{1}{n}\ones^\T \vec{y} \ones^\T \vec{x}_j\right)
 \]
-Assuming that \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon}\) as before, and that the entries of each feature \(\vec{x}_j\) in the design matrix are sampled independently and identically from a corresponding random variable \(X_j\), we can take the expected value of the expression, yielding
+Assuming that \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon}\) as before, and that the entries of each feature \(\vec{x}_j\) in the design matrix are sampled independently and identically from a corresponding random variable \(X_j\), we can take the expected value of the expression, yielding \textcolor{red}{this is only true if $X_j$ is independent of $s_j$ and also $\E \frac{1}{s_j} \neq \frac{1}{\E s_j}$}
 % FIXME: We're not really allowed to compute the exected value like this. So we need to motivate it somehow. Maybe assume that the scaling and centering factors are fixed or something?
 \[
   \frac{1}{\E s_j}\left( n \beta^*_j \E X_j^2 - n \beta^*_j (\E X_j)^2 \right) = \frac{n \beta^*_j\var X_j}{\E s_j}.
@@ -512,7 +512,8 @@ First, observe that \(\var{X_1} = q(1 - q)\) and \(\var{X_2} = 0.25\). In other 
 \[
   \beta^*_1 = \frac{1}{2\sqrt{q(1-q)}}
 \]
-If the classes are balanced, \(q = 0.5\), then this means that the coefficients are expected to be the same. If, however, for instance \(q = 0.1\), then the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five.
+
+If the classes are balanced, \(q = 0.5\), then this means that the coefficients are expected to be the same. If, however, for instance \(q = 0.1\), then the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five. \textcolor{red}{Is there a difference if one would have a $X_1 \sim \mathcal{N}\left(0,q(1-q) \right)?$ }
 
 \paragraph{Max-Abs Normalization} In this case, we get
 \[
