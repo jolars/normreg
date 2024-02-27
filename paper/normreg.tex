@@ -313,9 +313,8 @@ Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\
 \]
 Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
-  \label{eq:mean-centered-eval}
-  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                                \\
-                    & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)
+  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber                      \\
+                    & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right) \label{eq:mean-centered-eval}
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
@@ -353,17 +352,17 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 
 Now we assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then, observing that
 \[
-  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x} - \ones m_j)^\T (\vec{x} - \ones m_j) = \frac{1}{s^2}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2}
+  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x} - \ones m_j)^\T (\vec{x} - \ones m_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}
 \]
 and
 \[
-  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s}(\vec{x}^\T \vec{x} - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s}
+  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s_j}(\vec{x}^\T \vec{x} - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s_j},
 \]
-we have
+which means that we have
 \[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2}, \qquad d = \frac{1}{s} \left(nq(1 -q) + (1-\alpha)\lambda\right).
+  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{1}{s_j} \left(nq(1 -q) + (1-\alpha)\lambda\right).
 \]
-Next, we allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), is
+Next, we allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}.
 
 
 % \begin{theorem}
