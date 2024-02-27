@@ -92,7 +92,7 @@ There is a similar transformation for the normalized intercept which we omit her
 
 Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
 
-Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) is equivalent (\textcolor{red}{I would use something more than just equivalent, as equivalent is a strong word}) to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
 
 \begin{example}
   If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
