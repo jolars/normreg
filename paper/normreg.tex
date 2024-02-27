@@ -251,14 +251,15 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
-The solution to this system is well-known~\parencite{donoho1994}: \textcolor{red}{$s_j?$ Also maybe mention what it is, also $d_j$}
+The solution to this system is well-known~\parencite{donoho1994}:
 \begin{align}
-  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)}\label{eq:orthogonal-solution} = \st_{\alpha\lambda/d}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d}\right), \\
+  \label{eq:orthogonal-solution}
+  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)} = \st_{\alpha\lambda/d_j}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d_j}\right), \\
   \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
 \end{align}
 with \textcolor{red}{Is this $d$ really correct?}
 \[
-  d = \frac{\alpha\lambda}{s\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)}
+  d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)
 \]
 and where \(\st\) is the soft-thresholding operator, defined as
 \[
@@ -293,14 +294,14 @@ The expected value of the soft-thresholding estimator is
 And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
 \begin{equation}
   \label{eq:bias}
-  \E \left( \hat\beta_j - \beta_j^* \right) = \frac{\E \st_\lambda(Z)}{d} - \beta^*_j.
+  \E \left( \hat\beta_j - \beta_j^* \right) = \frac{\E \st_\lambda(Z)}{d_j} - \beta^*_j.
 \end{equation}
 
 The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is\todojl{Maybe better to define/compute variance instead at this point.}
 \[
   \begin{multlined}
-    \E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
-    \frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+    \E\left( \frac{1}{d_j}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
+    \frac{1}{d_j^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d_j\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d_j\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
   \end{multlined}
 \]
 
