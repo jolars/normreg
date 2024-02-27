@@ -80,7 +80,7 @@ There is ambiguity regarding many of the key terms in the field of normalization
 
 Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the case when scaling and centering with standard deviations and means respectively. Also note that normalization is sometimes defined as the process of scaling the samples (rather than the features).
 
-\subsubsection{Rescaling Regression Coefficients}
+\subsection{Rescaling Regression Coefficients}
 
 Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
 \[
@@ -88,7 +88,7 @@ Normalization changes the optimization problem as well as its solution: the coef
 \]
 There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
 
-\subsubsection{Comparing Effects of Continuous and Binary Features}
+\subsection{Comparing Effects of Continuous and Binary Features}
 
 Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
 
