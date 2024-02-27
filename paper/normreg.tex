@@ -319,10 +319,10 @@ Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expecte
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
-Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. And observe that\todojl{Need to rewrite this using \(\beta^*_j\) instead.}
+Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. Now observe that\todojl{Need to rewrite this using \(\beta^*_j\) instead.}
 \[
   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
-  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u,
+  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u.
 \]
 Expanding, we have
 \[
