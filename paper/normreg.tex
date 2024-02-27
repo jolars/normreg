@@ -148,15 +148,16 @@ One interesting property of maximum absolute value scaling is that it can be sen
 
 \begin{theorem}
   \label{thm:maxabs-gev}
-  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then \textcolor{red}{Define $\approx$ if you are going to prove anything.}
+  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then
   \[
-    \E \max_{i \in [n]} |X_i| \approx \mu_n + \gamma \sigma_n,
+    \lim_{n \rightarrow \infty}\Pr\left(\max_{i \in [n]} |X_i| \leq x\right) = G(x),
   \]
-  with
+  where \(G\) is the cumulative distribution function of a Gumbel distribution with
+  parameters
   \[
-    \mu_n = F_Y^{-1}(1 - 1/n), \quad a_n = \frac{1}{n f_Y(\mu_n)},
+    b_n = F_Y^{-1}(1 - 1/n)\quad \text{and} \quad a_n = \frac{1}{n f_Y(\mu_n)},
   \]
-  where \(\gamma\) is the Euler-Mascheroni constant, and \(f_Y\) and \(F_Y^{-1}\) is the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
+  where \(f_Y\) and \(F_Y^{-1}\) are the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
 \end{theorem}
 \begin{proof}
   If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\parencite[Theorem 10.5.2]{nagaraja2003} is
@@ -183,7 +184,7 @@ One interesting property of maximum absolute value scaling is that it can be sen
   In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
 \end{proof}
 
-In \Cref{fig:maxabs-gev}, we verify that the results from \Cref{thm:maxabs-gev} hold in practice.
+As a result of \Cref{thm:maxabs-gev}, the limiting distribution of \(\max_{i \in [n]}|X_i|\) has expected value \(b_n + \gamma a_n\), where \(\gamma\) is the Euler-Mascheroni constant. In \Cref{fig:maxabs-gev}, we see that the limiting distribution agrees the empirical distribution in expected value even for low values of \(n\).
 
 \begin{figure}[htpb]
   \centering
@@ -194,7 +195,7 @@ In \Cref{fig:maxabs-gev}, we verify that the results from \Cref{thm:maxabs-gev} 
   \label{fig:maxabs-gev}
 \end{figure}
 
-In \Cref{fig:maxabs-n} we show how the coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases.
+In \Cref{fig:maxabs-n} we show the effect of increasing the number of observations, \(n\), in a two-feature lasso model with max-abs normalization applied to both features. The coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases. Since the expected value of the Gumbel distribution diverges with \(n\), this means that there's always a large enough \(n\) to make the coefficient zero with high probability.
 
 \begin{figure}[htpb]
   \centering
@@ -297,10 +298,10 @@ And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
 
 The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is\todojl{Maybe better to define/compute variance instead at this point.}
 \[
-\begin{multlined}
-	\E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
-	\frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
-\end{multlined}
+  \begin{multlined}
+    \E\left( \frac{1}{d}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
+    \frac{1}{d^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
+  \end{multlined}
 \]
 
 \subsection{Mean-Centering and Normally Distributed Noise}
