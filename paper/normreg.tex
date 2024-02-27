@@ -350,8 +350,16 @@ under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref
 \]
 
 \subsubsection{Binary Features}
-\textcolor{red}{Define above more general with also in sample variance and then we get as a direct consequence below}
-Now assume that \(\vec{x}\) is a binary feature with class balance \(q\). Then we have
+
+Now we assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then, observing that
+\[
+  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x} - \ones m_j)^\T (\vec{x} - \ones m_j) = \frac{1}{s^2}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2}
+\]
+and
+\[
+  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s}(\vec{x}^\T \vec{x} - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s}
+\]
+we have
 \[
   \mu = \frac{\beta^*_j nq(1 - q)}{s}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2}, \qquad d = \frac{1}{s} \left(nq(1 -q) + (1-\alpha)\lambda\right).
 \]
