@@ -95,6 +95,8 @@ function bias_simulation(q::Float64, σe::Float64, method::String, λ::Real = 0.
   #
   β = 1
 
+  λ = λ * n
+
   # x = zeros(n)
   # x[1:ceil(Int, n * q)] .= 1
   #
