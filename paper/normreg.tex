@@ -358,22 +358,90 @@ and
 \[
   \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s_j}(\vec{x}^\T \vec{x} - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s_j},
 \]
-which means that we have
+this means that we have
 \[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{1}{s_j} \left(nq(1 -q) + (1-\alpha)\lambda\right).
+  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{nq(1 -q)}{s_j}  + (1-\alpha)\lambda s_j.
 \]
-Next, we allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}.
+We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}. In \Cref{thm:binary-varscale-bias}, we now show that the bias of the lasso estimate in the orthogonal case converges to the zero value as \(q\) goes to 1 if \(s = q(1-q)\).
+
+\begin{theorem}
+  \label{thm:binary-varscale-bias}
+  If \(\vec{x}\) is a binary feature with class balance \(q\), \(\alpha = 1\), and \(s = q(1-q)\), then
+  \[
+    \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j.
+  \]
+\end{theorem}
+\begin{proof}
+  First note that when \(s = q(1-q)\) we have
+  \[
+    \mu = \beta_j^* n, \quad \sigma^2 = \frac{\sigma_\varepsilon^2 n}{q(1-q)}, \quad\text{and}\quad d_j = n
+  \]
+  so that
+  \[
+    \begin{aligned}
+      \theta                & = -\beta_j^* n - \lambda,                                                    \\
+      \gamma                & = \beta_j^* n - \lambda                                                      \\
+      \frac{\theta}{\sigma} & = \frac{-\sqrt{q(1-q)}(\beta_j^* n + \lambda)}{\sigma_\varepsilon \sqrt{n}}, \\
+      \frac{\gamma}{\sigma} & = \frac{\sqrt{q(1-q)}(\beta_j^*n - \lambda)}{\sigma_\varepsilon \sqrt{n}}.
+    \end{aligned}
+  \]
+  Let
+  \[
+    a = \frac{\beta_j^* n + \lambda}{\sigma_\varepsilon \sqrt{n}}, \quad\text{and}\quad b = \frac{\beta_j^* n - \lambda}{\sigma_\varepsilon \sqrt{n}}.
+  \]
+  We now have
+  \[
+    \lim_{q \rightarrow 1} -\theta \cdf\left(\frac{\theta}{\sigma}\right) = (\beta_j^*n + \lambda) \lim_{q \rightarrow 1} \cdf\left(-a\sqrt{q(1-q)}\right) = \frac{1}{2}(\beta_j^*n + \lambda)
+  \]
+  and similarly
+  \[
+    \lim_{q \rightarrow 1} \gamma \cdf\left(\frac{\gamma}{\sigma}\right) = \frac{1}{2}(\beta_j^*n - \lambda)
+  \]
+  since \(\sqrt{q(1-q)} \rightarrow 0\) and hence \(\cdf\big(-a\sqrt{q(1-q)}\big) \rightarrow 1/2\) as \(q \rightarrow 1\), reminding ourselves
+  that \(\cdf\) is the cumulative distribution function of the standard normal distribution, which is symmetric around 0, and that \(a\) is constant with respect to \(q\).
+
+  Next, we define
+  \[
+    f(q) = \sigma_\varepsilon \sqrt{n}\left(\pdf\left(b\sqrt{q(1-q)}\right) - \pdf\left(-a\sqrt{q(1-q)}\right)\right),\quad\text{and}\quad g(q) = \sqrt{q(1-q)}
+  \]
+  and take the derivatives thereof, yielding
+  \[
+    f'(q) = \frac{\sigma_\varepsilon \sqrt{n} (2q -1)}{4 \pi}\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)
+  \]
+  and
+  \[
+    g'(q) = \frac{1 - 2q}{2\sqrt{q(1-q)}}.
+  \]
+  Note that
+  \[
+    \lim_{q \rightarrow 1} f(q) = \lim_{q \rightarrow 1} g(q) = 0
+  \]
+  and moreover that \(f(q)\) and \(g(q)\) are both differentiable in the interval \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval.
+
+  Finally, note that
+  \[
+    \begin{aligned}
+      \frac{f'(q)}{g'(q)} & = \frac{2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} (2q  - 1)\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)}{1 - 2q} \\
+                          & =2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} \left(a^2 e^{-\frac{q(1-q)a^2}{2}}- b^2 e^{-\frac{q(1-q)b^2}{2}}\right)                          \\
+                          & \rightarrow 0 \text{ as } q \rightarrow 1.
+    \end{aligned}
+  \]
+  Since this limit exists and is finite, we may apply L'Hôpital's rule to obtain
+  \[
+    \lim_{q \rightarrow 1} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = 0.
+  \]
+  Finally, we piece together our previous efforts to obtain
+  \[
+    \begin{aligned}
+      \lim_{q \rightarrow 1} \hat\beta_j & = \frac{1}{d} \lim_{q \rightarrow 1}\left(- \theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right) \\
+                                         & = \frac{1}{n}\left(\beta_j^*n +  \lim_{q \rightarrow 1}\frac{f(q)}{f(q)} \right)                                                                                                                                                                 \\
+                                         & = \beta_j^*.
+    \end{aligned}
+  \]
 
 
-% \begin{theorem}
-%   If \(\vec{x}\) is a binary feature with class balance \(q\), then \(\E \st_\lambda(Z) - \mu\) is constant with respect to \(q\) if and only if \(s \propto q(1 - q)\).
-% \end{theorem}
-% \begin{proof}
-%   Assume that \(s = f(q)q(1 - q)\). Then
-%   \[
-%     \lim_{q \rightarrow 1} \mu = \frac{n\beta_j}{\lim_{q \rightarrow } f(q)},\quad\lim_{q \rightarrow 1} \sigma^2 = \frac{\sigma_\varepsilon^2 n}{\lim_{q \rightarrow 1} f(q)q(1-q)}.
-%   \]
-% \end{proof}
+
+\end{proof}
 
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
