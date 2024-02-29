@@ -279,7 +279,7 @@ And for the variance, we get
 \[
   \begin{aligned}
     \var Z = \sigma^2 & = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) + \left(\frac{1}{n}\tilde{\vec{x}}_j^\T \ones\right)^2 n \sigma_\varepsilon^2 \\
-                    & = \sigma_\varepsilon^2\left( \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2\right).
+                      & = \sigma_\varepsilon^2\left( \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2\right).
   \end{aligned}
 \]
 
@@ -440,11 +440,52 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
   \]
 \end{proof}
 
-Note that if we set \(\sigma_\varepsilon = 0\) instead in \Cref{thm:binary-varscale-bias}, then we instead obtain
-\[
-  \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j - \sign(\beta^*_j)\frac{\lambda}{n},
-\]
-which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
+\begin{corollary}
+  Suppose \(\sigma_\varepsilon = 0\) in \Cref{thm:binary-varscale-bias}, all other things being equal. Then we instead obtain
+  \[
+    \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j - \sign(\beta^*_j)\frac{\lambda}{n},
+  \]
+  which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
+\end{corollary}
+
+
+\begin{corollary}
+  Letting \(s = \sqrt{q(1-q)}\) (standardization), we have
+  \[
+    \begin{aligned}
+      \mu                   & = \beta_j^* n \sqrt{q(1-q)},                                                \\
+      \sigma^2              & = \sigma_\varepsilon n,                                                     \\
+      d_j                   & = n\sqrt{q(1-q)} + (1 - \alpha) \lambda\sqrt{q(1-q)},                       \\
+      \frac{\theta}{\sigma} & = -\frac{\beta_j^* n \sqrt{q(1-q)} + \lambda}{\sigma_\varepsilon \sqrt{n}}, \\
+      \frac{\gamma}{\sigma} & =\frac{\beta_j^* n \sqrt{q(1-q)} - \lambda}{\sigma_\varepsilon \sqrt{n}}.
+    \end{aligned}
+  \]
+  Similar computations as in \Cref{thm:binary-varscale-bias} can be carried out to show that
+  \[
+    \lim_{q \rightarrow 1} \E \hat{\beta}_j = 0
+  \]
+  in this case.
+  % TODO: Consider adding a proof for this.
+\end{corollary}
+
+\begin{corollary}
+  Letting \(s = 1\) (max--abs or min--max normalization), we have
+  \[
+    \begin{aligned}
+      \mu                   & = \beta_j^* n q(1-q),                                                \\
+      \sigma^2              & = \sigma_\varepsilon n q(1-q),                                       \\
+      d_j                   & = n q(1-q) + (1 - \alpha) \lambda q(1-q),                            \\
+      \frac{\theta}{\sigma} & = -\frac{\beta_j^* n q(1-q) + \lambda}{\sigma_\varepsilon \sqrt{n}}, \\
+      \frac{\gamma}{\sigma} & =\frac{\beta_j^* n q(1-q) - \lambda}{\sigma_\varepsilon \sqrt{n}}.
+    \end{aligned}
+  \]
+  Similar computations as in \Cref{thm:binary-varscale-bias} can be carried out to show that
+  \[
+    \lim_{q \rightarrow 1} \E \hat{\beta}_j = 0
+  \]
+  in this case.
+  % TODO: Consider adding a proof for this.
+\end{corollary}
 
 
 
