@@ -366,7 +366,7 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
 
 \begin{theorem}
   \label{thm:binary-varscale-bias}
-  If \(\vec{x}\) is a binary feature with class balance \(q\), \(\alpha = 1\), and \(s = q(1-q)\), then
+  If \(\vec{x}\) is a binary feature with class balance \(q\), \(\alpha = 1\), \(\sigma_\varepsilon > 0\), and \(s = q(1-q)\), then
   \[
     \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j.
   \]
@@ -438,10 +438,14 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
                                          & = \beta_j^*.
     \end{aligned}
   \]
-
-
-
 \end{proof}
+
+Note that if we set \(\sigma_\varepsilon = 0\) instead in \Cref{thm:binary-varscale-bias}, then we instead obtain
+\[
+  \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j - \sign(\beta^*_j)\frac{\lambda}{n},
+\]
+which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
+
 
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
