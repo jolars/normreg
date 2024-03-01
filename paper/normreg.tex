@@ -284,26 +284,30 @@ And for the variance, we get
 \]
 
 The expected value of the soft-thresholding estimator is
-\[
+\begin{equation}
+  \label{eq:st-expected-value}
   \begin{aligned}
     \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                     \\
                       & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                           \\
                       & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
   \end{aligned}
-\]
+\end{equation}
 And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
 \begin{equation}
-  \label{eq:bias}
+  \label{eq:betahat-bias}
   \E \left( \hat\beta_j - \beta_j^* \right) = \frac{\E \st_\lambda(Z)}{d_j} - \beta^*_j.
 \end{equation}
 
-The mean-squared error of soft-thresholding of a random variable \(Z\) with respect to \(\beta^*_j\) is\todojl{Maybe better to define/compute variance instead at this point.}
-\[
-  \begin{multlined}
-    \E\left( \frac{1}{d_j}\st_\lambda(Z) - \beta^*_j\right)^2  = \\
-    \frac{1}{d_j^2}\left(\int_{-\infty}^{-\lambda}(z + \lambda - d_j\beta_j^*)^2 f_Z(z)\du z + \int_{\lambda}^{\infty}(z - \lambda - d_j\beta_j^*)^2 f_Z(z)\du z\right) +( \beta_j^*)^2 \int_{-\lambda}^\lambda f_Z(z) \du z.
-  \end{multlined}
-\]
+Finally, we note that the variance of the soft-thresholding estimator is
+\begin{equation}
+  \label{eq:st-variance}
+  \var {S_\lambda(Z)} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_Z(z) \du z - \left(\E \st_\lambda(Z)\right)^2.
+\end{equation}
+and that the variance of the lasso estimator is then
+\begin{equation}
+  \label{eq:betahat-variance}
+  \var \hat\beta_j^* = \frac{1}{d_j^2} \var \st_\lambda(Z).
+\end{equation}
 
 \subsection{Mean-Centering and Normally Distributed Noise}
 
@@ -318,35 +322,64 @@ Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expecte
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
-Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. Now observe that\todojl{Need to rewrite this using \(\beta^*_j\) instead.}
-\[
-  \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
-  \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u.
-\]
-Expanding, we have
-\[
-  \begin{aligned}
-    R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \pdf(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \pdf(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \pdf(u)\du u \\
-                   & \phantom{=} - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^{\infty} u \pdf(u)\du u + \lambda^2 \int_{-\infty}^\frac{-\lambda-\mu}{\sigma} \pdf(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \pdf(u)\du u \\
-                   & \phantom{=} + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \pdf(u) \du u.
-  \end{aligned}
-\]
+Next, we consider what the variance of the lasso estimator looks like.
 
-Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squared error. First, observe that
+Starting with the first term on the left-hand side of \eqref{eq:st-variance}, we have
 \begin{equation}
-  \label{eq:mse-bound1}
-  \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu) = \sigma^2 + \lambda^2.
+  \label{eq:mc-var-part1}
+  \begin{aligned}
+    \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z & = \sigma^2 \int_{-\infty}^{\frac{\theta}{\sigma}} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^{\frac{\theta}{\sigma}} y \pdf(y) \du y + \theta^2 \int_{-\infty}^{\frac{\theta}{\sigma}} \pdf(y) \du y \\
+                                                         & = \frac{\sigma^2}{2} \left( \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right) + 1 \right)                              \\
+                                                         & \phantom{=} + 2 \theta \sigma \pdf \left(\frac{\theta}{\sigma}\right) + \theta^2 \cdf\left(\frac{\theta}{\sigma}\right).
+  \end{aligned}
 \end{equation}
-% We need some condition on the last integral for this to hold, since mu^2 may also get lar0/000ge.
-Next, we see that
+Similar computations for the second term on the left-hand side of \eqref{eq:st-variance} yield
 \begin{equation}
-  \label{eq:mse-bound2}
-  \risk(\lambda, \mu) - \risk(\lambda, 0) = -2\mu \E \st_\lambda(z) + \mu^2 \leq \mu^2
+  \label{eq:mc-var-part2}
+  \begin{multlined}
+    \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z = \\
+    \frac{\sigma^2}{2} \left( \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\gamma^2}{2\sigma^2}\right) + 1 \right) + 2 \gamma \sigma \pdf \left(\frac{\gamma}{\sigma}\right) + \gamma^2 \cdf\left(\frac{\gamma}{\sigma}\right).
+  \end{multlined}
 \end{equation}
-under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref{eq:mse-bound2}, we have
-\[
-  \risk(\lambda,\mu) \leq \min\big(\sigma^2 + \lambda^2, \risk(\lambda, 0) + \mu^2\big) \leq \risk(\lambda, 0) + \min(\mu^2, \sigma^2 + \lambda^2).
-\]
+Plugging \eqref{eq:mean-centered-eval}, \eqref{eq:mc-var-part2}, and \eqref{eq:mc-var-part1} into \eqref{eq:betahat-variance} yields the variance of the estimator. Consequently, we can also compute the mean-squared error via the bias-variance decomposition
+\begin{equation}
+  \label{eq:betahat-mse}
+  \mse (\hat\beta_j, \beta^*_j) = \var\hat\beta_j + \left(\E \hat\beta_j - \beta^*_j\right)^2.
+\end{equation}
+
+
+% NOTE: In its current form, the following is not useful at all for us, but perhaps it 
+% could be if it was rewritten as mse with respec to \beta^*_j instead.
+
+% Next, for the mean-squared error with respect to \(\mu\), let \(\risk(\lambda, \mu) = \E \big(\st_\lambda(Z) - \mu\big)^2\) for brevity. Now observe that\todojl{Need to rewrite this using \(\beta^*_j\) instead.}
+% \[
+%   \risk(\lambda, \mu) = \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} (\sigma u + \lambda)^2 \pdf(u)\du u +
+%   \int_{\frac{\lambda - \mu}{\sigma}}^\infty (\sigma u - \lambda)^2 \pdf(u)\du u + \mu^2 \int_{\frac{-\lambda - \mu}{\sigma}}^{\frac{\lambda - \mu}{\sigma}} \pdf(u)\du u.
+% \]
+% Expanding, we have
+% \[
+%   \begin{aligned}
+%     R(\lambda,\mu) & = \sigma^2 \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u^2 \pdf(u)\du u + \sigma^2 \int_\frac{\lambda - \mu}{\sigma}^\infty u^2 \pdf(u)\du u + 2\lambda \int_{-\infty}^\frac{-\lambda - \mu}{\sigma} u \pdf(u)\du u \\
+%                    & \phantom{=} - 2\lambda \int_\frac{\lambda - \mu}{\sigma}^{\infty} u \pdf(u)\du u + \lambda^2 \int_{-\infty}^\frac{-\lambda-\mu}{\sigma} \pdf(u)\du u + \lambda^2 \int_\frac{\lambda-\mu}{\sigma}^\infty \pdf(u)\du u \\
+%                    & \phantom{=} + \mu^2 \int_\frac{-\lambda - \mu}{\sigma}^\frac{\lambda - \mu}{\sigma} \pdf(u) \du u.
+%   \end{aligned}
+% \]
+%
+% Next, assume that \(\mu \geq 0\). Now we compute an upper bound for the mean-squared error. First, observe that
+% \begin{equation}
+%   \label{eq:mse-bound1}
+%   \lim_{\mu \rightarrow \infty} \risk(\lambda, \mu) = \sigma^2 + \lambda^2.
+% \end{equation}
+% % We need some condition on the last integral for this to hold, since mu^2 may also get lar0/000ge.
+% Next, we see that
+% \begin{equation}
+%   \label{eq:mse-bound2}
+%   \risk(\lambda, \mu) - \risk(\lambda, 0) = -2\mu \E \st_\lambda(z) + \mu^2 \leq \mu^2
+% \end{equation}
+% under the assumption that \(\mu \geq 0\). Using \eqref{eq:mse-bound1} and \eqref{eq:mse-bound2}, we have
+% \[
+%   \risk(\lambda,\mu) \leq \min\big(\sigma^2 + \lambda^2, \risk(\lambda, 0) + \mu^2\big) \leq \risk(\lambda, 0) + \min(\mu^2, \sigma^2 + \lambda^2).
+% \]
 
 \subsubsection{Binary Features}
 
