@@ -65,8 +65,9 @@ In addition, discussions on the choice of normalization are often focused on com
 
 Throughout this paper, we assume that the data is generated from a linear model, that is,
 \[
-  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i,
+  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i \quad\text{for } i \in [n],
 \]
+with \([n] = \{1,2\dots,n\}\) and
 where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\) is the \(n \times p\) design matrix with columns \(\vec x_j\) and \(\vec y\) the \(n \times 1\) response vector.
 Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
 Unless otherwise stated, we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
