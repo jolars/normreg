@@ -900,9 +900,9 @@ version = "1.5.1"
 
 [[deps.ProjectRoot]]
 deps = ["FilePathsBase"]
-git-tree-sha1 = "40c8edd7b430ae8dcd0ea750715cce9cffcf379c"
+git-tree-sha1 = "d6b07fcd2266d7204aa41f986cc9e7181e1be6e5"
 uuid = "e3f974f6-674d-4b8e-a3d1-5850677db852"
-version = "0.3.1"
+version = "0.4.0"
 
 [[deps.PythonCall]]
 deps = ["CondaPkg", "Dates", "Libdl", "MacroTools", "Markdown", "Pkg", "REPL", "Requires", "Serialization", "Tables", "UnsafePointers"]
