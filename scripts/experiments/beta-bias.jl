@@ -9,7 +9,7 @@ using DataFrames
 using ProjectRoot
 using Plots.PlotMeasures
 
-set_plot_defaults("gr")
+set_plot_defaults()
 
 function bias_simulation(q::Real, σe::Real, method::String, n::Int64, λ::Real = 0.5)
   Random.seed!(852)
@@ -101,12 +101,6 @@ for (i, d) in enumerate(grouped_df)
       ""
     end
 
-    legend = if i == 1 && j == 4
-      true
-    else
-      false
-    end
-
     pl = @df dd plot(
       :q,
       :value,
@@ -114,19 +108,21 @@ for (i, d) in enumerate(grouped_df)
       ylabel = ylab,
       xlabel = xlab,
       title = title,
-      legend = legend,
+      legend = false,
     )
 
     push!(plots, pl)
   end
 end
 
-# lab = reshape(unique(df.method), 1, 3)
+lab = reshape(unique(df.method), 1, 3)
 
-# legend = plot([0 0 0], showaxis = false, grid = false, label = lab, left_margin = 0mm)
+legend =
+  plot([0 0 0], showaxis = false, grid = false, label = lab, legend_position = :topleft)
 
-plotlist =
-  plot(plots..., layout = (3, 4), size = (390, 350), left_margin = [10mm 1mm 1mm 1mm])
+l = @layout[grid(3, 4) a{0.15w}]
+
+plotlist = plot(plots..., legend, layout = l, size = (575, 400))
 
 file_name = "maxabs_n"
 file_path = @projectroot("paper", "plots", "bias-var-onedim.pdf")

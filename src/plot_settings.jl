@@ -14,11 +14,10 @@ function set_plot_defaults(backend = "pyplot")
     gr()
     default(
       fontfamily = "Computer Modern",
-      linewidth = 1,
       framestyle = :box,
       label = nothing,
       titlefontsize = 11,
-      thickness_scaling = 0.6,
+      thickness_scaling = 0.7,
     )
   else
     default(titlefontsize = 11, thickness_scaling = 1, framestyle = :box)
