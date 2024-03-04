@@ -9,6 +9,7 @@ function get_full_width()
 end
 
 function set_plot_defaults(backend = "pyplot")
+  theme(:wong)
   if backend == "gr"
     gr()
     default(
@@ -19,9 +20,7 @@ function set_plot_defaults(backend = "pyplot")
       titlefontsize = 11,
       thickness_scaling = 0.6,
     )
-    # scalefontsizes(1.3)
   else
-    theme(:wong)
     default(titlefontsize = 11, thickness_scaling = 1, framestyle = :box)
     pythonplot()
     matplotlib.rcParams["text.usetex"] = true
