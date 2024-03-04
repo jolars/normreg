@@ -1,6 +1,9 @@
 name = "NormReg"
 uuid = "14840c9a-f964-41a7-b64a-5f191879b565"
-authors = ["Johan Larsson <johanlarsson@outlook.com>", "Jonas Wallin <jonas.wallin@stat.lu.se"]
+authors = [
+  "Johan Larsson <johanlarsson@outlook.com>",
+  "Jonas Wallin <jonas.wallin@stat.lu.se",
+]
 version = "0.1.0"
 
 [deps]
@@ -30,3 +33,10 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
 julia = "1.9.2"
+Test = "1.6"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

@@ -28,4 +28,11 @@ include("utils.jl")
 export confidence_interval
 export confidence_error
 
+include("binary_features.jl")
+export binary_expected_value
+export binary_variance
+export binary_mean
+export binary_stddev
+export binary_d
+
 end
