@@ -26,6 +26,7 @@ function onedim_bias_sim(q::Real, σe::Real, method::String, n::Int64, λ::Real 
 
   μ = binary_mean(β, n, q, s)
   σ = binary_stddev(σe, n, q, s)
+
   d = binary_d(n, q, s, λ)
 
   θ = -(μ + λ)
@@ -44,7 +45,7 @@ param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.01:0.99),
   "sigma_e" => [0.1, 0.5, 1, 4],
   "method" => ["std", "var", "none"],
-  "lambda" => [0.9],
+  "lambda" => [0.2],
 )
 param_expanded = dict_list(param_dict)
 
@@ -54,8 +55,9 @@ for (i, d) in enumerate(param_expanded)
   @unpack q, sigma_e, method, lambda = d
 
   n = 100
+  lambda = n * lambda
 
-  bias, var, mse = onedim_bias_sim(q, sigma_e, method, n, lambda)
+  bias, var, mse = onedim_bias_sim(q, sigma_e, method, n, lambda);
 
   d_exp = copy(d)
   d_exp["bias"] = bias
@@ -71,7 +73,7 @@ df_long = stack(df, Not([:q, :sigma_e, :method, :lambda]))
 n_rows = length(unique(df.method))
 n_cols = length(unique(df.sigma_e))
 
-grouped_df = groupby(df, [:variable])
+grouped_df = groupby(df_long, [:variable])
 
 plots = []
 
@@ -122,7 +124,6 @@ l = @layout[grid(3, 4) a{0.15w}]
 
 plotlist = plot(plots..., legend, layout = l, size = (575, 400))
 
-file_name = "maxabs_n"
 file_path = @projectroot("paper", "plots", "bias-var-onedim.pdf")
 
 savefig(plotlist, file_path)
