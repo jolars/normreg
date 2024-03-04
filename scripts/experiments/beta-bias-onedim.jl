@@ -11,7 +11,7 @@ using Plots.PlotMeasures
 
 set_plot_defaults()
 
-function bias_simulation(q::Real, σe::Real, method::String, n::Int64, λ::Real = 0.5)
+function onedim_bias_sim(q::Real, σe::Real, method::String, n::Int64, λ::Real = 0.5)
   Random.seed!(852)
 
   β = 1
@@ -42,9 +42,9 @@ end
 
 param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.01:0.99),
-  "sigma_e" => [0.1, 0.5, 1, 2],
+  "sigma_e" => [0.1, 0.5, 1, 4],
   "method" => ["std", "var", "none"],
-  "lambda" => [0.5, 0.9],
+  "lambda" => [0.9],
 )
 param_expanded = dict_list(param_dict)
 
@@ -55,7 +55,7 @@ for (i, d) in enumerate(param_expanded)
 
   n = 100
 
-  bias, var, mse = bias_simulation(q, sigma_e, method, n, lambda)
+  bias, var, mse = onedim_bias_sim(q, sigma_e, method, n, lambda)
 
   d_exp = copy(d)
   d_exp["bias"] = bias
@@ -71,9 +71,7 @@ df_long = stack(df, Not([:q, :sigma_e, :method, :lambda]))
 n_rows = length(unique(df.method))
 n_cols = length(unique(df.sigma_e))
 
-df_subset = subset(df_long, :lambda => l -> l .== 0.9)
-
-grouped_df = groupby(df_subset, [:variable])
+grouped_df = groupby(df, [:variable])
 
 plots = []
 
@@ -115,7 +113,7 @@ for (i, d) in enumerate(grouped_df)
   end
 end
 
-lab = reshape(unique(df.method), 1, 3)
+lab = reshape(sort(unique(df.method)), 1, 3)
 
 legend =
   plot([0 0 0], showaxis = false, grid = false, label = lab, legend_position = :topleft)
