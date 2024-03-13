@@ -57,7 +57,7 @@ for (i, d) in enumerate(param_expanded)
   n = 100
   lambda = n * lambda
 
-  bias, var, mse = onedim_bias_sim(q, sigma_e, method, n, lambda);
+  bias, var, mse = onedim_bias_sim(q, sigma_e, method, n, lambda)
 
   d_exp = copy(d)
   d_exp["bias"] = bias
@@ -101,12 +101,20 @@ for (i, d) in enumerate(grouped_df)
       ""
     end
 
+    xformatter = if i > 2
+      x -> round(x, digits = 2)
+    else
+      x -> ""
+    end
+
     pl = @df dd plot(
       :q,
       :value,
       groups = :method,
       ylabel = ylab,
       xlabel = xlab,
+      xformatter = xformatter,
+      xticks = 0.5:0.25:1,
       title = title,
       legend = false,
     )
