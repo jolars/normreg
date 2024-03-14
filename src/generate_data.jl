@@ -5,14 +5,15 @@ using Base
 logspace(start, last, count) = Iterators.map(exp, range(log(start), log(last), count))
 
 function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, p = 0.5, ρ = 0)
+function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, q = 0.5, ρ = 0)
   X = Normal(0, 1)
 
   x = rand(X, n)
   z = rand(X, n)
 
-  q = quantile(X, 1 - p)
+  q = quantile(X, 1 - q)
 
-  r = ρ * √(p * (1 - p)) / pdf(X, q)
+  r = ρ * √(q * (1 - q)) / pdf(X, q)
 
   y = r * x .+ √(1 - r^2) * z
 
