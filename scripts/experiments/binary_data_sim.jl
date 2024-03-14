@@ -6,7 +6,6 @@ using LIBSVMdata
 using ProjectRoot
 using Lasso
 using Statistics
-using MLBase
 using GLM
 using DrWatson
 
@@ -16,14 +15,14 @@ function binary_simulation_varyq_experiment(n, p, s, normalization, q_type)
   k = 10
   train_size = 0.75
 
-  err, _, β_est = cross_validate(x, y, Normal(), normalization, k, train_size, "mse")
+  err, _, β_est = cross_validate(x, y, Normal(), normalization, k, train_size, "nmse")
 
   return err, β_est, β_true
 end
 
 param_dict = Dict(
-  "it" => collect(1:20),
-  "n" => 500,
+  "it" => collect(1:30),
+  "n" => 200,
   "p" => 1000,
   "s" => 20,
   "normalization" => ["none", "mean_std", "mean_stdvar"],
@@ -53,3 +52,5 @@ outfile = @projectroot("data", "binary_data_sim.json");
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
+
+include(@projectroot("scripts", "plots", "binary_data_sim.jl"))
