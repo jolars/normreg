@@ -20,15 +20,22 @@ for (i, d) in enumerate(groups)
   b = d.betas
   res = dropdims(mapreduce(permutedims, hcat, b), dims = 1)
   out = Float64.(mapreduce(permutedims, vcat, res))[:, 1:40]
-  pl = boxplot(
-    1:size(out, 1),
-    out,
-    fillcolor = :lightgrey,
+
+  xvar = 1:size(out, 2)
+  yvar = mean(out, dims = 1)'
+  yerror = std(out, dims = 1)'
+
+  pl = scatter(
+    xvar,
+    yvar;
     markercolor = :black,
-    markersize = 1,
+    markersize = 2,
     legend = false,
     xformatter = i == length(groups) ? :auto : _ -> "",
   )
+
+  yerror!(1:size(out, 2), yvar; yerror = yerror, markercolor = :transparent)
+
   title!(pl, d.normalization[1], ylims = (-0.5, 2))
   ylabel!(pl, L"\hat\beta")
 

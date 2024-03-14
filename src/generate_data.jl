@@ -40,32 +40,36 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
   end
 
   q = collect(logspace(0.5, 0.99, k))
+  q_noise = collect(range(0.5, 0.99, length = p - k))
 
   for i in 1:p
     if i <= k
       if q_type == "decreasing"
-        X = Bernoulli(q[i])
+        q_i = q[i]
       elseif q_type == "balanced"
-        X = Bernoulli(0.5)
+        q_i = 0.5
       elseif q_type == "imbalanced"
-        X = Bernoulli(0.9)
+        q_i = 0.9
       elseif q_type == "very_imbalanced"
-        X = Bernoulli(0.99)
+        q_i = 0.99
       else
         error("q_type not supported")
       end
     else
-      q_i = rand(Uniform(0.5, 0.99), 1)
-      X = Bernoulli(q_i[1])
+      q_i = q_noise[i - k]
     end
 
-    x[:, i] = rand(X, n)
+    n_ones = ceil(Int64, q_i * n)
+    inds = sample(1:n, n_ones, replace = false)
+    x[inds, i] .= 1
   end
 
   σ = √(var(x * β) / snr)
+  # σ = 1e-8
+
   y = x * β .+ rand(Normal(0, σ), n)
 
-  return x, y, β
+  return x, y, β, σ
 end
 
 function generate_mixed_data(n, p, k, q_type, beta_type, snr)
@@ -79,7 +83,7 @@ function generate_mixed_data(n, p, k, q_type, beta_type, snr)
     β[1:k] .= 1
   elseif beta_type == "linear"
     β[1:k_half] .= collect(range(10, 0.5, length = k_half))
-    β[(k_half+1):k] .= collect(range(10, 0.5, length = k - k_half))
+    β[(k_half + 1):k] .= collect(range(10, 0.5, length = k - k_half))
   else
     error("beta_type not supported")
   end
