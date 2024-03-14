@@ -9,7 +9,7 @@ function split_data(x, y, train_size = 0.75)
   n_train = round(Int, train_size * n)
 
   train_idx = idx[1:n_train]
-  test_idx = idx[n_train+1:end]
+  test_idx = idx[(n_train + 1):end]
 
   x_train = x[train_idx, :]
   y_train = y[train_idx]

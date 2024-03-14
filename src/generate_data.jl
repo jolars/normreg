@@ -4,7 +4,27 @@ using Base
 
 logspace(start, last, count) = Iterators.map(exp, range(log(start), log(last), count))
 
-function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, p = 0.5, ρ = 0)
+function generate_pseudonormal(n; μ = 0, σ = 0.5)
+  X = Normal(μ, σ)
+
+  lo = 1e-4
+  x = quantile.(X, range(lo, 1 - lo, length = n))
+
+  shuffle!(x)
+
+  return x
+end
+
+function generate_pseudobernoulli(n; q = 0.5)
+  x = zeros(n)
+
+  ind = sample(1:n, ceil(Int64, q * n), replace = false)
+
+  x[ind] .= 1
+
+  return x
+end
+
 function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, q = 0.5, ρ = 0)
   X = Normal(0, 1)
 
@@ -66,7 +86,6 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
   end
 
   σ = √(var(x * β) / snr)
-  # σ = 1e-8
 
   y = x * β .+ rand(Normal(0, σ), n)
 

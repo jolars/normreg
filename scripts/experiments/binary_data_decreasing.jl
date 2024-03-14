@@ -9,17 +9,6 @@ using ProjectRoot
 using Random
 
 function binary_simulation_varyq_experiment(n, p, s, normalization, q_type, snr)
-  x, y, β_true, _ = generate_binary_data(n, p, s, q_type, "constant", snr)
-
-  k = 10
-  train_size = 0.75
-
-  err, _, β_est = cross_validate(x, y, Normal(), normalization, k, train_size, "nmse")
-
-  return err, β_est, β_true
-end
-
-function binary_simulation_varyq_experiment2(n, p, s, normalization, q_type, snr)
   x, y, β_true, σ = generate_binary_data(n, p, s, q_type, "constant", snr)
 
   x, centers, scales = normalize_features(x, normalization)
@@ -52,10 +41,10 @@ results = [];
 for (i, d) in enumerate(expanded_params)
   @unpack it, n, p, s, snr, normalization, q_type = d
 
-  Random.seed!(it * 2)
+  Random.seed!(it)
 
   err, β_est, β_true =
-    binary_simulation_varyq_experiment2(n, p, s, normalization, q_type, snr)
+    binary_simulation_varyq_experiment(n, p, s, normalization, q_type, snr)
 
   d_exp = copy(d)
   d_exp["err"] = err

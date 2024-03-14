@@ -11,30 +11,32 @@ using ProjectRoot
 using NormReg
 
 function binary_gaussian_simulation(
-  σ = 0.5,
-  ρ = 0,
   α = 1,
-  normalization = "mean_std";
-  n_it = 100,
-  n_ps = 100,
+  normalization = "mean_std",
+  snr = 1;
+  n_it = 50,
+  n_qs = 100,
   n = 1000,
   seed = 909,
 )
   Random.seed!(seed)
 
   beta = [1, 1, 0.25]
-  betas = zeros(3, n_ps)
-  ps = range(0.5, 0.99, length = n_ps)
+  betas = zeros(3, n_qs)
+  qs = range(0.5, 0.99, length = n_qs)
 
-  for i in 1:n_ps
+  for i in 1:n_qs
     beta_hat = zeros(3)
     for _ in 1:n_it
-      x = generate_binary_gaussian_features(n, ρ = ρ, μ = 0, σ = σ, p = ps[i])
-      x3 = rand(Normal(0, 2), n)
-      x = [x x3]
+      x1 = generate_pseudobernoulli(n, q = qs[i])
+      x2 = generate_pseudonormal(n; μ = 0, σ = 0.5)
+      x3 = generate_pseudonormal(n; μ = 0, σ = 2)
 
-      y = x * beta
-      # y = x * beta .+ rand(Normal(0, 1))
+      x = [x1 x2 x3]
+
+      σ = √(var(x * beta) / snr)
+
+      y = x * beta .+ rand(Normal(0, σ))
 
       x_std, centers, scales = normalize_features(x, normalization)
 
@@ -53,8 +55,7 @@ function binary_gaussian_simulation(
         intercept = true,
       )
 
-      _, beta_hat_it =
-        unstandardize_coefficients(model.b0, model.coefs, centers, scales)
+      _, beta_hat_it = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
 
       # Compute the average across the iterations
       beta_hat += beta_hat_it / n_it
@@ -62,14 +63,13 @@ function binary_gaussian_simulation(
     betas[:, i] = beta_hat ./ beta
   end
 
-  return betas, ps
+  return betas, qs
 end
 
 param_dict = Dict(
-  "sigma" => 0.5,
-  "rho" => [0],
   "alpha" => [0, 1],
   "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
+  "snr" => [0.1],
 )
 
 expanded_params = dict_list(param_dict);
@@ -77,13 +77,13 @@ expanded_params = dict_list(param_dict);
 results = [];
 
 for (i, d) in enumerate(expanded_params)
-  @unpack sigma, rho, alpha, normalization = d
+  @unpack alpha, normalization, snr = d
 
-  betas, ps = binary_gaussian_simulation(sigma, rho, alpha, normalization)
+  betas, qs = binary_gaussian_simulation(alpha, normalization, snr)
 
   d_exp = copy(d)
   d_exp["betas"] = betas
-  d_exp["ps"] = ps
+  d_exp["qs"] = qs
 
   push!(results, d_exp)
 end
@@ -93,3 +93,5 @@ outfile = @projectroot("data", "lasso_ridge_twodim.json");
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
+
+include(@projectroot("scripts", "plots", "lasso_ridge_twodim.jl"))

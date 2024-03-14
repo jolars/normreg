@@ -9,7 +9,7 @@ using Distributions
 using ProjectRoot
 using Statistics
 
-NormReg.set_plot_defaults("pyplot");
+set_plot_defaults("pyplot");
 
 json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
 df = DataFrame(json);
@@ -30,6 +30,3 @@ plot_output = @df avg_value groupedbar(
 
 file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)
-
-# subset(df, :normalization .=> n -> n .== "mean_std", :q_type .=> q -> q .== "imbalanced")
-# subset(df, :normalization .=> n -> n .== "mean_stdvar", :q_type .=> q -> q .== "imbalanced")

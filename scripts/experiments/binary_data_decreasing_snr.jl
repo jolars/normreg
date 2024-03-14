@@ -19,7 +19,7 @@ end
 snr = collect(logspace(0.05, 6, 5))
 
 param_dict = Dict(
-  "it" => collect(1:30),
+  "it" => collect(1:10),
   "n" => 300,
   "p" => [500],
   "s" => [20],
