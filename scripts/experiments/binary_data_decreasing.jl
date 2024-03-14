@@ -2,6 +2,7 @@ using DataFrames
 using DrWatson
 using JSON
 using NormReg
+using Distributions
 using ProjectRoot
 using Random
 
