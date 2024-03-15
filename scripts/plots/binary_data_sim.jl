@@ -36,7 +36,6 @@ for (i, dd) in enumerate(groups)
 
   legend = i == 3 ? :outerright : nothing
 
-  # yformatter = i == 1 ? :auto : nothing
   yformatter = i == 1 ? :auto : _ -> ""
 
   pl = @df avg plot(
