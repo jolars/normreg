@@ -25,6 +25,9 @@ plots = []
 qtypes = unique(df.q_type)
 n_qtypes = length(qtypes)
 
+ymin = minimum(df.err)
+ymax = maximum(df.err)
+
 for (i, dd) in enumerate(groups)
   title = unique(dd.q_type)[1]
 
@@ -45,6 +48,7 @@ for (i, dd) in enumerate(groups)
     xaxis = :log,
     ribbon = :err_confidence_error,
     yformatter = yformatter,
+    ylims = (ymin, ymax),
   )
 
   if i == 1
