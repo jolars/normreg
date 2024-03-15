@@ -32,6 +32,67 @@ function get_error(y_pred, y_true, target = "mse")
   end
 end
 
+function holdout_validation(
+  x::Array{Float64,2},
+  y::Array{Float64,1},
+  dist = Normal(),
+  normalization = "mean_std",
+  target = "nmse",
+  train_size = 2 / 3,
+  validation_size = 0.5,
+)
+  n, p = size(x)
+
+  # First shuffle the data set.
+  perm = randperm(n)
+  x = x[perm, :]
+  y = y[perm]
+
+  x_tmp, y_tmp, x_test, y_test = split_data(x, y, train_size)
+  x_val, y_val, x_train, y_train = split_data(x_tmp, y_tmp, validation_size)
+
+  # fit once to obtain lambas for path
+  x_train_norm, _, _ = normalize_features(x_train, normalization)
+  res = fit(LassoPath, x_train_norm, y_train, dist, standardize = false)
+  lambda = res.λ
+  n_lambda = length(lambda)
+
+  x_val_norm, _, _ = normalize_features(x_val, normalization)
+
+  pred_array = predict(res, x_val_norm; select = AllSeg())
+
+  err = zeros(n_lambda)
+
+  for j in 1:n_lambda
+    err[j] = get_error(pred_array[:, j], y_val)
+  end
+
+  # err = mapslices(yhat -> get_error(yhat, y_val), pred_array; dims = 2)
+
+  best_lambda = lambda[argmin(err)]
+
+  x_test_norm, centers_test, scales_test = normalize_features(x_test, normalization)
+
+  res_test = fit(
+    LassoPath,
+    x_test_norm,
+    y_test,
+    dist,
+    standardize = false,
+    λ = [best_lambda],
+    maxncoef = p,
+  )
+
+  beta0_unstandardized, coefs_unstandardized =
+    unstandardize_coefficients(res_test.b0, res_test.coefs, centers_test, scales_test)
+
+  y_pred = beta0_unstandardized .+ x_test * coefs_unstandardized
+
+  test_error = get_error(y_pred, y_test, target)
+
+  return test_error, beta0_unstandardized, coefs_unstandardized
+end
+
 function cross_validate(
   x::Array{Float64,2},
   y::Array{Float64,1},

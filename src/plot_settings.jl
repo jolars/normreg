@@ -13,7 +13,6 @@ function set_plot_defaults(backend = "pyplot")
   default(framestyle = :box, label = nothing, tick_direction = :in)
   if backend == "gr"
     gr()
-    default(fontfamily = "Computer Modern", titlefontsize = 11, thickness_scaling = 0.7)
   else
     default(titlefontsize = 11)
     pythonplot()

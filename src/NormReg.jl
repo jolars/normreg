@@ -25,6 +25,7 @@ export find_binary_features, normalize_features, unstandardize_coefficients
 
 include("cv.jl")
 export cross_validate
+export holdout_validation
 
 include("utils.jl")
 export confidence_interval

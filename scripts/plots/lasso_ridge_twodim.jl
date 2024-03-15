@@ -63,7 +63,7 @@ for (j, dd) in enumerate(df_grouped)
       xformatter = xformatter,
       xlabel = xlabel,
       title = title,
-      xticks = 0.6:0.1:0.9,
+      xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
     )
 
