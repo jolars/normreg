@@ -342,7 +342,7 @@ Similar computations for the second term on the left-hand side of \eqref{eq:st-v
     \frac{\sigma^2}{2} \left( \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\gamma^2}{2\sigma^2}\right) + 1 \right) + 2 \gamma \sigma \pdf \left(\frac{\gamma}{\sigma}\right) + \gamma^2 \cdf\left(\frac{\gamma}{\sigma}\right).
   \end{multlined}
 \end{equation}
-Plugging \eqref{eq:mean-centered-eval}, \eqref{eq:mc-var-part2}, and \eqref{eq:mc-var-part1} into \eqref{eq:betahat-variance} yields the variance of the estimator. Consequently, we can also compute the mean-squared error via the bias-variance decomposition
+Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \eqref{eq:betahat-variance} yields the variance of the estimator. Consequently, we can also compute the mean-squared error via the bias-variance decomposition
 \begin{equation}
   \label{eq:betahat-mse}
   \mse (\hat\beta_j, \beta^*_j) = \var\hat\beta_j + \left(\E \hat\beta_j - \beta^*_j\right)^2.
@@ -396,7 +396,10 @@ this means that we have
 \[
   \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d = \frac{nq(1 -q)}{s_j}  + (1-\alpha)\lambda s_j.
 \]
-We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}. In \Cref{thm:binary-varscale-bias}, we now show that the bias of the lasso estimate in the orthogonal case converges to the zero value as \(q\) goes to 1 if \(s = q(1-q)\).
+We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}.
+
+We are mainly interested in examining the case when \(\vec{x}_j\) are imbalanced. In \Cref{thm:binary-varscale-bias}, we show what the
+bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta \geq 0\) in the lasso case.
 
 \begin{theorem}
   \label{thm:binary-varscale-bias}
@@ -412,7 +415,7 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
 \end{theorem}
 \begin{proof}
 
-  Since \(s_j = \big(q(1-q)\big)^\delta\) for \(\delta \geq 0\), we have
+  Since \(s_j = \big(q(1-q)\big)^\delta = (q - q^2)^\delta\), we have
   \[
     \begin{aligned}
       \mu                   & = \beta_j^* n \big(q(1-q)\big)^{1 - \delta}                                       \\
@@ -428,7 +431,7 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
   \]
   with
   \[
-    a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda}{\sigma_\varepsilon \sqrt{n}}
+    a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda}{\sigma_\varepsilon \sqrt{n}}.
   \]
 
   Now, we are interested in taking the limit of \Cref{eq:mean-centered-eval}, the expected value of the lasso estimator, as \(q \rightarrow 1\), that is
@@ -549,6 +552,11 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
   of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 \end{proof}
 
+\Cref{thm:binary-varscale-bias} shows that the bias of the lasso estimator when \(0 \leq \delta < 1/2\), which includes to the case of min--max and max--abs normalization (no scaling), approaches
+\(-\beta_j^*\) as \(q \rightarrow 1\). When \(\delta = 1/2\) (standardization), the lasso estimate does not vanish completely. Instead, it approaches the
+true coefficient scaled by the probability that a standard normal variable is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta \geq 1\), the
+estimate is unbiased asymptotically. The last fact may seem somewhat counterintuitive but is a consequence of the variance of the distribution of the estimator exploding as \(q \rightarrow 1\).
+
 % \begin{proof}
 %   OLD PROOF for variance case.
 %
@@ -620,13 +628,15 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
 %   \]
 % \end{proof}
 
-\begin{corollary}
-  Suppose \(\sigma_\varepsilon = 0\) in \Cref{thm:binary-varscale-bias}, all other things being equal. Then we instead obtain
-  \[
-    \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j - \sign(\beta^*_j)\frac{\lambda}{n},
-  \]
-  which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
-\end{corollary}
+% TODO: We might want to rephrase this somehow.
+% 
+% \begin{corollary}
+%   Suppose \(\sigma_\varepsilon = 0\) in \Cref{thm:binary-varscale-bias}, all other things being equal. Then we instead obtain
+%   \[
+%     \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j - \sign(\beta^*_j)\frac{\lambda}{n},
+%   \]
+%   which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
+% \end{corollary}
 
 
 \begin{figure}[htpb]
@@ -634,6 +644,9 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
   \includegraphics[]{plots/bias-var-onedim.pdf}
   \caption{%
     Bias, variance, and mean-squared error for a one-dimensional lasso problem.
+    Note that \(\delta = 0\) corresponds to the case of no scaling, \(\delta = 1/2\) corresponds
+    to standardization, and \(\delta = 1\) corresponds to scaling with the variance. The dotted
+    lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\).
   }
   \label{fig:bias-var-onedim-lasso}
 \end{figure}
