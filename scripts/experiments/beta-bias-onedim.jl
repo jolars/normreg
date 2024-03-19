@@ -32,8 +32,8 @@ function onedim_bias_sim(q::Real, σe::Real, method::String, n::Int64, λ::Real 
   θ = -(μ + λ)
   γ = μ - λ
 
-  eβ = binary_expected_value(θ, γ, σ, d)
-  var = binary_variance(θ, γ, σ, d)
+  eβ = binary_expected_value(θ, γ, σ, d, print_components = true)
+  2 * β * λ * pdf(Normal(), λ / (σe * sqrt(n))) / (σe * sqrt(n))
 
   bias = eβ - β
   mse = bias^2 + var

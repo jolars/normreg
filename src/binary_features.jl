@@ -13,10 +13,15 @@ function binary_d(n, q, s, λ, α = 1)
   return n * q * (1 - q) / s + (1 - α) * λ
 end
 
-function binary_expected_value(θ, γ, σ, d)
+function binary_expected_value(θ, γ, σ, d; print_components = false)
   X = Normal()
 
   tmp = -θ * cdf(X, θ / σ) - σ * pdf(X, θ / σ) + γ * cdf(X, γ / σ) + σ * pdf(X, γ / σ)
+
+  if print_components
+    println(-θ * cdf(X, θ / σ) / d + γ * cdf(X, γ / σ) / d)
+    println((σ / d) * (pdf(X, γ / σ) - pdf(X, θ / σ)))
+  end
 
   return tmp / d
 end

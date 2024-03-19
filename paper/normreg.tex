@@ -316,7 +316,7 @@ Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\
 \[
   Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
-Let \(\theta = -\lambda - \mu\) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
+Let \(\theta = -\mu -\lambda \) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
   \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber                      \\
                     & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right) \label{eq:mean-centered-eval}
@@ -386,93 +386,239 @@ Plugging \eqref{eq:mean-centered-eval}, \eqref{eq:mc-var-part2}, and \eqref{eq:m
 
 Now we assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then, observing that
 \[
-  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x} - \ones m_j)^\T (\vec{x} - \ones m_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}
+  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x}_j - \ones m_j)^\T (\vec{x}_j - \ones m_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}
 \]
 and
 \[
-  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s_j}(\vec{x}^\T \vec{x} - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s_j},
+  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s_j},
 \]
 this means that we have
 \[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{nq(1 -q)}{s_j}  + (1-\alpha)\lambda s_j.
+  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d = \frac{nq(1 -q)}{s_j}  + (1-\alpha)\lambda s_j.
 \]
 We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the lasso estimate, setting \(\alpha = 1\), can be obtained by plugging in \(\mu\) and \(\sigma\) into \eqref{eq:mean-centered-eval}. In \Cref{thm:binary-varscale-bias}, we now show that the bias of the lasso estimate in the orthogonal case converges to the zero value as \(q\) goes to 1 if \(s = q(1-q)\).
 
 \begin{theorem}
   \label{thm:binary-varscale-bias}
-  If \(\vec{x}\) is a binary feature with class balance \(q\), \(\alpha = 1\), \(\sigma_\varepsilon > 0\), and \(s = q(1-q)\), then
+  If \(\vec{x}\) is a binary feature with class balance \(q\), \(\alpha = 1\), \(\sigma_\varepsilon > 0\), and \(s = (q(1-q))^{\delta}\), \(\delta \geq 0\) then
   \[
-    \lim_{q \rightarrow 1} \E \hat{\beta}_j = \beta^*_j.
+    \lim_{q \rightarrow 1} \E \hat{\beta}_j =
+    \begin{cases}
+      0                                                                           & \text{if } 0 \leq \delta < \frac{1}{2}, \\
+      2 \beta_j^* \cdf\left(-\frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon}\right) & \text{if } \delta = \frac{1}{2},        \\
+      \beta^*_j                                                                   & \text{if } \delta \geq 1.
+    \end{cases}
   \]
 \end{theorem}
 \begin{proof}
-  First note that when \(s = q(1-q)\) we have
-  \[
-    \mu = \beta_j^* n, \quad \sigma^2 = \frac{\sigma_\varepsilon^2 n}{q(1-q)}, \quad\text{and}\quad d_j = n
-  \]
-  so that
-  \[
-    \begin{aligned}
-      \theta                & = -\beta_j^* n - \lambda,                                                    \\
-      \gamma                & = \beta_j^* n - \lambda                                                      \\
-      \frac{\theta}{\sigma} & = \frac{-\sqrt{q(1-q)}(\beta_j^* n + \lambda)}{\sigma_\varepsilon \sqrt{n}}, \\
-      \frac{\gamma}{\sigma} & = \frac{\sqrt{q(1-q)}(\beta_j^*n - \lambda)}{\sigma_\varepsilon \sqrt{n}}.
-    \end{aligned}
-  \]
-  Let
-  \[
-    a = \frac{\beta_j^* n + \lambda}{\sigma_\varepsilon \sqrt{n}}, \quad\text{and}\quad b = \frac{\beta_j^* n - \lambda}{\sigma_\varepsilon \sqrt{n}}.
-  \]
-  We now have
-  \[
-    \lim_{q \rightarrow 1} -\theta \cdf\left(\frac{\theta}{\sigma}\right) = (\beta_j^*n + \lambda) \lim_{q \rightarrow 1} \cdf\left(-a\sqrt{q(1-q)}\right) = \frac{1}{2}(\beta_j^*n + \lambda)
-  \]
-  and similarly
-  \[
-    \lim_{q \rightarrow 1} \gamma \cdf\left(\frac{\gamma}{\sigma}\right) = \frac{1}{2}(\beta_j^*n - \lambda)
-  \]
-  since \(\sqrt{q(1-q)} \rightarrow 0\) and hence \(\cdf\big(-a\sqrt{q(1-q)}\big) \rightarrow 1/2\) as \(q \rightarrow 1\), reminding ourselves
-  that \(\cdf\) is the cumulative distribution function of the standard normal distribution, which is symmetric around 0, and that \(a\) is constant with respect to \(q\).
 
-  Next, we define
+  Since \(s_j = \big(q(1-q)\big)^\delta\) for \(\delta \geq 0\), we have
   \[
-    f(q) = \sigma_\varepsilon \sqrt{n}\left(\pdf\left(b\sqrt{q(1-q)}\right) - \pdf\left(-a\sqrt{q(1-q)}\right)\right),\quad\text{and}\quad g(q) = \sqrt{q(1-q)}
+    \begin{aligned}
+      \mu                   & = \beta_j^* n \big(q(1-q)\big)^{1 - \delta}                                       \\
+      \sigma                & = \sigma_\varepsilon \sqrt{n} \big(q(1-q)\big)^{1/2 - \delta},                    \\
+      d                     & = n \big(q(1-q)\big)^{1 - \delta} + (1 - \alpha) \lambda \big(q(1-q)\big)^\delta, \\
+      \theta                & = -\beta^*_j n \big(q(1-q)\big)^{1-\delta} - \lambda                              \\
+      \gamma                & = \beta^*_j n \big(q(1-q)\big)^{1-\delta} - \lambda                               \\
+      \frac{\theta}{\sigma} & = -a \sqrt{q(1-q)} - b \big(q(1-q)\big)^{\delta - 1/2}                            \\
+      \frac{\gamma}{\sigma} & = a \sqrt{q(1-q)} - b \big(q(1-q)\big)^{\delta - 1/2}                             \\
+      \frac{\theta}{d}      & = -\beta_j^* - \frac{\lambda \big(q(1-q)\big)^{\delta - 1}}{n}                    \\
+      \frac{\gamma}{d}      & = \beta_j^* - \frac{\lambda \big(q(1-q)\big)^{\delta - 1}}{n}                     \\
+    \end{aligned}
   \]
-  and take the derivatives thereof, yielding
+  with
   \[
-    f'(q) = \frac{\sigma_\varepsilon \sqrt{n} (2q -1)}{4 \pi}\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)
+    a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda}{\sigma_\varepsilon \sqrt{n}}
   \]
-  and
-  \[
-    g'(q) = \frac{1 - 2q}{2\sqrt{q(1-q)}}.
-  \]
-  Note that
-  \[
-    \lim_{q \rightarrow 1} f(q) = \lim_{q \rightarrow 1} g(q) = 0
-  \]
-  and moreover that \(f(q)\) and \(g(q)\) are both differentiable in the interval \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval.
 
-  Finally, note that
+  Now, we are interested in taking the limit of \Cref{eq:mean-centered-eval}, the expected value of the lasso estimator, as \(q \rightarrow 1\), that is
+  \begin{equation}
+    \label{eq:eval-qlimit}
+    \lim_{q \rightarrow 1}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
+  \end{equation}
+
+  Before we proceed, note that
+  \begin{equation}
+    \label{eq:eval-sigma-limits}
+    \lim_{q \rightarrow 1} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1} \frac{\gamma}{\sigma} =
+    \begin{cases}
+      \infty & \text{if } 0 \leq \delta < \frac{1}{2}, \\
+      -b     & \text{if } \delta = \frac{1}{2},        \\
+      0      & \text{if } \delta > \frac{1}{2},
+    \end{cases}
+  \end{equation}
+  which we will make repeated use of throughout the proof.
+
+  Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for now assuming that they are well-defined and that the limits of the remaining terms also exist seperately, we have
+  \begin{align}
+     & \lim_{q \rightarrow 1} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                                                                                                                                                                                                                   \\
+     & = \lim_{q \rightarrow 1} \left(\left(\beta_j^* + \lambda n^{-1}\big(q(1-q)\big)^{\delta - 1}\right) \cdf \left(\frac{\theta}{\sigma}\right) + \left(\beta_j^* - \lambda n^{-1}\big(q(1-q)\big)^{\delta - 1}\right)\cdf \left(\frac{\gamma}{\sigma}\right) \right)                                                                                                                                                                                                                                                                                                                              \nonumber \\ & = 2\beta_j^*\cdf \left(- b \lim_{q \rightarrow 1} \big(q(1-q)\big)^{\delta - 1/2}\right)                                                                                                                                                                                                                                                               + \lambda n^{-1} \lim_{q \rightarrow 1} \big(q(1-q)\big)^{\delta - 1}\left(\cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right)\right). \label{eq:eval-qlimit-terms}
+  \end{align}
+  Considering the first term in \Cref{eq:eval-qlimit-terms}, we see that
+  \[
+    2\beta_j^*\cdf \left(- b \lim_{q \rightarrow 1} \big(q(1-q)\big)^{\delta - 1/2}\right) =
+    \begin{cases}
+      0                     & \text{if } 0 \leq \delta < 1/2, \\
+      2 \beta_j^* \cdf (-b) & \text{if } \delta = 1/2,        \\
+      \beta_j^*             & \text{if } \delta > 1/2.
+    \end{cases}
+  \]
+  For the second term in \Cref{eq:eval-qlimit-terms}, we start by observing that if
+  \(\delta = 1\), then \(\left(q(1-q)\right)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1}(q(1 - q))^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
+
+  For \(0 \leq \delta < 1\), the limit is indeterminite of the form \(\infty \times 0\). We define
+  \[
+    f(q) = \cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right) \qquad\text{and}\qquad g(q) = \big(q(1-q)\big)^{1-\delta},
+  \]
+  such that we can express the limit as \(\lim_{q \rightarrow 1}f(q)/g(q)\). The corresponding derivatives are
   \[
     \begin{aligned}
-      \frac{f'(q)}{g'(q)} & = \frac{2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} (2q  - 1)\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)}{1 - 2q} \\
-                          & =2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} \left(a^2 e^{-\frac{q(1-q)a^2}{2}}- b^2 e^{-\frac{q(1-q)b^2}{2}}\right)                          \\
-                          & \rightarrow 0 \text{ as } q \rightarrow 1.
+      f'(q) & = \left(\frac{-a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)\big(q(1-q)\big)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)        \\
+            & \qquad - \left(\frac{a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)\big(q(1-q)\big)^{\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right), \\
+      g'(q) & = (1 - \delta)(1-2q)\big(q(1-q)\big)^{-\delta}.
     \end{aligned}
   \]
-  Since this limit exists and is finite, we may apply L'Hôpital's rule to obtain
+  Since \(f(q)\) and \(g(q)\) are both differentiable in the interval \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval, we can use L'Hôpital's rule to obtain the limit.
+
+  First note that we have
+  \begin{equation}
+    \label{eq:eval-qlimit-secondterm}
+    \begin{multlined}
+      \frac{f'(q)}{g'(q)} = \frac{1}{1 - \delta}\bigg(\left( -\frac{a}{2}\left(q - q^2\right)^{\delta - 1/2} - b(\delta - 1/2)(q -q^2)^{2\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right) \\- \left( \frac{a}{2}\left(q - q^2\right)^{\delta - 1/2} - b(\delta - 1/2)(q -q^2)^{2\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right)\bigg).
+    \end{multlined}
+  \end{equation}
+  For \(0 \leq \delta < 1/2\), $\lim_{q \rightarrow 1}f'(q)/g'(q) = 0$ since the exponential terms of \(\pdf\) in \Cref{eq:eval-qlimit-secondterm} dominate in the limit.
+
+  For \(\delta = 1/2\), we have
   \[
-    \lim_{q \rightarrow 1} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = 0.
+    \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = -a \lim_{q \rightarrow 1}\left(\pdf\left(\frac{\theta}{\sigma}\right) + \pdf\left(\frac{\gamma}{\sigma}\right)\right) = -2a \pdf(-b)
   \]
-  Finally, we piece together our previous efforts to obtain
+  so that the second term in \Cref{eq:eval-qlimit-terms} becomes
+  \begin{equation}
+    \label{eq:eval-qlimit-stdcase}
+    -\frac{2\beta_j^*\lambda}{\sigma_\varepsilon\sqrt{n}} \pdf\left(\frac{-\lambda}{\sigma_\varepsilon\sqrt{n}}\right).
+  \end{equation}
+  For \(\delta = 3/4\), and \(3/4 <\delta < 1\), the terms cancel or vanish, and so the limit is 0 in both cases.
+
+  For \(1/2 < \delta < 3/4\), repeated use of the previous strategy: rewriting the fraction, derivating, and using L'Hôpital's rule, shows that the limit is 0 also in this case. For brevity, we omit these calculations here.
+
+  Now we proceed to consider the terms involving \(\pdf\) in \Cref{eq:eval-qlimit}. We have
+  \begin{equation}
+    \label{eq:eval-qlimit-pdfterm}
+    \lim_{q \rightarrow 1} \frac{\sigma}{d} \left(\pdf \left(\frac{\gamma}{\sigma}\right) - \pdf \left(\frac{\theta}{\sigma}\right)\right)
+    = \frac{\sigma_\varepsilon}{\sqrt{n}} \lim_{q \rightarrow 1} \left(q - q^2\right)^{-1/2}\left( \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)\right).
+  \end{equation}
+  For \(0 \leq \delta < 1/2\), we observe that the exponential terms in \(\pdf\) dominate in the limit, and so we can distribute the limit and consider the limits of the respective terms individually, which both vanish.
+
+  For \(\delta \geq 1/2\), the limit in \Cref{eq:eval-qlimit-pdfterm} has an indeterminate form of the type \(\infty \times 0\). Define
+  \[
+    u(q) = \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right) \qquad\text{and}\qquad v(q) = \left(q - q^2\right)^{1/2},
+  \]
+  which are both differentiable in the interval \((1/2, 1)\) and \(v'(q) \neq 0\) everywhere in this interval. The derivatives are
   \[
     \begin{aligned}
-      \lim_{q \rightarrow 1} \hat\beta_j & = \frac{1}{d} \lim_{q \rightarrow 1}\left(- \theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right) \\
-                                         & = \frac{1}{n}\left(\beta_j^*n +  \lim_{q \rightarrow 1}\frac{f(q)}{f(q)} \right)                                                                                                                                                                 \\
-                                         & = \beta_j^*.
+      u'(q) & = -\pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} \left(\frac{1}{2}\left(a(1-2q)(q - q^2)^{-1/2}\right) - b(\delta - 1/2)(1- 2q)(q - q^2)^{\delta - 3/2}\right)          \\
+            & \qquad + \pdf\left(\frac{\theta}{\sigma}\right) \frac{\theta}{\sigma} \left(-\frac{1}{2}\left(a(1-2q)(q - q^2)^{-1/2}\right) - b(\delta - 1/2)(1- 2q)(q - q^2)^{\delta - 3/2}\right), \\
+      v'(q) & = \frac{1}{2} (1- 2q)(q - q^2)^{-1/2}.
     \end{aligned}
   \]
+  And so
+  \[
+    \begin{aligned}
+      \frac{u'(q)}{v'(q)} = -\left(a - b(2\delta - 1)(q - q^2)^{\delta - 1}\right) \pdf\left(\frac{\gamma}{\sigma}\right) \frac{\gamma}{\sigma} - \left(a + b(2\delta - 1)(q - q^2)^{\delta - 1}\right)\pdf\left(\frac{\theta}{\sigma}\right) \frac{\theta}{\sigma}.
+    \end{aligned}
+  \]
+  Taking the limit, rearranging, and assuming that the limits of the separate terms exist, we obtain
+  \begin{multline}
+    \label{eq:eval-qlimit-pdfterm-split}
+    \lim_{q \rightarrow 1} \frac{u'(q)}{v'(q)} = - a \lim_{q \rightarrow 1} \left( \pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} + \pdf\left(\frac{\theta}{\sigma}\right)\frac{\theta}{\sigma}\right)
+    + b (2\delta - 1) \lim_{q \rightarrow 1} \bigg( \\ \pdf\left(\frac{\gamma}{\sigma}\right) \left(a(q -q^2)^{\delta - 1/2}- b(q - q^2)^{2\delta - 3/2} \right)                   -  \pdf\left(\frac{\theta}{\sigma}\right) \left(-a(q - q^2)^{\delta - 1/2} - b(q - q^2)^{2\delta - 3/2}\right) \bigg)
+  \end{multline}
+  For \(\delta = 1/2\), we have
+  \[
+    \lim_{q \rightarrow 1} \frac{u'(q)}{v'(q)} = -a\left(-b \pdf(-b) - b \pdf(-b)\right) + 0 = 2ab \pdf(-b).
+  \]
+  Using L'Hôpital's rule, the second term in \Cref{eq:eval-qlimit-pdfterm} must consequently be
+  \[
+    \frac{2 \beta_j^* \lambda}{\sigma_\varepsilon \sqrt{n}} \pdf \left(\frac{-\lambda}{\sigma_\varepsilon\sqrt{n}}\right),
+  \]
+  which cancels with \Cref{eq:eval-qlimit-stdcase}.
+
+  For \(\delta > 1/2\), we first observe that the first term in \Cref{eq:eval-qlimit-pdfterm-split} tends to zero due to \Cref{eq:eval-sigma-limits} and
+  the properties of the standard normal distribution. For the second term, we note that this is essentially
+  of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 \end{proof}
+
+% \begin{proof}
+%   OLD PROOF for variance case.
+%
+%   First note that when \(s = q(1-q)\) we have
+%   \[
+%     \mu = \beta_j^* n, \quad \sigma^2 = \frac{\sigma_\varepsilon^2 n}{q(1-q)}, \quad\text{and}\quad d_j = n
+%   \]
+%   so that
+%   \[
+%     \begin{aligned}
+%       \theta                & = -\beta_j^* n - \lambda,                                                    \\
+%       \gamma                & = \beta_j^* n - \lambda                                                      \\
+%       \frac{\theta}{\sigma} & = \frac{-\sqrt{q(1-q)}(\beta_j^* n + \lambda)}{\sigma_\varepsilon \sqrt{n}}, \\
+%       \frac{\gamma}{\sigma} & = \frac{\sqrt{q(1-q)}(\beta_j^*n - \lambda)}{\sigma_\varepsilon \sqrt{n}}.
+%     \end{aligned}
+%   \]
+%   Let
+%   \[
+%     a = \frac{\beta_j^* n + \lambda}{\sigma_\varepsilon \sqrt{n}}, \quad\text{and}\quad b = \frac{\beta_j^* n - \lambda}{\sigma_\varepsilon \sqrt{n}}.
+%   \]
+%   We now have
+%   \[
+%     \lim_{q \rightarrow 1} -\theta \cdf\left(\frac{\theta}{\sigma}\right) = (\beta_j^*n + \lambda) \lim_{q \rightarrow 1} \cdf\left(-a\sqrt{q(1-q)}\right) = \frac{1}{2}(\beta_j^*n + \lambda)
+%   \]
+%   and similarly
+%   \[
+%     \lim_{q \rightarrow 1} \gamma \cdf\left(\frac{\gamma}{\sigma}\right) = \frac{1}{2}(\beta_j^*n - \lambda)
+%   \]
+%   since \(\sqrt{q(1-q)} \rightarrow 0\) and hence \(\cdf\big(-a\sqrt{q(1-q)}\big) \rightarrow 1/2\) as \(q \rightarrow 1\), reminding ourselves
+%   that \(\cdf\) is the cumulative distribution function of the standard normal distribution, which is symmetric around 0, and that \(a\) is constant with respect to \(q\).
+%
+%   Next, we define
+%   \[
+%     f(q) = \sigma_\varepsilon \sqrt{n}\left(\pdf\left(b\sqrt{q(1-q)}\right) - \pdf\left(-a\sqrt{q(1-q)}\right)\right),\quad\text{and}\quad g(q) = \sqrt{q(1-q)}
+%   \]
+%   and take the derivatives thereof, yielding
+%   \[
+%     f'(q) = \frac{\sigma_\varepsilon \sqrt{n} (2q -1)}{4 \pi}\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)
+%   \]
+%   and
+%   \[
+%     g'(q) = \frac{1 - 2q}{2\sqrt{q(1-q)}}.
+%   \]
+%   Note that
+%   \[
+%     \lim_{q \rightarrow 1} f(q) = \lim_{q \rightarrow 1} g(q) = 0
+%   \]
+%   and moreover that \(f(q)\) and \(g(q)\) are both differentiable in the interval \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval.
+%
+%   Finally, note that
+%   \[
+%     \begin{aligned}
+%       \frac{f'(q)}{g'(q)} & = \frac{2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} (2q  - 1)\left(b^2 e^{-\frac{q(1-q)b^2}{2}}- a^2 e^{-\frac{q(1-q)a^2}{2}}\right)}{1 - 2q} \\
+%                           & =2\sqrt{q(1-q)}\sigma_\varepsilon \sqrt{n} \left(a^2 e^{-\frac{q(1-q)a^2}{2}}- b^2 e^{-\frac{q(1-q)b^2}{2}}\right)                          \\
+%                           & \rightarrow 0 \text{ as } q \rightarrow 1.
+%     \end{aligned}
+%   \]
+%   Since this limit exists and is finite, we may apply L'Hôpital's rule to obtain
+%   \[
+%     \lim_{q \rightarrow 1} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = 0.
+%   \]
+%   Finally, we piece together our previous efforts to obtain
+%   \[
+%     \begin{aligned}
+%       \lim_{q \rightarrow 1} \hat\beta_j & = \frac{1}{d} \lim_{q \rightarrow 1}\left(- \theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right) \\
+%                                          & = \frac{1}{n}\left(\beta_j^*n +  \lim_{q \rightarrow 1}\frac{f(q)}{f(q)} \right)                                                                                                                                                                 \\
+%                                          & = \beta_j^*.
+%     \end{aligned}
+%   \]
+% \end{proof}
 
 \begin{corollary}
   Suppose \(\sigma_\varepsilon = 0\) in \Cref{thm:binary-varscale-bias}, all other things being equal. Then we instead obtain
@@ -482,44 +628,6 @@ We will allow ourselves to abuse notation and overload the definitions of \(\mu\
   which is the typical result of the lasso estimate when \(\vec{x}_j\) is normally distributed.
 \end{corollary}
 
-
-\begin{corollary}
-  Letting \(s = \sqrt{q(1-q)}\) (standardization), we have
-  \[
-    \begin{aligned}
-      \mu                   & = \beta_j^* n \sqrt{q(1-q)},                                                \\
-      \sigma^2              & = \sigma_\varepsilon n,                                                     \\
-      d_j                   & = n\sqrt{q(1-q)} + (1 - \alpha) \lambda\sqrt{q(1-q)},                       \\
-      \frac{\theta}{\sigma} & = -\frac{\beta_j^* n \sqrt{q(1-q)} + \lambda}{\sigma_\varepsilon \sqrt{n}}, \\
-      \frac{\gamma}{\sigma} & =\frac{\beta_j^* n \sqrt{q(1-q)} - \lambda}{\sigma_\varepsilon \sqrt{n}}.
-    \end{aligned}
-  \]
-  Similar computations as in \Cref{thm:binary-varscale-bias} can be carried out to show that
-  \[
-    \lim_{q \rightarrow 1} \E \hat{\beta}_j = 0
-  \]
-  in this case.
-  % TODO: Consider adding a proof for this.
-\end{corollary}
-
-\begin{corollary}
-  Letting \(s = 1\) (max--abs or min--max normalization), we have
-  \[
-    \begin{aligned}
-      \mu                   & = \beta_j^* n q(1-q),                                                \\
-      \sigma^2              & = \sigma_\varepsilon n q(1-q),                                       \\
-      d_j                   & = n q(1-q) + (1 - \alpha) \lambda q(1-q),                            \\
-      \frac{\theta}{\sigma} & = -\frac{\beta_j^* n q(1-q) + \lambda}{\sigma_\varepsilon \sqrt{n}}, \\
-      \frac{\gamma}{\sigma} & =\frac{\beta_j^* n q(1-q) - \lambda}{\sigma_\varepsilon \sqrt{n}}.
-    \end{aligned}
-  \]
-  Similar computations as in \Cref{thm:binary-varscale-bias} can be carried out to show that
-  \[
-    \lim_{q \rightarrow 1} \E \hat{\beta}_j = 0
-  \]
-  in this case.
-  % TODO: Consider adding a proof for this.
-\end{corollary}
 
 \begin{figure}[htpb]
   \centering
