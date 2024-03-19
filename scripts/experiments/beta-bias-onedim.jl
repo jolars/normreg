@@ -29,10 +29,6 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5)
   eβ = binary_expected_value(θ, γ, σ, d, print_components = false)
   v = binary_variance(θ, γ, σ, d)
 
-  # std_level = 2 * β * λ * pdf(Normal(), λ / (σe * sqrt(n))) / (σe * sqrt(n))
-  std_level = 2 * β * cdf(Normal(), -β * sqrt(n) / σe)
-  
-
   bias = eβ - β
   mse = bias^2 + v
 
@@ -81,6 +77,8 @@ for (i, d) in enumerate(grouped_df)
   subgrouped_df = groupby(d, [:sigma_e])
 
   for (j, dd) in enumerate(subgrouped_df)
+    sort!(dd, [:delta])
+
     ylab = if j == 1
       unique(d.variable)[1]
     else
@@ -107,20 +105,9 @@ for (i, d) in enumerate(grouped_df)
       x -> ""
     end
 
-    pl = plot(xlims = (0.45, 1.05))
+    # pl = plot(xlims = (0.45, 1.05))
 
-    if i == 2
-      β = 1
-      n = 100
-      σe = unique(dd.sigma_e)[1]
-      λ = 0.2 * n
-      lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β
-      println("lev:", lev)
-      hline!(pl, [lev], linestyle = :dot, linecolor = :black)
-    end
-
-    @df dd plot!(
-      pl,
+    pl = @df dd plot(
       :q,
       :value,
       groups = :delta,
@@ -130,8 +117,19 @@ for (i, d) in enumerate(grouped_df)
       xticks = 0.5:0.25:1,
       title = title,
       legend = false,
-      palette=pal,
+      palette = pal,
     )
+
+    # Plot asymptotic limit for standardization case
+    if i == 2
+      β = 1
+      n = 100
+      σe = unique(dd.sigma_e)[1]
+      λ = 0.2 * n
+      lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β
+      println("lev:", lev)
+      hline!(pl, [lev], linestyle = :dot, linecolor = :black)
+    end
 
     push!(plots, pl)
   end
@@ -149,7 +147,7 @@ legend =
     label = lab,
     legend_position = :topleft,
     legend_title = L"\delta",
-    palette=pal,
+    palette = pal
   )
 
 l = @layout[grid(3, n_sigma) a{0.15w}]
