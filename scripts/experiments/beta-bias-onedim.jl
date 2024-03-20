@@ -18,6 +18,10 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5)
 
   s = (q - q^2)^δ
 
+  λ = λ / (0.5 - 0.5^2)^δ 
+
+  println("λ: ", λ)
+
   μ = binary_mean(β, n, q, s)
   σ = binary_stddev(σe, n, q, s)
 
@@ -32,7 +36,7 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5)
   bias = eβ - β
   mse = bias^2 + v
 
-  return bias, v, mse
+  return bias, v, mse, λ
 end
 
 param_dict = Dict{String,Any}(
@@ -51,23 +55,24 @@ for (i, d) in enumerate(param_expanded)
   n = 100
   lambda = n * lambda
 
-  bias, var, mse = onedim_bias_sim(q, sigma_e, delta, n, lambda)
+  bias, v, mse, λ = onedim_bias_sim(q, sigma_e, delta, n, lambda)
 
   d_exp = copy(d)
   d_exp["bias"] = bias
-  d_exp["var"] = var
+  d_exp["var"] = v
   d_exp["mse"] = mse
+  d_exp["lambda"] = λ
 
   push!(results, d_exp)
 end
 
 df = DataFrame(results);
-df_long = stack(df, Not([:q, :sigma_e, :delta, :lambda]))
+df_long = stack(df, Not([:q, :sigma_e, :delta, :lambda]));
 
 n_delta = length(unique(df.delta))
 n_sigma = length(unique(df.sigma_e))
 
-grouped_df = groupby(df_long, [:variable])
+grouped_df = groupby(df_long, [:variable]);
 
 plots = []
 
@@ -105,8 +110,6 @@ for (i, d) in enumerate(grouped_df)
       x -> ""
     end
 
-    # pl = plot(xlims = (0.45, 1.05))
-
     pl = @df dd plot(
       :q,
       :value,
@@ -125,7 +128,9 @@ for (i, d) in enumerate(grouped_df)
       β = 1
       n = 100
       σe = unique(dd.sigma_e)[1]
-      λ = 0.2 * n
+      std_group = subset(dd, :delta => d -> d .== 0.5)
+      λ = unique(std_group.lambda)[1]
+      println("λ:", λ)
       lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β
       println("lev:", lev)
       hline!(pl, [lev], linestyle = :dot, linecolor = :black)
