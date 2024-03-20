@@ -42,7 +42,7 @@ end
 param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.01:0.99),
   "sigma_e" => [0.1, 0.5, 1, 4],
-  "delta" => [0, 1/4, 1/2, 1, 2],
+  "delta" => [0, 1/4, 1/2, 1, 1.5],
   "lambda" => [0.2],
 )
 param_expanded = dict_list(param_dict)
