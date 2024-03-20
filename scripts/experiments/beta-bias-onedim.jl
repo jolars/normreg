@@ -14,13 +14,11 @@ set_plot_defaults()
 function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5)
   Random.seed!(852)
 
-  β = 1
+  β = 2
 
   s = (q - q^2)^δ
 
-  λ = λ / (0.5 - 0.5^2)^δ 
-
-  println("λ: ", λ)
+  λ = λ / (0.5 - 0.5^2)^δ
 
   μ = binary_mean(β, n, q, s)
   σ = binary_stddev(σe, n, q, s)
@@ -40,9 +38,9 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5)
 end
 
 param_dict = Dict{String,Any}(
-  "q" => collect(0.5:0.01:0.99),
-  "sigma_e" => [0.1, 0.5, 1, 4],
-  "delta" => [0, 1/4, 1/2, 1, 1.5],
+  "q" => collect(0.5:0.001:0.999),
+  "sigma_e" => [0.25, 0.5, 1, 8],
+  "delta" => [0, 1 / 4, 1 / 2, 1.0, 1.5],
   "lambda" => [0.2],
 )
 param_expanded = dict_list(param_dict)
@@ -125,14 +123,12 @@ for (i, d) in enumerate(grouped_df)
 
     # Plot asymptotic limit for standardization case
     if i == 2
-      β = 1
+      β = 2
       n = 100
       σe = unique(dd.sigma_e)[1]
       std_group = subset(dd, :delta => d -> d .== 0.5)
       λ = unique(std_group.lambda)[1]
-      println("λ:", λ)
       lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β
-      println("lev:", lev)
       hline!(pl, [lev], linestyle = :dot, linecolor = :black)
     end
 
@@ -144,16 +140,15 @@ lab = reshape(sort(unique(df.delta)), 1, n_delta)
 
 legendvals = collect(zeros(n_delta)')
 
-legend =
-  plot(
-    legendvals,
-    showaxis = false,
-    grid = false,
-    label = lab,
-    legend_position = :topleft,
-    legend_title = L"\delta",
-    palette = pal
-  )
+legend = plot(
+  legendvals,
+  showaxis = false,
+  grid = false,
+  label = lab,
+  legend_position = :topleft,
+  legend_title = L"\delta",
+  palette = pal,
+)
 
 l = @layout[grid(3, n_sigma) a{0.15w}]
 
