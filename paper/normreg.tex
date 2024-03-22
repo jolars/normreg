@@ -206,7 +206,7 @@ Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) 
 
 \subsection{Orthogonal Features}
 
-If the features of the normalized design matrix are orthogonal, that is, \(\tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p\right) \), then \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
+If the features of the normalized design matrix are orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1 \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^t \tilde{\vec{x}}_p\right) \), then \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
 \[
   \begin{cases}
     -\vec{y}^\T \tilde{\vec{x}}_j + \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 + (1 - \alpha) \lambda \beta_j + \alpha \lambda g \ni 0, & j=1,\dots,p, \\
@@ -320,7 +320,7 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
 
 \begin{theorem}
   \label{thm:classbalance-bias}
-  If \(\vec{x}\) is a binary feature with class balance \(q \in (0, 1)\), \(\alpha = 1\), \(\lambda \in \mathbb{R}^+\), \(\sigma_\varepsilon > 0\), and \(s = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\), \(\alpha = 1\), \(\lambda \in \mathbb{R}^+\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
   \[
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
@@ -384,7 +384,7 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
     \end{cases}
   \]
   For the second term in \Cref{eq:eval-qlimit-terms}, we start by observing that if
-  \(\delta = 1\), then \(\left(q(1-q)\right)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1}(q(1 - q))^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
+  \(\delta = 1\), then \(q(1-q)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1}(q - q^2)^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
 
   For \(0 \leq \delta < 1\), the limit is indeterminite of the form \(\infty \times 0\). We define
   \[
@@ -393,8 +393,8 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
   such that we can express the limit as \(\lim_{q \rightarrow 1}f(q)/g(q)\). The corresponding derivatives are
   \[
     \begin{aligned}
-      f'(q) & = \left(\frac{-a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)        \\
-            & \qquad - \left(\frac{a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right), \\
+      f'(q) & = \left(\frac{-a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)                \\
+            & \phantom{= {}} - \left(\frac{a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right), \\
       g'(q) & = (1 - \delta)(1-2q)(q - q^2)^{-\delta}.
     \end{aligned}
   \]
