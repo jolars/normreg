@@ -58,7 +58,7 @@ Finally, we note that the variance of the soft-thresholding estimator is
 and that the variance of the elastic net estimator is therefore
 \begin{equation}
   \label{eq:betahat-variance}
-  \var \hat\beta_j^* = \frac{1}{d_j^2} \var \st_\lambda(Z).
+  \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda(Z).
 \end{equation}
 
 \subsection{Mean-Centering and Normally Distributed Noise}
@@ -404,92 +404,6 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
     \end{aligned}
   \end{multline*}
   Inspection of the exponents involving the factor \((q - q^2)\) shows that the first term inside the limit will dominate. And since the upper limit of the integrals, \(\theta/\sigma \rightarrow  0\)  as \(q \rightarrow 1^+\), the limit must be \(\infty\).
-
-
-
-
-
-
-
-
-
-  % We begin with
-  % \[
-  %   \begin{aligned}
-  %     \lim_{q \rightarrow 1^+} \frac{\sigma^2}{2} \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) & = \frac{\sigma_\varepsilon^2 n}{2} \lim_{q \rightarrow 1^+} (q-q^2)^{1
-  %     - 2\delta}\erf\left(\frac{-a(q - q^2)^{1/2} - b(q - q^2)^{\delta - 1/2}}{\sqrt{2}}\right)                                                                                                                                     \\
-  %                                                                                              & = \begin{cases}
-  %                                                                                                    0                                                                                      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
-  %                                                                                                    \frac{\sigma_\varepsilon^2 n}{2}\erf\left(-\frac{\lambda}{\sigma_\varepsilon n}\right) & \text{if } \delta = \frac{1}{2,}        \\
-  %                                                                                                    \sign(\theta) \infty                                                                   & \text{if } \delta > \frac{1}{2}.        \\
-  %                                                                                                  \end{cases}
-  %   \end{aligned}
-  % \]
-  % The first case occurs because the error function is bounded at \(\pm 1\) and \((q-q^2)^{1-2\delta} \rightarrow 0\) as \(q \rightarrow 1^+\) when \(0 \leq \delta < 1/2 \).
-  % The second case comes from the fact that the argument of the error function is constant when \(\delta = 1/2\). We do not bother with the
-  % value of the the constant here since, as we shall see, the limit of \Cref{eq:varthm-var} will tend to \(\infty\) anyway.
-  %
-  % For \(\delta > 1/2\), which corresponds to the last case, the limit is indeterminate of the form \(\infty \times 0\). We can express it as
-  % \[
-  %   \lim_{q \rightarrow 1^+} \frac{f(q)}{g(q)}
-  % \]
-  % with
-  % \[
-  %   f(q) = \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) \quad\text{and}\quad g(q) = (q - q^2)^{2\delta - 1}.
-  % \]
-  % \(f\) and \(g\) are both differentiable in the interval \(1/2, 1\) nd \(g'(q) \neq 0\) everywhere in this interval. Taking the derivatives and
-  % applying L'Hôpital's rule, we obtain
-  % \[
-  %   \lim_{q \rightarrow 1^+} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1^+} \frac{f'(q)}{g'(q)} = \sign(\theta) \infty.
-  % \]
-  %
-  % Next, we have
-  % \[
-  %   \begin{aligned}
-  %     \lim_{q \rightarrow 1^+} \frac{\theta\sigma}{2}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right) & = \frac{\sigma_\varepsilon^2 n}{\sqrt{2 \pi}} \lim_{q \rightarrow 1^+} \left(-a(q - q^2)^{3/2 - 2\delta} - b(q - q^2)^{1/2 - \delta}\right) \\
-  %                                                                                                                    & \qquad \times \exp\left( -\frac{1}{2}\big( a^2(q - q^2) + b^2(q - q^2)^{2\delta - 1} + 2ab(q - q^2)^{\delta}\big)\right)                  \\
-  %                                                                                                                    & =
-  %     \begin{cases}
-  %       0                                                & \text{if } 0 \leq \delta < \frac{1}{2}, \\
-  %       \lambda \sigma_\varepsilon \sqrt{\frac{n}{2\pi}} & \text{if } \delta = \frac{1}{2},        \\
-  %       \sign(\theta) \infty                             & \text{if } \delta > \frac{1}{2}.
-  %     \end{cases}
-  %   \end{aligned}
-  % \]
-  % The cases are similar to the previous ones. For the first case, the exponential term dominates in the limit since its argument tends to \(-\infty\).
-  % For the second case, the limit is constant since the argument of the exponential term is constant as is the prefactor involving \(b\).
-  % In the last case, the exponential term tends to one since its argument tends to 0, and the prefactor of it tends to \(\sign(\theta)\infty\).
-  %
-  % Next we have
-  % \[
-  %   \begin{aligned}
-  %     \lim_{q \rightarrow 1^+} 2 \theta \sigma \pdf \left(\frac{\theta}{\sigma}\right) & = 2 \sigma_\varepsilon \sqrt{n} \lim_{q \rightarrow 1^+}\left(-\beta_j^* n(q - q^2)^{3/2 - 2\delta} - \lambda (q - q^2)^{1/2 - \delta}\right) \pdf\left(\frac{\theta}{\sigma}\right) \\
-  %                                                                                    & = \begin{cases}
-  %                                                                                          0                                              & \text{if } 0 \leq \delta < \frac{1}{2}, \\
-  %                                                                                          -2\sigma_\varepsilon \lambda \sqrt{n} \pdf(-b) & \text{if } \delta = \frac{1}{2},        \\
-  %                                                                                          \sign(\theta) \infty                           & \text{if } \delta > \frac{1}{2}.
-  %                                                                                        \end{cases}
-  %   \end{aligned}
-  % \]
-  % In the first case, both factors in the limit vanish.
-  % In the second case, the limit is constant since the argument of the probability density function is constant, as is \(\lambda(q-q^2)^{1/2 - \delta} = \lambda\).
-  % In the third case, the term involving \(\pdf\) vanishes since its argument tends to \(-\infty\), and the other factor tends to \(\sign(\theta)\infty\).
-  %
-  % Then, we have
-  % \[
-  %   \begin{aligned}
-  %     \lim_{q \rightarrow 1^+} \theta^2 \cdf \left( \frac{\theta}{\sigma}\right) & = \lim_{q \rightarrow 1^+} \left( (\beta_j^*n)^2(q-q^2)^{2 - 2\delta} + \lambda^2 + 2\lambda \beta_j^* n (q - q^2)^{1 - \delta}\right) \cdf\left(\frac{\theta}{\sigma}\right) \\
-  %                                                                              & = \begin{cases}
-  %                                                                                    0                                                        & \text{if } 0 \leq \delta < 1, \\
-  %                                                                                    \frac{1}{2}\left(\beta_j^* n + \lambda\right)^2 \cdf(-b) & \text{if } \delta = 1,        \\
-  %                                                                                    \infty                                                   & \text{if } \delta > 1.
-  %                                                                                  \end{cases}
-  %   \end{aligned}
-  % \]
-  % In the first case, the first factor vanishes since the exponent of \(q-q^2\) is positive. When \(\delta = 1\), the limit it constant since both factors are costant.
-  % In the last case, the first factor tends to infinity since the exponent of \(q-q^2\) is negative, while the second factor is constant.
-  %
-  % Expressions for the limits involving \(\gamma\) are identical up to the replacement of \(\theta\) by \(\gamma\).
 
 \end{proof}
 
