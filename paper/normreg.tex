@@ -276,7 +276,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
   of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}[Ridge Regression]
   Asume the conditions of \Cref{thm:classbalance-bias} but that \(\lambda_1 = 0\). Then
   \[
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
@@ -300,9 +300,9 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
   \[
     \lim_{q \rightarrow 1^+} (q - q^2)^{2\delta - 1} =
     \begin{cases}
-      \infty & \text{if } 0 \leq \delta < 1/2, \\
-      1      & \text{if } \delta = 1/2,        \\
-      0      & \text{if } \delta > 1/2.
+      \infty    & \text{if } 0 \leq \delta < 1/2, \\
+      1         & \text{if } \delta = 1/2,        \\
+      \beta_j^* & \text{if } \delta > 1/2.
     \end{cases}
   \]
 \end{proof}
