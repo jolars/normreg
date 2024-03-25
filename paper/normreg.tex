@@ -313,6 +313,7 @@ true coefficient scaled by the probability that a standard normal variable is sm
 estimate is unbiased asymptotically. The last fact may seem somewhat counterintuitive but is a consequence of the variance of the distribution of the estimator exploding as \(q \rightarrow 1^+\).
 
 \begin{theorem}
+  \label{thm:classbalance-variance}
   If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda_1,\lambda_2 \in (0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
   \[
     \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
@@ -407,6 +408,25 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 
 \end{proof}
 
+\begin{corollary}
+  Assume the conditions of \Cref{thm:classbalance-variance} but that \(\lambda_1 = 0\). Then
+  \[
+  \lim_{q \rightarrow 1^+} \var \hat{\beta}_j = 
+  \begin{cases}
+    0 & \text{if } 0 \leq \delta < 1/4, \\
+    \frac{\sigma_\varepsilon^2 n}{\lambda_2^2}& \text{if } \delta = 1/4, \\
+    \infty & \text{if } \delta > 1/4.
+  \end{cases}
+  \]
+\end{corollary}
+\begin{proof}
+  We have 
+  \begin{equation*}
+    \lim_{q\rightarrow 1^+}\var \hat{\beta}_j = \lim_{q \rightarrow 1^+}\frac{\sigma^2}{d_j^2} \left(\frac{\sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta}}{n (q-q^2)^{1 - \delta} + \lambda_2 (q-q^2)^\delta}\right)^2  
+                                              = \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} \lim_{q \rightarrow 1^+}(q-q^2)^{1 - 4\delta},
+  \end{equation*}
+  from which the result follows directly.
+\end{proof}
 
 \begin{figure}[htpb]
   \centering
@@ -419,13 +439,6 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   }
   \label{fig:bias-var-onedim-lasso}
 \end{figure}
-
-
-% We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
-% \[
-%   \E \hat\beta = \frac{\st{\left( n\beta q(1-q) ; \lambda_1\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
-% \]
-% This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just, due to the ridge penalty, be a scaled version of the ordinary least squares coefficient.
 
 \subsection{Two-Dimensional Problem}
 
