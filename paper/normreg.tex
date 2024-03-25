@@ -114,7 +114,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
 
 \begin{theorem}
   \label{thm:classbalance-bias}
-  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\), \(\lambda_1,\lambda_2 \in (0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\), \(\lambda_1 \in (0,\infty)\), \(\lambda_2 \in [0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
   \[
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
@@ -274,6 +274,37 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
   For \(\delta > 1/2\), we first observe that the first term in \Cref{eq:eval-qlimit-pdfterm-split} tends to zero due to \Cref{eq:eval-sigma-limits} and
   the properties of the standard normal distribution. For the second term, we note that this is essentially
   of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
+\end{proof}
+
+\begin{corollary}
+  Asume the conditions of \Cref{thm:classbalance-bias} but that \(\lambda_1 = 0\). Then
+  \[
+    \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
+    \begin{cases}
+      0                                         & \text{if } 0 \leq \delta < 1/2, \\
+      \frac{\beta_j^*}{1 + \frac{\lambda_2}{n}} & \text{if } \delta = 1/2,        \\
+      0                                         & \text{if } \delta > 1/2.
+    \end{cases}
+  \]
+\end{corollary}
+\begin{proof}
+  If \(\lambda_1 = 0\), we have \(\E \st_{\lambda_1}(Z) = \mu\) and consequently
+  \[
+    \E \hat{\beta}_j = \frac{\beta_j^*}{1 + \frac{\lambda_2}{n} (q - q^2)^{2\delta - 1}}.
+  \]
+  Then
+  \[
+    \lim_{q \rightarrow 1^+} \E \hat{\beta}_j = \frac{\beta_j^*}{1 + \frac{\lambda_2}{n}\lim_{q \rightarrow 1^+} (q - q^2)^{2\delta - 1}}.
+  \]
+  The result follows by noting that
+  \[
+    \lim_{q \rightarrow 1^+} (q - q^2)^{2\delta - 1} =
+    \begin{cases}
+      \infty & \text{if } 0 \leq \delta < 1/2, \\
+      1      & \text{if } \delta = 1/2,        \\
+      0      & \text{if } \delta > 1/2.
+    \end{cases}
+  \]
 \end{proof}
 
 \Cref{thm:classbalance-bias} shows that the bias of the elastic net estimator when \(0 \leq \delta < 1/2\), which includes to the case of min--max and max--abs normalization (no scaling), approaches
