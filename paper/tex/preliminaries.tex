@@ -1,0 +1,205 @@
+\section{Preliminaries}
+
+Throughout this paper, we assume that the data is generated from a linear model, that is,
+\[
+  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i \quad\text{for } i \in [n],
+\]
+with \([n] = \{1,2\dots,n\}\) and
+where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\) is the \(n \times p\) design matrix with columns \(\vec x_j\) and \(\vec y\) the \(n \times 1\) response vector.
+Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
+Unless otherwise stated, we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
+
+There is ambiguity regarding many of the key terms in the field of normalization. \emph{Scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably throughout the literature. Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
+
+\begin{definition}[Normalization]
+  \label{def:normalization}
+  Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with each row equal to \([c_1, c_2, c_n]^\T\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
+\end{definition}
+
+Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the case when scaling and centering with standard deviations and means respectively. Also note that normalization is sometimes defined as the process of scaling the samples (rather than the features).
+
+\subsection{Rescaling Regression Coefficients}
+
+Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
+\[
+  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
+\]
+There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
+
+\subsection{Comparing Effects of Continuous and Binary Features}
+
+Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
+
+Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+
+\begin{example}
+  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
+\end{example}
+
+Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
+
+On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
+
+We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
+
+\subsection{Types of Normalization}
+
+There are many different strategies for normalizing the design matrix. In this paper, we will focus on the ones outlined in \Cref{tab:normalization-types}.
+In the following sections, we will discuss some basic properties of these normalization strategies that will be useful in subsequent sections of the paper.
+
+\begin{table}[hbt]
+  \centering
+  \caption{Common ways to normalize a matrix of features}
+  \label{tab:normalization-types}
+  \begin{tabular}{lll}
+    \toprule
+    Normalization    & Centering (\(c_{1j}\))             & Scaling (\(s_j\))                                         \\
+    \midrule
+    Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    \addlinespace
+    Min--Max         & \(\min_i(x_{ij})\)                 & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    \addlinespace
+    Unit Vector (L2) & 0                                  & \(\sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
+    \addlinespace
+    Max Abs          & 0                                  & \(\max_i(|x_{ij}|)\)                                      \\
+    \addlinespace
+    Adaptive Lasso   & 0                                  & \(\beta_j^\text{OLS}\)                                    \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Standardization}
+
+Standardization is perhaps the most common type of normalization, at least in the field of statistics. It is also sometimes known as \emph{z-scoring} or \emph{z-transformation}. One of the benefits of using standardization is that it simplifies certain aspects of fitting the model. For instance, the intercept term \(\hat\beta_0\) is equal to the mean of the response \(\vec y\).
+
+For regularized methods, it is typically the case that we standardize with the uncorrected sample standard deviation (division by \(n\)).
+
+The downside of standardization is that it involves centering by the mean, which typically destroys sparsity in the data structure. This is not a problem when the data is stored as a dense matrix, but when the data is sparse, this can lead to a significant increase in memory usage and computational time.
+
+\subsubsection{Maximum Absolute Value Scaling}
+
+A common alternative to standardization is to scale the features by their maximum absolute value. This is sometimes called \emph{max-abs scaling}. This type of scaling typically has no impact on binary data (since the maximum absolute value is usually 1), and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\).
+
+This type of scaling is naturally sensitive to outliers, since a single outlier can dominate the scaling factor.
+
+One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
+
+\begin{theorem}
+  \label{thm:maxabs-gev}
+  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then
+  \[
+    \lim_{n \rightarrow \infty}\Pr\left(\max_{i \in [n]} |X_i| \leq x\right) = G(x),
+  \]
+  where \(G\) is the cumulative distribution function of a Gumbel distribution with
+  parameters
+  \[
+    b_n = F_Y^{-1}(1 - 1/n)\quad \text{and} \quad a_n = \frac{1}{n f_Y(\mu_n)},
+  \]
+  where \(f_Y\) and \(F_Y^{-1}\) are the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
+\end{theorem}
+\begin{proof}
+  If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\parencite[Theorem 10.5.2]{nagaraja2003} is
+  \[
+    \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
+  \]
+  We have
+  \[
+    \begin{aligned}
+      \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
+                                & = \frac{2 - \cdf\left(\frac{x - \mu}{\sigma}\right) - \cdf\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\pdf\left(\frac{x - \mu}{\sigma}\right) + \pdf\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
+                                & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
+    \end{aligned}
+  \]
+  where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
+  Next, we follow \textcite[example 10.5.3]{nagaraja2003} and observe that
+  \[
+    \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
+  \]
+  since
+  \[
+    \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
+  \]
+  In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
+\end{proof}
+
+As a result of \Cref{thm:maxabs-gev}, the limiting distribution of \(\max_{i \in [n]}|X_i|\) has expected value \(b_n + \gamma a_n\), where \(\gamma\) is the Euler-Mascheroni constant. In \Cref{fig:maxabs-gev}, we verify that the limiting distribution agrees well with the empirical distribution in expected value even for small values of \(n\).
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/maxabs_gev.pdf}
+  \caption{%
+    Theoretical versus empirical distribution of the maximum absolute value of normally distributed random variables.
+  }
+  \label{fig:maxabs-gev}
+\end{figure}
+
+In \Cref{fig:maxabs-n} we show the effect of increasing the number of observations, \(n\), in a two-feature lasso model with max-abs normalization applied to both features. The coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases. Since the expected value of the Gumbel distribution diverges with \(n\), this means that there's always a large enough \(n\) to make the coefficient zero with high probability.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/maxabs_n.pdf}
+  \caption{%
+    Effects of maximum absolute value scaling.
+  }
+  \label{fig:maxabs-n}
+\end{figure}
+
+\subsubsection{Min-Max Normalization}
+
+Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and is also sensitive to outliers.
+
+\subsection{The Elastic Net}
+
+From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
+\begin{equation}
+  \label{eq:elastic-net}
+  \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
+\end{equation}
+When \(\lambda_1 > 0\) and \(\lambda_2 = 0\), the elastic net is equivalent to the lasso, and when \(\lambda_1 = 0\) and \(\lambda_2 > 0\), it is equivalent to ridge regression.
+
+Expanding \Cref{eq:elastic-net}, we have
+\[
+  \begin{aligned}
+    \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
+  \end{aligned}
+\]
+Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT stationarity condition yields the following system of equations.
+\begin{equation}
+  \label{eq:kkt-elasticnet}
+  \begin{cases}
+    \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0 - \vec{y}) + \lambda_1 g + \lambda_2 \vec\beta \ni \vec{0}, \\
+    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} - \vec{y}^\T \vec{1} = 0.
+  \end{cases}
+\end{equation}
+Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) such that
+\[
+  g_i \in
+  \begin{cases}
+    \{\sign{\beta_i}\} & \text{if } \beta_i \neq 0, \\
+    [-1, 1]            & \text{otherwise}.
+  \end{cases}
+\]
+
+\subsection{Orthogonal Features}
+
+If the features of the normalized design matrix are orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right) \), then \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
+\[
+  \begin{cases}
+    -\vec{y}^\T \tilde{\vec{x}}_j + \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j=1,\dots,p, \\
+    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
+  \end{cases}
+\]
+The solution to this system is well-known~\parencite{donoho1994}:
+\begin{align}
+  \label{eq:orthogonal-solution}
+  \hat\beta_j & = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + \lambda_2\right)} = \st_{\lambda_1/d_j}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d_j}\right), \\
+  \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
+\end{align}
+with
+\[
+  d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + \lambda_2\right)
+\]
+and where \(\st\) is the soft-thresholding operator, defined as
+\[
+  \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
+\]

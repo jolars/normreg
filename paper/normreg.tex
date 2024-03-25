@@ -21,212 +21,7 @@
 \maketitle
 
 \input{tex/introduction.tex}
-
-\section{Setup, Notation and Terminology}
-
-Throughout this paper, we assume that the data is generated from a linear model, that is,
-\[
-  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i \quad\text{for } i \in [n],
-\]
-with \([n] = \{1,2\dots,n\}\) and
-where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\) is the \(n \times p\) design matrix with columns \(\vec x_j\) and \(\vec y\) the \(n \times 1\) response vector.
-Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\) to denote our estimates of the intercept and coefficients and use \(\beta_0\) and \(\beta\) to refer to corresponding variables in the optimization problem.
-Unless otherwise stated, we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
-
-There is ambiguity regarding many of the key terms in the field of normalization. \emph{Scaling}, \emph{standardization}, and \emph{normalizaton} are for instance used interchangeably throughout the literature. Here, we define \emph{normalization} as the process of centering and scaling the feature matrix, which we formalize in \Cref{def:normalization}.
-
-\begin{definition}[Normalization]
-  \label{def:normalization}
-  Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with each row equal to \([c_1, c_2, c_n]^\T\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
-\end{definition}
-
-Some authors refer to this procedure as \emph{standardization} or \emph{scaling}, but here we define scaling only as multiplication with the inverse of the scaling matrix and standardization as the case when scaling and centering with standard deviations and means respectively. Also note that normalization is sometimes defined as the process of scaling the samples (rather than the features).
-
-\subsection{Rescaling Regression Coefficients}
-
-Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae.
-\[
-  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
-\]
-There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
-
-\subsection{Comparing Effects of Continuous and Binary Features}
-
-Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
-
-Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
-
-\begin{example}
-  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
-\end{example}
-
-Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
-
-On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
-
-We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
-
-\subsection{Types of Normalization}
-
-There are many different strategies for normalizing the design matrix. In this paper, we will focus on the ones outlined in \Cref{tab:normalization-types}.
-In the following sections, we will discuss some basic properties of these normalization strategies that will be useful in subsequent sections of the paper.
-
-\begin{table}[hbt]
-  \centering
-  \caption{Common ways to normalize a matrix of features}
-  \label{tab:normalization-types}
-  \begin{tabular}{lll}
-    \toprule
-    Normalization    & Centering (\(c_{1j}\))             & Scaling (\(s_j\))                                         \\
-    \midrule
-    Standardization  & \(\frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
-    \addlinespace
-    Min--Max         & \(\min_i(x_{ij})\)                 & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
-    \addlinespace
-    Unit Vector (L2) & 0                                  & \(\sqrt{\sum_{i=1}^n x_{ij}^2}\)                          \\
-    \addlinespace
-    Max Abs          & 0                                  & \(\max_i(|x_{ij}|)\)                                      \\
-    \addlinespace
-    Adaptive Lasso   & 0                                  & \(\beta_j^\text{OLS}\)                                    \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\subsubsection{Standardization}
-
-Standardization is perhaps the most common type of normalization, at least in the field of statistics. It is also sometimes known as \emph{z-scoring} or \emph{z-transformation}. One of the benefits of using standardization is that it simplifies certain aspects of fitting the model. For instance, the intercept term \(\hat\beta_0\) is equal to the mean of the response \(\vec y\).
-
-For regularized methods, it is typically the case that we standardize with the uncorrected sample standard deviation (division by \(n\)).
-
-The downside of standardization is that it involves centering by the mean, which typically destroys sparsity in the data structure. This is not a problem when the data is stored as a dense matrix, but when the data is sparse, this can lead to a significant increase in memory usage and computational time.
-
-\subsubsection{Maximum Absolute Value Scaling}
-
-A common alternative to standardization is to scale the features by their maximum absolute value. This is sometimes called \emph{max-abs scaling}. This type of scaling typically has no impact on binary data (since the maximum absolute value is usually 1), and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\).
-
-This type of scaling is naturally sensitive to outliers, since a single outlier can dominate the scaling factor.
-
-One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
-
-\begin{theorem}
-  \label{thm:maxabs-gev}
-  Let \(X_1, X_2, \dots, X_n\) be a sample of normally distributed random variables, each with mean \(\mu\) and standard deviation \(\sigma\). Then
-  \[
-    \lim_{n \rightarrow \infty}\Pr\left(\max_{i \in [n]} |X_i| \leq x\right) = G(x),
-  \]
-  where \(G\) is the cumulative distribution function of a Gumbel distribution with
-  parameters
-  \[
-    b_n = F_Y^{-1}(1 - 1/n)\quad \text{and} \quad a_n = \frac{1}{n f_Y(\mu_n)},
-  \]
-  where \(f_Y\) and \(F_Y^{-1}\) are the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
-\end{theorem}
-\begin{proof}
-  If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\parencite[Theorem 10.5.2]{nagaraja2003} is
-  \[
-    \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
-  \]
-  We have
-  \[
-    \begin{aligned}
-      \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
-                                & = \frac{2 - \cdf\left(\frac{x - \mu}{\sigma}\right) - \cdf\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\pdf\left(\frac{x - \mu}{\sigma}\right) + \pdf\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
-                                & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
-    \end{aligned}
-  \]
-  where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
-  Next, we follow \textcite[example 10.5.3]{nagaraja2003} and observe that
-  \[
-    \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
-  \]
-  since
-  \[
-    \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
-  \]
-  In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
-\end{proof}
-
-As a result of \Cref{thm:maxabs-gev}, the limiting distribution of \(\max_{i \in [n]}|X_i|\) has expected value \(b_n + \gamma a_n\), where \(\gamma\) is the Euler-Mascheroni constant. In \Cref{fig:maxabs-gev}, we verify that the limiting distribution agrees well with the empirical distribution in expected value even for small values of \(n\).
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/maxabs_gev.pdf}
-  \caption{%
-    Theoretical versus empirical distribution of the maximum absolute value of normally distributed random variables.
-  }
-  \label{fig:maxabs-gev}
-\end{figure}
-
-In \Cref{fig:maxabs-n} we show the effect of increasing the number of observations, \(n\), in a two-feature lasso model with max-abs normalization applied to both features. The coefficient corresponding to the Normally distributed feature shrinks as the number of observation \(n\) increases. Since the expected value of the Gumbel distribution diverges with \(n\), this means that there's always a large enough \(n\) to make the coefficient zero with high probability.
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/maxabs_n.pdf}
-  \caption{%
-    Effects of maximum absolute value scaling.
-  }
-  \label{fig:maxabs-n}
-\end{figure}
-
-\subsubsection{Min-Max Normalization}
-
-Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and is also sensitive to outliers.
-
-\subsection{The Elastic Net}
-
-From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
-\begin{equation}
-  \label{eq:elastic-net}
-  \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2.
-\end{equation}
-When \(\alpha = 1\), the elastic net is equivalent to the lasso, and when \(\alpha = 0\), it is equivalent to ridge regression.
-
-Expanding \Cref{eq:elastic-net}, we have
-\[
-  \begin{aligned}
-    \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \alpha\lambda \lVert \vec\beta \rVert_1 + \frac{(1 - \alpha)\lambda}{2}\lVert \vec \beta \rVert_2^2.
-  \end{aligned}
-\]
-Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT stationarity condition yields the following system of equations.
-\begin{equation}
-  \label{eq:kkt-elasticnet}
-  \begin{cases}
-    \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0 - \vec{y}) + \alpha\lambda g + (1 - \alpha)\lambda \vec\beta \ni \vec{0}, \\
-    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} - \vec{y}^\T \vec{1} = 0.
-  \end{cases}
-\end{equation}
-Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) such that
-\[
-  g_i \in
-  \begin{cases}
-    \{\sign{\beta_i}\} & \text{if } \beta_i \neq 0, \\
-    [-1, 1]            & \text{otherwise}.
-  \end{cases}
-\]
-
-\subsection{Orthogonal Features}
-
-If the features of the normalized design matrix are orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1 \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^t \tilde{\vec{x}}_p\right) \), then \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
-\[
-  \begin{cases}
-    -\vec{y}^\T \tilde{\vec{x}}_j + \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 + (1 - \alpha) \lambda \beta_j + \alpha \lambda g \ni 0, & j=1,\dots,p, \\
-    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
-  \end{cases}
-\]
-The solution to this system is well-known~\parencite{donoho1994}:
-\begin{align}
-  \label{eq:orthogonal-solution}
-  \hat\beta_j & = \frac{\st_{\alpha\lambda}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha) \lambda\right)} = \st_{\alpha\lambda/d_j}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d_j}\right), \\
-  \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
-\end{align}
-with
-\[
-  d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + (1 - \alpha)\lambda\right)
-\]
-and where \(\st\) is the soft-thresholding operator, defined as
-\[
-  \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
-\]
+\input{tex/preliminaries.tex}
 
 \section{Bias and Variance}
 
@@ -260,7 +55,7 @@ Finally, we note that the variance of the soft-thresholding estimator is
   \label{eq:st-variance}
   \var {S_\lambda(Z)} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_Z(z) \du z - \left(\E \st_\lambda(Z)\right)^2.
 \end{equation}
-and that the variance of the lasso estimator is then
+and that the variance of the elastic net estimator is therefore
 \begin{equation}
   \label{eq:betahat-variance}
   \var \hat\beta_j^* = \frac{1}{d_j^2} \var \st_\lambda(Z).
@@ -279,7 +74,7 @@ Let \(\theta = -\mu -\lambda \) and \(\gamma = \mu - \lambda\). Then the expecte
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
 
-Next, we consider what the variance of the lasso estimator looks like.
+Next, we consider what the variance of the elastic net estimator looks like.
 
 Starting with the first term on the left-hand side of \Cref{eq:st-variance}, we have
 \begin{multline}
@@ -303,24 +98,23 @@ Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref
 
 Now we assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then, observing that
 \[
-  \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j = \frac{1}{s_j^2}(\vec{x}_j - \ones m_j)^\T (\vec{x}_j - \ones m_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}
+  \begin{aligned}
+    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}, \\
+    \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{nq(1 - q)}{s_j}.
+  \end{aligned}
 \]
-and
+Consequently,
 \[
-  \tilde{\vec{x}}_j^\T \vec{x}_j = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones m_j) = \frac{nq(1 - q)}{s_j},
-\]
-this means that we have
-\[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d = \frac{nq(1 -q)}{s_j}  + (1-\alpha)\lambda s_j.
+  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d = \frac{nq(1 -q)}{s_j}  + \lambda_2 s_j.
 \]
 We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
 
-We are mainly interested in examining the case when \(\vec{x}_j\) are imbalanced. In \Cref{thm:classbalance-bias}, we show what the
-bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta \geq 0\) in the lasso case.
+We are mainly interested in examining the case when \(\vec{x}_j\) is imbalanced. In \Cref{thm:classbalance-bias}, we show what the
+bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\delta \geq 0\).
 
 \begin{theorem}
   \label{thm:classbalance-bias}
-  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\), \(\alpha = 1\), \(\lambda \in \mathbb{R}^+\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\), \(\lambda_1,\lambda_2 \in \mathbb{R}^+\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\)  then
   \[
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
@@ -335,32 +129,32 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
   Since \(s_j = (q - q^2)^\delta = (q - q^2)^\delta\), we have
   \[
     \begin{aligned}
-      \mu                   & = \beta_j^* n (q - q^2)^{1 - \delta}                                \\
-      \sigma                & = \sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta},             \\
-      d                     & = n (q - q^2)^{1 - \delta} + (1 - \alpha) \lambda (q - q^2)^\delta, \\
-      \theta                & = -\beta^*_j n (q - q^2)^{1-\delta} - \lambda                       \\
-      \gamma                & = \beta^*_j n (q - q^2)^{1-\delta} - \lambda                        \\
-      \frac{\theta}{\sigma} & = -a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}                     \\
-      \frac{\gamma}{\sigma} & = a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}                      \\
-      \frac{\theta}{d}      & = -\beta_j^* - \frac{\lambda (q - q^2)^{\delta - 1}}{n}             \\
-      \frac{\gamma}{d}      & = \beta_j^* - \frac{\lambda (q - q^2)^{\delta - 1}}{n}              \\
+      \mu                   & = \beta_j^* n (q - q^2)^{1 - \delta}                      \\
+      \sigma                & = \sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta},   \\
+      d                     & = n (q - q^2)^{1 - \delta} + \lambda_2 (q - q^2)^\delta,  \\
+      \theta                & = -\beta^*_j n (q - q^2)^{1-\delta} - \lambda_1           \\
+      \gamma                & = \beta^*_j n (q - q^2)^{1-\delta} - \lambda_1            \\
+      \frac{\theta}{\sigma} & = -a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}           \\
+      \frac{\gamma}{\sigma} & = a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}            \\
+      \frac{\theta}{d}      & = -\beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n} \\
+      \frac{\gamma}{d}      & = \beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n}  \\
     \end{aligned}
   \]
   with
   \[
-    a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda}{\sigma_\varepsilon \sqrt{n}}.
+    a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}.
   \]
 
-  Now, we are interested in taking the limit of \Cref{eq:mean-centered-eval}, the expected value of the lasso estimator, as \(q \rightarrow 1\), that is
+  Now, we are interested in taking the limit of \Cref{eq:mean-centered-eval}, the expected value of the lasso estimator, as \(q \rightarrow 1^+\), that is
   \begin{equation}
     \label{eq:eval-qlimit}
-    \lim_{q \rightarrow 1}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
+    \lim_{q \rightarrow 1^+}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
   \end{equation}
 
   Before we proceed, note that
   \begin{equation}
     \label{eq:eval-sigma-limits}
-    \lim_{q \rightarrow 1} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1} \frac{\gamma}{\sigma} =
+    \lim_{q \rightarrow 1^+} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1^+} \frac{\gamma}{\sigma} =
     \begin{cases}
       -\infty & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       -b      & \text{if } \delta = \frac{1}{2},        \\
@@ -371,93 +165,109 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
 
   Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for now assuming that they are well-defined and that the limits of the remaining terms also exist seperately, we have
   \begin{align}
-     & \lim_{q \rightarrow 1} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                                                                                                                                                                                                     \\
-     & = \lim_{q \rightarrow 1} \left(\left(\beta_j^* + \lambda n^{-1}(q - q^2)^{\delta - 1}\right) \cdf \left(\frac{\theta}{\sigma}\right) + \left(\beta_j^* - \lambda n^{-1}(q - q^2)^{\delta - 1}\right)\cdf \left(\frac{\gamma}{\sigma}\right) \right)                                                                                                                                                                                                                                                                                                                              \nonumber \\ & = 2\beta_j^*\cdf \left(- b \lim_{q \rightarrow 1} (q - q^2)^{\delta - 1/2}\right)                                                                                                                                                                                                                                                               + \lambda n^{-1} \lim_{q \rightarrow 1} (q - q^2)^{\delta - 1}\left(\cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right)\right). \label{eq:eval-qlimit-terms}
+     & \lim_{q \rightarrow 1^+} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                          \\
+     & = \lim_{q \rightarrow 1^+} \Bigg(\left(\frac{\beta_j^* n}{n + \lambda_2 (q-q^2)^{2\delta - 1}} + \frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2 (q-q^2)^{\delta}} \right) \cdf \left(\frac{\theta}{\sigma}\right)  \nonumber                                                                                                                                                                                    \\
+     & \phantom{= \lim_{q \rightarrow 1^+} \Bigg( } + \left(\frac{\beta_j^* n}{n + \lambda_2 (q-q^2)^{2\delta - 1}} - \frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2 (q-q^2)^{\delta}} \right)\cdf \left(\frac{\gamma}{\sigma}\right) \Bigg) \nonumber                                                                                                                                                                 \\
+     & = \lim_{q \rightarrow 1^+} \frac{\beta_j^*n}{n + \lambda_2 (q-q^2)^{2\delta - 1}}\left(\cdf \left(\frac{\theta}{\sigma}\right) + \cdf \left(\frac{\gamma}{\sigma}\right) \right)                                                                                                                                                                                                                        \nonumber \\
+     & \phantom{={}} +  \lim_{q \rightarrow 1^+}\frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2(q -q^2)^{\delta}} \left(\cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right)\right). \label{eq:eval-qlimit-terms}
   \end{align}
   Considering the first term in \Cref{eq:eval-qlimit-terms}, we see that
   \[
-    2\beta_j^*\cdf \left(- b \lim_{q \rightarrow 1} (q - q^2)^{\delta - 1/2}\right) =
+    \lim_{q \rightarrow 1^+} \frac{\beta_j^*n}{n + \lambda_2 (q-q^2)^{2\delta - 1}}\left(\cdf \left(\frac{\theta}{\sigma}\right) + \cdf \left(\frac{\gamma}{\sigma}\right) \right)  =
     \begin{cases}
-      0                     & \text{if } 0 \leq \delta < 1/2, \\
-      2 \beta_j^* \cdf (-b) & \text{if } \delta = 1/2,        \\
-      \beta_j^*             & \text{if } \delta > 1/2.
+      0                                            & \text{if } 0 \leq \delta < 1/2, \\
+      \frac{2n \beta_j^*}{n + \lambda_2} \cdf (-b) & \text{if } \delta = 1/2,        \\
+      \beta_j^*                                    & \text{if } \delta > 1/2.
     \end{cases}
   \]
   For the second term in \Cref{eq:eval-qlimit-terms}, we start by observing that if
-  \(\delta = 1\), then \(q(1-q)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1}(q - q^2)^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
+  \(\delta = 1\), then \(q(1-q)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1^+}(q - q^2)^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
 
   For \(0 \leq \delta < 1\), the limit is indeterminite of the form \(\infty \times 0\). We define
   \[
-    f(q) = \cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right) \qquad\text{and}\qquad g(q) = (q - q^2)^{1-\delta},
+    f(q) = \cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right)
+    \qquad\text{and}\qquad
+    g(q) = n(q - q^2)^{1-\delta} + \lambda_2(q - q^2)^\delta,
   \]
-  such that we can express the limit as \(\lim_{q \rightarrow 1}f(q)/g(q)\). The corresponding derivatives are
+  such that we can express the limit as \(\lim_{q \rightarrow 1^+}f(q)/g(q)\). The corresponding derivatives are
   \[
     \begin{aligned}
-      f'(q) & = \left(\frac{-a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)                \\
-            & \phantom{= {}} - \left(\frac{a(1-2q)}{2\sqrt{q(1-q)}} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right), \\
-      g'(q) & = (1 - \delta)(1-2q)(q - q^2)^{-\delta}.
+      f'(q) & = \left(-\frac{a}{2}(1-2q)(q - q^2)^{-1/2} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)                 \\
+            & \phantom{= {}} - \left(-\frac{a}{2}(1-2q)(q - q^2)^{-1/2} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right), \\
+      g'(q) & = n(1 - \delta)(1-2q)(q - q^2)^{-\delta} + \lambda_2 \delta(1 - 2q) (q - q^2)^{\delta - 1}
     \end{aligned}
   \]
-  Since \(f(q)\) and \(g(q)\) are both differentiable in the interval \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval, we can use L'Hôpital's rule to obtain the limit.
-
-  First note that we have
+  Note that \(f(q)\) and \(g(q)\) are both differentiable and \(g'(q) \neq 0\) everywhere in the interval \((1/2, 1)\). Now note that we have
   \begin{multline}
     \label{eq:eval-qlimit-secondterm}
-    \frac{f'(q)}{g'(q)} = \frac{1}{1 - \delta}\bigg(\left( -\frac{a}{2}\left(q - q^2\right)^{\delta - 1/2} - b(\delta - 1/2)(q -q^2)^{2\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right) \\- \left( \frac{a}{2}\left(q - q^2\right)^{\delta - 1/2} - b(\delta - 1/2)(q -q^2)^{2\delta - 3/2}\right)\pdf\left(\frac{\gamma}{\sigma}\right)\bigg).
+    \frac{f'(q)}{g'(q)} = \frac{1}{n(1-\delta)(q-q^2)^{1/2-\delta} + \lambda_2 \delta (1-2q)(q - q^2)^{\delta-1/2}} \\
+    \times \left(\left(-\frac{a}{2} - b(\delta - 1/2)(q - q^2)^{\delta - 1}\right)\pdf\left(\frac{\theta}{\sigma}\right) - \left(\frac{a}{2} - b(\delta - 1/2)(q - q^2)^{\delta - 1}\right)\pdf\left(\frac{\gamma}{\sigma}\right) \right).
   \end{multline}
-  For \(0 \leq \delta < 1/2\), $\lim_{q \rightarrow 1}f'(q)/g'(q) = 0$ since the exponential terms of \(\pdf\) in \Cref{eq:eval-qlimit-secondterm} dominate in the limit.
+  For \(0 \leq \delta < 1/2\), $\lim_{q \rightarrow 1^+}f'(q)/g'(q) = 0$ since the exponential terms of \(\pdf\) in \Cref{eq:eval-qlimit-secondterm} dominate in the limit.
 
   For \(\delta = 1/2\), we have
   \[
-    \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = -a \lim_{q \rightarrow 1}\left(\pdf\left(\frac{\theta}{\sigma}\right) + \pdf\left(\frac{\gamma}{\sigma}\right)\right) = -2a \pdf(-b)
+    \lim_{q \rightarrow 1^+} \frac{f'(q)}{g'(q)} = -\frac{a}{n + \lambda_2} \lim_{q \rightarrow 1^+}\left(\pdf\left(\frac{\theta}{\sigma}\right) + \pdf\left(\frac{\gamma}{\sigma}\right)\right) = -\frac{a}{n + \lambda_2} \pdf(-b)
   \]
-  so that the second term in \Cref{eq:eval-qlimit-terms} becomes
+  so that we can use L'Hôpital's rule to show that the second term in \Cref{eq:eval-qlimit-terms} becomes
   \begin{equation}
     \label{eq:eval-qlimit-stdcase}
-    -\frac{2\beta_j^*\lambda}{\sigma_\varepsilon\sqrt{n}} \pdf\left(\frac{-\lambda}{\sigma_\varepsilon\sqrt{n}}\right).
+    -\frac{2\beta_j^*\lambda_1\sqrt{n}}{\sigma_\varepsilon(n + \lambda_2)} \pdf\left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
   \end{equation}
-  For \(\delta = 3/4\), and \(3/4 <\delta < 1\), the terms cancel or vanish, and so the limit is 0 in both cases.
 
-  For \(1/2 < \delta < 3/4\), repeated use of the previous strategy: rewriting the fraction, derivating, and using L'Hôpital's rule, shows that the limit is 0 also in this case. For brevity, we omit these calculations here.
+  For \(\delta > 1/2\), we have
+  \[
+    \begin{aligned}
+      \lim_{q \rightarrow 1^+} \frac{f'(q)}{g'(q)} & = \lim_{q \rightarrow 1^+} \frac{-\frac{a}{2}\left(\pdf\left(\frac{\theta}{\sigma}\right) + \pdf\left(\frac{\gamma}{\sigma}\right)\right)}{n(1-\delta)(q - q^2)^{1/2 - \delta} + \lambda_2 \delta(1 - 2q)(q - q^2)^{\delta - 1/2}}                                                       \\
+                                                   & \phantom{= {}} + \lim_{q \rightarrow 1^+} \frac{b(\delta - 1/2)\left(\pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)\right)}{n(1 - \delta)(q - q^2)^{3/2 - 2\delta} + \lambda_2 \delta (1 - 2q)(q - q^2)^{1/2}}                                          \\
+                                                   & = 0 + \lim_{q \rightarrow 1^+} \frac{b(\delta - 1/2) e^{-\frac{1}{2}\left(a^2(q - q^2) + b^2(q - q^2)^{2\delta - 1}\right)}\left(e^{-ab(q-q^2)^\delta} - e^{ab(q-q^2)^\delta}\right)}{\sqrt{2\pi}\left(n(1-\delta)(q - q^2)^{3/2 - 2\delta} + \lambda_2\delta(1-2q)(q-q^2)^{1/2}\right)} \\
+                                                   & = 0
+    \end{aligned}
+  \]
+  since the exponential term in the numerator dominate.
 
   Now we proceed to consider the terms involving \(\pdf\) in \Cref{eq:eval-qlimit}. We have
   \begin{equation}
     \label{eq:eval-qlimit-pdfterm}
-    \lim_{q \rightarrow 1} \frac{\sigma}{d} \left(\pdf \left(\frac{\gamma}{\sigma}\right) - \pdf \left(\frac{\theta}{\sigma}\right)\right)
-    = \frac{\sigma_\varepsilon}{\sqrt{n}} \lim_{q \rightarrow 1} \left(q - q^2\right)^{-1/2}\left( \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)\right).
+    \lim_{q \rightarrow 1^+} \frac{\sigma}{d} \left(\pdf \left(\frac{\gamma}{\sigma}\right) - \pdf \left(\frac{\theta}{\sigma}\right)\right)
+    = \sigma_\varepsilon \sqrt{n} \lim_{q \rightarrow 1^+} \frac{ \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)}{n(q-q^2)^{1/2} + \lambda_2(q - q^2)^{2\delta - 1/2}}
   \end{equation}
   For \(0 \leq \delta < 1/2\), we observe that the exponential terms in \(\pdf\) dominate in the limit, and so we can distribute the limit and consider the limits of the respective terms individually, which both vanish.
 
   For \(\delta \geq 1/2\), the limit in \Cref{eq:eval-qlimit-pdfterm} has an indeterminate form of the type \(\infty \times 0\). Define
   \[
-    u(q) = \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right) \qquad\text{and}\qquad v(q) = \left(q - q^2\right)^{1/2},
+    u(q) = \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)
+    \qquad\text{and}\qquad
+    v(q) = n(q - q^2)^{1/2} + \lambda_2 (q - q^2)^{2\delta - 1/2}
   \]
   which are both differentiable in the interval \((1/2, 1)\) and \(v'(q) \neq 0\) everywhere in this interval. The derivatives are
   \[
     \begin{aligned}
       u'(q) & = -\pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} \left(\frac{1}{2}\left(a(1-2q)(q - q^2)^{-1/2}\right) - b(\delta - 1/2)(1- 2q)(q - q^2)^{\delta - 3/2}\right)                  \\
             & \phantom{= {}} + \pdf\left(\frac{\theta}{\sigma}\right) \frac{\theta}{\sigma} \left(-\frac{1}{2}\left(a(1-2q)(q - q^2)^{-1/2}\right) - b(\delta - 1/2)(1- 2q)(q - q^2)^{\delta - 3/2}\right), \\
-      v'(q) & = \frac{1}{2} (1- 2q)(q - q^2)^{-1/2}.
+      v'(q) & = \frac{n}{2} (1 - 2q)(q - q^2)^{-1/2} + \lambda_2(2\delta - 1/2)(1 - 2q)(q - q^2)^{2\delta - 3/2}.
     \end{aligned}
   \]
   And so
-  \[
-    \begin{aligned}
-      \frac{u'(q)}{v'(q)} = -\left(a - b(2\delta - 1)(q - q^2)^{\delta - 1}\right) \pdf\left(\frac{\gamma}{\sigma}\right) \frac{\gamma}{\sigma} - \left(a + b(2\delta - 1)(q - q^2)^{\delta - 1}\right)\pdf\left(\frac{\theta}{\sigma}\right) \frac{\theta}{\sigma}.
-    \end{aligned}
-  \]
+  \begin{equation}
+    \begin{split}
+      \frac{u'(q)}{v'(q)} = \frac{1}{n + \lambda_2(4\delta - 1)(q - q^2)^{2\delta - 1}}  \Bigg( & -\left(a - b(2\delta - 1)(q - q^2)^{\delta - 1}\right) \pdf\left(\frac{\gamma}{\sigma}\right) \frac{\gamma}{\sigma} \\ & - \left(a + b(2\delta - 1)(q - q^2)^{\delta - 1}\right)\pdf\left(\frac{\theta}{\sigma}\right) \frac{\theta}{\sigma}\Bigg).
+    \end{split}
+  \end{equation}
   Taking the limit, rearranging, and assuming that the limits of the separate terms exist, we obtain
   \begin{multline}
     \label{eq:eval-qlimit-pdfterm-split}
-    \lim_{q \rightarrow 1} \frac{u'(q)}{v'(q)} = - a \lim_{q \rightarrow 1} \left( \pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} + \pdf\left(\frac{\theta}{\sigma}\right)\frac{\theta}{\sigma}\right) \\ + b (2\delta - 1) \lim_{q \rightarrow 1} \bigg( \pdf\left(\frac{\gamma}{\sigma}\right) \left(a(q -q^2)^{\delta - 1/2}- b(q - q^2)^{2\delta - 3/2} \right) \\ -  \pdf\left(\frac{\theta}{\sigma}\right) \left(-a(q - q^2)^{\delta - 1/2} - b(q - q^2)^{2\delta - 3/2}\right) \bigg).
+    \lim_{q \rightarrow 1^+} \frac{u'(q)}{v'(q)} = - a \lim_{q \rightarrow 1^+}  \frac{1}{n + \lambda_2 (4 \delta - 1)(q - q^2)^{2\delta - 1}} \left( \pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} + \pdf\left(\frac{\theta}{\sigma}\right)\frac{\theta}{\sigma}\right) \\
+    + b (2\delta - 1) \lim_{q \rightarrow 1^+} \frac{1}{n + \lambda_2 (4 \delta - 1)(q - q^2)^{2\delta - 1}} \bigg( \pdf\left(\frac{\gamma}{\sigma}\right) \left(a(q -q^2)^{\delta - 1/2}- b(q - q^2)^{2\delta - 3/2} \right) \\
+    - \pdf\left(\frac{\theta}{\sigma}\right) \left(-a(q - q^2)^{\delta - 1/2} - b(q - q^2)^{2\delta - 3/2}\right) \bigg).
   \end{multline}
   For \(\delta = 1/2\), we have
   \[
-    \lim_{q \rightarrow 1} \frac{u'(q)}{v'(q)} = -a\left(-b \pdf(-b) - b \pdf(-b)\right) + 0 = 2ab \pdf(-b).
+    \lim_{q \rightarrow 1^+} \frac{u'(q)}{v'(q)} = -\frac{a}{n + \lambda_2}\left(-b \pdf(-b) - b \pdf(-b)\right) + 0 = 2ab \pdf(-b) = \frac{2 \beta_j^* \lambda_1}{\sigma_\varepsilon^2(n + \lambda_2)} \pdf \left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
   \]
   Using L'Hôpital's rule, the second term in \Cref{eq:eval-qlimit-pdfterm} must consequently be
   \[
-    \frac{2 \beta_j^* \lambda}{\sigma_\varepsilon \sqrt{n}} \pdf \left(\frac{-\lambda}{\sigma_\varepsilon\sqrt{n}}\right),
+    \frac{2 \beta_j^* \lambda_1\sqrt{n}}{\sigma_\varepsilon(n + \lambda_2)} \pdf \left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
   \]
   which cancels with \Cref{eq:eval-qlimit-stdcase}.
 
@@ -466,15 +276,15 @@ bias is under mean-centering and scaling with \(s = (q - q^2)^\delta\), \(\delta
   of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 \end{proof}
 
-\Cref{thm:classbalance-bias} shows that the bias of the lasso estimator when \(0 \leq \delta < 1/2\), which includes to the case of min--max and max--abs normalization (no scaling), approaches
-\(-\beta_j^*\) as \(q \rightarrow 1\). When \(\delta = 1/2\) (standardization), the lasso estimate does not vanish completely. Instead, it approaches the
+\Cref{thm:classbalance-bias} shows that the bias of the elastic net estimator when \(0 \leq \delta < 1/2\), which includes to the case of min--max and max--abs normalization (no scaling), approaches
+\(-\beta_j^*\) as \(q \rightarrow 1^+\). When \(\delta = 1/2\) (standardization), the lasso estimate does not vanish completely. Instead, it approaches the
 true coefficient scaled by the probability that a standard normal variable is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta \geq 1\), the
-estimate is unbiased asymptotically. The last fact may seem somewhat counterintuitive but is a consequence of the variance of the distribution of the estimator exploding as \(q \rightarrow 1\).
+estimate is unbiased asymptotically. The last fact may seem somewhat counterintuitive but is a consequence of the variance of the distribution of the estimator exploding as \(q \rightarrow 1^+\).
 
 \begin{theorem}
-  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda \in \mathbb{R}^+\), \(\alpha = 1\), \(\sigma_\varepsilon > 0\), and \(s = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda_1,\lambda_2 \in \mathbb{R}^+\), \(\sigma_\varepsilon > 0\), and \(s = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
   \[
-    \lim_{q \rightarrow 1} \var \hat{\beta}_j =
+    \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \infty & \text{if } \delta \geq \frac{1}{2}.
@@ -491,9 +301,9 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   Start by assuming that \(\alpha = 1\) and, for convenience, note the following identities:
   \[
     \begin{aligned}
-      \theta \sigma             & =  -\sigma_\varepsilon\left(\beta_j^* n^{3/2}(q- q^2)^{3/2-2\delta} + \sqrt{n} \lambda (q-q^2)^{1/2 - \delta}\right), \\
-      \frac{\theta^2}{\sigma^2} & = a^2(q-q^2) + b^2(q-q^2)^{2\delta - 1} + 2ab (q -q^2)^\delta,                                                        \\
-      \theta^2                  & = \left(\beta_j^* n\right)^2 (q-q^2)^{2-2\delta} + \lambda^2 + 2\lambda \beta_j^* n(q-q^2)^{1-\delta},                \\
+      \theta \sigma             & =  -\sigma_\varepsilon\left(\beta_j^* n^{3/2}(q- q^2)^{3/2-2\delta} + \sqrt{n} \lambda_1 (q-q^2)^{1/2 - \delta}\right), \\
+      \frac{\theta^2}{\sigma^2} & = a^2(q-q^2) + b^2(q-q^2)^{2\delta - 1} + 2ab (q -q^2)^\delta,                                                          \\
+      \theta^2                  & = \left(\beta_j^* n\right)^2 (q-q^2)^{2-2\delta} + \lambda_1^2 + 2\lambda_1 \beta_j^* n(q-q^2)^{1-\delta},              \\
       d^2                       & = n^2(q -q^2)^{2 - 2\delta}.
     \end{aligned}
   \]
@@ -503,10 +313,10 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 
   We start with the case when \(0 \leq \delta < 1/2\), writing the limit of \Cref{eq:varthm-var} as
   \begin{align*}
-    \lim_{q \rightarrow }\var \hat{\beta}_j = {} & \frac{\sigma_\varepsilon^2}{2 n} \lim_{q \rightarrow 1} \frac{1}{q -q^2}\bigg(1 + \erf\left(\frac{\theta}{\sigma \sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right)\bigg)                                                                                                                              \\
-                                                 & + \frac{\sigma_\varepsilon^2}{2 n} \lim_{q \rightarrow 1} \frac{1}{q -q^2}\bigg(1 + \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma} \sqrt{\frac{2}{\pi}} \exp\left(- \frac{\gamma^2}{2\sigma^2}\right)\bigg)                                                                                                                           \\
-                                                 & + \lim_{q \rightarrow 1} \frac{2\theta\sigma}{d^2} \pdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1} \frac{\theta^2}{d^2} \cdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1} \frac{2\gamma}{d^2} \sigma \pdf\left(\frac{\gamma}{\sigma}\right) + \lim_{q \rightarrow 1}\frac{\gamma^2}{d^2} \cdf\left(\frac{\gamma}{\sigma}\right) \\
-                                                 & - \left( \lim_{q\rightarrow 1}\frac{1}{d}\E \hat{\beta}_j\right)^2,
+    \lim_{q \rightarrow }\var \hat{\beta}_j = {} & \frac{\sigma_\varepsilon^2}{2 n} \lim_{q \rightarrow 1^+} \frac{1}{q -q^2}\bigg(1 + \erf\left(\frac{\theta}{\sigma \sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right)\bigg)                                                                                                                                    \\
+                                                 & + \frac{\sigma_\varepsilon^2}{2 n} \lim_{q \rightarrow 1^+} \frac{1}{q -q^2}\bigg(1 + \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma} \sqrt{\frac{2}{\pi}} \exp\left(- \frac{\gamma^2}{2\sigma^2}\right)\bigg)                                                                                                                                 \\
+                                                 & + \lim_{q \rightarrow 1^+} \frac{2\theta\sigma}{d^2} \pdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1^+} \frac{\theta^2}{d^2} \cdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1^+} \frac{2\gamma}{d^2} \sigma \pdf\left(\frac{\gamma}{\sigma}\right) + \lim_{q \rightarrow 1^+}\frac{\gamma^2}{d^2} \cdf\left(\frac{\gamma}{\sigma}\right) \\
+                                                 & - \left( \lim_{q\rightarrow 1^+}\frac{1}{d}\E \hat{\beta}_j\right)^2,
   \end{align*}
   assuming, for now, that all limits exist. Next, let
   \[
@@ -524,44 +334,44 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   \end{align*}
   \(f_1\), \(f_1\) and \(g\) are differentiable in \((1/2, 1)\) and \(g'(q) \neq 0\) everywhere in this interval. \(f_1/g\) and \(f_2/g\) are indeterminate of the form \(0/0\). And we see that
   \[
-    \lim_{q \rightarrow 1} \frac{f_1'(q)}{g'(q)} = \lim_{q \rightarrow 1} \frac{f_2'(q)}{g'(q)} = 0
+    \lim_{q \rightarrow 1^+} \frac{f_1'(q)}{g'(q)} = \lim_{q \rightarrow 1^+} \frac{f_2'(q)}{g'(q)} = 0
   \]
   due to the dominance of the exponential terms as \(\theta/\sigma\) and \(\gamma/\sigma\) both tend to \(-\infty\). Thus \(f_1/g\) and \(f_2/g\) also tend to 0 by L'Hôpital's rule.
 
   A similar argument can be made to show that
   \[
-    \lim_{q \rightarrow 1} \frac{2\theta \sigma}{d^2} \pdf \left(\frac{\theta}{\sigma}\right) = 0
+    \lim_{q \rightarrow 1^+} \frac{2\theta \sigma}{d^2} \pdf \left(\frac{\theta}{\sigma}\right) = 0
     \qquad\text{and}\qquad
-    \lim_{q \rightarrow 1} \frac{\theta^2}{d^2} \cdf \left(\frac{\theta}{\sigma}\right) = 0,
+    \lim_{q \rightarrow 1^+} \frac{\theta^2}{d^2} \cdf \left(\frac{\theta}{\sigma}\right) = 0,
   \]
   and similarly for the terms involving \(\gamma\).
 
-  And since we have previously established that \(\lim_{q\rightarrow 1} \frac{1}{d} \E \hat{\beta}_j = 0\), the limit of the entire expression must also be 0.
+  And since we have previously established that \(\lim_{q\rightarrow 1^+} \frac{1}{d} \E \hat{\beta}_j = 0\), the limit of the entire expression must also be 0.
 
   For \(\delta = 1/2\), we start by establishing that
   \[
-    \lim_{q \rightarrow 1} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \lim_{q \rightarrow 1} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right)
+    \lim_{q \rightarrow 1^+} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \lim_{q \rightarrow 1^+} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right)
   \]
   is a positive constant since \(\theta/\sigma \rightarrow -b\), \(\sigma = \sigma_\varepsilon \sqrt{n}\), \(\theta \rightarrow - \lambda\), and \(\theta\sigma \rightarrow - \sigma_\varepsilon \sqrt{n}\lambda\). An identical argument can be made in the case of
   \[
-    \lim_{q \rightarrow 1} \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z.
+    \lim_{q \rightarrow 1^+} \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z.
   \]
   The algebraic limit theorem then shows that
   \[
-    \lim_{q \rightarrow 1} \frac{1}{d^2} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \frac{C^+}{\lim_{q\rightarrow 1} d^2} = \frac{C^+}{0} = \infty.
+    \lim_{q \rightarrow 1^+} \frac{1}{d^2} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \frac{C^+}{\lim_{q\rightarrow 1^+} d^2} = \frac{C^+}{0} = \infty.
   \]
   And due to \Cref{thm:classbalance-bias}, the limt of the expression must tend to \(\infty\).
 
   Finally, for the case when \(\delta > 1/2\), we have
   \begin{multline*}
-    \lim_{q \rightarrow 1} \frac{1}{d^2} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right) \\
+    \lim_{q \rightarrow 1^+} \frac{1}{d^2} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right) \\
     \begin{aligned}
-      = \lim_{q \rightarrow 1} \Bigg( & (q - q^2)^{-1} \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y                                                                                                     \\
-                                      & - 2\sigma_\varepsilon \sqrt{n} \left(\beta_j^* n (q-q^2)^{1/2} + \lambda(q - q^2)^{\delta - 3/2}\right)\theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y \\
-                                      & + \left((\beta_j^*n)^2 + \lambda^2(q-q^2)^{2\delta - 2} + 2\beta_j^* n (q -q^2)^{\delta - 1}\right)\theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\Bigg).
+      = \lim_{q \rightarrow 1^+} \Bigg( & (q - q^2)^{-1} \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y                                                                                                     \\
+                                        & - 2\sigma_\varepsilon \sqrt{n} \left(\beta_j^* n (q-q^2)^{1/2} + \lambda(q - q^2)^{\delta - 3/2}\right)\theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y \\
+                                        & + \left((\beta_j^*n)^2 + \lambda^2(q-q^2)^{2\delta - 2} + 2\beta_j^* n (q -q^2)^{\delta - 1}\right)\theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\Bigg).
     \end{aligned}
   \end{multline*}
-  For \(\delta > 1/2\), the first term inside the limit will dominate since all the other terms involving \((q - q^2)\) have a larger exponent and the pdf and cdfs are unperturbed by \(q\) and the upper limit of the integrals, \(\theta/\sigma \rightarrow  0\)  as \(q \rightarrow 1\). The expression therefore tends to \(\infty\).
+  For \(\delta > 1/2\), the first term inside the limit will dominate since all the other terms involving \((q - q^2)\) have a larger exponent and the pdf and cdfs are unperturbed by \(q\) and the upper limit of the integrals, \(\theta/\sigma \rightarrow  0\)  as \(q \rightarrow 1^+\). The expression therefore tends to \(\infty\).
 
 
 
@@ -574,7 +384,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   % We begin with
   % \[
   %   \begin{aligned}
-  %     \lim_{q \rightarrow 1} \frac{\sigma^2}{2} \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) & = \frac{\sigma_\varepsilon^2 n}{2} \lim_{q \rightarrow 1} (q-q^2)^{1
+  %     \lim_{q \rightarrow 1^+} \frac{\sigma^2}{2} \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) & = \frac{\sigma_\varepsilon^2 n}{2} \lim_{q \rightarrow 1^+} (q-q^2)^{1
   %     - 2\delta}\erf\left(\frac{-a(q - q^2)^{1/2} - b(q - q^2)^{\delta - 1/2}}{\sqrt{2}}\right)                                                                                                                                     \\
   %                                                                                              & = \begin{cases}
   %                                                                                                    0                                                                                      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
@@ -583,13 +393,13 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   %                                                                                                  \end{cases}
   %   \end{aligned}
   % \]
-  % The first case occurs because the error function is bounded at \(\pm 1\) and \((q-q^2)^{1-2\delta} \rightarrow 0\) as \(q \rightarrow 1\) when \(0 \leq \delta < 1/2 \).
+  % The first case occurs because the error function is bounded at \(\pm 1\) and \((q-q^2)^{1-2\delta} \rightarrow 0\) as \(q \rightarrow 1^+\) when \(0 \leq \delta < 1/2 \).
   % The second case comes from the fact that the argument of the error function is constant when \(\delta = 1/2\). We do not bother with the
   % value of the the constant here since, as we shall see, the limit of \Cref{eq:varthm-var} will tend to \(\infty\) anyway.
   %
   % For \(\delta > 1/2\), which corresponds to the last case, the limit is indeterminate of the form \(\infty \times 0\). We can express it as
   % \[
-  %   \lim_{q \rightarrow 1} \frac{f(q)}{g(q)}
+  %   \lim_{q \rightarrow 1^+} \frac{f(q)}{g(q)}
   % \]
   % with
   % \[
@@ -598,13 +408,13 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   % \(f\) and \(g\) are both differentiable in the interval \(1/2, 1\) nd \(g'(q) \neq 0\) everywhere in this interval. Taking the derivatives and
   % applying L'Hôpital's rule, we obtain
   % \[
-  %   \lim_{q \rightarrow 1} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1} \frac{f'(q)}{g'(q)} = \sign(\theta) \infty.
+  %   \lim_{q \rightarrow 1^+} \frac{f(q)}{g(q)} = \lim_{q \rightarrow 1^+} \frac{f'(q)}{g'(q)} = \sign(\theta) \infty.
   % \]
   %
   % Next, we have
   % \[
   %   \begin{aligned}
-  %     \lim_{q \rightarrow 1} \frac{\theta\sigma}{2}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right) & = \frac{\sigma_\varepsilon^2 n}{\sqrt{2 \pi}} \lim_{q \rightarrow 1} \left(-a(q - q^2)^{3/2 - 2\delta} - b(q - q^2)^{1/2 - \delta}\right) \\
+  %     \lim_{q \rightarrow 1^+} \frac{\theta\sigma}{2}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right) & = \frac{\sigma_\varepsilon^2 n}{\sqrt{2 \pi}} \lim_{q \rightarrow 1^+} \left(-a(q - q^2)^{3/2 - 2\delta} - b(q - q^2)^{1/2 - \delta}\right) \\
   %                                                                                                                    & \qquad \times \exp\left( -\frac{1}{2}\big( a^2(q - q^2) + b^2(q - q^2)^{2\delta - 1} + 2ab(q - q^2)^{\delta}\big)\right)                  \\
   %                                                                                                                    & =
   %     \begin{cases}
@@ -621,7 +431,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   % Next we have
   % \[
   %   \begin{aligned}
-  %     \lim_{q \rightarrow 1} 2 \theta \sigma \pdf \left(\frac{\theta}{\sigma}\right) & = 2 \sigma_\varepsilon \sqrt{n} \lim_{q \rightarrow 1}\left(-\beta_j^* n(q - q^2)^{3/2 - 2\delta} - \lambda (q - q^2)^{1/2 - \delta}\right) \pdf\left(\frac{\theta}{\sigma}\right) \\
+  %     \lim_{q \rightarrow 1^+} 2 \theta \sigma \pdf \left(\frac{\theta}{\sigma}\right) & = 2 \sigma_\varepsilon \sqrt{n} \lim_{q \rightarrow 1^+}\left(-\beta_j^* n(q - q^2)^{3/2 - 2\delta} - \lambda (q - q^2)^{1/2 - \delta}\right) \pdf\left(\frac{\theta}{\sigma}\right) \\
   %                                                                                    & = \begin{cases}
   %                                                                                          0                                              & \text{if } 0 \leq \delta < \frac{1}{2}, \\
   %                                                                                          -2\sigma_\varepsilon \lambda \sqrt{n} \pdf(-b) & \text{if } \delta = \frac{1}{2},        \\
@@ -636,7 +446,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   % Then, we have
   % \[
   %   \begin{aligned}
-  %     \lim_{q \rightarrow 1} \theta^2 \cdf \left( \frac{\theta}{\sigma}\right) & = \lim_{q \rightarrow 1} \left( (\beta_j^*n)^2(q-q^2)^{2 - 2\delta} + \lambda^2 + 2\lambda \beta_j^* n (q - q^2)^{1 - \delta}\right) \cdf\left(\frac{\theta}{\sigma}\right) \\
+  %     \lim_{q \rightarrow 1^+} \theta^2 \cdf \left( \frac{\theta}{\sigma}\right) & = \lim_{q \rightarrow 1^+} \left( (\beta_j^*n)^2(q-q^2)^{2 - 2\delta} + \lambda^2 + 2\lambda \beta_j^* n (q - q^2)^{1 - \delta}\right) \cdf\left(\frac{\theta}{\sigma}\right) \\
   %                                                                              & = \begin{cases}
   %                                                                                    0                                                        & \text{if } 0 \leq \delta < 1, \\
   %                                                                                    \frac{1}{2}\left(\beta_j^* n + \lambda\right)^2 \cdf(-b) & \text{if } \delta = 1,        \\
@@ -667,7 +477,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 
 % We assume now that all the entries in \(\vec{x}\) are generated from a Bernoulli-distributed random variable with parameter \(q\). In this case, the explicit solution to the one-variable elastic net problem is
 % \[
-%   \E \hat\beta = \frac{\st{\left( n\beta q(1-q) ; \alpha\lambda\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
+%   \E \hat\beta = \frac{\st{\left( n\beta q(1-q) ; \lambda_1\right)}}{\sqrt{q(1-q)} \left(n + (1-\alpha)\lambda\right)}
 % \]
 % This means that the expected value of the coefficient is sensitive to the class balance in the problem. As \(q\) goes to 0 or 1, the expected value of the coefficient goes to 0 as long as \(\alpha > 0\). When \(\alpha = 0\), on the other hand, the coefficient is unaffected by the class imbalance, and will just, due to the ridge penalty, be a scaled version of the ordinary least squares coefficient.
 
