@@ -25,35 +25,32 @@
 
 \section{Bias and Variance}
 
-Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \Cref{eq:orthogonal-solution}. We start by focusing on the numerator since the denominator is constant. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\). We have
+Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \Cref{eq:orthogonal-solution}. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} = \tilde{\vec{x}}_j^\T(\mat{X}\vec{\beta} + \vec{\varepsilon})\) and \(d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2\right)\) so that \(\hat{\beta}_j = \st_{\lambda_1}(Z)/d_j\). We start by focusing on the numerator, since the denominator, \(d_j\), is fixed. First observe that
 \[
-  \E Z = \mu = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones (\tilde{\vec{x}}_j\beta_j + \vec{\varepsilon})^\T \ones \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j - \frac{1}{n} \tilde{\vec{x}}^\T \ones (\tilde{\vec{x}}_j\beta_j)^\T\ones.
+  \E Z = \mu = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j.
 \]
-And for the variance, we get
+And for the variance, we have
 \[
-  \var Z = \sigma^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) + \left(\frac{1}{n}\tilde{\vec{x}}_j^\T \ones\right)^2 n \sigma_\varepsilon^2
-  = \sigma_\varepsilon^2\left( \lVert \tilde{\vec{x}}_j\rVert_2^2 +\frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2\right).
+  \var Z = \sigma^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 .
 \]
 
 The expected value of the soft-thresholding estimator is
-\begin{equation}
+\begin{align}
   \label{eq:st-expected-value}
-  \begin{aligned}
-    \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                     \\
-                      & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                           \\
+    \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                   \nonumber \\
+                      & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                         \nonumber \\
                       & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
-  \end{aligned}
-\end{equation}
-And then the bias of \(\hat\beta_j\) with respect to \(\beta_j^*\) is
+\end{align}
+And then the bias of \(\hat\beta_j\) with respect to the true coefficient \(\beta_j^*\) is
 \begin{equation}
   \label{eq:betahat-bias}
-  \E \left( \hat\beta_j - \beta_j^* \right) = \frac{\E \st_\lambda(Z)}{d_j} - \beta^*_j.
+\E \hat\beta_j - \beta_j^* = \frac{1}{d_j}\E \st_\lambda(Z) - \beta^*_j.
 \end{equation}
 
 Finally, we note that the variance of the soft-thresholding estimator is
 \begin{equation}
   \label{eq:st-variance}
-  \var {S_\lambda(Z)} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_Z(z) \du z - \left(\E \st_\lambda(Z)\right)^2.
+  \var {S_\lambda(Z)} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_Z(z) \du z - \left(\E \st_\lambda(Z)\right)^2
 \end{equation}
 and that the variance of the elastic net estimator is therefore
 \begin{equation}
@@ -61,9 +58,9 @@ and that the variance of the elastic net estimator is therefore
   \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda(Z).
 \end{equation}
 
-\subsection{Mean-Centering and Normally Distributed Noise}
+\subsection{Normally Distributed Noise}
 
-Here we assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that \(\vec{\varepsilon}\) is normally distributed. Then
+Here we again assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that, in addition, \(\vec{\varepsilon}\) is normally distributed. Then
 \[
   Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
@@ -72,10 +69,9 @@ Let \(\theta = -\mu -\lambda \) and \(\gamma = \mu - \lambda\). Then the expecte
   \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber                      \\
                     & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right) \label{eq:mean-centered-eval}
 \end{align}
-where \(\pdf(u)\) and \(\cdf(u)\) are the probability and cumulative density functions of the standard normal distribution.
+where \(\pdf(u)\) and \(\cdf(u)\) are the probability density and cumulative distribution functions of the standard normal distribution, respectively.
 
 Next, we consider what the variance of the elastic net estimator looks like.
-
 Starting with the first term on the left-hand side of \Cref{eq:st-variance}, we have
 \begin{multline}
   \label{eq:mc-var-part1}
@@ -96,16 +92,16 @@ Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref
 
 \subsubsection{Binary Features}
 
-Now we assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then, observing that
+Assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then observe that
 \[
   \begin{aligned}
     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}, \\
     \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{nq(1 - q)}{s_j}.
   \end{aligned}
 \]
-Consequently,
+And consequently
 \[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d = \frac{nq(1 -q)}{s_j}  + \lambda_2 s_j.
+  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{nq(1 -q)}{s_j}  + \lambda_2 s_j.
 \]
 We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
 
@@ -126,32 +122,25 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
 \end{theorem}
 \begin{proof}
 
-  Since \(s_j = (q - q^2)^\delta = (q - q^2)^\delta\), we have
-  \[
-    \begin{aligned}
-      \mu                   & = \beta_j^* n (q - q^2)^{1 - \delta}                      \\
-      \sigma                & = \sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta},   \\
-      d                     & = n (q - q^2)^{1 - \delta} + \lambda_2 (q - q^2)^\delta,  \\
-      \theta                & = -\beta^*_j n (q - q^2)^{1-\delta} - \lambda_1           \\
-      \gamma                & = \beta^*_j n (q - q^2)^{1-\delta} - \lambda_1            \\
-      \frac{\theta}{\sigma} & = -a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}           \\
-      \frac{\gamma}{\sigma} & = a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2}            \\
-      \frac{\theta}{d}      & = -\beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n} \\
-      \frac{\gamma}{d}      & = \beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n}  \\
-    \end{aligned}
-  \]
+  Since \(s_j = (q - q^2)^\delta\), we have
+  \begin{align*}
+    \mu    & = \beta_j^* n (q - q^2)^{1 - \delta}                     & \frac{\theta}{\sigma} & = -a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2},           \\
+    \sigma & = \sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta},  & \frac{\gamma}{\sigma} & = a \sqrt{q(1-q)} - b (q - q^2)^{\delta - 1/2},            \\
+    d_j    & = n (q - q^2)^{1 - \delta} + \lambda_2 (q - q^2)^\delta, & \frac{\theta}{d_j}    & = -\beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n}, \\
+    \theta & = -\beta^*_j n (q - q^2)^{1-\delta} - \lambda_1,         & \frac{\gamma}{d_j}    & = \beta_j^* - \frac{\lambda_1 (q - q^2)^{\delta - 1}}{n},  \\
+    \gamma & = \beta^*_j n (q - q^2)^{1-\delta} - \lambda_1,
+  \end{align*}
   with
   \[
     a = \frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon} \qquad \text{and} \qquad b = \frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}.
   \]
 
-  Now, we are interested in taking the limit of \Cref{eq:mean-centered-eval}, the expected value of the lasso estimator, as \(q \rightarrow 1^+\), that is
+  We are interested in
   \begin{equation}
     \label{eq:eval-qlimit}
-    \lim_{q \rightarrow 1^+}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
+    \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =\lim_{q \rightarrow 1^+}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
   \end{equation}
-
-  Before we proceed, note that
+  Before we proceed, however, note that
   \begin{equation}
     \label{eq:eval-sigma-limits}
     \lim_{q \rightarrow 1^+} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1^+} \frac{\gamma}{\sigma} =
@@ -165,7 +154,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
 
   Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for now assuming that they are well-defined and that the limits of the remaining terms also exist seperately, we have
   \begin{align}
-     & \lim_{q \rightarrow 1^+} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                          \\
+     & \lim_{q \rightarrow 1^+} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d_j} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                        \\
      & = \lim_{q \rightarrow 1^+} \Bigg(\left(\frac{\beta_j^* n}{n + \lambda_2 (q-q^2)^{2\delta - 1}} + \frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2 (q-q^2)^{\delta}} \right) \cdf \left(\frac{\theta}{\sigma}\right)  \nonumber                                                                                                                                                                                    \\
      & \phantom{= \lim_{q \rightarrow 1^+} \Bigg( } + \left(\frac{\beta_j^* n}{n + \lambda_2 (q-q^2)^{2\delta - 1}} - \frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2 (q-q^2)^{\delta}} \right)\cdf \left(\frac{\gamma}{\sigma}\right) \Bigg) \nonumber                                                                                                                                                                 \\
      & = \lim_{q \rightarrow 1^+} \frac{\beta_j^*n}{n + \lambda_2 (q-q^2)^{2\delta - 1}}\left(\cdf \left(\frac{\theta}{\sigma}\right) + \cdf \left(\frac{\gamma}{\sigma}\right) \right)                                                                                                                                                                                                                        \nonumber \\
@@ -314,7 +303,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 
 \begin{theorem}
   \label{thm:classbalance-variance}
-  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda_1,\lambda_2 \in (0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda_1,\lambda_2 \in (0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
   \[
     \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
     \begin{cases}
@@ -411,19 +400,19 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 \begin{corollary}
   Assume the conditions of \Cref{thm:classbalance-variance} but that \(\lambda_1 = 0\). Then
   \[
-  \lim_{q \rightarrow 1^+} \var \hat{\beta}_j = 
-  \begin{cases}
-    0 & \text{if } 0 \leq \delta < 1/4, \\
-    \frac{\sigma_\varepsilon^2 n}{\lambda_2^2}& \text{if } \delta = 1/4, \\
-    \infty & \text{if } \delta > 1/4.
-  \end{cases}
+    \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
+    \begin{cases}
+      0                                          & \text{if } 0 \leq \delta < 1/4, \\
+      \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} & \text{if } \delta = 1/4,        \\
+      \infty                                     & \text{if } \delta > 1/4.
+    \end{cases}
   \]
 \end{corollary}
 \begin{proof}
-  We have 
+  We have
   \begin{equation*}
-    \lim_{q\rightarrow 1^+}\var \hat{\beta}_j = \lim_{q \rightarrow 1^+}\frac{\sigma^2}{d_j^2} \left(\frac{\sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta}}{n (q-q^2)^{1 - \delta} + \lambda_2 (q-q^2)^\delta}\right)^2  
-                                              = \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} \lim_{q \rightarrow 1^+}(q-q^2)^{1 - 4\delta},
+    \lim_{q\rightarrow 1^+}\var \hat{\beta}_j = \lim_{q \rightarrow 1^+}\frac{\sigma^2}{d_j^2} \left(\frac{\sigma_\varepsilon \sqrt{n} (q - q^2)^{1/2 - \delta}}{n (q-q^2)^{1 - \delta} + \lambda_2 (q-q^2)^\delta}\right)^2
+    = \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} \lim_{q \rightarrow 1^+}(q-q^2)^{1 - 4\delta},
   \end{equation*}
   from which the result follows directly.
 \end{proof}

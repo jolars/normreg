@@ -185,21 +185,20 @@ Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) 
 If the features of the normalized design matrix are orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right) \), then \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
 \[
   \begin{cases}
-    -\vec{y}^\T \tilde{\vec{x}}_j + \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j=1,\dots,p, \\
+    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 - \tilde{\vec{x}}_j^\T\vec{y} + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j=1,\dots,p, \\
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
-The solution to this system is well-known~\parencite{donoho1994}:
-\begin{align}
+The inclusion of an intercept, \(\beta_0\), ensures that the location of the
+features (their means) does not affect the solution (except for the intercept itself). Therefore,
+we will from now on assume that the features are mean-centered, that is, \(c_j = \bar{\vec{x}}_j\) for all \(j\) and therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then given by the following set of equations~\parencite{donoho1994}:
+\begin{equation}
   \label{eq:orthogonal-solution}
-  \hat\beta_j & = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + \lambda_2\right)} = \st_{\lambda_1/d_j}\left(\frac{\tilde{\vec{x}}_j^\T \vec{y} - \frac{1}{n} \tilde{\vec{x}}_j^\T \ones \vec{y}^\T \ones}{d_j}\right), \\
-  \hat\beta_0 & = \frac{\left(\vec{y} - \tilde{\mat{X}}\vec{\beta}\right)^\T \vec{1}}{n},
-\end{align}
-with
-\[
-  d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j - \frac{1}{n}(\tilde{\vec{x}}_j^\T \ones)^2 + \lambda_2\right)
-\]
-and where \(\st\) is the soft-thresholding operator, defined as
+  \hat\beta_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2\right)},
+  \qquad
+  \hat\beta_0 = \frac{\vec{y}^\T \ones}{n},
+\end{equation}
+where \(\st\) is the soft-thresholding operator, defined as
 \[
   \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
