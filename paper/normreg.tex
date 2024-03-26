@@ -4,7 +4,7 @@
 \newcommand{\mv}[1]{{\boldsymbol{\mathrm{#1}}}}
 
 % title block
-\title{Standardization and Regularization}
+\title{Sparse Regression Induces Normalization-Dependent Bias--Variance Tradeoffs for Binary Features}
 \author[1,*]{Johan Larsson}
 \author[1]{Jonas Wallin}
 \affil[1]{Department of Statistics, Lund University}
@@ -24,7 +24,7 @@
 \input{tex/introduction.tex}
 \input{tex/preliminaries.tex}
 
-\section{Bias and Variance}
+\section{Bias-Variance Tradeoffs in Binary Features}
 
 Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). We are interested in the expected value of \Cref{eq:orthogonal-solution}. Let \(Z = \tilde{\vec{x}}_j^\T \vec{y} = \tilde{\vec{x}}_j^\T(\mat{X}\vec{\beta} + \vec{\varepsilon})\) and \(d_j = s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2\right)\) so that \(\hat{\beta}_j = \st_{\lambda_1}(Z)/d_j\). We start by focusing on the numerator, since the denominator, \(d_j\), is fixed. First observe that
 \[
@@ -38,14 +38,14 @@ And for the variance, we have
 The expected value of the soft-thresholding estimator is
 \begin{align}
   \label{eq:st-expected-value}
-    \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                   \nonumber \\
-                      & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                         \nonumber \\
-                      & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
+  \E \st_\lambda(Z) & = \int_{-\infty}^\infty \st_\lambda(z) f_Z(z) \du z                                                   \nonumber \\
+                    & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_Z(z) \du z                         \nonumber \\
+                    & = \int_{-\infty}^{-\lambda}(z + \lambda)f_Z(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_Z(z) \du z.
 \end{align}
 And then the bias of \(\hat\beta_j\) with respect to the true coefficient \(\beta_j^*\) is
 \begin{equation}
   \label{eq:betahat-bias}
-\E \hat\beta_j - \beta_j^* = \frac{1}{d_j}\E \st_\lambda(Z) - \beta^*_j.
+  \E \hat\beta_j - \beta_j^* = \frac{1}{d_j}\E \st_\lambda(Z) - \beta^*_j.
 \end{equation}
 
 Finally, we note that the variance of the soft-thresholding estimator is
@@ -59,16 +59,16 @@ and that the variance of the elastic net estimator is therefore
   \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda(Z).
 \end{equation}
 
-\subsection{Normally Distributed Noise}
+% \subsection{Normally Distributed Noise}
 
-Here we again assume that \(\tilde{\vec{x}}_j\) is mean-centered, such that \(\tilde{\vec{x}}^\T \ones = 0\), and that, in addition, \(\vec{\varepsilon}\) is normally distributed. Then
+Next, we add the additional assumption that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
   Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
 \]
-Let \(\theta = -\mu -\lambda \) and \(\gamma = \mu - \lambda\). Then the expected value of soft-thresholding of \(Z\) is
+Let \(\theta = -\mu -\lambda_1 \) and \(\gamma = \mu - \lambda_1\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
-  \E \st_\lambda(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber                      \\
-                    & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right) \label{eq:mean-centered-eval}
+  \E \st_{\lambda_1}(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber                      \\
+                        & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right) \label{eq:mean-centered-eval}
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability density and cumulative distribution functions of the standard normal distribution, respectively.
 
@@ -76,13 +76,13 @@ Next, we consider what the variance of the elastic net estimator looks like.
 Starting with the first term on the left-hand side of \Cref{eq:st-variance}, we have
 \begin{multline}
   \label{eq:mc-var-part1}
-  \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \sigma^2 \int_{-\infty}^{\frac{\theta}{\sigma}} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^{\frac{\theta}{\sigma}} y \pdf(y) \du y + \theta^2 \int_{-\infty}^{\frac{\theta}{\sigma}} \pdf(y) \du y \\
+  \int_{-\infty}^{-\lambda_1}(z+ \lambda_1)^2 f_Z(z) \du z = \sigma^2 \int_{-\infty}^{\frac{\theta}{\sigma}} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^{\frac{\theta}{\sigma}} y \pdf(y) \du y + \theta^2 \int_{-\infty}^{\frac{\theta}{\sigma}} \pdf(y) \du y \\
   = \frac{\sigma^2}{2} \left( \erf\left(\frac{\theta}{\sigma\sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right) + 1 \right) + 2 \theta \sigma \pdf \left(\frac{\theta}{\sigma}\right) + \theta^2 \cdf\left(\frac{\theta}{\sigma}\right).
 \end{multline}
 Similar computations for the second term on the left-hand side of \Cref{eq:st-variance} yield
 \begin{multline}
   \label{eq:mc-var-part2}
-  \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z \\
+  \int_{\lambda_1}^{\infty}(z - \lambda_1)^2 f_Z(z) \du z \\
   = \frac{\sigma^2}{2} \left( \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\gamma^2}{2\sigma^2}\right) + 1 \right) + 2 \gamma \sigma \pdf \left(\frac{\gamma}{\sigma}\right) + \gamma^2 \cdf\left(\frac{\gamma}{\sigma}\right).
 \end{multline}
 Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref{eq:betahat-variance} yields the variance of the estimator. Consequently, we can also compute the mean-squared error via the bias-variance decomposition
@@ -91,9 +91,11 @@ Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref
   \mse (\hat\beta_j, \beta^*_j) = \var\hat\beta_j + \left(\E \hat\beta_j - \beta^*_j\right)^2.
 \end{equation}
 
-\subsubsection{Binary Features}
+% \subsubsection{Binary Features}
 
-Assume that \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\). Then observe that
+Our results have so far covered the general case where we have made no assumptions on \(\mat{X}\), except for being non-random. But our main focus in this paper
+is the case when \(\vec{x_j}\) is a binary feature with class balance \(q\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\).
+In this case, we observe that
 \[
   \begin{aligned}
     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}, \\
@@ -104,9 +106,38 @@ And consequently
 \[
   \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{nq(1 -q)}{s_j}  + \lambda_2 s_j.
 \]
-We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
+We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d_j\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
 
-We are mainly interested in examining the case when \(\vec{x}_j\) is imbalanced. In \Cref{thm:classbalance-bias}, we show what the
+We are mainly interested in examining the case when \(\vec{x}_j\) is imbalanced and what effect various approaches to normalizing the features
+has on the elastic net estimator. In order to study this, we will parameterize the scaling factors \(s_j\) for \(j  \in [p]\) by \(s_j = (q - q^2)^\delta\), \(\delta \geq 0\).
+This includes the cases that we are primary interested in, that is,
+\begin{itemize}
+  \item \(\delta = 0\): no scaling, which includes min--max and max--abs normalization,
+  \item \(\delta = 1/2\): standardization, and
+  \item \(\delta = 1\): scaling by the variance.
+\end{itemize}
+Note that the last of these cases does not correspond to a standard type of normalization. But as we will see, it has some interesting properties in the case of binary features.
+
+A natual consequence of the normal distribution of \(Z\) is that the probability of selection in the elastic net problem is given by
+\begin{align*}
+  \Pr\left(\hat{\beta}_j \neq 0\right) & = \Pr\left(\st_{\lambda_1}(Z) \neq 0\right)                                                                                         \\
+                                       & = \Pr\left(Z > \lambda_1\right) + \Pr\left(Z < -\lambda_1\right)                                                                    \\
+                                       & = \cdf\left(\frac{\mu - \lambda_1}{\sigma}\right) + \cdf\left(\frac{- \mu -\lambda_1}{\sigma}\right).                               \\
+                                       & = \cdf \left( \frac{\beta_j^*n (q-q^2)^{1/2} - \lambda_1(q-q^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right)                 \\
+                                       & \phantom{={}} + \cdf \left( \frac{-\beta_j^*n (q-q^2)^{1/2} - \lambda_1(q-q^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
+\end{align*}
+
+Letting \(\theta = -\mu - \lambda_1 \) and \(\gamma = \mu - \lambda_1\), we can express the probability of selection in the limit as \(q \rightarrow 1^+\) as
+\[
+  \lim_{q \rightarrow 1^+} \Pr(\hat{\beta}_j \neq 0) =
+  \begin{cases}
+    0                                                            & \text{if } 0 \leq \delta < \frac{1}{2}, \\
+    2\cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
+    1                                                            & \text{if } \delta > \frac{1}{2}.
+  \end{cases}
+\]
+
+In \Cref{thm:classbalance-bias}, we show what the
 bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\delta \geq 0\).
 
 \begin{theorem}
@@ -116,7 +147,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
       0                                                                           & \text{if } 0 \leq \delta < \frac{1}{2}, \\
-      2 \beta_j^* \cdf\left(-\frac{\beta_j^* \sqrt{n}}{\sigma_\varepsilon}\right) & \text{if } \delta = \frac{1}{2},        \\
+      \frac{2n \beta_j^*}{n + \lambda_2} \cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
       \beta^*_j                                                                   & \text{if } \delta \geq 1.
     \end{cases}
   \]
@@ -141,7 +172,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
     \label{eq:eval-qlimit}
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =\lim_{q \rightarrow 1^+}\frac{1}{d}\left(-\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)\right).
   \end{equation}
-  Before we proceed, however, note that
+  Before we proceed, note the following limits, which we will make repeated use of throughout the proof.
   \begin{equation}
     \label{eq:eval-sigma-limits}
     \lim_{q \rightarrow 1^+} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1^+} \frac{\gamma}{\sigma} =
@@ -151,7 +182,6 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
       0       & \text{if } \delta > \frac{1}{2},
     \end{cases}
   \end{equation}
-  which we will make repeated use of throughout the proof.
 
   Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for now assuming that they are well-defined and that the limits of the remaining terms also exist seperately, we have
   \begin{align}
@@ -266,7 +296,7 @@ bias is under mean-centering and scaling with \(s_j = (q - q^2)^\delta\), \(\del
   of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 \end{proof}
 
-\begin{corollary}[Ridge Regression]
+\begin{corollary}[Bias in Ridge Regression]
   Asume the conditions of \Cref{thm:classbalance-bias} but that \(\lambda_1 = 0\). Then
   \[
     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
@@ -398,7 +428,7 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
 
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}[Variance in Ridge Regression]
   Assume the conditions of \Cref{thm:classbalance-variance} but that \(\lambda_1 = 0\). Then
   \[
     \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
@@ -429,158 +459,6 @@ estimate is unbiased asymptotically. The last fact may seem somewhat counterintu
   }
   \label{fig:bias-var-onedim-lasso}
 \end{figure}
-
-\subsection{Two-Dimensional Problem}
-
-The previous section served only to introduce some of the main results. Here, we check if they persist when we mix continuous and binary features.
-
-Let us start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence between either the features or the observations. When \(q = 0.5\), the classes are completely balanced, and the population standard deviations become 0.5 and 1 for \(\vec{x}_2\) and \(\vec{x}_1\) respectively. And if we choose to normalize with mean and standard deviation, then, after standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. If the true model is \(y = \mat{X}\vec{\beta}\) and \(\beta = [1,1]^\T\), then shrinkage will be applied equally across the coefficients of the two features.
-
-\subsubsection{Lasso}
-Consider the two dimensional problem
-
-\[
-  \frac 1 2 \lVert \vec{y} - \vec{x}_1 \beta_1 -\vec{x}_1 \beta_1 \rVert_2^2 + \lambda \left( | \beta_1 | + |\beta_2| \right).
-\]
-Assume without loss of generality that $|\mv{y}^\T\mv{x}_1|> |\mv{y}^\T\mv{x}_2|$ (what about equal?)
-\begin{proof}
-  Note that the problem can be reformulated as
-  \[ l(\mv{\beta}) =
-    \frac 1 2 \begin{bmatrix}
-      \beta_1 \\ \beta_2
-    \end{bmatrix}^\T \mv{H} \begin{bmatrix}
-      \beta_1 \\ \beta_2
-    \end{bmatrix}  -
-    \mv{b}^\T \begin{bmatrix}
-      \beta_1 \\ \beta_2
-    \end{bmatrix} + \lambda  \mv{1}^\T \left| \begin{bmatrix}
-      \beta_1 \\ \beta_2
-    \end{bmatrix}  \right|.
-  \]
-  where
-  $$
-    \mv{b} = \begin{bmatrix}
-      \mv{y}^\T \mv{x}_1 & \mv{y}^\T \mv{x}_2
-    \end{bmatrix} , \mv{H}  =
-    \begin{bmatrix}
-      \mv{x}_1^\T \mv{x}_1 & \mv{x}_1^\T \mv{x}_2 \\
-      \mv{x}_2^\T \mv{x}_1 & \mv{x}_2^\T \mv{x}_2 \\
-    \end{bmatrix} .
-  $$
-  The first we do is standardize the problem by considering the variable
-  $$
-    \begin{bmatrix}
-      \tilde	\beta_1 \\ \tilde \beta_2
-    \end{bmatrix} =  \begin{bmatrix}
-      \sqrt{H_{11}} & 0             \\
-      0             & \sqrt{H_{22}}
-    \end{bmatrix} \begin{bmatrix}
-      \beta_1 \\ \beta_2
-    \end{bmatrix},
-  $$
-  Now the transformed problem is
-  \[ l( \mv{\tilde \beta }) =
-    \frac 1 2 \begin{bmatrix}
-      \tilde	\beta_1 \\ \tilde \beta_2
-    \end{bmatrix}^\T   \mv{ \tilde H} \begin{bmatrix}
-      \tilde	\beta_1 \\  \tilde\beta_2
-    \end{bmatrix}
-    -  \mv{\tilde b}^\T \begin{bmatrix}
-      \tilde	\beta_1 \\ \tilde \beta_2
-    \end{bmatrix} + {\tilde \lambda}^\T \left| \begin{bmatrix}
-      \tilde	\beta_1 \\ \tilde \beta_2
-    \end{bmatrix}  \right|.
-  \]
-  where now
-  $$
-    \mv{ \tilde b} = \begin{bmatrix}
-      \frac{\mv{y}^\T \mv{x}_1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{\mv{y}^\T \mv{x}_2}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
-    \end{bmatrix} , \mv{ \tilde H}  =
-    \begin{bmatrix}
-      1    & \rho \\
-      \rho & 1    \\
-    \end{bmatrix}, \tilde \lambda  = \lambda  \begin{bmatrix}
-      \frac{1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{1}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
-    \end{bmatrix} .
-  $$
-  The sub differential of $ l( \mv{\tilde \beta }) $ is equal to
-  $$
-    \partial l( \mv{\tilde \beta })  = \mv{ \tilde H} \begin{bmatrix}
-      \tilde	\beta_1 \\  \tilde\beta_2
-    \end{bmatrix}  -   \mv{\tilde b}  + {\tilde \lambda} \cdot \partial \left| \begin{bmatrix}
-      \tilde	\beta_1 \\ \tilde \beta_2
-    \end{bmatrix}  \right|.
-  $$
-
-  CASE 0: all zero.
-  CASE 1:
-  First consider the situation where only one $\tilde \beta$ is non-zero. Assume that the first coeffienct is non-zero,then $\hat \beta_1 =  \tilde b_1 -  {\tilde \lambda}_1 sign( \tilde b_1 )$. The gradient of the likelihood of the second component is
-  $$
-    \rho \hat \beta_1  -  \tilde b_2 \in [-\tilde \lambda_2,\tilde \lambda_2 ]
-  $$
-\end{proof}
-
-\subsubsection{Class Imbalances}
-
-As long as the classes are balanced, the procedure we used in the previous section, standardization, will yield unbiased estimates of the two coefficients. But what if the classes of the binary feature are imbalanced? That is, what if \(q\) is larger than \(0.5\)? It turns out that the results vary depending on the type of penalty used.
-
-\subsection{Which Predictor Enters First?}
-
-Given our previous results on shrinkage of coefficients of binary features, a natural follow-up question is: how large does the true regression coefficient of a binary feature need to be in order to still be selected?
-
-To begin to probe this question, we first bring the following standard result to attention.
-
-\begin{proposition}
-  The first predictor to enter the elastic net path is given by
-  \[
-    \argmax_j\left| \tilde{\vec{x}}_j^\T\left(\vec{y} - \frac{1}{n}\sum_i y_i \right)\right|.
-  \]
-\end{proposition}
-\begin{proof}
-  The proof is a simple consequence of the KKT conditions for the elastic net problem. The first predictor to enter the path is the one that has the largest gradient of the objective function at the origin.
-\end{proof}
-
-If we expand the argument inside the absolute value operator, we have
-\[
-  \tilde{\vec{x}}_j^\T\left( \vec{y} - \frac{1}{n}\ones{}^\T \vec{y}\right) = \frac{1}{s_j}\left(\vec{x}_j^\T \vec{y} - \frac{1}{n}\ones^\T \vec{y} \ones^\T \vec{x}_j\right)
-\]
-Assuming that \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon}\) as before, and that the entries of each feature \(\vec{x}_j\) in the design matrix are sampled independently and identically from a corresponding random variable \(X_j\), we can take the expected value of the expression, yielding \textcolor{red}{this is only true if $X_j$ is independent of $s_j$ and also $\E \frac{1}{s_j} \neq \frac{1}{\E s_j}$}
-% FIXME: We're not really allowed to compute the exected value like this. So we need to motivate it somehow. Maybe assume that the scaling and centering factors are fixed or something?
-\[
-  \frac{1}{\E s_j}\left( n \beta^*_j \E X_j^2 - n \beta^*_j (\E X_j)^2 \right) = \frac{n \beta^*_j\var X_j}{\E s_j}.
-\]
-Assuming that we have two features in our design, they enter the model at exactly the same time if
-\[
-  \begin{aligned}
-    \frac{n \beta^*_1\var X_1}{\E s_1} & = \frac{n \beta^*_2\var X_2}{\E s_2} \implies                     \\
-    \beta^*_1                          & = \frac{\beta^*_2\var X_2}{\E s_2} \times \frac{\E s_1}{\var X_1}
-  \end{aligned}
-\]
-
-Next, assume that \(X_1 \sim \bernoulli{(q)}\) and \(X_2 \sim \normal{(0, 0.5)}\) and that \(\beta^*_2 = 1\). In this case, how large does \(\beta^*_1\) be in order for the first feature to enter the model at the same time as the second one?
-
-First, observe that \(\var{X_1} = q(1 - q)\) and \(\var{X_2} = 0.25\). In other words, we have
-\begin{equation}
-  \label{eq:beta1star}
-  \beta^*_1 = \frac{\E s_1}{4q(1-q)\E s_2}
-\end{equation}
-
-\paragraph{Standardization} If the features are standardized, then \Cref{eq:beta1star} is
-\[
-  \beta^*_1 = \frac{1}{2\sqrt{q(1-q)}}
-\]
-
-If the classes are balanced, \(q = 0.5\), then this means that the coefficients are expected to be the same. If, however, for instance \(q = 0.1\), then the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five. \textcolor{red}{Is there a difference if one would have a $X_1 \sim \mathcal{N}\left(0,q(1-q) \right)?$ }
-
-\paragraph{Max-Abs Normalization} In this case, we get
-\[
-  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \max | X_{12}, \dots,  X_{n2} |}.
-\]
-
-\paragraph{Min-Max Normalization} In this case, we get
-\[
-  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \left(\max | X_{12}, \dots,  X_{n2}| - \min | X_{12}, \dots,  X_{n2} |\right)}.
-\]
 
 \subsection{Relative Size of Predictors in Model}
 
