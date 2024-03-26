@@ -12,22 +12,27 @@ function find_binary_features(x)
   return binary
 end
 
-function normalize_features(x::AbstractMatrix, method::String = "mean_std")
+function normalize_features(
+  x::AbstractMatrix,
+  method::String = "mean_std",
+  center::Bool = true,
+)
   p = size(x, 2)
-  centers = zeros(1, p)
   scales = ones(1, p)
+
+  if center
+    centers = mean(x, dims = 1)
+  else
+    centers = zeros(1, p)
+  end
 
   # TODO: Add l1 and l2 norm methods too.
   if method == "mean_std"
-    centers = mean(x, dims = 1)
     scales = std(x, dims = 1)
   elseif method == "mean_var"
-    centers = mean(x, dims = 1)
     scales = var(x, dims = 1)
   elseif method == "mean_stdvar"
     # Center all features. 
-    centers = mean(x, dims = 1)
-
     # Scale binary features by their variance and
     # continuous features by their standard deviation.
     binary = find_binary_features(x)
@@ -40,9 +45,6 @@ function normalize_features(x::AbstractMatrix, method::String = "mean_std")
       end
     end
   elseif method == "mean_2std"
-    # Center all features
-    centers = mean(x, dims = 1)
-
     # Only scale continuous features
     binary = find_binary_features(x)
 
@@ -54,7 +56,6 @@ function normalize_features(x::AbstractMatrix, method::String = "mean_std")
   elseif method == "max_abs"
     scales = maximum(abs.(x), dims = 1)
   elseif method == "min_max"
-    centers = minimum(x, dims = 1)
     scales = maximum(abs.(x), dims = 1) - centers
   elseif method == "none"
     # Do nothing
@@ -62,7 +63,7 @@ function normalize_features(x::AbstractMatrix, method::String = "mean_std")
     error("Invalid normalization method. See source for options")
   end
 
-  scales[scales.==0] .= 1
+  scales[scales .== 0] .= 1
 
   x_normalized = (Matrix(x) .- centers) ./ scales
 
