@@ -176,8 +176,8 @@ legend = plot(
   showaxis = false,
   grid = false,
   label = lab,
-  legend_position = :top,
-  title = L"\delta",
+  legend_position = :topleft,
+  legend_title = L"\delta",
 )
 
 l = @layout[grid(n_rows, n_cols) a{0.15w}]
