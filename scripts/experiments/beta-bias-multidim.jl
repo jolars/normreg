@@ -147,7 +147,9 @@ for (i, d) in enumerate(grouped_df)
 
     title = i == 1 ? L"q = %$(title_stump)" : ""
 
-    xlab = j == 2 ? L"p" : ""
+    xlab = j == 2 && i == n_rows ? L"p" : ""
+
+    xformatter = i == 3 ? :auto : _ -> ""
 
     ylims = variable in ["power", "fdr"] ? (-0.05, 1.05) : :auto
     ylims = variable == "mse" ? :auto : ylims
@@ -159,6 +161,7 @@ for (i, d) in enumerate(grouped_df)
       groups = :delta,
       ylabel = ylab,
       xlabel = xlab,
+      xformatter = xformatter,
       title = title,
       ylims = ylims,
       legend = false,
