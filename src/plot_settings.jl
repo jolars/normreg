@@ -4,9 +4,7 @@ using PlotThemes
 
 using PythonPlot: matplotlib
 
-function get_full_width()
-  return 570
-end
+const global FULL_WIDTH = 630
 
 function set_plot_defaults(backend = "pyplot")
   theme(:wong)

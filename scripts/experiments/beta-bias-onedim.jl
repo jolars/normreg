@@ -39,7 +39,7 @@ end
 
 param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.001:0.999),
-  "sigma_e" => [0.25, 0.5, 1, 8],
+  "sigma_e" => [0.25, 0.5, 1, 2],
   "delta" => [0, 1 / 4, 1 / 2, 1.0, 1.5],
   "lambda" => [0.2],
 )
@@ -150,9 +150,9 @@ legend = plot(
   palette = pal,
 )
 
-l = @layout[grid(3, n_sigma) a{0.15w}]
+l = @layout[grid(3, n_sigma) a{0.11w}]
 
-plotlist = plot(plots..., legend, layout = l, size = (575, 400))
+plotlist = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 400))
 
 file_path = @projectroot("paper", "plots", "bias-var-onedim.pdf")
 

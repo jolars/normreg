@@ -183,9 +183,9 @@ legend = plot(
   legend_title = L"\delta",
 )
 
-l = @layout[grid(n_rows, n_cols) a{0.15w}]
+l = @layout[grid(n_rows, n_cols) a{0.11w}]
 
-plotlist = plot(plots..., legend, layout = l, size = (575, 400))
+plotlist = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 350))
 
 file_path = @projectroot("paper", "plots", "beta-bias-multidim.pdf")
 savefig(plotlist, file_path)

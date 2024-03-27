@@ -36,12 +36,11 @@ end
 
 set_plot_defaults()
 
-
 param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.001:0.999),
   "delta" => [0, 1 / 4, 1 / 2, 1.0, 1.5],
   "lambda" => [0.002],
-  "sigma_e" => [0.25, 0.5, 2, 4],
+  "sigma_e" => [0.25, 0.5, 1, 2],
 )
 param_expanded = dict_list(param_dict);
 
@@ -89,7 +88,7 @@ for (j, dd) in enumerate(subgrouped_df)
   # else
   #   ""
   # end
-  
+
   yformatter = j == 1 ? :auto : _ -> ""
 
   legend = j == n_sigma ? :outerright : nothing
@@ -117,18 +116,12 @@ for (j, dd) in enumerate(subgrouped_df)
     xticks = 0.5:0.15:0.95,
   )
 
-  hline!(
-    pl,
-    [lev],
-    linestyle = :dot,
-    linecolor = :black,
-    z_order = :back,
-  )
+  hline!(pl, [lev], linestyle = :dot, linecolor = :black, z_order = :back)
 
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_sigma), size = (550,190))
+plot_output = plot(plots..., layout = (1, n_sigma), size = (FULL_WIDTH, 190))
 
 file_path = @projectroot("paper", "plots", "selection_probability.pdf")
 savefig(plot_output, file_path)

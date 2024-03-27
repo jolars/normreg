@@ -14,8 +14,8 @@ include("lasso_utils.jl")
 export orthogonal_solution, soft_threshold, get_lambdamax
 
 include("plot_settings.jl")
-export set_plot_defaults, get_full_width
-export get_full_width
+export set_plot_defaults
+export FULL_WIDTH
 
 include("plotting.jl")
 export plot_lasso_path

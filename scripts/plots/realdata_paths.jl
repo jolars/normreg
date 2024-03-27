@@ -20,8 +20,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
 
     betas = Float64.(mapreduce(permutedims, vcat, dd.betas[1]))'
 
-    normalization =
-      replace(normalization, "mean_std" => "Mean-SD", "max_abs" => "Max-Abs")
+    normalization = replace(normalization, "mean_std" => "Mean-SD", "max_abs" => "Max-Abs")
 
     n_choose = 70
 
@@ -39,6 +38,8 @@ for (i, d) in enumerate(groupby(df, :normalization))
     var_grey = findall(dropdims(sum(betas .!= 0, dims = 2) .> 0, dims = 2))
     grey_vars = setdiff(var_grey, var_ind)
 
+    xformatter = i == 2 ? :auto : _ -> ""
+
     p = plot(legend = false)
 
     for i in grey_vars
@@ -54,9 +55,10 @@ for (i, d) in enumerate(groupby(df, :normalization))
           color = i,
           yguide = normalization,
           yguideposition = :right,
+          xformatter = xformatter,
         )
       else
-        plot!(Array(x_var), coefs[i, :], legend = false, color = i)
+        plot!(Array(x_var), coefs[i, :], legend = false, color = i, xformatter = xformatter)
       end
     end
 
@@ -80,9 +82,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
   end
 end
 
-width = get_full_width()
-
-plot_output = plot(plots..., layout = (2, 3), size = (width, 350))
+plot_output = plot(plots..., layout = (2, 3), size = (FULL_WIDTH, 350))
 
 file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
 
