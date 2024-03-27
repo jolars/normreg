@@ -1,0 +1,101 @@
+\PassOptionsToPackage{dvipsnames}{xcolor}
+
+\documentclass[10pt]{article} % For LaTeX2e
+\usepackage[preprint]{tmlr}
+% If accepted, instead use the following line for the camera-ready submission:
+%\usepackage[accepted]{tmlr}
+% To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
+%\usepackage[preprint]{tmlr}
+
+\usepackage{amssymb,amsmath,amsthm,mathtools}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{upquote}
+\usepackage{booktabs}
+
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+
+\usepackage{xcolor}
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true,
+  breaklinks = true,
+  linkcolor  = black,
+  filecolor  = MidnightBlue,
+  citecolor  = MidnightBlue,
+  urlcolor   = MidnightBlue
+}
+
+\usepackage{cleveref}
+
+% Optional math commands from https://github.com/goodfeli/dlbook_notation.
+\input{math_commands.tex}
+\input{tex/macros.tex}
+
+\title{Formatting Instructions for TMLR \\Journal Submissions}
+
+% Authors must not appear in the submitted version. They should be hidden
+% as long as the tmlr package is used without the [accepted] or [preprint] options.
+% Non-anonymous submissions will be rejected without review.
+
+\author{%
+  \name Johan Larsson \email johan.larsson@stat.lu.se\\
+  \addr Deparment of Statistics\\Lund University
+  \AND
+  \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
+  \addr Department of Statistics\\Lund University
+}
+
+% The \author macro works with any number of authors. Use \AND 
+% to separate the names and addresses of multiple authors.
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\def\month{MM}  % Insert correct month for camera-ready version
+\def\year{YYYY} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  The abstract paragraph should be indented 1/2~inch on both left and
+  right-hand margins. Use 10~point type, with a vertical spacing of 11~points.
+  The word \textbf{\large Abstract} must be centered, in bold, and in point size 12. Two
+  line spaces precede the abstract. The abstract must be limited to one
+  paragraph.
+\end{abstract}
+
+\input{tex/introduction.tex}
+\input{tex/preliminaries.tex}
+\input{tex/binary-features.tex}
+\input{tex/mixed-data.tex}
+\input{tex/experiments.tex}
+
+% \subsubsection*{Broader Impact Statement}
+%
+% In this optional section, TMLR encourages authors to discuss possible repercussions of their work,
+% notably any potential negative impact that a user of this research should be aware of.
+% Authors should consult the TMLR Ethics Guidelines available on the TMLR website
+% for guidance on how to approach this subject.
+
+% \subsubsection*{Acknowledgments}
+%
+% Use unnumbered third level headings for the acknowledgments. All
+% acknowledgments, including those to funding agencies, go at the end of the paper.
+% Only add this information once your submission is accepted and deanonymized.
+
+\bibliography{normreg}
+\bibliographystyle{tmlr}
+
+\appendix
+
+\section{Appendix}
+
+\input{tex/appendix.tex}
+
+\end{document}

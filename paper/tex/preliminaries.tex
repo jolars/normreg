@@ -81,7 +81,7 @@ For many types of continuous data, such as normally distributed data, the sample
   where \(f_Y\) and \(F_Y^{-1}\) are the probability distribution function and quantile function, respectively, of a folded normal distribution with mean \(\mu\) and standard deviation \(\sigma\).
 \end{theorem}
 \begin{proof}
-  If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\parencite[Theorem 10.5.2]{nagaraja2003} is
+  If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\citep[Theorem 10.5.2]{nagaraja2003} is
   \[
     \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
   \]
@@ -94,7 +94,7 @@ For many types of continuous data, such as normally distributed data, the sample
     \end{aligned}
   \]
   where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
-  Next, we follow \textcite[example 10.5.3]{nagaraja2003} and observe that
+  Next, we follow \citet[example 10.5.3]{nagaraja2003} and observe that
   \[
     \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
   \]
@@ -174,7 +174,7 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
 \]
 The inclusion of an intercept, \(\beta_0\), ensures that the location of the
 features (their means) does not affect the solution (except for the intercept itself). Therefore,
-we will from now on assume that the features are mean-centered, that is, \(c_j = \bar{\vec{x}}_j\) for all \(j\) and therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then given by the following set of equations~\parencite{donoho1994}:
+we will from now on assume that the features are mean-centered, that is, \(c_j = \bar{\vec{x}}_j\) for all \(j\) and therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then given by the following set of equations~\citep{donoho1994}:
 \begin{equation}
   \label{eq:orthogonal-solution}
   \hat\beta_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2\right)},
