@@ -147,7 +147,7 @@ for (i, d) in enumerate(grouped_df)
 
     title = i == 1 ? L"q = %$(title_stump)" : ""
 
-    xlab = j > 2 ? L"p" : ""
+    xlab = j == 2 ? L"p" : ""
 
     ylims = variable in ["power", "fdr"] ? (-0.05, 1.05) : :auto
     ylims = variable == "mse" ? :auto : ylims
