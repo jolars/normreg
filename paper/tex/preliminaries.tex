@@ -26,22 +26,6 @@ Normalization changes the optimization problem as well as its solution: the coef
 \]
 There is a similar transformation for the normalized intercept which we omit here since we are not interested in interpreting it.
 
-\subsection{Comparing Effects of Continuous and Binary Features}
-
-Throughout the paper, we will consider problems where the features are either coming from a continuous or binary distribution. To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
-
-Starting with normally distributed variables, we will here assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
-
-\begin{example}
-  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
-\end{example}
-
-Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
-
-On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
-
-We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
-
 \subsection{Types of Normalization}
 
 There are many different strategies for normalizing the design matrix. In this paper, we will focus on the ones outlined in \Cref{tab:normalization-types}.
@@ -78,11 +62,10 @@ The downside of standardization is that it involves centering by the mean, which
 
 \subsubsection{Maximum Absolute Value Scaling}
 
-A common alternative to standardization is to scale the features by their maximum absolute value. This is sometimes called \emph{max-abs scaling}. This type of scaling typically has no impact on binary data (since the maximum absolute value is usually 1), and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\).
+A common alternative to standardization is to scale the features by their maximum absolute value. This is sometimes called \emph{max--abs} scaling. This type of scaling typically has no impact on binary data (since the maximum absolute value is usually 1), and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\).
+This type of scaling is naturally sensitive to outliers, since they will single-handedly determine the scaling factor.
 
-This type of scaling is naturally sensitive to outliers, since a single outlier can dominate the scaling factor.
-
-One interesting property of maximum absolute value scaling is that it can be sensitive to the number of observations in the sample. This happens because the maximum absolute value might have a distribution that depends on the sample size. This is the case, for instance, for every feature that comes from a normal distribution.
+For many types of continuous data, such as normally distributed data, the sample maximum, and therefore the level of scaling in the max--abs method, depends on the sample size~\Cref{thm:maxabs-gev}. This, in addition to the sensitivity to outliers, makes maximum absolute value scaling unsuitable for such data. As a result, we will only discuss it in the context of binary features.
 
 \begin{theorem}
   \label{thm:maxabs-gev}
@@ -146,7 +129,7 @@ In \Cref{fig:maxabs-n} we show the effect of increasing the number of observatio
 
 \subsubsection{Min-Max Normalization}
 
-Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and is also sensitive to outliers.
+Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and also shares its sensitivity to outliers and sample size.
 
 \subsection{The Elastic Net}
 

@@ -9,37 +9,57 @@ using DataFrames
 using ProjectRoot
 using Plots.PlotMeasures
 
-set_plot_defaults("gr")
+set_plot_defaults()
+
+function binary_selection_prob(β, n, q, delta, lambda, σe)
+  X = Normal()
+
+  s = (q - q^2)^delta
+
+  lambda = lambda / (0.5 - 0.5^2)^delta
+
+  X = Normal()
+  μ = binary_mean(β, n, q, s)
+  σ = binary_stddev(σe, n, q, s)
+
+  prob = cdf(X, (μ - lambda) / σ) + cdf(X, (-μ - lambda) / σ)
+
+  return prob, lambda
+end
 
 function multidim_bias_sim(
-  q::Real,
+  q_signal::Real,
   σe::Real,
-  method::String,
-  n::Int64,
-  λ::Real = 0.9,
-  p::Int64 = 100_000,
-  s::Int64 = 100,
+  δ::Real,
+  n::Int64 = 1_000,
+  λ_in::Real = 0.5,
+  p::Int64 = 1_000,
+  k::Int64 = 10,
 )
-  Random.seed!(1637)
+  Random.seed!(1001)
 
-  bias_sum = 0
   mse_sum = 0
-  var_sum = 0
+
+  qs = collect(range(0.5, 0.999, length = ceil(Int64, p - k)))
+
+  fdp = 0
+  dr = 0
+  power = 1
 
   for j in 1:p
-    β = if j <= s
-      1
+    if j <= k
+      # signal
+      β = 2
+      q = q_signal
     else
-      0
+      # noise
+      β = 0
+      q = qs[j - k]
     end
 
-    if method == "var"
-      s = q * (1 - q)
-    elseif method == "std"
-      s = sqrt(q * (1 - q))
-    elseif method == "none"
-      s = 1
-    end
+    s = (q - q^2)^δ
+
+    λ = n * 2 * λ_in / (0.5 - 0.5^2)^δ
 
     μ = binary_mean(β, n, q, s)
     σ = binary_stddev(σe, n, q, s)
@@ -49,87 +69,98 @@ function multidim_bias_sim(
     γ = μ - λ
 
     eβ = binary_expected_value(θ, γ, σ, d)
-    var = binary_variance(θ, γ, σ, d)
+    v = binary_variance(θ, γ, σ, d)
 
     bias = eβ - β
-    mse = bias^2 + var
+    mse = bias^2 + v
 
-    bias_sum += bias
-    var_sum += var
+    X = Normal()
+
+    prob = cdf(X, (μ - λ) / σ) + cdf(X, (-μ - λ) / σ)
+
+    dr += prob
+
+    if j <= k
+      # Compute power for signals
+      power *= prob
+    else
+      # Compute false discovery rate for noise
+      fdp += prob
+    end
+
     mse_sum += mse
   end
 
-  return bias_sum, var_sum, mse_sum
+  fdr = fdp / dr
+
+  return mse_sum, fdr, power
 end
 
 param_dict = Dict{String,Any}(
-  "q" => collect(0.5:0.01:0.99),
-  "sigma_e" => [0.1, 0.5, 1, 2],
-  "method" => ["std", "var", "none"],
-  "lambda" => [0.5, 0.9],
-)
-param_expanded = dict_list(param_dict)
+  "q" => [0.5, 0.9, 0.99],
+  "p" => collect(20:10:100),
+  "sigma_e" => [1],
+  "delta" => [0, 1 / 2, 1.0],
+  "lambda" => [0.05],
+);
+
+param_expanded = dict_list(param_dict);
 
 results = []
 
 for (i, d) in enumerate(param_expanded)
-  @unpack q, sigma_e, method, lambda = d
+  @unpack q, p, sigma_e, delta, lambda = d
 
   n = 100
+  k = 10
 
-  bias, var, mse = multidim_bias_sim(q, sigma_e, method, n, lambda)
+  mse, fdr, power = multidim_bias_sim(q, sigma_e, delta, n, lambda, p, k)
 
   d_exp = copy(d)
-  d_exp["bias"] = bias
-  d_exp["var"] = var
   d_exp["mse"] = mse
+  d_exp["fdr"] = fdr
+  d_exp["power"] = power
 
   push!(results, d_exp)
 end
 
 df = DataFrame(results);
-df_long = stack(df, Not([:q, :sigma_e, :method, :lambda]))
+df_long = stack(df, Not([:q, :p, :sigma_e, :delta, :lambda]));
 
-n_rows = length(unique(df.method))
-n_cols = length(unique(df.sigma_e))
+n_rows = length(unique(df_long.variable))
+n_cols = length(unique(df.q))
 
-df_subset = subset(df_long, :lambda => l -> l .== 0.9)
-
-grouped_df = groupby(df_subset, [:variable])
+grouped_df = groupby(df_long, [:variable])
 
 plots = []
 
 for (i, d) in enumerate(grouped_df)
-  subgrouped_df = groupby(d, [:sigma_e])
+  # subgrouped_df = groupby(df_long, [:q])
+  subgrouped_df = groupby(d, [:q])
 
   for (j, dd) in enumerate(subgrouped_df)
-    ylab = if j == 1
-      unique(d.variable)[1]
-    else
-      ""
-    end
+    variable = unique(d.variable)[1]
 
-    title_stump = unique(dd.sigma_e)[1]
+    ylab = j == 1 ? variable : ""
 
-    title = if i == 1
-      L"\sigma_e = %$(title_stump)"
-    else
-      ""
-    end
+    title_stump = unique(dd.q)[1]
 
-    xlab = if i > 2
-      L"q"
-    else
-      ""
-    end
+    title = i == 1 ? L"q = %$(title_stump)" : ""
+
+    xlab = j > 2 ? L"p" : ""
+
+    ylims = variable in ["power", "fdr"] ? (-0.05, 1.05) : :auto
+    ylims = variable == "mse" ? :auto : ylims
+    # ylims = variable == "fdr" ? (-0.05, 1.05) : ylims
 
     pl = @df dd plot(
-      :q,
+      :p,
       :value,
-      groups = :method,
+      groups = :delta,
       ylabel = ylab,
       xlabel = xlab,
       title = title,
+      ylims = ylims,
       legend = false,
     )
 
@@ -137,16 +168,21 @@ for (i, d) in enumerate(grouped_df)
   end
 end
 
-lab = reshape(unique(df.method), 1, 3)
+lab = reshape(unique(df.delta), 1, length(unique(df.delta)))
+labvals = zeros(length(lab))'
 
-legend =
-  plot([0 0 0], showaxis = false, grid = false, label = lab, legend_position = :topleft)
+legend = plot(
+  labvals,
+  showaxis = false,
+  grid = false,
+  label = lab,
+  legend_position = :top,
+  title = L"\delta",
+)
 
-l = @layout[grid(3, 4) a{0.15w}]
+l = @layout[grid(n_rows, n_cols) a{0.15w}]
 
 plotlist = plot(plots..., legend, layout = l, size = (575, 400))
 
-# file_name = "maxabs_n"
-# file_path = @projectroot("paper", "plots", "bias-var-multidim.pdf")
-#
-# savefig(plotlist, file_path)
+file_path = @projectroot("paper", "plots", "beta-bias-multidim.pdf")
+savefig(plotlist, file_path)

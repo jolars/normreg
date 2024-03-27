@@ -1,0 +1,22 @@
+\section{Mixed Data}
+\label{sec:mixed-data}
+
+A natural follow-up topic to the discussion in the previous section is to consider the case where the features are of mixed type, that is, some are continuous and some are binary.
+To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
+In this section, we will discuss what it means for a continuous and binary feature to have \emph{comparable} effects and how the choice of normalization needs to be adapted to ensure that our penalized estimates respect this notion of comparability.
+
+In this pape, we will focus on normally distrubted continuous features. We acknowledge that this is a limiting choice, but leave it to future papers to approach this issue for other types of distributions.
+
+We will assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \textcite{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+
+\begin{example}
+  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
+\end{example}
+
+Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
+
+On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
+
+We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
+
+
