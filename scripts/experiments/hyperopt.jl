@@ -28,7 +28,7 @@ lambda_sim = function (dataset, delta, lambda_max, n_lambda)
 
   x_train_std, centers, scales = normalize_features2(x_train, delta, false)
 
-  lambda = collect(logspace(lambda_max, lambda_max * 1e-6, n_lambda))
+  lambda = collect(logspace(lambda_max, lambda_max * 1e-5, n_lambda))
 
   model = fit(
     LassoPath,
@@ -42,13 +42,16 @@ lambda_sim = function (dataset, delta, lambda_max, n_lambda)
   intercept, coefs = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
 
   err = zeros(n_lambda)
+  support_size = zeros(n_lambda)
 
   for i in 1:n_lambda
     y_pred = intercept[i] .+ x_test * coefs[:, i]
     err[i] = get_error(y_pred, y_test, "nmse")
+
+    support_size[i] = sum(coefs[:, i] .!= 0)
   end
 
-  return err, lambda
+  return err, lambda, support_size
 end
 
 max_delta = maximum(delta)
@@ -61,7 +64,7 @@ grid_size = 100
 
 datasets = ["a1a", "w1a", "rhee2006"]
 
-res = DataFrame(dataset = [], delta = [], lambda = [], err = [])
+res = DataFrame(dataset = [], delta = [], lambda = [], err = [], support_size = [])
 
 deltas = collect(range(0, 1, length = grid_size));
 
@@ -84,8 +87,14 @@ for dataset in datasets
   end
 
   for delta in deltas
-    err, lambda = lambda_sim(dataset, delta, lambda_max, grid_size)
-    df = DataFrame(dataset = dataset, delta = delta, lambda = lambda, err = err)
+    err, lambda, support_size = lambda_sim(dataset, delta, lambda_max, grid_size)
+    df = DataFrame(
+      dataset = dataset,
+      delta = delta,
+      lambda = lambda,
+      err = err,
+      support_size = support_size,
+    )
     res = vcat(res, df)
   end
 end

@@ -15,7 +15,7 @@ plots = []
 
 df_grouped = groupby(df, [:dataset])
 
-n_plots = length(df_grouped)
+n_cols = length(df_grouped)
 
 for (i, d) in enumerate(df_grouped)
   dataset = d[1, :dataset]
@@ -30,15 +30,15 @@ for (i, d) in enumerate(df_grouped)
   x = unique(lambda)
   y = unique(delta)
 
-  # z = Matrix(unstack(dd, :delta, :lambda, :err))
+  z = permutedims(reshape(err, length(x), length(y)), [2, 1])
 
-  z = reshape(err, length(x), length(y))
-
-  legend = i == n_plots ? true : false
+  legend = i == n_cols ? true : false
 
   yformatter = i == 1 ? :auto : _ -> ""
 
-  xlab = i == ceil(Int32, n_plots / 2) ? L"\lambda" : ""
+  colorbar_title = i == n_cols ? "NMSE" : ""
+
+  xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
   ylab = i == 1 ? L"\delta" : ""
 
   pl = contourf(
@@ -51,12 +51,36 @@ for (i, d) in enumerate(df_grouped)
     yformatter = yformatter,
     xscale = :log10,
     ylims = (0.0, 1.0),
-    legend = true,
+    colorbar = true,
+    colorbar_title = colorbar_title,
+  )
+
+  gdf = groupby(dd_sorted, :lambda)
+  result = combine(gdf) do sdf
+    sdf[argmin(sdf.err), :delta]
+  end
+
+  plot!(pl, result.lambda, result.x1, color = :lightgrey, linestyle = :dot)
+
+  best_ind = argmin(err)
+
+  best_delta, best_lambda = delta[best_ind], lambda[best_ind]
+
+  scatter!(
+    pl,
+    [best_lambda],
+    [best_delta],
+    label = "Best",
+    color = :white,
+    xscale = :log10,
+    legend = false,
   )
 
   push!(plots, pl)
 end
 
-l = (1, 3)
+l = (1, n_cols)
 
 plot(plots..., layout = l, size = (FULL_WIDTH, 200))
+
+savefig(@projectroot("paper", "plots", "hyperopt.pdf"))
