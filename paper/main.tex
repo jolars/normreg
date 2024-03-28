@@ -2,6 +2,7 @@
 
 \documentclass[10pt]{article} % For LaTeX2e
 \usepackage[preprint]{tmlr}
+
 % If accepted, instead use the following line for the camera-ready submission:
 %\usepackage[accepted]{tmlr}
 % To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
@@ -17,6 +18,9 @@
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 
 \usepackage{xcolor}
+
+\usepackage{caption}
+\usepackage{subcaption}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -47,9 +51,6 @@
   \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
   \addr Department of Statistics\\Lund University
 }
-
-% The \author macro works with any number of authors. Use \AND 
-% to separate the names and addresses of multiple authors.
 
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
