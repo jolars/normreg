@@ -9,6 +9,8 @@ export generate_binary_data
 export generate_mixed_data
 export generate_pseudobernoulli
 export generate_pseudonormal
+export logspace
+export log10space
 
 include("lasso_utils.jl")
 export orthogonal_solution, soft_threshold, get_lambdamax
@@ -21,11 +23,14 @@ include("plotting.jl")
 export plot_lasso_path
 
 include("preprocessing.jl")
-export find_binary_features, normalize_features, unstandardize_coefficients
+export find_binary_features,
+  normalize_features, unstandardize_coefficients, normalize_features2
 
 include("cv.jl")
 export cross_validate
 export holdout_validation
+export split_data
+export get_error
 
 include("utils.jl")
 export confidence_interval

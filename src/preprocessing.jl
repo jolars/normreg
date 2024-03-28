@@ -12,6 +12,38 @@ function find_binary_features(x)
   return binary
 end
 
+function normalize_features2(x::AbstractMatrix, delta::Real = 0, center::Bool = false)
+  p = size(x, 2)
+  scales = ones(1, p)
+
+  if center
+    centers = mean(x, dims = 1)
+  else
+    centers = zeros(1, p)
+  end
+
+  binary = find_binary_features(x)
+
+  for j in 1:p
+    if binary[j]
+      q = mean(x[:, j])
+      scales[j] = (q - q^2)^delta
+    else
+      scales[j] = std(x[:, j])
+    end
+  end
+
+  scales[scales .== 0] .= 1
+
+  if center
+    x_normalized = (Matrix(x) .- centers) ./ scales
+  else
+    x_normalized = Matrix(x) ./ scales
+  end
+
+  return x_normalized, centers, scales
+end
+
 function normalize_features(
   x::AbstractMatrix,
   method::String = "mean_std",

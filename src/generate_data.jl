@@ -2,7 +2,11 @@ using Random
 using Distributions
 using Base
 
-logspace(start, last, count) = Iterators.map(exp, range(log(start), log(last), count))
+logspace(first, last, count) = Iterators.map(exp, range(log(first), log(last), count))
+
+function log10space(first, last, count)
+  return Iterators.map(x -> 10^x, range(first^(-10), last^(-10), count))
+end
 
 function generate_pseudonormal(n; μ = 0, σ = 0.5)
   X = Normal(μ, σ)

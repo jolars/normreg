@@ -1,6 +1,18 @@
 \section{Experiments}
 \label{sec:experiments}
 
+\subsection{Hyperparameter Selection}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/hyperopt.pdf}
+  \caption{%
+    Contour plots of hold-out error across a grid of \(\delta\) and \(\lambda\) values for the
+    lasso.
+  }
+  \label{fig:hyperparameter selection}
+\end{figure}
+
 \subsection{Relative Size of Predictors in Model}
 
 The next question we now ask ourselves is: given that both features are in the model, what are their respective sizes given differences in class balance (\(q\))?
