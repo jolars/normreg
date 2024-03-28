@@ -13,74 +13,87 @@ df = CSV.read(file, DataFrame)
 
 plots = []
 
-df_grouped = groupby(df, [:dataset])
+df_alpha = groupby(df, [:alpha])
 
-n_cols = length(df_grouped)
+n_cols = length(unique(df.dataset))
+n_rows = length(df_alpha)
 
-for (i, d) in enumerate(df_grouped)
-  dataset = d[1, :dataset]
+for (j, d_alpha) in enumerate(df_alpha)
+  df_dataset = groupby(d_alpha, [:dataset])
 
-  dd = select(d, [:delta, :lambda, :err])
-  dd_sorted = sort(dd, [:delta, :lambda])
+  for (i, d) in enumerate(df_dataset)
+    dataset = d[1, :dataset]
 
-  delta = dd_sorted.delta
-  lambda = dd_sorted.lambda
-  err = dd_sorted.err
+    dd = select(d, [:delta, :lambda, :err])
+    dd_sorted = sort(dd, [:delta, :lambda])
 
-  x = unique(lambda)
-  y = unique(delta)
+    delta = dd_sorted.delta
+    lambda = dd_sorted.lambda
+    err = dd_sorted.err
 
-  z = permutedims(reshape(err, length(x), length(y)), [2, 1])
+    x = unique(lambda)
+    y = unique(delta)
 
-  legend = i == n_cols ? true : false
+    z = permutedims(reshape(err, length(x), length(y)), [2, 1])
 
-  yformatter = i == 1 ? :auto : _ -> ""
+    legend = i == n_cols ? true : false
 
-  colorbar_title = i == n_cols ? "NMSE" : ""
+    yformatter = i == 1 ? :auto : _ -> ""
 
-  xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
-  ylab = i == 1 ? L"\delta" : ""
+    xformatter = j == n_rows ? :auto : _ -> ""
 
-  pl = contourf(
-    x,
-    y,
-    z,
-    xlab = xlab,
-    ylab = ylab,
-    title = dataset,
-    yformatter = yformatter,
-    xscale = :log10,
-    ylims = (0.0, 1.0),
-    colorbar = true,
-    colorbar_title = colorbar_title,
-  )
+    colorbar_title = i == n_cols ? "NMSE" : ""
 
-  gdf = groupby(dd_sorted, :lambda)
-  result = combine(gdf) do sdf
-    sdf[argmin(sdf.err), :delta]
+    xlab = j == n_rows && i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
+
+    model = d[1, :alpha] == 1.0 ? "Lasso" : "Ridge"
+
+    ylab = i == 1 ? L"$\delta$ \\%$(model)" : ""
+
+    title = j == 1 ? dataset : ""
+
+    pl = contourf(
+      x,
+      y,
+      z,
+      xlab = xlab,
+      ylab = ylab,
+      title = title,
+      yformatter = yformatter,
+      xformatter = xformatter,
+      xscale = :log10,
+      ylims = (0.0, 1.0),
+      colorbar = true,
+      colorbar_title = colorbar_title,
+    )
+
+    gdf = groupby(dd_sorted, :lambda)
+    result = combine(gdf) do sdf
+      sdf[argmin(sdf.err), :delta]
+    end
+
+    plot!(pl, result.lambda, result.x1, color = :lightgrey, linestyle = :dot)
+
+    best_ind = argmin(err)
+
+    best_delta, best_lambda = delta[best_ind], lambda[best_ind]
+
+    scatter!(
+      pl,
+      [best_lambda],
+      [best_delta],
+      label = "Best",
+      color = :white,
+      xscale = :log10,
+      legend = false,
+    )
+
+    push!(plots, pl)
   end
-
-  plot!(pl, result.lambda, result.x1, color = :lightgrey, linestyle = :dot)
-
-  best_ind = argmin(err)
-
-  best_delta, best_lambda = delta[best_ind], lambda[best_ind]
-
-  scatter!(
-    pl,
-    [best_lambda],
-    [best_delta],
-    label = "Best",
-    color = :white,
-    xscale = :log10,
-    legend = false,
-  )
-
-  push!(plots, pl)
 end
 
-l = (1, n_cols)
+l = (n_rows, n_cols)
 
-plot(plots..., layout = l, size = (FULL_WIDTH, 200))
+plot(plots..., layout = l, size = (FULL_WIDTH, 300))
 
 savefig(@projectroot("paper", "plots", "hyperopt.pdf"))

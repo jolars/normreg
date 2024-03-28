@@ -13,7 +13,7 @@ df = CSV.read(file, DataFrame)
 
 plots = []
 
-df_grouped = groupby(df, [:dataset])
+df_grouped = groupby(subset(df, :alpha => a -> a .== 1), [:dataset])
 
 n_cols = length(df_grouped)
 

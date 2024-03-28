@@ -19,7 +19,7 @@ datagrabber = function (dataset)
   return x, y
 end
 
-lambda_sim = function (dataset, delta, lambda_max, n_lambda)
+lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
   Random.seed!(1234)
 
   x, y = datagrabber(dataset)
@@ -37,6 +37,7 @@ lambda_sim = function (dataset, delta, lambda_max, n_lambda)
     λ = lambda,
     standardize = false,
     stopearly = false,
+    α = alpha,
   )
 
   intercept, coefs = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
@@ -64,38 +65,44 @@ grid_size = 100
 
 datasets = ["a1a", "w1a", "rhee2006"]
 
-res = DataFrame(dataset = [], delta = [], lambda = [], err = [], support_size = [])
+res =
+  DataFrame(alpha = [], dataset = [], delta = [], lambda = [], err = [], support_size = [])
 
 deltas = collect(range(0, 1, length = grid_size));
 
-for dataset in datasets
-  lambda_max = 0
+alphas = [0, 1]
 
-  for delta in deltas
-    Random.seed!(1234)
+for alpha in alphas
+  for dataset in datasets
+    lambda_max = 0
 
-    x, y = datagrabber(dataset)
+    for delta in deltas
+      Random.seed!(1234)
 
-    x_train, y_train, x_test, y_test = split_data(x, y, 0.5)
+      x, y = datagrabber(dataset)
 
-    x_train_std, centers, scales = normalize_features2(x_train, delta, false)
+      x_train, y_train, x_test, y_test = split_data(x, y, 0.5)
 
-    n = size(x_train, 1)
-    tmp = maximum(abs.(x_train_std' * (y_train .- mean(y_train)))) / n
+      x_train_std, centers, scales = normalize_features2(x_train, delta, false)
 
-    lambda_max = max(lambda_max, tmp)
-  end
+      n = size(x_train, 1)
+      tmp = maximum(abs.(x_train_std' * (y_train .- mean(y_train)))) / n
 
-  for delta in deltas
-    err, lambda, support_size = lambda_sim(dataset, delta, lambda_max, grid_size)
-    df = DataFrame(
-      dataset = dataset,
-      delta = delta,
-      lambda = lambda,
-      err = err,
-      support_size = support_size,
-    )
-    res = vcat(res, df)
+      lambda_max = max(lambda_max, tmp)
+    end
+
+    for delta in deltas
+      err, lambda, support_size = lambda_sim(alpha, dataset, delta, lambda_max, grid_size)
+      df = DataFrame(
+        alpha = alpha,
+        dataset = dataset,
+        delta = delta,
+        lambda = lambda,
+        err = err,
+        support_size = support_size,
+      )
+      res = vcat(res, df)
+    end
   end
 end
 
