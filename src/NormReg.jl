@@ -9,6 +9,7 @@ export generate_binary_data
 export generate_mixed_data
 export generate_pseudobernoulli
 export generate_pseudonormal
+export generate_pseudobernoulli_times_gaussian
 export logspace
 export log10space
 

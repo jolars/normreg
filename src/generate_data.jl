@@ -29,6 +29,16 @@ function generate_pseudobernoulli(n; q = 0.5)
   return x
 end
 
+function generate_pseudobernoulli_times_gaussian(n; q = 0.5, sigma = 0.1)
+  x = zeros(n)
+
+  ind = sample(1:n, ceil(Int64, q * n), replace = false)
+
+  x[ind] .= rand(Normal(1, sigma), length(ind))
+
+  return x
+end
+
 function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, q = 0.5, ρ = 0)
   X = Normal(0, 1)
 
@@ -49,7 +59,7 @@ function generate_binary_gaussian_features(n; μ = 0, σ = 0.5, q = 0.5, ρ = 0)
   return [y b]
 end
 
-function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
+function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1, rho = 0.0)
   x = zeros(n, p)
 
   β = zeros(p)
@@ -87,6 +97,14 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1)
     n_ones = ceil(Int64, q_i * n)
     inds = sample(1:n, n_ones, replace = false)
     x[inds, i] .= 1
+
+    if i > 1 && i <= k && rho > 0
+      flips = rand(Bernoulli(rho), n)
+
+      # keep going until there is at least some variance
+      flips = rand(Bernoulli(rho), n)
+      x[flips, i] .= x[flips, 1]
+    end
   end
 
   σ = √(var(x * β) / snr)

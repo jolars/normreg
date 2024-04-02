@@ -13,7 +13,8 @@ using NormReg
 function binary_gaussian_simulation(
   α = 1,
   normalization = "mean_std",
-  snr = 1;
+  snr = 1,
+  sigma = 0.1;
   n_it = 50,
   n_qs = 100,
   n = 1000,
@@ -21,18 +22,21 @@ function binary_gaussian_simulation(
 )
   Random.seed!(seed)
 
-  beta = [1, 1, 0.25]
-  betas = zeros(3, n_qs)
+  p = 4
+
+  beta = [1, 1, 0.25, 1]
+  betas = zeros(p, n_qs)
   qs = range(0.5, 0.99, length = n_qs)
 
   for i in 1:n_qs
-    beta_hat = zeros(3)
+    beta_hat = zeros(p)
     for _ in 1:n_it
       x1 = generate_pseudobernoulli(n, q = qs[i])
       x2 = generate_pseudonormal(n; μ = 0, σ = 0.5)
       x3 = generate_pseudonormal(n; μ = 0, σ = 2)
+      x4 = generate_pseudobernoulli_times_gaussian(n; q = qs[i], sigma)
 
-      x = [x1 x2 x3]
+      x = [x1 x2 x3 x4]
 
       σ = √(var(x * beta) / snr)
 
@@ -70,6 +74,7 @@ param_dict = Dict(
   "alpha" => [0, 1],
   "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
   "snr" => [0.1],
+  "sigma" => [0.2],
 )
 
 expanded_params = dict_list(param_dict);
@@ -77,9 +82,9 @@ expanded_params = dict_list(param_dict);
 results = [];
 
 for (i, d) in enumerate(expanded_params)
-  @unpack alpha, normalization, snr = d
+  @unpack alpha, normalization, snr, sigma = d
 
-  betas, qs = binary_gaussian_simulation(alpha, normalization, snr)
+  betas, qs = binary_gaussian_simulation(alpha, normalization, snr, sigma)
 
   d_exp = copy(d)
   d_exp["betas"] = betas

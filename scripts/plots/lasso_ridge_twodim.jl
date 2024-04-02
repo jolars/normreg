@@ -30,9 +30,6 @@ for (j, dd) in enumerate(df_grouped)
   for (i, d) in enumerate(groups)
     p = plot(legend = false)
 
-    labels =
-      [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)"]
-
     model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
 
     yguide = i == 1 ? model * L"\hat\beta / \beta^*" : ""
@@ -72,14 +69,19 @@ for (j, dd) in enumerate(df_grouped)
 end
 
 labels =
-  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)"]
+  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(0,0.2)"]
 
-legend =
-  plot([0 0 0], showaxis = false, grid = false, label = labels, legend_position = :topleft)
+legend = plot(
+  [0 0 0 0],
+  showaxis = false,
+  grid = false,
+  label = labels,
+  legend_position = :topleft,
+)
 
-l = @layout[grid(2, 4) a{0.25w}]
+l = @layout[grid(2, 4) a{0.35w}]
 
-pl = plot(plots..., legend, layout = l, size = (get_full_width(), 300))
+pl = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 300))
 
 file_path = @projectroot("paper", "plots", "lassoridge_twodim.pdf");
 
