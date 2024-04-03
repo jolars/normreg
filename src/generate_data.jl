@@ -75,36 +75,51 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1, 
   end
 
   q = collect(logspace(0.5, 0.99, k))
-  q_noise = collect(range(0.5, 0.99, length = p - k))
 
-  for i in 1:p
-    if i <= k
-      if q_type == "decreasing"
-        q_i = q[i]
-      elseif q_type == "balanced"
-        q_i = 0.5
-      elseif q_type == "imbalanced"
-        q_i = 0.9
-      elseif q_type == "very_imbalanced"
-        q_i = 0.99
-      else
-        error("q_type not supported")
-      end
+  for i in 1:k
+    if q_type == "decreasing"
+      q_i = q[i]
+    elseif q_type == "balanced"
+      q_i = 0.5
+    elseif q_type == "imbalanced"
+      q_i = 0.9
+    elseif q_type == "very_imbalanced"
+      q_i = 0.99
     else
-      q_i = q_noise[i - k]
+      error("q_type not supported")
     end
 
     n_ones = ceil(Int64, q_i * n)
+
+    if rho == 0
+      inds = sample(1:n, n_ones, replace = false)
+      x[inds, i] .= 1
+    else
+      if i == 1
+        x[1:n_ones, i] .= 1
+      else
+        n_rho = ceil(Int64, rho * n * 0.5)
+        x[1:n_rho, i] .= 1
+
+        n_ones_cur = sum(x[:, i])
+        n_rem = Int64(n_ones - n_ones_cur)
+
+        # println("n_rem: $(n_rem), n: $(n)")
+
+        inds = sample((n_rho + 1):n, n_rem, replace = false)
+
+        x[inds, i] .= 1
+      end
+    end
+  end
+
+  q_noise = collect(range(0.5, 0.99, length = p - k))
+
+  for i in (k + 1):p
+    q_i = q_noise[i - k]
+    n_ones = ceil(Int64, q_i * n)
     inds = sample(1:n, n_ones, replace = false)
     x[inds, i] .= 1
-
-    if i > 1 && i <= k && rho > 0
-      flips = rand(Bernoulli(rho), n)
-
-      # keep going until there is at least some variance
-      flips = rand(Bernoulli(rho), n)
-      x[flips, i] .= x[flips, 1]
-    end
   end
 
   σ = √(var(x * β) / snr)

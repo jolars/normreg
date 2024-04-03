@@ -69,7 +69,7 @@ for (j, dd) in enumerate(df_grouped)
 end
 
 labels =
-  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(0,0.2)"]
+  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(1,0.2)"]
 
 legend = plot(
   [0 0 0 0],
