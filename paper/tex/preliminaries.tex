@@ -24,14 +24,6 @@ There is ambiguity regarding many of the key terms in the field of normalization
 
 Some authors refer to this procedure as \emph{standardization}, but here we define standardization only as the case when centering with the arithmetic mean and scaling with the (uncorrected) standard deviation. Also note that normalization is sometimes defined as the process of scaling the \emph{samples}, rather than the features. We will not consider this type of normalization in this paper.
 
-\subsection{Rescaling Regression Coefficients}
-
-Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, which we denote by \(\hat\beta^{(n)}_j\), back using the following formulae:
-\[
-  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j}.
-\]
-There is a similar transformation for the intercept which we omit here since we are not interested in interpreting it.
-
 \subsection{Types of Normalization}
 
 There are many different strategies for normalizing the design matrix.
@@ -109,20 +101,19 @@ Min-max normalization scales the data to lie in \([0, 1]\). As with maximum abso
 
 \subsection{The Elastic Net}
 
-From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties, that is,
+From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties. The elastic net, for the normalized feature matrix \(\tilde{\mat{X}}\), is represented by the following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
-  \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( L(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
 \end{equation}
-When \(\lambda_1 > 0\) and \(\lambda_2 = 0\), the elastic net is equivalent to the lasso, and when \(\lambda_1 = 0\) and \(\lambda_2 > 0\), it is equivalent to ridge regression.
-
-Expanding \Cref{eq:elastic-net}, we have
+We define \((\hat{\beta}_0^{(n)}, \hat{\vec{\beta}}^{(n)})\) as a solution to the optimization problem in \Cref{eq:elastic-net}.
+When \(\lambda_1 > 0\) and \(\lambda_2 = 0\), the elastic net is equivalent to the lasso, and when \(\lambda_1 = 0\) and \(\lambda_2 > 0\), it is equivalent to ridge regression. Expanding \(L\) in \Cref{eq:elastic-net}, we have
 \[
   \begin{aligned}
     \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
   \end{aligned}
 \]
-Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT stationarity condition yields the following system of equations.
+Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT stationarity condition yields the following system of equations:
 \begin{equation}
   \label{eq:kkt-elasticnet}
   \begin{cases}
@@ -138,6 +129,14 @@ Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) 
     [-1, 1]            & \text{otherwise}.
   \end{cases}
 \]
+
+\subsection{Rescaling Regression Coefficients}
+
+Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, \(\hat\beta^{(n)}_j\), back via
+\[
+  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j} \quad\text{for}\quad j = 1,2,\dots,p.
+\]
+There is a similar transformation for the intercept which we omit here since we are not interested in interpreting it.
 
 \subsection{Orthogonal Features}
 
