@@ -185,3 +185,40 @@ function generate_mixed_data(n, p, k, q_type, beta_type, snr)
 
   return x, y, β
 end
+
+function generate_interaction_data(β, norm_strategy, delta, q, mu, center; snr = 1, n = 100)
+  p = length(β)
+
+  x = zeros(n, p)
+
+  x[:, 1] .= generate_pseudobernoulli(n, q = q)
+  x[:, 2] .= generate_pseudonormal(n; μ = mu, σ = 0.5)
+  x[:, 3] .= x[:, 1] .* x[:, 2]
+
+  σ = √(var(x * β) / snr)
+  y = x * β .+ rand(Normal(0, σ), n)
+
+  normalization = if delta == 1
+    "mean_stdvar"
+  elseif delta == 0.5
+    "mean_std"
+  else
+    "none"
+  end
+
+  if norm_strategy == 1
+    x_std, centers, scales = normalize_features(x, normalization)
+    x_std[:, 3] .= x_std[:, 1] .* x_std[:, 2]
+    scales[3] = scales[1] * scales[2]
+  elseif norm_strategy == 2
+    x_std, centers, scales = normalize_features(x, normalization)
+  elseif norm_strategy == 3
+    intersections = [3]
+    x_std, centers, scales =
+      normalize_features(x, normalization, intersections = intersections)
+  end
+
+  # print(scales)
+
+  return x_std, y, β, centers, scales
+end

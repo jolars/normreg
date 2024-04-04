@@ -15,6 +15,6 @@ function set_plot_defaults(backend = "pyplot")
     default(titlefontsize = 11)
     pythonplot()
     matplotlib.rcParams["text.usetex"] = true
-    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}\\usepackage{mathtools}"
+    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}\\usepackage{amsfonts}\\usepackage{amssymb}\\usepackage{mathtools}"
   end
 end

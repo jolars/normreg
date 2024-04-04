@@ -10,6 +10,7 @@ export generate_mixed_data
 export generate_pseudobernoulli
 export generate_pseudonormal
 export generate_pseudobernoulli_times_gaussian
+export generate_interaction_data
 export logspace
 export log10space
 
