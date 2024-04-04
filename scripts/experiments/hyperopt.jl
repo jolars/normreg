@@ -26,7 +26,7 @@ lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
 
   x_train, y_train, x_test, y_test = split_data(x, y, 0.5)
 
-  x_train_std, centers, scales = normalize_features2(x_train, delta, false)
+  x_train_std, centers, scales = normalize_features(x_train, delta)
 
   lambda = collect(logspace(lambda_max, lambda_max * 1e-5, n_lambda))
 

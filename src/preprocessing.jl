@@ -51,7 +51,7 @@ function normalize_features_unadjusted(x::AbstractMatrix, method::String = "std"
 
   if method == "std"
     centers = mean(x, dims = 1)
-    scales = std(x, dims = 1)
+    scales = std(x, dims = 1, corrected = false)
   elseif method == "max_abs"
     centers = zeros(1, p)
     scales = maximum(abs.(x), dims = 1)
@@ -74,7 +74,7 @@ end
 
 function normalize_features(
   x::AbstractMatrix,
-  method::String = "mean_std";
+  delta::Real = 0,
   center::Bool = true,
   intersections::Vector{Int} = Int[],
 )
@@ -89,45 +89,21 @@ function normalize_features(
     centers = zeros(1, p)
   end
 
-  # TODO: Add l1 and l2 norm methods too.
-  if method == "mean_std"
-    for j in 1:p
-      if binary[j]
+  # always scale continuos features by standard deviation
+
+  for j in 1:p
+    if binary[j]
+      mod = 0.5 / (0.25^delta)
+      scales[j] = mod * var(x[:, j])^delta
+    else
+      # conditionally scale interaction effects
+      if j in intersections
+        nz = findall(x[:, j] .!= 0)
+        scales[j] = std(x[nz, j])
+      else
         scales[j] = std(x[:, j])
-      else
-        if j in intersections
-          nz = findall(x[:, j] .!= 0)
-          scales[j] = std(x[nz, j])
-        else
-          scales[j] = std(x[:, j])
-        end
       end
     end
-  elseif method == "mean_var"
-    scales = var(x, dims = 1)
-  elseif method == "mean_stdvar"
-    for j in 1:p
-      if binary[j]
-        scales[j] = 2 * var(x[:, j])
-      else
-        if j in intersections
-          nz = findall(x[:, j] .!= 0)
-          scales[j] = std(x[nz, j])
-        else
-          scales[j] = std(x[:, j])
-        end
-      end
-    end
-  elseif method == "max_abs"
-    scales = maximum(abs.(x), dims = 1)
-  elseif method == "min_max"
-    scales = maximum(abs.(x), dims = 1) .- minimum(abs.(x), dims = 1)
-  elseif method == "none"
-    for j in 1:p
-      scales[j] = binary[j] ? 0.5 : std(x[:, j])
-    end
-  else
-    error("Invalid normalization method. See source for options")
   end
 
   scales[scales .== 0] .= 1

@@ -1,32 +1,81 @@
-using DataFrames
-using DrWatson
-using Distributions
-using JSON
-using NormReg
 using Random
+using LinearAlgebra
+using Distributions
+using DrWatson
+using Statistics
+using DataFrames
+using Lasso
+using Plots
+using JSON
 using ProjectRoot
+using NormReg
 
-function sim(n, p, s, normalization, q_type, beta_type, snr)
-  x, y, β_true = generate_mixed_data(n, p, s, q_type, beta_type, snr)
+function binary_gaussian_simulation(
+  α = 1,
+  delta = 0.5,
+  snr = 1,
+  sigma = 0.1;
+  n_it = 50,
+  n_qs = 100,
+  n = 1000,
+  seed = 909,
+)
+  Random.seed!(seed)
 
-  k = 10
-  train_size = 0.75
+  p = 4
 
-  err, _, β_est = cross_validate(x, y, Normal(), normalization, k, train_size, "nmse")
+  beta = [1, 1, 0.25, 1]
+  betas = zeros(p, n_qs)
+  qs = range(0.5, 0.99, length = n_qs)
 
-  return err, β_est, β_true
+  for i in 1:n_qs
+    beta_hat = zeros(p)
+    for _ in 1:n_it
+      x1 = generate_pseudobernoulli(n, q = qs[i])
+      x2 = generate_pseudonormal(n; μ = 0, σ = 0.5)
+      x3 = generate_pseudonormal(n; μ = 0, σ = 2)
+      x4 = generate_pseudobernoulli_times_gaussian(n; q = qs[i], sigma)
+
+      x = [x1 x2 x3 x4]
+
+      σ = √(var(x * beta) / snr)
+
+      y = x * beta .+ rand(Normal(0, σ))
+
+      x_std, centers, scales = normalize_features(x, delta)
+
+      λmax = maximum(abs.(x_std' * (y .- mean(y))))
+
+      λ = α == 0 ? λmax * 0.25 / n : λmax * 0.15 / n
+
+      model = Lasso.fit(
+        Lasso.LassoPath,
+        x_std,
+        y,
+        Normal(),
+        α = α,
+        standardize = false,
+        λ = [λ],
+        intercept = true,
+      )
+
+      _, beta_hat_it = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
+
+      # Compute the average across the iterations
+      beta_hat += beta_hat_it / n_it
+    end
+    betas[:, i] = beta_hat ./ beta
+  end
+
+  return betas, qs
 end
 
 param_dict = Dict(
-  "it" => collect(1:20),
-  "n" => 400,
-  "p" => [1000],
-  "s" => [20],
-  "normalization" => ["none", "mean_std", "mean_stdvar"],
-  # "q_type" => ["linear", "balanced", "imbalanced", "very_imbalanced"],
-  "q_type" => ["geometric"],
-  "beta_type" => "constant",
-  "snr" => 12.0,
+  "alpha" => [0, 1],
+  "delta" => [0, 0.5, 1],
+  "snr" => [4],
+  "sigma" => [0.5],
+  "dummy" => "dummy"
 )
 
 expanded_params = dict_list(param_dict);
@@ -34,16 +83,13 @@ expanded_params = dict_list(param_dict);
 results = [];
 
 for (i, d) in enumerate(expanded_params)
-  @unpack it, n, p, s, normalization, q_type, beta_type, snr = d
+  @unpack alpha, delta, snr, sigma = d
 
-  Random.seed!(it)
-
-  err, β_est, β_true = sim(n, p, s, normalization, q_type, beta_type, snr)
+  betas, qs = binary_gaussian_simulation(alpha, delta, snr, sigma)
 
   d_exp = copy(d)
-  d_exp["err"] = err
-  d_exp["betas_est"] = β_est
-  d_exp["betas_true"] = β_true
+  d_exp["betas"] = betas
+  d_exp["qs"] = qs
 
   push!(results, d_exp)
 end
@@ -53,3 +99,5 @@ outfile = @projectroot("data", "mixed_data.json");
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
+
+include(@projectroot("scripts", "plots", "mixed_data.jl"))
