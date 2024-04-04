@@ -34,7 +34,7 @@ function generate_pseudobernoulli_times_gaussian(n; q = 0.5, sigma = 0.1)
 
   ind = sample(1:n, ceil(Int64, q * n), replace = false)
 
-  x[ind] .= rand(Normal(1, sigma), length(ind))
+  x[ind] .= rand(Normal(0, sigma), length(ind))
 
   return x
 end

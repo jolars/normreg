@@ -23,6 +23,10 @@ norm_map = Dict(
   "max_abs" => "Max-Abs",
 );
 
+n_rows = length(unique(df.alpha))
+n_cols = length(unique(df.normalization))
+n_groups = 4
+
 plots = []
 
 for (j, dd) in enumerate(df_grouped)
@@ -69,17 +73,17 @@ for (j, dd) in enumerate(df_grouped)
 end
 
 labels =
-  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(1,0.2)"]
+  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(0,0.5)"]
 
 legend = plot(
-  [0 0 0 0],
+  zeros(1, n_groups),
   showaxis = false,
   grid = false,
   label = labels,
   legend_position = :topleft,
 )
 
-l = @layout[grid(2, 4) a{0.35w}]
+l = @layout[grid(n_rows, n_cols) a{0.35w}]
 
 pl = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 300))
 

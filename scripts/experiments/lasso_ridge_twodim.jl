@@ -12,7 +12,7 @@ using NormReg
 
 function binary_gaussian_simulation(
   α = 1,
-  normalization = "mean_std",
+  delta = 0.5,
   snr = 1,
   sigma = 0.1;
   n_it = 50,
@@ -42,7 +42,7 @@ function binary_gaussian_simulation(
 
       y = x * beta .+ rand(Normal(0, σ))
 
-      x_std, centers, scales = normalize_features(x, normalization)
+      x_std, centers, scales = normalize_features(x, delta)
 
       λmax = maximum(abs.(x_std' * (y .- mean(y))))
 
@@ -72,9 +72,9 @@ end
 
 param_dict = Dict(
   "alpha" => [0, 1],
-  "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
+  "normalization" => ["none", "mean_std", "mean_stdvar"],
   "snr" => [4],
-  "sigma" => [0.2],
+  "sigma" => [0.5],
 )
 
 expanded_params = dict_list(param_dict);
