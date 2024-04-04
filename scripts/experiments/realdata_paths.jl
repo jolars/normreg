@@ -18,7 +18,7 @@ function path_simulation(dataset, normalization, model = "gaussian")
 
   x, y = load_dataset(dataset, dense = true, replace = false, verbose = false)
 
-  x_norm, centers, scales = normalize_features(Array(x), normalization)
+  x_norm, centers, scales = normalize_features_unadjusted(Array(x), normalization)
 
   res = fit(LassoPath, x_norm, y, dist, standardize = false)
 
@@ -28,8 +28,8 @@ function path_simulation(dataset, normalization, model = "gaussian")
 end
 
 param_dict = Dict{String,Any}(
-  "dataset" => ["housing", "leukemia", "triazines"],
-  "normalization" => ["mean_std", "max_abs"],
+  "dataset" => ["housing", "leukemia", "triazines", "w1a"],
+  "normalization" => ["std", "max_abs"],
   "model" => ["gaussian"],
   "alpha" => 1.0,
 )

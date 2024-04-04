@@ -45,6 +45,33 @@ function normalize_features2(x::AbstractMatrix, delta::Real = 0, center::Bool = 
   return x_normalized, centers, scales
 end
 
+function normalize_features_unadjusted(x::AbstractMatrix, method::String = "std")
+  p = size(x, 2)
+  scales = ones(1, p)
+
+  if method == "std"
+    centers = mean(x, dims = 1)
+    scales = std(x, dims = 1)
+  elseif method == "max_abs"
+    centers = zeros(1, p)
+    scales = maximum(abs.(x), dims = 1)
+  elseif method == "min_max"
+    centers = minimum(abs.(x), dims = 1)
+    scales = maximum(abs.(x), dims = 1) .- centers
+  elseif method == "none"
+    centers = zeros(1, p)
+    scales = ones(1, p)
+  else
+    error("Invalid normalization method. See source for options")
+  end
+
+  scales[scales .== 0] .= 1
+
+  x_normalized = (Matrix(x) .- centers) ./ scales
+
+  return x_normalized, centers, scales
+end
+
 function normalize_features(
   x::AbstractMatrix,
   method::String = "mean_std";
@@ -97,7 +124,7 @@ function normalize_features(
     scales = maximum(abs.(x), dims = 1) .- minimum(abs.(x), dims = 1)
   elseif method == "none"
     for j in 1:p
-      scales[j] = binary[j] ? 1 : std(x[:, j])
+      scales[j] = binary[j] ? 0.5 : std(x[:, j])
     end
   else
     error("Invalid normalization method. See source for options")

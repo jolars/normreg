@@ -25,8 +25,11 @@ include("plotting.jl")
 export plot_lasso_path
 
 include("preprocessing.jl")
-export find_binary_features,
-  normalize_features, unstandardize_coefficients, normalize_features2
+export find_binary_features
+export normalize_features
+export normalize_features2
+export unstandardize_coefficients
+export normalize_features_unadjusted
 
 include("cv.jl")
 export cross_validate

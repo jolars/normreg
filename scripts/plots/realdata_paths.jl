@@ -5,13 +5,16 @@ using NormReg
 using JSON
 using ProjectRoot
 
-set_plot_defaults("pyplot");
+set_plot_defaults();
 
 json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"));
 df = DataFrame(json_data);
 df_flat = DataFrames.flatten(df, [:betas]);
 
 plots = []
+
+n_rows = length(unique(df.normalization))
+n_cols = length(unique(df.dataset))
 
 for (i, d) in enumerate(groupby(df, :normalization))
   for (j, dd) in enumerate(groupby(d, :dataset))
@@ -20,7 +23,8 @@ for (i, d) in enumerate(groupby(df, :normalization))
 
     betas = Float64.(mapreduce(permutedims, vcat, dd.betas[1]))'
 
-    normalization = replace(normalization, "mean_std" => "Mean-SD", "max_abs" => "Max-Abs")
+    normalization =
+      replace(normalization, "std" => "Standardization", "max_abs" => "Max--Abs")
 
     n_choose = 70
 
@@ -29,7 +33,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
     first_ten = findfirst(dropdims(sum(betas .!= 0, dims = 1) .>= 5, dims = 1))
     var_ind = findall(Array(betas[:, first_ten]) .!= 0)
 
-    coefs = betas
+    coefs = betas ./ maximum(abs.(betas))
 
     n_var = size(coefs, 1)
     n_lambda = size(coefs, 2)
@@ -38,7 +42,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
     var_grey = findall(dropdims(sum(betas .!= 0, dims = 2) .> 0, dims = 2))
     grey_vars = setdiff(var_grey, var_ind)
 
-    xformatter = i == 2 ? :auto : _ -> ""
+    xformatter = i == n_rows ? :auto : _ -> ""
 
     p = plot(legend = false)
 
@@ -46,43 +50,47 @@ for (i, d) in enumerate(groupby(df, :normalization))
       plot!(Array(x_var), coefs[i, :], legend = false, color = :gray90)
     end
 
+    yguideposition = if j == n_cols
+      :right
+    else
+      :left
+    end
+
+    yguide = if j == 1
+      L"\hat\beta / \max_j |\hat\beta_j| "
+    elseif j == n_cols
+      normalization
+    else
+      ""
+    end
+
+    yformatter = j == 1 ? :auto : _ -> ""
+
     for i in var_ind
-      if j == 3
-        plot!(
-          Array(x_var),
-          coefs[i, :],
-          legend = false,
-          color = i,
-          yguide = normalization,
-          yguideposition = :right,
-          xformatter = xformatter,
-        )
-      else
-        plot!(Array(x_var), coefs[i, :], legend = false, color = i, xformatter = xformatter)
-      end
+      plot!(
+        Array(x_var),
+        coefs[i, :],
+        color = i,
+        legend = false,
+        xformatter = xformatter,
+        yformatter = yformatter,
+        yguide = yguide,
+        yguideposition = yguideposition,
+        ylims = (-1.1, 1.1),
+      )
     end
 
     if i == 1
       title!(dataset)
     else
-      if j == 2
-        xlabel!("Step")
-      end
-    end
-
-    if j == 3
-      ylabel!(normalization)
-    end
-
-    if mod(j - 1, 3) == 0
-      ylabel!(L"\hat\beta")
+      xlabel!("Step")
     end
 
     push!(plots, p)
   end
 end
 
-plot_output = plot(plots..., layout = (2, 3), size = (FULL_WIDTH, 350))
+plot_output = plot(plots..., layout = (n_rows, n_cols), size = (FULL_WIDTH, 350))
 
 file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
 
