@@ -73,7 +73,7 @@ end
 param_dict = Dict(
   "alpha" => [0, 1],
   "normalization" => ["none", "mean_std", "mean_stdvar", "max_abs"],
-  "snr" => [0.1],
+  "snr" => [4],
   "sigma" => [0.2],
 )
 
