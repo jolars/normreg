@@ -51,3 +51,19 @@ function binary_variance(θ, γ, σ, d)
 
   return (1 / d^2) * (a + b) - binary_expected_value(θ, γ, σ, d)^2
 end
+
+function binary_selection_prob(β, n, q, delta, lambda, σe)
+  X = Normal()
+
+  s = (q - q^2)^delta
+
+  lambda = lambda / (0.5 - 0.5^2)^delta
+
+  X = Normal()
+  μ = binary_mean(β, n, q, s)
+  σ = binary_stddev(σe, n, q, s)
+
+  prob = cdf(X, (μ - lambda) / σ) + cdf(X, (-μ - lambda) / σ)
+
+  return prob, lambda
+end
