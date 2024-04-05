@@ -11,23 +11,9 @@ using Plots.PlotMeasures
 
 set_plot_defaults()
 
-function binary_selection_prob(β, n, q, delta, lambda, σe)
-  X = Normal()
+# TODO: Change power-simulation to use a range of q (since it is constant over p)
 
-  s = (q - q^2)^delta
-
-  lambda = lambda / (0.5 - 0.5^2)^delta
-
-  X = Normal()
-  μ = binary_mean(β, n, q, s)
-  σ = binary_stddev(σe, n, q, s)
-
-  prob = cdf(X, (μ - lambda) / σ) + cdf(X, (-μ - lambda) / σ)
-
-  return prob, lambda
-end
-
-function multidim_bias_sim(
+function fdr_mse_sim(
   q_signal::Real,
   σe::Real,
   δ::Real,
@@ -114,7 +100,7 @@ for (i, d) in enumerate(param_expanded)
   n = 100
   k = 10
 
-  mse, fdr, power = multidim_bias_sim(q, sigma_e, delta, n, lambda, p, k)
+  mse, fdr, power = fdr_mse_sim(q, sigma_e, delta, n, lambda, p, k)
 
   d_exp = copy(d)
   d_exp["mse"] = mse
@@ -125,7 +111,7 @@ for (i, d) in enumerate(param_expanded)
 end
 
 df = DataFrame(results);
-df_long = stack(df, Not([:q, :p, :sigma_e, :delta, :lambda]));
+df_long = stack(df, Not([:q, :p, :sigma_e, :delta, :lambda, :power]));
 
 n_rows = length(unique(df_long.variable))
 n_cols = length(unique(df.q))
@@ -139,9 +125,9 @@ for (i, d) in enumerate(grouped_df)
   subgrouped_df = groupby(d, [:q])
 
   for (j, dd) in enumerate(subgrouped_df)
-    variable = unique(d.variable)[1]
+    variable = unique(dd.variable)[1]
 
-    ylab = j == 1 ? variable : ""
+    ylab = j == 1 ? uppercase(variable) : ""
 
     title_stump = unique(dd.q)[1]
 
@@ -149,11 +135,15 @@ for (i, d) in enumerate(grouped_df)
 
     xlab = j == 2 && i == n_rows ? L"p" : ""
 
-    xformatter = i == 3 ? :auto : _ -> ""
+    xformatter = i == n_rows ? :auto : _ -> ""
 
-    ylims = variable in ["power", "fdr"] ? (-0.05, 1.05) : :auto
-    ylims = variable == "mse" ? :auto : ylims
-    # ylims = variable == "fdr" ? (-0.05, 1.05) : ylims
+    ylims = (0, 1.1)
+
+    if variable == "mse"
+      dd.value .= dd.value ./ maximum(dd.value)
+    end
+
+    yformatter = j == 1 ? :auto : _ -> ""
 
     pl = @df dd plot(
       :p,
@@ -162,8 +152,10 @@ for (i, d) in enumerate(grouped_df)
       ylabel = ylab,
       xlabel = xlab,
       xformatter = xformatter,
+      yformatter = yformatter,
       title = title,
       ylims = ylims,
+      xlims = (15, 105),
       legend = false,
     )
 
@@ -172,7 +164,7 @@ for (i, d) in enumerate(grouped_df)
 end
 
 lab = reshape(unique(df.delta), 1, length(unique(df.delta)))
-labvals = zeros(length(lab))'
+labvals = zeros(1, length(lab))
 
 legend = plot(
   labvals,
@@ -183,9 +175,8 @@ legend = plot(
   legend_title = L"\delta",
 )
 
-l = @layout[grid(n_rows, n_cols) a{0.11w}]
+l = @layout[grid(n_rows, n_cols) a{0.2w}]
 
-plotlist = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 350))
+fdr_mse_plot = plot(plots..., legend, layout = l, size = (FULL_WIDTH * 0.6, 250))
 
-file_path = @projectroot("paper", "plots", "beta-bias-multidim.pdf")
-savefig(plotlist, file_path)
+savefig(fdr_mse_plot, @projectroot("paper", "plots", "fdr_mse.pdf"))

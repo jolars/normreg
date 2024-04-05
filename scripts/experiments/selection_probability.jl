@@ -8,20 +8,7 @@ using StatsPlots
 using LaTeXStrings
 using NormReg
 
-function binary_selection_prob(β, n, q, delta, lambda, σe)
-  X = Normal()
-
-  s = (q - q^2)^delta
-
-  lambda = lambda / (0.5 - 0.5^2)^delta
-
-  μ = binary_mean(β, n, q, s)
-  σ = binary_stddev(σe, n, q, s)
-
-  prob = cdf(X, (μ - lambda) / σ) + cdf(X, (-μ - lambda) / σ)
-
-  return prob, lambda
-end
+set_plot_defaults()
 
 function sim_binary_selection(q, delta, lambda, sigma_e)
   beta = 1
@@ -33,8 +20,6 @@ function sim_binary_selection(q, delta, lambda, sigma_e)
 
   return prob, lambda
 end
-
-set_plot_defaults()
 
 param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.001:0.999),
@@ -82,12 +67,6 @@ for (j, dd) in enumerate(subgrouped_df)
   end
 
   title_stump = unique(dd.sigma_e)[1]
-
-  # xlab = if i > 2
-  #   L"q"
-  # else
-  #   ""
-  # end
 
   yformatter = j == 1 ? :auto : _ -> ""
 
