@@ -125,9 +125,13 @@ for (i, d) in enumerate(grouped_df)
   subgrouped_df = groupby(d, [:q])
 
   for (j, dd) in enumerate(subgrouped_df)
-    variable = unique(dd.variable)[1]
+    variable = dd.variable[1]
 
-    ylab = j == 1 ? uppercase(variable) : ""
+    if j == 1
+      ylab = variable == "mse" ? "NMSE" : "FDR"
+    else
+      ylab = ""
+    end
 
     title_stump = unique(dd.q)[1]
 
