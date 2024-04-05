@@ -50,7 +50,7 @@ for (i, d) in enumerate(df_grouped)
     sdf[sdf.delta .== 1, [:support_size, :err]]
   end
 
-  ylab = i == 1 ? "Support size" : ""
+  ylab = i == 1 ? "Support Size" : ""
 
   pl = plot(
     result.lambda,

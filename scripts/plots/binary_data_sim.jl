@@ -14,36 +14,41 @@ set_plot_defaults("pyplot");
 
 json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
 df = DataFrame(json);
-df_filtered = select(df, [:it, :normalization, :q_type, :snr, :err]);
+df_filtered = select(df, [:it, :delta, :q, :snr, :err]);
 df_subset = subset(df_filtered)
 
-groups = groupby(df_subset, [:q_type], sort = true);
+groups = groupby(df_subset, [:q], sort = true);
 dd = groups[1]
 
 plots = []
 
-qtypes = unique(df.q_type)
+qtypes = unique(df.q)
 n_qtypes = length(qtypes)
 
 ymin = minimum(df.err)
 ymax = maximum(df.err)
 
 for (i, dd) in enumerate(groups)
-  title = unique(dd.q_type)[1]
+  q = dd.q[1]
 
-  groups = groupby(dd, [:normalization, :snr], sort = true)
+  title = L"q = %$(q)"
+
+  groups = groupby(dd, [:delta, :snr], sort = true)
   avg = combine(groups, :err .=> [mean, confidence_error])
 
-  legend = i == 3 ? :outerright : nothing
+  legend = i == n_qtypes ? :bottomleft : false
 
   yformatter = i == 1 ? :auto : _ -> ""
+
+  avg.delta = string.(avg.delta)
 
   pl = @df avg plot(
     :snr,
     :err_mean,
-    group = :normalization,
+    group = :delta,
     title = title,
     legend = legend,
+    legend_title = L"\delta",
     xaxis = :log,
     ribbon = :err_confidence_error,
     yformatter = yformatter,
@@ -51,7 +56,7 @@ for (i, dd) in enumerate(groups)
   )
 
   if i == 1
-    ylabel!("Normalized Mean-Squared Error")
+    ylabel!("NMSE")
   end
 
   if i == 2
@@ -61,7 +66,7 @@ for (i, dd) in enumerate(groups)
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_qtypes), size = (570, 220))
+plot_output = plot(plots..., layout = (1, n_qtypes), size = (FULL_WIDTH, 220))
 
 file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)

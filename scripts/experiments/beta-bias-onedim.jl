@@ -76,21 +76,24 @@ plots = []
 
 pal = :Johnson
 
+variable_map = Dict("mse" => "MSE", "bias" => "Bias", "var" => "Variance")
+
 for (i, d) in enumerate(grouped_df)
   subgrouped_df = groupby(d, [:sigma_e])
 
   for (j, dd) in enumerate(subgrouped_df)
     sort!(dd, [:delta])
 
+    variable = d.variable[1]
+
     ylab = if j == 1
-      unique(d.variable)[1]
+      variable_map[variable]
     else
       ""
     end
 
-    title_stump = unique(dd.sigma_e)[1]
-
     title = if i == 1
+      title_stump = dd.sigma_e[1]
       L"\sigma_e = %$(title_stump)"
     else
       ""
@@ -108,13 +111,20 @@ for (i, d) in enumerate(grouped_df)
       x -> ""
     end
 
+    ylims = variable == "var" ? (-0.02, 0.4) : variable == "mse" ? (-0.2, 4.5) : :auto
+
+    yformatter = j == 1 ? :auto : _ -> ""
+
     pl = @df dd plot(
       :q,
       :value,
       groups = :delta,
       ylabel = ylab,
       xlabel = xlab,
+      ylims = ylims,
+      xlims = (0.45, 1.05),
       xformatter = xformatter,
+      yformatter = yformatter,
       xticks = 0.5:0.25:1,
       title = title,
       legend = false,
@@ -125,7 +135,7 @@ for (i, d) in enumerate(grouped_df)
     if i == 2
       β = 2
       n = 100
-      σe = unique(dd.sigma_e)[1]
+      σe = dd.sigma_e[1]
       std_group = subset(dd, :delta => d -> d .== 0.5)
       λ = unique(std_group.lambda)[1]
       lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β

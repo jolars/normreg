@@ -36,7 +36,7 @@ function holdout_validation(
   x::Array{Float64,2},
   y::Array{Float64,1},
   dist = Normal(),
-  normalization = "mean_std",
+  delta::Real = 0,
   target = "nmse",
   train_size = 2 / 3,
   validation_size = 0.5,
@@ -52,12 +52,12 @@ function holdout_validation(
   x_val, y_val, x_train, y_train = split_data(x_tmp, y_tmp, validation_size)
 
   # fit once to obtain lambas for path
-  x_train_norm, _, _ = normalize_features(x_train, normalization)
+  x_train_norm, _, _ = normalize_features(x_train, delta)
   res = fit(LassoPath, x_train_norm, y_train, dist, standardize = false)
   lambda = res.λ
   n_lambda = length(lambda)
 
-  x_val_norm, _, _ = normalize_features(x_val, normalization)
+  x_val_norm, _, _ = normalize_features(x_val, delta)
 
   pred_array = predict(res, x_val_norm; select = AllSeg())
 
@@ -71,7 +71,7 @@ function holdout_validation(
 
   best_lambda = lambda[argmin(err)]
 
-  x_test_norm, centers_test, scales_test = normalize_features(x_test, normalization)
+  x_test_norm, centers_test, scales_test = normalize_features(x_test, delta)
 
   res_test = fit(
     LassoPath,
