@@ -85,7 +85,7 @@ for (i, d) in enumerate(df_grouped)
     ylab = ylab,
     xlab = xlab,
     legendposition = i == 1 ? :topleft : :none,
-    labels = ["Optimal" L"0" L"0.5" L"1"],
+    labels = ["Optimal" "0" "0.5" "1"],
     legend_title = L"\delta",
     legend_background_color = :transparent,
     color = colors,
