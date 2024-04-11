@@ -1,4 +1,5 @@
 using Plots
+using ColorSchemes
 using LaTeXStrings
 using PlotThemes
 
@@ -21,4 +22,8 @@ function set_plot_defaults(backend = "pyplot")
     matplotlib.rcParams["text.usetex"] = true
     matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}\\usepackage{amsfonts}\\usepackage{amssymb}\\usepackage{mathtools}"
   end
+end
+
+function delta_palette(ind)
+  return ColorSchemes.Johnson[ind]'
 end

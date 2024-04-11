@@ -11,8 +11,6 @@ using Plots.PlotMeasures
 
 set_plot_defaults()
 
-# TODO: Change power-simulation to use a range of q (since it is constant over p)
-
 function fdr_mse_sim(
   q_signal::Real,
   σe::Real,
@@ -121,6 +119,8 @@ grouped_df = groupby(df_long, [:variable])
 
 plots = []
 
+colors = delta_palette(3:5)
+
 for (i, d) in enumerate(grouped_df)
   # subgrouped_df = groupby(df_long, [:q])
   subgrouped_df = groupby(d, [:q])
@@ -162,6 +162,7 @@ for (i, d) in enumerate(grouped_df)
       ylims = ylims,
       xlims = (15, 105),
       legend = false,
+      color = colors,
     )
 
     push!(plots, pl)
@@ -180,6 +181,7 @@ legend = plot(
   frametitle = :none,
   legend_title = L"\delta",
   background_color_subplot = :transparent,
+  color = colors,
 )
 
 l = @layout[grid(n_rows, n_cols) a{0.2w}]

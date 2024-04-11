@@ -80,7 +80,7 @@ function plot_binary_bias_var(df, α = 0)
         legend = false,
         # legend = i == 1 && j == 4,
         # legend_position = :outerright,
-        palette = pal,
+        c,
       )
 
       # Plot asymptotic limit for standardization case

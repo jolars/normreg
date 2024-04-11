@@ -46,8 +46,7 @@ function binary_gaussian_simulation(
 
       λmax = maximum(abs.(x_std' * (y .- mean(y))))
 
-      # λ = α == 0 ? λmax * 0.25 / n : λmax * 0.15 / n
-      λ = α == 0 ? λmax * 0.75 / n : λmax * 0.5 / n
+      λ = α == 0 ? λmax * 2 / n : λmax * 0.5 / n
 
       model = Lasso.fit(
         Lasso.LassoPath,

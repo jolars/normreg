@@ -22,6 +22,7 @@ export soft_threshold
 include("plot_settings.jl")
 export set_plot_defaults
 export FULL_WIDTH
+export delta_palette
 
 include("plotting.jl")
 export plot_lasso_path

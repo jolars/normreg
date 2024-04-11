@@ -73,8 +73,11 @@ for (i, d) in enumerate(param_expanded)
 end
 
 df = DataFrame(results);
-df_power = unique(select(df, [:q, :delta, :power]));
+df_sorted = sort(df, :delta);
+df_power = unique(select(df_sorted, [:q, :delta, :power]));
 df_power.delta = string.(df_power.delta);
+
+colors = delta_palette(3:5)
 
 power_plot = @df df_power plot(
   :q,
@@ -87,6 +90,7 @@ power_plot = @df df_power plot(
   legend_position = :bottomleft,
   legend_background_color = :transparent,
   size = (FULL_WIDTH * 0.4, 230),
+  color = colors,
 )
 
 savefig(power_plot, @projectroot("paper", "plots", "power.pdf"))

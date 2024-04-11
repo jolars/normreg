@@ -51,12 +51,13 @@ hi = y_true .+ y_err;
 
 pl = plot(
   n,
-  y_true; ribbon = (y_err, y_err),
+  y_true;
+  ribbon = (y_err, y_err),
   label = "Empirical",
   size = (235, 175),
-  legend = :bottomright
+  legend = :bottomright,
 )
-plot!(n, y, color = :red, label = "Theoretical")
+plot!(n, y, label = "Theoretical")
 xaxis!(L"n")
 yaxis!(L"\max_i |x_i|")
 

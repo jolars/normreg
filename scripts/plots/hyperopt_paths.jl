@@ -9,6 +9,9 @@ using NormReg
 
 set_plot_defaults()
 
+colors = [RGB(204 / 255, 50 / 255, 85 / 255) delta_palette(3:5)]
+linestyles = [:dash :solid :solid :solid]
+
 file = @projectroot("data", "hyperopt.csv")
 
 df = CSV.read(file, DataFrame);
@@ -61,6 +64,8 @@ for (i, d) in enumerate(df_grouped)
     title = dataset,
     xformatter = _ -> "",
     legend = false,
+    color = colors,
+    linestyle = linestyles,
   )
 
   optim = result[argmin(result.err), [:lambda, :err]]
@@ -73,31 +78,23 @@ for (i, d) in enumerate(df_grouped)
 
   xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
 
-  if i == 1
-    pl2 = plot(
-      result.lambda,
-      [result.err result_0.err result_05.err result_1.err],
-      xscale = :log10,
-      ylab = ylab,
-      xlab = xlab,
-      legend_position = :topleft,
-      labels = ["Optimal" L"0" L"0.5" L"1"],
-      legend_title = L"\delta",
-      legend_background_color = :transparent,
-    )
-  else
-    pl2 = plot(
-      result.lambda,
-      [result.err result_0.err result_05.err result_1.err],
-      xscale = :log10,
-      ylab = ylab,
-      xlab = xlab,
-    )
-  end
+  pl2 = plot(
+    result.lambda,
+    [result.err result_0.err result_05.err result_1.err],
+    xscale = :log10,
+    ylab = ylab,
+    xlab = xlab,
+    legendposition = i == 1 ? :topleft : :none,
+    labels = ["Optimal" L"0" L"0.5" L"1"],
+    legend_title = L"\delta",
+    legend_background_color = :transparent,
+    color = colors,
+    linestyle = linestyles,
+  )
 
   optim = result[argmin(result.err), [:lambda, :err]]
 
-  scatter!(pl2, [optim.lambda], [optim.err], color = :darkorange)
+  scatter!(pl2, [optim.lambda], [optim.err], color = colors[1])
 
   push!(plots, pl2)
 end

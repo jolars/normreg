@@ -53,6 +53,7 @@ for (i, dd) in enumerate(groups)
     ribbon = :err_confidence_error,
     yformatter = yformatter,
     ylims = (ymin, ymax),
+    color = delta_palette(3:5),
   )
 
   if i == 1
