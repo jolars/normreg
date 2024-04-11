@@ -26,7 +26,8 @@ function fdr_mse_sim(
 
   mse_sum = 0
 
-  qs = collect(range(0.5, 0.999, length = ceil(Int64, p - k)))
+  # qs = collect(range(0.5, 0.999, length = ceil(Int64, p - k)))
+  qs = collect(logspace(0.5, 0.99, ceil(Int64, p - k)))
 
   fdp = 0
   dr = 0
@@ -77,7 +78,7 @@ function fdr_mse_sim(
     mse_sum += mse
   end
 
-  fdr = fdp / dr
+  fdr = dr == 0 ? 1 : fdp / dr
 
   return mse_sum, fdr, power
 end
@@ -176,7 +177,9 @@ legend = plot(
   grid = false,
   label = lab,
   legend_position = :topleft,
+  frametitle = :none,
   legend_title = L"\delta",
+  background_color_subplot = :transparent,
 )
 
 l = @layout[grid(n_rows, n_cols) a{0.2w}]

@@ -12,7 +12,11 @@ function set_plot_defaults(backend = "pyplot")
   if backend == "gr"
     gr()
   else
-    default(titlefontsize = 11)
+    default(
+      titlefontsize = 11,
+      background_color_outside = :transparent,
+      legend_background_color = :transparent,
+    )
     pythonplot()
     matplotlib.rcParams["text.usetex"] = true
     matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{lmodern}\\usepackage{amsfonts}\\usepackage{amssymb}\\usepackage{mathtools}"

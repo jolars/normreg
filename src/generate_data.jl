@@ -192,30 +192,17 @@ function generate_interaction_data(β, norm_strategy, delta, q, mu, center; snr 
   x = zeros(n, p)
 
   x[:, 1] .= generate_pseudobernoulli(n, q = q)
-  x[:, 2] .= generate_pseudonormal(n; μ = mu, σ = 0.5)
+  x[:, 2] .= generate_pseudonormal(n; μ = mu, σ = 2)
   x[:, 3] .= x[:, 1] .* x[:, 2]
 
   σ = √(var(x * β) / snr)
   y = x * β .+ rand(Normal(0, σ), n)
 
-  normalization = if delta == 1
-    "mean_stdvar"
-  elseif delta == 0.5
-    "mean_std"
-  else
-    "none"
-  end
-
   if norm_strategy == 1
-    x_std, centers, scales = normalize_features(x, normalization)
-    x_std[:, 3] .= x_std[:, 1] .* x_std[:, 2]
-    scales[3] = scales[1] * scales[2]
+    x_std, centers, scales = normalize_features(x, delta)
   elseif norm_strategy == 2
-    x_std, centers, scales = normalize_features(x, normalization)
-  elseif norm_strategy == 3
     intersections = [3]
-    x_std, centers, scales =
-      normalize_features(x, normalization, intersections = intersections)
+    x_std, centers, scales = normalize_features(x, delta, intersections = intersections)
   end
 
   # print(scales)

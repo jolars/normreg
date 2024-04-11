@@ -65,6 +65,9 @@ for (j, d_alpha) in enumerate(df_alpha)
       xformatter = xformatter,
       xscale = :log10,
       ylims = (0.0, 1.0),
+      xlims = (1e-4, 2),
+      xticks = [1e-4, 1e-2, 1],
+      grid = false,
       colorbar = true,
       colorbar_title = colorbar_title,
       c = palette,
@@ -97,6 +100,10 @@ end
 
 l = (n_rows, n_cols)
 
-plot(plots..., layout = l, size = (FULL_WIDTH, 300))
+plot_output = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
 
 savefig(@projectroot("paper", "plots", "hyperopt_surfaces.pdf"))
+
+# plot_talk = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
+#
+# savefig(@projectroot("paper", "plots", "hyperopt_surfaces.pdf"))

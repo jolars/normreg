@@ -132,7 +132,7 @@ Here, \(g\) is a subgradient of the \(\ell_1\) norm, which has elements \(g_i\) 
 
 \subsection{Rescaling Regression Coefficients}
 
-Normalization changes the optimization problem as well as its solution: the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, \(\hat\beta^{(n)}_j\), back via
+Normalization changes the optimization problem and therefore its solution, the coefficients, which will now be on the scale of the normalized features. We, however, are interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain estimates of these, we transform the coefficients from the normalized poblem, \(\hat\beta^{(n)}_j\), back via
 \[
   \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j} \quad\text{for}\quad j = 1,2,\dots,p.
 \]

@@ -74,7 +74,7 @@ end
 
 function normalize_features(
   x::AbstractMatrix,
-  delta::Real = 0,
+  delta::Real = 0;
   center::Bool = true,
   intersections::Vector{Int} = Int[],
 )
@@ -94,14 +94,18 @@ function normalize_features(
   for j in 1:p
     if binary[j]
       mod = 0.5 / (0.25^delta)
-      scales[j] = mod * var(x[:, j])^delta
+      # mod = 2^delta
+      scales[j] = mod * var(x[:, j], corrected = false)^delta
     else
       # conditionally scale interaction effects
       if j in intersections
+        mod = 0.5 / (0.25^delta)
         nz = findall(x[:, j] .!= 0)
-        scales[j] = std(x[nz, j])
+        scales[j] =
+          std(x[nz, j], corrected = false) * mod * var(x[:, j], corrected = false)^delta
       else
-        scales[j] = std(x[:, j])
+        mod = 0.5 / (0.25^delta)
+        scales[j] = std(x[:, j], corrected = false)
       end
     end
   end

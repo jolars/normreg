@@ -2,19 +2,20 @@ using Distributions
 using SpecialFunctions
 
 function binary_mean(β, n, q, s)
-  return β * n * q * (1 - q) / s
+  return β * n * (q - q^2) / s
 end
 
 function binary_stddev(σe, n, q, s)
-  return sqrt(σe^2 * n * q * (1 - q) / (s^2))
+  v = σe^2 * n * (q - q^2) / s^2
+  return sqrt(v)
 end
 
 function binary_d(n, q, s, λ, α = 1)
-  return n * q * (1 - q) / s + (1 - α) * λ
+  return n * (q - q^2) / s + s * (1 - α) * λ
 end
 
 function binary_expected_value(θ, γ, σ, d; print_components = false)
-  X = Normal()
+  X = Normal(0, 1)
 
   tmp = -θ * cdf(X, θ / σ) - σ * pdf(X, θ / σ) + γ * cdf(X, γ / σ) + σ * pdf(X, γ / σ)
 

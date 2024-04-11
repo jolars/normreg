@@ -18,7 +18,7 @@ df_grouped = (groupby(df_subset, [:alpha], sort = true));
 
 n_rows = length(unique(df.alpha))
 n_cols = length(unique(df.delta))
-n_groups = 4
+n_groups = 3
 
 plots = []
 
@@ -29,7 +29,7 @@ for (j, dd) in enumerate(df_grouped)
 
     model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
 
-    yguide = i == 1 ? model * L"\hat\beta / \beta^*" : ""
+    yguide = i == 1 ? model * L"\hat{\beta}_j" : ""
 
     yformatter = i == 1 ? :auto : _ -> ""
 
@@ -51,11 +51,13 @@ for (j, dd) in enumerate(df_grouped)
     xlabel = j == 2 ? L"q" : ""
 
     betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
+    yerr = Float64.(mapreduce(permutedims, vcat, d.betas_std[1]))
 
     plot!(
       d.qs[1],
       betas,
       yguide = yguide,
+      ribbon = yerr,
       yformatter = yformatter,
       xformatter = xformatter,
       xlabel = xlabel,
@@ -68,8 +70,9 @@ for (j, dd) in enumerate(df_grouped)
   end
 end
 
-labels =
-  [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)" L"\operatorname{Bernoulli}(q) \times \operatorname{Normal}(0,0.5)"]
+# labels =
+#   [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)"]
+labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 
 legend = plot(
   zeros(1, n_groups),
@@ -77,9 +80,10 @@ legend = plot(
   grid = false,
   label = labels,
   legend_position = :topleft,
+  background_color_subplot = :transparent,
 )
 
-l = @layout[grid(n_rows, n_cols) a{0.35w}]
+l = @layout[grid(n_rows, n_cols) a{0.20w}]
 
 pl = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 300))
 

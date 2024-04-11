@@ -85,6 +85,7 @@ power_plot = @df df_power plot(
   legend_title = L"\delta",
   ylims = (0, 1.05),
   legend_position = :bottomleft,
+  legend_background_color = :transparent,
   size = (FULL_WIDTH * 0.4, 230),
 )
 

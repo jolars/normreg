@@ -168,28 +168,6 @@ For \(\delta > 1/2\), we first observe that the first term in \Cref{eq:eval-qlim
 the properties of the standard normal distribution. For the second term, we note that this is essentially
 of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
 
-\subsection{Proof of \Cref{cor:ridge-bias}}
-
-\begin{proof}
-  If \(\lambda_1 = 0\), we have \(\E \st_{\lambda_1}(Z) = \mu\) and consequently
-  \[
-    \E \hat{\beta}_j = \frac{\beta_j^*}{1 + \frac{\lambda_2}{n} (q - q^2)^{2\delta - 1}}.
-  \]
-  Then
-  \[
-    \lim_{q \rightarrow 1^+} \E \hat{\beta}_j = \frac{\beta_j^*}{1 + \frac{\lambda_2}{n}\lim_{q \rightarrow 1^+} (q - q^2)^{2\delta - 1}}.
-  \]
-  The result follows by noting that
-  \[
-    \lim_{q \rightarrow 1^+} (q - q^2)^{2\delta - 1} =
-    \begin{cases}
-      \infty    & \text{if } 0 \leq \delta < 1/2, \\
-      1         & \text{if } \delta = 1/2,        \\
-      \beta_j^* & \text{if } \delta > 1/2.
-    \end{cases}
-  \]
-\end{proof}
-
 \subsection{Proof of \Cref{thm:classbalance-variance}}
 
 The variance of the elastic net estimator is given by

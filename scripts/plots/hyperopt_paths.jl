@@ -60,6 +60,7 @@ for (i, d) in enumerate(df_grouped)
     linetype = :steppre,
     title = dataset,
     xformatter = _ -> "",
+    legend = false,
   )
 
   optim = result[argmin(result.err), [:lambda, :err]]
@@ -72,23 +73,33 @@ for (i, d) in enumerate(df_grouped)
 
   xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
 
-  pl = plot(
-    result.lambda,
-    [result.err result_0.err result_05.err result_1.err],
-    xscale = :log10,
-    ylab = ylab,
-    xlab = xlab,
-    legend = i == n_cols,
-    labels = ["Optimal" L"0" L"0.5" L"1"],
-    legend_title = L"\delta",
-    legend_position = :topleft,
-  )
+  if i == 1
+    pl2 = plot(
+      result.lambda,
+      [result.err result_0.err result_05.err result_1.err],
+      xscale = :log10,
+      ylab = ylab,
+      xlab = xlab,
+      legend_position = :topleft,
+      labels = ["Optimal" L"0" L"0.5" L"1"],
+      legend_title = L"\delta",
+      legend_background_color = :transparent,
+    )
+  else
+    pl2 = plot(
+      result.lambda,
+      [result.err result_0.err result_05.err result_1.err],
+      xscale = :log10,
+      ylab = ylab,
+      xlab = xlab,
+    )
+  end
 
   optim = result[argmin(result.err), [:lambda, :err]]
 
-  scatter!(pl, [optim.lambda], [optim.err], color = :darkorange)
+  scatter!(pl2, [optim.lambda], [optim.err], color = :darkorange)
 
-  push!(plots, pl)
+  push!(plots, pl2)
 end
 
 l = (n_rows, n_cols)
