@@ -1,48 +1,277 @@
-@article{gelman2008,
-  title         = {Scaling Regression Inputs by Dividing by Two Standard Deviations},
-  author        = {Gelman, Andrew},
-  volume        = {27},
-  number        = {15},
-  pages         = {2865--2873},
-  doi           = {10.1002/sim.3107},
-  issn          = {02776715, 10970258},
-  url           = {https://onlinelibrary.wiley.com/doi/10.1002/sim.3107},
-  urldate       = {2023-09-27},
-  date          = {2008-07-10},
-  journaltitle  = {Statistics in Medicine},
-  shortjournal  = {Statist. Med.},
+@article{belloni2011,
+  title         = {Square-Root Lasso: Pivotal Recovery of Sparse Signals via Conic Programming},
+  shorttitle    = {Square-Root Lasso},
+  author        = {Belloni, A. and Chernozhukov, V. and Wang, L.},
+  year          = {2011},
+  month         = dec,
+  journal       = {Biometrika},
+  volume        = {98},
+  number        = {4},
+  pages         = {791--806},
+  doi           = {10.1093/biomet/asr043},
+  issn          = {0006-3444},
+  urldate       = {2023-10-18},
   abstract      = {
-    Interpretation of regression coefficients is sensitive to the scale of the inputs.
-    One method often used to place input variables on a common scale is to divide each
-    numeric variable by its standard deviation. Here we propose dividing each numeric
-    variable by two times its standard deviation, so that the generic comparison is
-    with inputs equal to the mean \pm{}1 standard deviation. The resulting coefficients
-    are then directly comparable for untransformed binary predictors. We have
-    implemented the procedure as a function in R. We illustrate the method with two
-    simple analyses that are typical of applied modeling: a linear regression of data
-    from the National Election Study and a multilevel logistic regression of data on
-    the prevalence of rodents in New York City apartments. We recommend our rescaling
-    as a default option--an improvement upon the usual approach of including variables
-    in whatever way they are coded in the data file--so that the magnitudes of
-    coefficients can be directly compared as a matter of routine statistical practice.
-    Copyright q 2007 John Wiley \& Sons, Ltd.
-  },
-  langid        = {english}
+    We propose a pivotal method for estimating high-dimensional sparse linear
+    regression models, where the overall number of regressors p is large, possibly much
+    larger than n, but only s regressors are significant. The method is a modification
+    of the lasso, called the square-root lasso. The method is pivotal in that it
+    neither relies on the knowledge of the standard deviation {$\sigma$} nor does it
+    need to pre-estimate {\$\sigma\$}. Moreover, the method does not rely on normality
+    or sub-Gaussianity of noise. It achieves near-oracle performance, attaining the
+    convergence rate {\$\sigma\$}\{(s/n) log p\}1/2 in the prediction norm, and thus
+    matching the performance of the lasso with known {\$\sigma\$}. These performance
+    results are valid for both Gaussian and non-Gaussian errors, under some mild moment
+    restrictions. We formulate the square-root lasso as a solution to a convex conic
+    programming problem, which allows us to implement the estimator using efficient
+    algorithmic methods, such as interior-point and first-order methods.
+  }
 }
 
+% == BibTeX quality report for belloni2011:
+% ? unused Library catalog ("Silverchair")
+% ? unused Url ("https://doi.org/10.1093/biomet/asr043")
+@article{bien2013,
+  title         = {A Lasso for Hierarchical Interactions},
+  author        = {Bien, Jacob and Taylor, Jonathan and Tibshirani, Robert},
+  year          = {2013},
+  month         = jun,
+  journal       = {The Annals of Statistics},
+  publisher     = {Institute of Mathematical Statistics},
+  volume        = {41},
+  number        = {3},
+  pages         = {1111--1141},
+  doi           = {10.1214/13-AOS1096},
+  issn          = {0090-5364, 2168-8966},
+  urldate       = {2024-04-03},
+  abstract      = {
+    We add a set of convex constraints to the lasso to produce sparse interaction
+    models that honor the hierarchy restriction that an interaction only be included in
+    a model if one or both variables are marginally important. We give a precise
+    characterization of the effect of this hierarchy constraint, prove that hierarchy
+    holds with probability one and derive an unbiased estimate for the degrees of
+    freedom of our estimator. A bound on this estimate reveals the amount of fitting
+    ``saved'' by the hierarchy constraint. We distinguish between parameter
+    sparsity---the number of nonzero coefficients---and practical sparsity---the number
+    of raw variables one must measure to make a new prediction. Hierarchy focuses on
+    the latter, which is more closely tied to important data collection concerns such
+    as cost, time and effort. We develop an algorithm, available in the R package
+    hierNet, and perform an empirical study of our method.
+  }
+}
+
+% == BibTeX quality report for bien2013:
+% ? unused Library catalog ("Project Euclid")
+% ? unused Url ("https://projecteuclid.org/journals/annals-of-statistics/volume-41/issue-3/A-lasso-for-hierarchical-interactions/10.1214/13-AOS1096.full")
+@article{bien2013a,
+  title         = {A Lasso for Hierarchical Interactions},
+  author        = {Bien, Jacob and Taylor, Jonathan and Tibshirani, Robert},
+  year          = {2013},
+  month         = jun,
+  journal       = {Annals of Statistics},
+  volume        = {41},
+  number        = {3},
+  pages         = {1111--1141},
+  doi           = {10.1214/13-AOS1096},
+  issn          = {0090-5364},
+  abstract      = {
+    We add a set of convex constraints to the lasso to produce sparse interaction
+    models that honor the hierarchy restriction that an interaction only be included in
+    a model if one or both variables are marginally important. We give a precise
+    characterization of the effect of this hierarchy constraint, prove that hierarchy
+    holds with probability one and derive an unbiased estimate for the degrees of
+    freedom of our estimator. A bound on this estimate reveals the amount of fitting
+    "saved" by the hierarchy constraint. We distinguish between parameter sparsity-the
+    number of nonzero coefficients-and practical sparsity-the number of raw variables
+    one must measure to make a new prediction. Hierarchy focuses on the latter, which
+    is more closely tied to important data collection concerns such as cost, time and
+    effort. We develop an algorithm, available in the R package hierNet, and perform an
+    empirical study of our method.
+  },
+  langid        = {english},
+  pmcid         = {PMC4527358},
+  pmid          = {26257447}
+}
+
+% == BibTeX quality report for bien2013a:
+% ? unused Journal abbreviation ("Ann Stat")
+% ? unused Library catalog ("PubMed")
+@article{bring1994,
+  title         = {How to Standardize Regression Coefficients},
+  author        = {Bring, Johan},
+  year          = {1994},
+  month         = aug,
+  journal       = {The American Statistician},
+  publisher     = {[American Statistical Association, Taylor \& Francis, Ltd.]},
+  volume        = {48},
+  number        = {3},
+  pages         = {209--213},
+  doi           = {10.2307/2684719},
+  issn          = {0003-1305},
+  urldate       = {2023-09-29},
+  eprint        = {2684719},
+  eprinttype    = {jstor},
+  abstract      = {
+    In many regression studies, there is an ambition to compare the relative importance
+    of different variables. One measure frequently used is standardized regression
+    coefficients. The present article reveals an inconsistency in the definition of the
+    standardized coefficients and demonstrates that if they were correctly defined, a
+    comparison between standardized coefficients would be similar to comparing t
+    values.
+  }
+}
+
+% == BibTeX quality report for bring1994:
+% ? unused Url ("https://www.jstor.org/stable/2684719")
+@article{donoho1994,
+  title         = {Ideal Spatial Adaptation by Wavelet Shrinkage},
+  author        = {Donoho, David L. and Johnstone, Iain M.},
+  year          = {1994},
+  month         = aug,
+  journal       = {Biometrika},
+  publisher     = {[Oxford University Press, Biometrika Trust]},
+  volume        = {81},
+  number        = {3},
+  pages         = {425--455},
+  doi           = {10.2307/2337118},
+  issn          = {0006-3444},
+  urldate       = {2023-10-06},
+  eprint        = {2337118},
+  eprinttype    = {jstor},
+  abstract      = {
+    With ideal spatial adaptation, an oracle furnishes information about how best to
+    adapt a spatially variable estimator, whether piecewise constant, piecewise
+    polynomial, variable knot spline, or variable bandwidth kernel, to the unknown
+    function. Estimation with the aid of an oracle offers dramatic advantages over
+    traditional linear estimation by nonadaptive kernels; however, it is a priori
+    unclear whether such performance can be obtained by a procedure relying on the data
+    alone. We describe a new principle for spatially-adaptive estimation: selective
+    wavelet reconstruction. We show that variable-knot spline fits and
+    piecewise-polynomial fits, when equipped with an oracle to select the knots, are
+    not dramatically more powerful than selective wavelet reconstruction with an
+    oracle. We develop a practical spatially adaptive method, RiskShrink, which works
+    by shrinkage of empirical wavelet coefficients. RiskShrink used in connection with
+    sample rotation. Inclusion probabilities of any order can be written explicitly in
+    closed form. Second-order inclusion probabilities {$\pi$}ij satisfy the condition
+    \$0 {\$<\$} {\textbackslash}pi\_\{ij\} {\$<\$}
+    {\textbackslash}pi\_\{i\}{\textbackslash}pi\_j\$, which guarantees Yates \&
+    Grundy's variance estimator to be unbiased, definable for all samples and always
+    nonnegative for any sample size.
+  }
+}
+
+% == BibTeX quality report for donoho1994:
+% ? unused Url ("https://www.jstor.org/stable/2337118")
+@article{donoho1995,
+  title         = {Adapting to Unknown Smoothness via Wavelet Shrinkage},
+  author        = {Donoho, David L. and Johnstone, Iain M.},
+  year          = {1995},
+  journal       = {Journal of the American Statistical Association},
+  publisher     = {American Statistical Association, Taylor \& Francis, Ltd.},
+  volume        = {90},
+  number        = {432},
+  pages         = {1200--1224},
+  doi           = {10.2307/2291512},
+  issn          = {0162-1459},
+  urldate       = {2023-11-03},
+  eprint        = {2291512},
+  eprinttype    = {jstor},
+  abstract      = {
+    We attempt to recover a function of unknown smoothness from noisy sampled data. We
+    introduce a procedure, SureShrink, that suppresses noise by thresholding the
+    empirical wavelet coefficients. The thresholding is adaptive: A threshold level is
+    assigned to each dyadic resolution level by the principle of minimizing the Stein
+    unbiased estimate of risk (Sure) for threshold estimates. The computational effort
+    of the overall procedure is order N {$\cdot$} log(N) as a function of the sample
+    size N. SureShrink is smoothness adaptive: If the unknown function contains jumps,
+    then the reconstruction (essentially) does also; if the unknown function has a
+    smooth piece, then the reconstruction is (essentially) as smooth as the mother
+    wavelet will allow. The procedure is in a sense optimally smoothness adaptive: It
+    is near minimax simultaneously over a whole interval of the Besov scale; the size
+    of this interval depends on the choice of mother wavelet. We know from a previous
+    paper by the authors that traditional smoothing methods--kernels, splines, and
+    orthogonal series estimates--even with optimal choices of the smoothing parameter,
+    would be unable to perform in a near-minimax way over many spaces in the Besov
+    scale. Examples of SureShrink are given. The advantages of the method are
+    particularly evident when the underlying function has jump discontinuities on a
+    smooth background.
+  }
+}
+
+% == BibTeX quality report for donoho1995:
+% ? unused Url ("https://www.jstor.org/stable/2291512")
+@article{efron1991,
+  title         = {Regression Percentiles Using Asymmetric Squared Error Loss},
+  author        = {Efron, B.},
+  year          = {1991},
+  journal       = {Statistica Sinica},
+  publisher     = {Institute of Statistical Science, Academia Sinica},
+  volume        = {1},
+  number        = {1},
+  pages         = {93--125},
+  issn          = {1017-0405},
+  urldate       = {2023-09-18},
+  eprint        = {24303995},
+  eprinttype    = {jstor},
+  abstract      = {
+    We consider the problem of estimating regression percentiles, for example the 75th
+    conditional percentile of the response variable y given the covariate vector x.
+    Asymmetric Least Squares (ALS) is a variant of ordinary least squares, in which the
+    squared error loss function is given different weight depending on whether the
+    residual is positive or negative. ALS estimates of regression percentiles are easy
+    to compute. They are reasonably efficient under normality conditions. There is an
+    interesting connection between ALS estimates and absolute residual regression for
+    detecting heteroscedasticity. Three examples are given to demonstrate the utility
+    of estimated regression percentiles for understanding regression data, particularly
+    when the covariate x is multi-dimensional.
+  }
+}
+
+% == BibTeX quality report for efron1991:
+% ? unused Url ("https://www.jstor.org/stable/24303995")
+@techreport{elghaoui2010,
+  title         = {Safe Feature Elimination in Sparse Supervised Learning},
+  author        = {El Ghaoui, Laurent and Viallon, Vivian and Rabbani, Tarek},
+  year          = {2010},
+  month         = sep,
+  address       = {Berkeley},
+  number        = {UCB/EECS-2010-126},
+  type          = {Technical Report},
+  institution   = {EECS Department, University of California},
+  abstract      = {
+    We investigate fast methods that allow to quickly eliminate variables (features) in
+    supervised learning problems involving a convex loss function and a l{$_1$}-norm
+    penalty, leading to a potentially substantial reduction in the number of variables
+    prior to running the supervised learning algorithm. The methods are not heuristic:
+    they only eliminate features that are \emph{guaranteed} to be absent after solving
+    the learning problem. Our framework applies to a large class of problems, including
+    support vector machine classification, logistic regression and least-squares. The
+    complexity of the feature elimination step is negligible compared to the typical
+    computational effort involved in the sparse supervised learning problem: it grows
+    linearly with the number of features times the number of examples, with much better
+    count if data is sparse. We apply our method to data sets arising in text
+    classification and observe a dramatic reduction of the dimensionality, hence in
+    computational effort required to solve the learning problem, especially when very
+    sparse classifiers are sought. Our method allows to immediately extend the scope of
+    existing algorithms, allowing us to run them on data sets of sizes that were out of
+    their reach before.
+  }
+}
+
+% == BibTeX quality report for elghaoui2010:
+% ? unused Url ("http://www.eecs.berkeley.edu/Pubs/TechRpts/2010/EECS-2010-126.html")
 @article{friedman2007,
   title         = {Pathwise Coordinate Optimization},
-  author        = {Friedman, Jerome and Hastie, Trevor and H\"{o}fling, Holger and Tibshirani, Robert},
+  author        = {Friedman, Jerome and Hastie, Trevor and H{\"o}fling, Holger and Tibshirani, Robert},
+  year          = {2007},
+  month         = dec,
+  journal       = {The Annals of Applied Statistics},
   volume        = {1},
   number        = {2},
   pages         = {302--332},
   doi           = {10/d88g8c},
   issn          = {1932-6157},
-  url           = {https://projecteuclid.org/euclid.aoas/1196438020},
   urldate       = {2018-03-12},
-  date          = {2007-12},
-  journaltitle  = {The Annals of Applied Statistics},
-  shortjournal  = {Ann. Appl. Stat.},
   abstract      = {
     We consider ``one-at-a-time'' coordinate-wise descent algorithms for a class of
     convex optimization problems. An algorithm of this kind has been proposed for the
@@ -60,51 +289,209 @@
   langid        = {english}
 }
 
-@article{donoho1994,
-  title         = {Ideal Spatial Adaptation by Wavelet Shrinkage},
-  author        = {Donoho, David L. and Johnstone, Iain M.},
-  volume        = {81},
-  number        = {3},
-  pages         = {425--455},
-  doi           = {10.2307/2337118},
-  issn          = {0006-3444},
-  url           = {https://www.jstor.org/stable/2337118},
-  urldate       = {2023-10-06},
-  date          = {1994-08},
-  journaltitle  = {Biometrika},
-  eprint        = {2337118},
-  eprinttype    = {jstor},
-  abstract      = {
-    With ideal spatial adaptation, an oracle furnishes information about how best to
-    adapt a spatially variable estimator, whether piecewise constant, piecewise
-    polynomial, variable knot spline, or variable bandwidth kernel, to the unknown
-    function. Estimation with the aid of an oracle offers dramatic advantages over
-    traditional linear estimation by nonadaptive kernels; however, it is a priori
-    unclear whether such performance can be obtained by a procedure relying on the data
-    alone. We describe a new principle for spatially-adaptive estimation: selective
-    wavelet reconstruction. We show that variable-knot spline fits and
-    piecewise-polynomial fits, when equipped with an oracle to select the knots, are
-    not dramatically more powerful than selective wavelet reconstruction with an
-    oracle. We develop a practical spatially adaptive method, RiskShrink, which works
-    by shrinkage of empirical wavelet coefficients. RiskShrink used in connection with
-    sample rotation. Inclusion probabilities of any order can be written explicitly in
-    closed form. Second-order inclusion probabilities \ensuremath{\pi}ij satisfy the
-    condition \$0 {$<\$} \textbackslash pi\_\{ij\} {\$<\$} \textbackslash
-    pi\_\{i\}\textbackslash pi\_j\$, which guarantees Yates \& Grundy's variance
-    estimator to be unbiased, definable for all samples and always nonnegative for any
-    sample size.
-  }
+% == BibTeX quality report for friedman2007:
+% ? unused Journal abbreviation ("Ann. Appl. Stat.")
+% ? unused Library catalog ("Project Euclid")
+% ? unused Url ("https://projecteuclid.org/euclid.aoas/1196438020")
+@article{friedman2010,
+  title         = {Regularization Paths for Generalized Linear Models via Coordinate Descent},
+  author        = {Friedman, Jerome and Hastie, Trevor and Tibshirani, Robert},
+  year          = {2010},
+  month         = jan,
+  journal       = {Journal of Statistical Software},
+  volume        = {33},
+  number        = {1},
+  pages         = {1--22},
+  doi           = {10.18637/jss.v033.i01}
 }
 
+% == BibTeX quality report for friedman2010:
+% ? unused Url ("http://www.jstatsoft.org/v33/i01/")
+@article{gelman2008,
+  title         = {Scaling Regression Inputs by Dividing by Two Standard Deviations},
+  author        = {Gelman, Andrew},
+  year          = {2008},
+  month         = jul,
+  journal       = {Statistics in Medicine},
+  volume        = {27},
+  number        = {15},
+  pages         = {2865--2873},
+  doi           = {10.1002/sim.3107},
+  issn          = {02776715, 10970258},
+  urldate       = {2023-09-27},
+  abstract      = {
+    Interpretation of regression coefficients is sensitive to the scale of the inputs.
+    One method often used to place input variables on a common scale is to divide each
+    numeric variable by its standard deviation. Here we propose dividing each numeric
+    variable by two times its standard deviation, so that the generic comparison is
+    with inputs equal to the mean {\textpm}1 standard deviation. The resulting
+    coefficients are then directly comparable for untransformed binary predictors. We
+    have implemented the procedure as a function in R. We illustrate the method with
+    two simple analyses that are typical of applied modeling: a linear regression of
+    data from the National Election Study and a multilevel logistic regression of data
+    on the prevalence of rodents in New York City apartments. We recommend our
+    rescaling as a default option---an improvement upon the usual approach of including
+    variables in whatever way they are coded in the data file---so that the magnitudes
+    of coefficients can be directly compared as a matter of routine statistical
+    practice. Copyright q 2007 John Wiley \& Sons, Ltd.
+  },
+  langid        = {english}
+}
+
+% == BibTeX quality report for gelman2008:
+% ? unused Journal abbreviation ("Statist. Med.")
+% ? unused Library catalog ("DOI.org (Crossref)")
+% ? unused Url ("https://onlinelibrary.wiley.com/doi/10.1002/sim.3107")
+@phdthesis{kooij2007,
+  title         = {
+    Prediction Accuracy and Stability of Regression with Optimal Scaling
+    Transformations
+  },
+  author        = {van der Kooij, A. J.},
+  year          = {2007},
+  month         = jun,
+  address       = {Leiden, Netherlands},
+  isbn          = {9789090219363},
+  urldate       = {2023-10-30},
+  abstract      = {
+    The central topic of this thesis is the CATREG approach to nonlinear regression.
+    This approach finds optimal quantifications for categorical variables and/or
+    nonlinear transformations for numerical variables in regression analysis. (CATREG
+    is implemented in SPSS Categories by the author of the thesis; the relevant parts
+    of the Categories manual are included in the appendix.) The first chapter of the
+    thesis provides a non-technical introduction to the CATREG approach, illustrated
+    with graphs. The more technical part of the thesis includes (1) a solution to the
+    local minima problem for monotone transformations, as well as a study of the effect
+    of several data conditions on the incidence and severeness of local minima, (2) the
+    incorporation into CATREG of a particular resampling method (the .632 bootstrap)
+    for assessing prediction accuracy, and (3) the incorporation into CATREG of several
+    regularization methods (Ridge Regression, the Lasso, and the Elastic Net) for
+    stabilizing the estimates of the regression coefficients and transformations. The
+    technical part is followed by a chapter describing a bulimia nervosa study in which
+    the CATREG-Lasso and the .632 bootstrap are applied.
+  },
+  langid        = {english},
+  school        = {Leiden University}
+}
+
+% == BibTeX quality report for kooij2007:
+% ? unused Library catalog ("scholarlypublications.universiteitleiden.nl")
+% ? unused Number of pages ("197")
+% ? unused Type ("PhD Thesis")
+% ? unused Url ("https://hdl.handle.net/1887/12096")
+@article{lee2015,
+  title         = {A Note on Standardization in Penalized Regressions},
+  author        = {Lee, Sangin},
+  year          = {2015},
+  journal       = {Journal of the Korean Data and Information Science Society},
+  publisher     = {{The Korean Data and Information Science Society}},
+  volume        = {26},
+  number        = {2},
+  pages         = {505--516},
+  doi           = {10.7465/jkdi.2015.26.2.505},
+  issn          = {1598-9402},
+  urldate       = {2023-09-12},
+  abstract      = {
+    We consider sparse high-dimensional linear regression models. Penalized regressions
+    have been used as effective methods for variable selection and estimation in
+    high-dimensional models. In penalized regressions, it is common practice to
+    standardize variables before fitting a penalized model and then fit a penalized
+    model with standardized variables. Finally, the estimated coefficients from a
+    penalized model are recovered to the scale on original variables. However, these
+    procedures produce a slightly different solution compared to the corresponding
+    original penalized problem. In this paper, we investigate issues on the
+    standardization of variables in penalized regressions and formulate the definition
+    of the standardized penalized estimator. In addition, we compare the original
+    penalized estimator with the standardized penalized estimator through simulation
+    studies and real data analysis.
+  },
+  langid        = {english}
+}
+
+% == BibTeX quality report for lee2015:
+% ? unused Library catalog ("koreascience.or.kr")
+% ? unused Url ("http://koreascience.or.kr/article/JAKO201510665813828.page")
+@article{lim2015,
+  title         = {Learning Interactions via Hierarchical Group-Lasso Regularization},
+  author        = {Lim, Michael and Hastie, Trevor},
+  year          = {2015},
+  month         = sep,
+  journal       = {Journal of Computational and Graphical Statistics},
+  volume        = {24},
+  number        = {3},
+  pages         = {627--654},
+  doi           = {10.1080/10618600.2014.938812},
+  issn          = {1061-8600},
+  abstract      = {
+    We introduce a method for learning pairwise interactions in a linear regression or
+    logistic regression model in a manner that satisfies strong hierarchy: whenever an
+    interaction is estimated to be nonzero, both its associated main effects are also
+    included in the model. We motivate our approach by modeling pairwise interactions
+    for categorical variables with arbitrary numbers of levels, and then show how we
+    can accommodate continuous variables as well. Our approach allows us to dispense
+    with explicitly applying constraints on the main effects and interactions for
+    identifiability, which results in interpretable interaction models. We compare our
+    method with existing approaches on both simulated and real data, including a
+    genome-wide association study, all using our R package glinternet.
+  },
+  langid        = {english},
+  pmcid         = {PMC4706754},
+  pmid          = {26759522}
+}
+
+% == BibTeX quality report for lim2015:
+% ? unused Journal abbreviation ("J Comput Graph Stat")
+% ? unused Library catalog ("PubMed")
+@book{mallat2008,
+  title         = {A Wavelet Tour of Signal Processing: The Sparse Way},
+  shorttitle    = {A {{Wavelet Tour}} of {{Signal Processing}}},
+  author        = {Mallat, St{\'e}phane},
+  year          = {2008},
+  month         = nov,
+  publisher     = {Academic Press Inc},
+  address       = {Burlington, MA, USA},
+  isbn          = {978-0-12-374370-1},
+  edition       = {3},
+  abstract      = {
+    Offers the major concepts, techniques and applications of sparse representation.
+    This book presents the standard representations with Fourier, wavelet and
+    time-frequency transforms, and the construction of orthogonal bases with fast
+    algorithms.
+  },
+  collaborator  = {Peyr{\'e}, Gabriel},
+  langid        = {english}
+}
+
+% == BibTeX quality report for mallat2008:
+% ? unused Library catalog ("Amazon")
+% ? unused Number of pages ("832")
+@book{mises1964,
+  title         = {{Selected papers of Richard Von Mises}},
+  author        = {Mises, Richard Von},
+  year          = {1964},
+  publisher     = {American Mathematical Society},
+  address       = {Providence, RI, USA},
+  volume        = {2},
+  editor        = {Birkhoff, Garrett},
+  abstract      = {
+    Works of Richard von Mises, Austrian-born American mathematician, engineer, and
+    positivist philosopher who notably advanced statistics and probability theory.
+  },
+  langid        = {ngerman}
+}
+
+% == BibTeX quality report for mises1964:
+% ? unused Number of pages ("588")
 @book{nagaraja2003,
   title         = {Order Statistics},
   shorttitle    = {Order {{Statistics}}},
   author        = {Nagaraja, Haikady N. and David, Herbert A.},
-  location      = {{Hoboken, N.J}},
-  publisher     = {{John Wiley \& Sons Inc}},
+  year          = {2003},
+  month         = jul,
+  publisher     = {John Wiley \& Sons Inc},
+  address       = {Hoboken, N.J},
   series        = {Wiley Series in Probability and Statistics},
   isbn          = {978-0-471-38926-2},
-  date          = {2003-07-21},
   edition       = {3},
   abstract      = {
     Considerable changes have occurred in the field of order statistics in the nearly
@@ -112,6 +499,293 @@
     gives a helpful account of order statistics, useful to students as well as those
     needing a guide to the extensive literature.
   },
-  langid        = {english},
-  pagetotal     = {458}
+  langid        = {english}
 }
+
+% == BibTeX quality report for nagaraja2003:
+% ? unused Number of pages ("458")
+@article{nolde2017,
+  title         = {Elicitability and Backtesting: Perspectives for Banking Regulation},
+  shorttitle    = {Elicitability and Backtesting},
+  author        = {Nolde, Natalia and Ziegel, Johanna F.},
+  year          = {2017},
+  month         = dec,
+  journal       = {The Annals of Applied Statistics},
+  publisher     = {Institute of Mathematical Statistics},
+  volume        = {11},
+  number        = {4},
+  pages         = {1833--1874},
+  doi           = {10.1214/17-AOAS1041},
+  issn          = {1932-6157, 1941-7330},
+  urldate       = {2023-09-18},
+  abstract      = {
+    Conditional forecasts of risk measures play an important role in internal risk
+    management of financial institutions as well as in regulatory capital calculations.
+    In order to assess forecasting performance of a risk measurement procedure, risk
+    measure forecasts are compared to the realized financial losses over a period of
+    time and a statistical test of correctness of the procedure is conducted. This
+    process is known as backtesting. Such traditional backtests are concerned with
+    assessing some optimality property of a set of risk measure estimates. However,
+    they are not suited to compare different risk estimation procedures. We investigate
+    the proposal of comparative backtests, which are better suited for method
+    comparisons on the basis of forecasting accuracy, but necessitate an elicitable
+    risk measure. We argue that supplementing traditional backtests with comparative
+    backtests will enhance the existing trading book regulatory framework for banks by
+    providing the correct incentive for accuracy of risk measure forecasts. In
+    addition, the comparative backtesting framework could be used by banks internally
+    as well as by researchers to guide selection of forecasting methods. The discussion
+    focuses on three risk measures, Value at Risk, expected shortfall and expectiles,
+    and is supported by a simulation study and data analysis.
+  }
+}
+
+% == BibTeX quality report for nolde2017:
+% ? unused Library catalog ("Project Euclid")
+% ? unused Url ("https://projecteuclid.org/journals/annals-of-applied-statistics/volume-11/issue-4/Elicitability-and-backtesting-Perspectives-for-banking-regulation/10.1214/17-AOAS1041.full")
+@inproceedings{ozsahin2022,
+  title         = {Impact of Feature Scaling on Machine Learning Models for the Diagnosis of Diabetes},
+  author        = {
+    Ozsahin, Dilber Uzun and Taiwo Mustapha, Mubarak and Mubarak, Auwalu Saleh and Said
+    Ameen, Zubaida and Uzun, Berna
+  },
+  year          = {2022-08-02/2022-08-04},
+  booktitle     = {
+    Conference {{Proceedings}}: 2022 {{International Conference}} on {{Artificial
+    Intelligence}} in {{Everything}} ({{AIE}})
+  },
+  publisher     = {IEEE Computer Society},
+  address       = {Lefkosa, Cyprus},
+  pages         = {87--94},
+  doi           = {10.1109/AIE57029.2022.00024},
+  isbn          = {978-1-66547-400-9},
+  urldate       = {2023-12-01},
+  abstract      = {
+    Due to its high prevalence and incidence, diabetes is considered significant public
+    health. Since diabetes has no known cure, early diagnosis plays a vital role in
+    effectively managing the disease. Feature scaling is a vital step in pre-processing
+    data before building a model using machine learning. The datasets used for model
+    training in machine learning often contain unpredictable values that may have
+    varying scales. This can result in inequalities in comparing these values. Feature
+    scaling techniques can address these challenges by adjusting the values and
+    promoting easy and fair comparisons among values. This study aims to evaluate the
+    impact of normalization, standardization, and no feature scaling on the performance
+    of five machine learning models in diagnosing diabetes. The machine learning
+    algorithms implemented for this study include random forest, naive Bayes, k-nearest
+    neighbor (KNN), logistic regression, and support vector machine (SVM). These
+    algorithms support supervised learning. Furthermore, several open-source frameworks
+    and libraries were implemented. They include; Jupyter notebook, SkLearn, Pandas,
+    NumPy, Matplotlib, and seaborn. The result obtained from the study indicates that
+    the random forest model performed significantly well without implementing any
+    feature scaling technique. This contrasts with the KNN and SVM model, which
+    performed better when the normalization technique was implemented. Also, the naive
+    Bayes model shows no changes when either standardization, normalization, or no
+    feature scaling was implemented. This study concludes that not all model requires
+    feature scaling techniques to be applied to the dataset to achieve optimal
+    performance. Furthermore, distance-based and gradient descent algorithms previously
+    thought to be sensitive to feature scaling may not necessarily be true, as
+    indicated by the outcome of this study. Finally, feature scaling techniques
+    significantly impact some models while others do not.
+  },
+  langid        = {english}
+}
+
+% == BibTeX quality report for ozsahin2022:
+% ? unused Conference name ("2022 International Conference on Artificial Intelligence in Everything (AIE)")
+% ? unused Library catalog ("IEEE Xplore")
+% ? unused Url ("https://ieeexplore.ieee.org/abstract/document/9898687")
+@article{simon2012,
+  title         = {Standardization and the Group Lasso Penalty},
+  author        = {Simon, Noah and Tibshirani, Robert},
+  year          = {2012},
+  month         = jul,
+  journal       = {Statistica Sinica},
+  volume        = {22},
+  number        = {3},
+  pages         = {983--1001},
+  doi           = {10.5705/ss.2011.075},
+  issn          = {1017-0405},
+  urldate       = {2023-09-18},
+  abstract      = {
+    We re-examine the original Group Lasso paper of . The form of penalty in that paper
+    seems to be designed for problems with uncorrelated features, but the statistical
+    community has adopted it for general problems with correlated features. We show
+    that for this general situation, a Group Lasso with a different choice of penalty
+    matrix is generally more effective. We give insight into this formulation and show
+    that it is intimately related to the uniformly most powerful invariant test for
+    inclusion of a group. We demonstrate the efficacy of this method-- the
+    ``standardized Group Lasso''-- over the usual group lasso on real and simulated
+    data sets. We also extend this to the Ridged Group Lasso to provide within group
+    regularization as needed. We discuss a simple algorithm based on group-wise
+    coordinate descent to fit both this standardized Group Lasso and Ridged Group
+    Lasso.
+  },
+  pmcid         = {PMC4527185},
+  pmid          = {26257503}
+}
+
+% == BibTeX quality report for simon2012:
+% ? unused Journal abbreviation ("Stat Sin")
+% ? unused Library catalog ("PubMed Central")
+% ? unused Url ("https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4527185/")
+@article{su2017a,
+  title         = {False Discoveries Occur Early on the {{Lasso}} Path},
+  author        = {Su, Weijie and Bogdan, Ma{\l}gorzata and Cand{\`e}s, Emmanuel},
+  year          = {2017},
+  month         = oct,
+  journal       = {The Annals of Statistics},
+  publisher     = {Institute of Mathematical Statistics},
+  volume        = {45},
+  number        = {5},
+  pages         = {2133--2150},
+  doi           = {10.1214/16-AOS1521},
+  issn          = {0090-5364},
+  urldate       = {2023-09-29},
+  eprint        = {26362897},
+  eprinttype    = {jstor},
+  abstract      = {
+    In regression settings where explanatory variables have very low correlations and
+    there are relatively few effects, each of large magnitude, we expect the Lasso to
+    find the important variables with few errors, if any. This paper shows that in a
+    regime of linear sparsity---meaning that the fraction of variables with a
+    nonvanishing effect tends to a constant, however small---this cannot really be the
+    case, even when the design variables are stochastically independent. We demonstrate
+    that true features and null features are always interspersed on the Lasso path, and
+    that this phenomenon occurs no matter how strong the effect sizes are. We derive a
+    sharp asymptotic trade-off between false and true positive rates or, equivalently,
+    between measures of type I and type II errors along the Lasso path. This trade-off
+    states that if we ever want to achieve a type II error (false negative rate) under
+    a critical value, then anywhere on the Lasso path the type I error (false positive
+    rate) will need to exceed a given threshold so that we can never have both errors
+    at a low level at the same time. Our analysis uses tools from approximate message
+    passing (AMP) theory as well as novel elements to deal with a possibly adaptive
+    selection of the Lasso regularizing parameter.
+  }
+}
+
+% == BibTeX quality report for su2017a:
+% ? unused Url ("https://www.jstor.org/stable/26362897")
+@article{sun2012,
+  title         = {Scaled Sparse Linear Regression},
+  author        = {Sun, Tingni and Zhang, Cun-Hui},
+  year          = {2012},
+  month         = dec,
+  journal       = {Biometrika},
+  volume        = {99},
+  number        = {4},
+  pages         = {879--898},
+  doi           = {10.1093/biomet/ass043},
+  issn          = {0006-3444},
+  urldate       = {2023-10-18},
+  abstract      = {
+    Scaled sparse linear regression jointly estimates the regression coefficients and
+    noise level in a linear model. It chooses an equilibrium with a sparse regression
+    method by iteratively estimating the noise level via the mean residual square and
+    scaling the penalty in proportion to the estimated noise level. The iterative
+    algorithm costs little beyond the computation of a path or grid of the sparse
+    regression estimator for penalty levels above a proper threshold. For the scaled
+    lasso, the algorithm is a gradient descent in a convex minimization of a penalized
+    joint loss function for the regression coefficients and noise level. Under mild
+    regularity conditions, we prove that the scaled lasso simultaneously yields an
+    estimator for the noise level and an estimated coefficient vector satisfying
+    certain oracle inequalities for prediction, the estimation of the noise level and
+    the regression coefficients. These inequalities provide sufficient conditions for
+    the consistency and asymptotic normality of the noise-level estimator, including
+    certain cases where the number of variables is of greater order than the sample
+    size. Parallel results are provided for least-squares estimation after model
+    selection by the scaled lasso. Numerical results demonstrate the superior
+    performance of the proposed methods over an earlier proposal of joint convex
+    minimization.
+  }
+}
+
+% == BibTeX quality report for sun2012:
+% ? unused Library catalog ("Silverchair")
+% ? unused Url ("https://doi.org/10.1093/biomet/ass043")
+@article{tibshirani1997a,
+  title         = {The Lasso Method for Variable Selection in the {{Cox}} Model},
+  author        = {Tibshirani, Robert},
+  year          = {1997},
+  month         = feb,
+  journal       = {Statistics in Medicine},
+  volume        = {16},
+  number        = {4},
+  pages         = {385--395},
+  doi           = {10.1002/(SICI)1097-0258(19970228)16:4<385::AID-SIM380>3.0.CO;2-3},
+  issn          = {1097-0258},
+  urldate       = {2023-09-27},
+  copyright     = {Copyright {\copyright} 1997 John Wiley \& Sons, Ltd.},
+  abstract      = {
+    I propose a new method for variable selection and shrinkage in Cox's proportional
+    hazards model. My proposal minimizes the log partial likelihood subject to the sum
+    of the absolute values of the parameters being bounded by a constant. Because of
+    the nature of this constraint, it shrinks coefficients and produces some
+    coefficients that are exactly zero. As a result it reduces the estimation variance
+    while providing an interpretable final model. The method is a variation of the
+    `lasso' proposal of Tibshirani, designed for the linear regression context.
+    Simulations indicate that the lasso can be more accurate than stepwise selection in
+    this setting. {\copyright} 1997 by John Wiley \& Sons, Ltd.
+  },
+  langid        = {english}
+}
+
+% == BibTeX quality report for tibshirani1997a:
+% ? unused extra: _eprint ("https://onlinelibrary.wiley.com/doi/pdf/10.1002/%28SICI%291097-0258%2819970228%2916%3A4%3C385%3A%3AAID-SIM380%3E3.0.CO%3B2-3")
+% ? unused Library catalog ("Wiley Online Library")
+% ? unused Url ("https://onlinelibrary.wiley.com/doi/abs/10.1002/%28SICI%291097-0258%2819970228%2916%3A4%3C385%3A%3AAID-SIM380%3E3.0.CO%3B2-3")
+@article{tibshirani2012,
+  title         = {Strong Rules for Discarding Predictors in Lasso-Type Problems},
+  author        = {
+    Tibshirani, Robert and Bien, Jacob and Friedman, Jerome and Hastie, Trevor and
+    Simon, Noah and Taylor, Jonathan and Tibshirani, Ryan J.
+  },
+  year          = {2012},
+  month         = mar,
+  journal       = {Journal of the Royal Statistical Society. Series B: Statistical Methodology},
+  volume        = {74},
+  number        = {2},
+  pages         = {245--266},
+  doi           = {10/c4bb85},
+  issn          = {1369-7412},
+  urldate       = {2018-03-16},
+  langid        = {english}
+}
+
+% == BibTeX quality report for tibshirani2012:
+% ? Possibly abbreviated journal title Journal of the Royal Statistical Society. Series B: Statistical Methodology
+% ? unused Library catalog ("iths.pure.elsevier.com")
+% ? unused Url ("https://iths.pure.elsevier.com/en/publications/strong-rules-for-discarding-predictors-in-lasso-type-problems")
+@article{zou2006,
+  title         = {The Adaptive Lasso and Its Oracle Properties},
+  author        = {Zou, Hui},
+  year          = {2006},
+  month         = dec,
+  journal       = {Journal of the American Statistical Association},
+  publisher     = {Taylor \& Francis},
+  volume        = {101},
+  number        = {476},
+  pages         = {1418--1429},
+  doi           = {10.1198/016214506000000735},
+  issn          = {0162-1459},
+  urldate       = {2023-10-12},
+  abstract      = {
+    The lasso is a popular technique for simultaneous estimation and variable
+    selection. Lasso variable selection has been shown to be consistent under certain
+    conditions. In this work we derive a necessary condition for the lasso variable
+    selection to be consistent. Consequently, there exist certain scenarios where the
+    lasso is inconsistent for variable selection. We then propose a new version of the
+    lasso, called the adaptive lasso, where adaptive weights are used for penalizing
+    different coefficients in the {$\ell$}1 penalty. We show that the adaptive lasso
+    enjoys the oracle properties; namely, it performs as well as if the true underlying
+    model were given in advance. Similar to the lasso, the adaptive lasso is shown to
+    be near-minimax optimal. Furthermore, the adaptive lasso can be solved by the same
+    efficient algorithm for solving the lasso. We also discuss the extension of the
+    adaptive lasso in generalized linear models and show that the oracle properties
+    still hold under mild regularity conditions. As a byproduct of our theory, the
+    nonnegative garotte is shown to be consistent for variable selection.
+  }
+}
+
+% == BibTeX quality report for zou2006:
+% ? unused extra: _eprint ("https://doi.org/10.1198/016214506000000735")
+% ? unused Library catalog ("Taylor and Francis+NEJM")
+% ? unused Url ("https://doi.org/10.1198/016214506000000735")
