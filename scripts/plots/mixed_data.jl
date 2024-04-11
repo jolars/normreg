@@ -18,15 +18,15 @@ df_grouped = (groupby(df_subset, [:alpha], sort = true));
 
 n_rows = length(unique(df.alpha))
 n_cols = length(unique(df.delta))
-n_groups = 3
+n_groups = 2
 
 plots = []
+
+labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 
 for (j, dd) in enumerate(df_grouped)
   groups = groupby(dd, :delta, sort = true)
   for (i, d) in enumerate(groups)
-    p = plot(legend = false)
-
     model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
 
     yguide = i == 1 ? model * L"\hat{\beta}_j" : ""
@@ -43,17 +43,16 @@ for (j, dd) in enumerate(df_grouped)
 
     title = if j == 1
       L"\delta = %$(delta)"
-      # norm_map[string(d.normalization[1])]
     else
       ""
     end
 
-    xlabel = j == 2 ? L"q" : ""
+    xlabel = j == 2 && i == 2 ? L"q" : ""
 
     betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
     yerr = Float64.(mapreduce(permutedims, vcat, d.betas_std[1]))
 
-    plot!(
+    pl = plot(
       d.qs[1],
       betas,
       yguide = yguide,
@@ -64,9 +63,11 @@ for (j, dd) in enumerate(df_grouped)
       title = title,
       xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
+      legendposition = j == 1 && i == n_cols ? :bottomleft : :none,
+      labels = labels,
     )
 
-    push!(plots, p)
+    push!(plots, pl)
   end
 end
 
@@ -74,18 +75,19 @@ end
 #   [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)"]
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 
-legend = plot(
-  zeros(1, n_groups),
-  showaxis = false,
-  grid = false,
-  label = labels,
-  legend_position = :topleft,
-  background_color_subplot = :transparent,
-)
+# legend = plot(
+#   zeros(1, n_groups),
+#   showaxis = false,
+#   grid = false,
+#   label = labels,
+#   legend_position = :topleft,
+#   background_color_subplot = :transparent,
+# )
 
-l = @layout[grid(n_rows, n_cols) a{0.20w}]
+# l = @layout[grid(n_rows, n_cols) a{0.20w}]
+l = (n_rows, n_cols)
 
-pl = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 300))
+pl = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
 
 file_path = @projectroot("paper", "plots", "mixed_data.pdf");
 
