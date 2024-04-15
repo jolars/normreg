@@ -68,6 +68,7 @@ Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref
 \end{equation*}
 
 \subsection{Binary Features}
+\label{sec:theory-binary-features}
 
 The main focus in this paper is the case when \(\vec{x_j}\) is a binary feature with class balance \(q = \bar{\vec{x}}_j\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\).
 In this case, we observe that
@@ -84,18 +85,30 @@ And consequently
 We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d_j\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
 
 The presence of the factor \(q - q^2\) in \(\mu\), \(\sigma^2\), and \(d_j\) means that there is a relationship between class balance and the elastic net estimator and that this relationship is mediated by the scaling factor \(s_j\). To achieve some initial intuition for this relationship, we begin by considering the noiseless case (\(\sigma_\varepsilon = 0\)) in which, inserting  \(\mu\), \(\sigma\), and \(d_j\) into \Cref{eq:orthogonal-solution} yields
-\[
-  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}^\intercal \vec{y})}{s_j\left(\tilde{\vec{x}}_j^\intercal \tilde{\vec{x}}_j + \lambda_2\right)}
+\begin{equation}
+  \label{eq:noiseless-estimator}
+  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\intercal \vec{y})}{s_j\left(\tilde{\vec{x}}_j^\intercal \tilde{\vec{x}}_j + \lambda_2\right)}
   =
   \frac{\st_{\lambda_1}\left(\frac{\beta_j^* n (q - q^2)}{s_j}\right)}{s_j\left(\frac{n(q - q^2)}{s_j^2} + \lambda_2\right)}.
-\]
+\end{equation}
 This expression shows that the class balance, \(q\), directly affects the estimator. For values of \(q\) close to \(0\) or \(1\), the input into the soft-thresholding part of the estimator will diminish and consequently force the estimate to zero, that is, unless we use the scaling factor \(s_j = (q - q^2)\), in which case the soft-thresholding part will be unaffected by class imbalance. This choice will not, however, mitigate the impact of class imbalance on the ridge part of the estimator, for which we would instead need \(s_j = \sqrt{q - q^2}\). For any other choices of \(\delta\), such as \(\delta = 0\), \(q\) will affect the estimator through both the ridge and lasso parts.
 
 Based on these facts, we will consider the scaling parameterization \(s_j = (q-q^2)^\delta\), \(\delta \geq 0\). This includes the cases that we are primary interested in, that is,
 \(\delta = 0\) (no scaling), \(\delta = 1/2\) (standard-deviation scaling), and \(\delta = 1\) (variance scaling). Note that the last of these types, variance scaling, is not a standard type of normalization; yet, as we have already seen, it has some interesting properties
-in the context of binary features. We now leave the noise-less scenario and proceed to consider how class balance affects the probability of selection, bias, and variance of the elastic net estimator, starting with the first of these.
+in the context of binary features.
 
-A consequence of the normal error distribution and consequent normal distribution of \(Z\) is that the probability of selection in the elastic net problem is given analytically by
+Another interesting fact about \Cref{eq:noiseless-estimator}, which holds also in the noisy situation, is that even when the binary feature is balanced (\(q = 1/2\)), normalization will still have an effect on the estimator.
+Using \(\delta = 0\), for instance, leads the true coefficient \(\beta_j^*\) in the input to \(\st_\lambda\) to be scaled by \(n (q - q^2) = n/4\). For \(\delta = 1\), there would be, in contrast, be no scaling in the class-balanced case. And for \(\delta = 1/2\), the scaling factor is \(n/2\). Generalizing this, we see that to achieve equivalent scaling in the class-balanced case for all types of normalization, under our parameterization, we would need to use
+\[
+  s_j = 4^{\delta - 1} (q - q^2)^\delta.
+\]
+This only resolves the issue for the penalization due to the \(\ell_1\) norm (the lasso part).
+To achieve a similar effect for the ridge part, we would need a similar modification.
+Since all features are binary under our current assumptions, however, we will for now just assume that we scale \(\lambda_1\) and \(\lambda_2\) to account for this effect\footnote{We do this in all of the following examples.}, which is equivalent to modifying \(s_j\). We will, however, return to this issue later in \Cref{sec:mixed-data}, since it has important implications in the situation when \(\mat{X}\) contains both binary and continuous features.
+
+% TODO: This makes it seem like it would make more sense to adjust λ instead of the scaling parameter to compensate for class balance.
+
+We now leave the noise-less scenario and proceed to consider how class balance affects the probability of selection, bias, and variance of the elastic net estimator, starting with the first of these. A consequence of the normal error distribution and consequent normal distribution of \(Z\) is that the probability of selection in the elastic net problem is given analytically by
 \begin{align*}
   \Pr\left(\hat{\beta}_j \neq 0\right) & = \Pr\left(\st_{\lambda_1}(Z) \neq 0\right)                                                                                                                                                                                                               \\
                                        & = \Pr\left(Z > \lambda_1\right) + \Pr\left(Z < -\lambda_1\right)                                                                                                                                                                                          \\
@@ -113,7 +126,7 @@ Letting \(\theta = -\mu - \lambda_1 \) and \(\gamma = \mu - \lambda_1\), we can 
   \end{cases}
 \]
 
-In \Cref{fig:selection-probability}, we compute this probability for various settings of \(\delta\) for a single feature. Our intuition from the noise-less case holds: \(\delta\) mitigates the influence of class imbalance on selection probability. The lower the value of \(\delta\), the larger the effect of class imbalance becomes. Note that the probability of selection initially decreases also in the case when \(\delta \geq 1\). This is a consequence of increased variance of \(Z\) dues to the scaling factor that scales the measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as \(q\) approaches 1, the probability picks up again and eventually approaches 1 for these \(\delta \in \{1, 1.5\}\). The reason for this is that the variance of \(Z\) eventually explodes (again due to the scaling), which ultimately removes the soft-thresholding effect altogether. Note that the selection probability is unaffected by \(\lambda_2\) (the ridge penalty), so these results hold for any value of it.
+In \Cref{fig:selection-probability}, we plot this probability for various settings of \(\delta\) for a single feature. Our intuition from the noise-less case holds: \(\delta\) mitigates the influence of class imbalance on selection probability. The lower the value of \(\delta\), the larger the effect of class imbalance becomes. Note that the probability of selection initially decreases also in the case when \(\delta \geq 1\). This is a consequence of increased variance of \(Z\) dues to the scaling factor that scales the measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as \(q\) approaches 1, the probability picks up again and eventually approaches 1 for these \(\delta \in \{1, 1.5\}\). The reason for this is that the variance of \(Z\) eventually explodes (again due to the scaling), which ultimately removes the soft-thresholding effect altogether. Note that the selection probability is unaffected by \(\lambda_2\) (the ridge penalty), so these results hold for any value of it.
 
 \begin{figure}[htpb]
   \centering
@@ -133,7 +146,7 @@ Now we turn to the impact of class imbalance on bias and variance of the elastic
     \begin{cases}
       0                                                                                                  & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \frac{2n \beta_j^*}{n + \lambda_2} \cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
-      \beta^*_j                                                                                          & \text{if } \delta \geq \frac{1}{2}.
+      \beta^*_j                                                                                          & \text{if } \delta > \frac{1}{2}.
     \end{cases}
   \]
 \end{theorem}
@@ -152,8 +165,8 @@ Now we turn to the impact of class imbalance on bias and variance of the elastic
 %
 \Cref{thm:classbalance-bias} shows that the bias of the elastic net estimator when \(0 \leq \delta < 1/2\) approaches
 \(-\beta_j^*\) as \(q \rightarrow 1^+\). Interestingly, when \(\delta = 1/2\) (standardization), the lasso estimate does not vanish completely. Instead, it approaches the
-true coefficient scaled by the probability that a standard normal variable is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta \geq 1\), the
-estimate is unbiased asymptotically, which is related to the scaled variance of the error term. Note that this unbiasedness is parallel by a surge in variance, and therefore mean-squared error, and only serves to demonstrate that the cost of the decoupling of \(q\) is unbearable in the larg e noise--large imbalance scenario.
+true coefficient scaled by the probability that a standard normal variable is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the
+estimate is unbiased asymptotically, which is related to the scaled variance of the error term. Note that this unbiasedness is paralleled by a surge in variance and therefore also a rise in mean-squared error, and only serves to demonstrate that the cost of the decoupling of \(q\) is unbearable in the large noise--large imbalance scenario.
 
 In \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as \(q \rightarrow 1^+\).
 
@@ -235,24 +248,55 @@ In \Cref{sec:experiments}, we will continue to study binary features in simulate
 
 In this section, we consider the case where the features are made up of a mix of continuous and and binary features.
 Throughout the section, we will continue to assume that \(\mat{X}\) is fixed and that the features are orthogonal.
+To limit our scope, we will focus on the case where the continuous features are normally distributed.
 
-A fundamental problem of regularization in the context of mixed data is how to put the binary and continuous features on the same scale, which we need to do in order for regularization to be, roughly speaking, \emph{fair}. In this paper, we will limit ourselves to continuous features that are normally distributed.
+A fundamental problem in the context of mixed data is how to put the binary and normal features on the same scale, which we need to do in order for regularization to be, roughly speaking, ``fair'', given that the solution is sensitive to the scale of the features.
+In essence, we need to say something about how an effect associated with a one-unit change in the binary feature (a flip) relates to a one-unit change in the continuous feature.
+Since we assume our continuous feature to be normal, however, we will instead reason about change in terms of standard deviations of the normal feature.
 
-To be able to compare normalization methods with respect to these cases, we need to construct problems in which the coefficients of the continuous and binary features are, in some sense, comparable.
-
-In this section, we will discuss what it means for a continuous and binary feature to have \emph{comparable} effects and how the choice of normalization needs to be adapted to ensure that our penalized estimates respect this notion of comparability.
-
-In this paper, we will focus on normally distrubted continuous features. We acknowledge that this is a limiting choice, but leave it to future papers to approach this issue for other types of distributions.
-
-We will assume that the effect of a change in the binary variable (going from 0 to 1) corresponds to a difference of two standard deviations in the normally distributed variable. We base this choice on the reasoning by \citet{gelman2008}. In other words, if the regression coefficient of the binary variable is \(\beta^*_1\), then the effect corresponding to a normally distributed random variable is equivalent if \(\beta^*_2 = (2\sigma)^{-1} \beta_1^*\).
+To setup this situation more formally, we will say that the effect of a binary feature \(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if, for some non-zero choice of \(\lambda_1\) or \(\lambda_2\),
+\[
+  \beta^*_1 = \kappa \sigma_{2}\beta^*_2,
+\]
+where \(\sigma_2\) is the standard deviation of \(\vec{x}_2\) and \(\kappa \in \mathbb{R}^+\) is the comparability scaling factor, which represents the number of standard deviations (of the continuous feature) we consider achieves comparability between the features' effects.
 
 \begin{example}
-  If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are equivalent if \(\beta_1^* = 1\) and \(\beta_2^* = 0.25\).
+  Assume \(\kappa = 2\). Then if \(\vec{x}_2\) is sampled from \(\normal(\mu, 1/2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = \beta_2^*\).
+\end{example}
+\begin{example}
+  Assume \(\kappa = 1\). Then if \(\vec{x}_2\) is sampled from \(\normal(\mu, 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = 4\beta_2^*\).
 \end{example}
 
-Our particular choice of two standard deviations is not critical for our results, which hold for any other choice, as long it is linear with respect to the standard deviation of the normally distributed variable.
+Note that this definition refers to the data-generating mechanism, and not the regularized estimates.
+What we ultimately want for comparability, however, is for the following to hold:
+\[
+  \hat{\beta}_1 = \kappa \sigma_{2}\hat{\beta}_2.
+\]
+Put plainly, we want the effects of regularization to be distributed evenly across the regularized estimates.
+The crux of the problem is how to choose the scaling factor \(s_j\) for the binary features in order to achieve this effect for a given \(\kappa\).
 
-On the other hand, we also assume that the effects are equivalent irrespective of the class balance of the binary feature. In other words, we say that two binary features \(\vec{x}_1\) and \(\vec{x}_3\) have equivalent effects as long as \(\beta_1^* = \beta_3^*\), even if the values in \(\vec{x}_1\) are spread evenly between zeros and ones and those of \(\vec{x}_3\) are all zeros except for one. We will see that this is a fundamental assumption upon which our results hinge entirely.
+Let us assume that we have two features, \(\vec{x}_1\) and \(\vec{x}_2\), where \(\vec{x}_1\) is binary and \(\vec{x}_2\) is normally distributed and that their effects are comparable in the sense given above.
+Then it should hold that
+\begin{alignat}{3}
+  \label{eq:comparable-effects}
+  \hat{\beta}_1                                                                                                                          & = \kappa \sigma_2\hat{\beta}_2                                                                                                                           & \implies \nonumber \\
+  \frac{\st_{\lambda_1}(\tilde{\vec{x}}_1^\intercal \vec{y})}{s_1\left(\tilde{\vec{x}}_1^\intercal \tilde{\vec{x}}_1 + \lambda_2\right)} & = \frac{\kappa \sigma_2 \st_{\lambda_1}(\tilde{\vec{x}}_2^\intercal \vec{y})}{s_2\left(\tilde{\vec{x}}_2^\intercal \tilde{\vec{x}}_2 + \lambda_2\right)} & \implies \nonumber \\
+  \frac{\st_{\lambda_1}\left(\frac{n\beta_1^* (q - q^2)}{s_1}\right)}{s_1\left(\frac{n(q - q^2)}{s_1^2} + \lambda_2\right)}              & = \frac{\kappa \st_{\lambda_1}\left(\frac{n\beta_1^*}{\kappa} \right)}{n + \lambda_2}.
+\end{alignat}
+First observe that there is no simple function \(s_j\) for which \Cref{eq:comparable-effects} holds in general (\(q \in [0, 1]\), \(\lambda_1,\lambda_2 \in \mathbb{R}^+\)). But assuming \(\lambda_2 = 0\), we can see that  \(s_1 = \kappa (q - q^2)\) suffices for equality.
+If \(\lambda_1 = 0\), in contrast, then \(s_j = (q - q^2)\) will have the same effect.
+In other words, we can achieve comparability in the lasso by scaling each binary feature with its variance times \(\kappa\), the number of standard deviations we consider achieves comparability between the features' effects.
+For ridge regression, we can achieve comparability by scaling with standard deviation, irrespective of \(\kappa\).
 
-We will cover cases where the continuous feature is not normally distributed on a case-by-case basis as we proceed through the paper.
+For other choices of \(\lambda_1\), \(\lambda_2\), and \(\delta\), we can only achieve comparability for a specific level of class balance, and never for \(\lambda_1 >0\), \(\lambda_2 >0\).
+Let this \emph{baseline} level be \(q_0\).
+To achieve equality for \(\lambda_2 = 0\), we need \(s_1 =\kappa (q_0 - q_0^2)^{1 - \delta}(q - q^2)^\delta\). Similarly, for \(\lambda_1 = 0\), we need \(s_1 = (q_0 - q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_0 = 1/2\), to have effects be equivalent for the class-balanced case.
+
+In addition, we will use \(\kappa = 2\) throughout the rest of the paper. That is, we will say that the effects are comparable if the effect of a flip in the binary feature equals the effect of a two-standard deviation change in the normal feature. We base this argument on the discussion by \citet{gelman2008}, who argues that the classical approach of comparing standardized coefficients\footnote{Coefficients multiplied by the standard deviation of the respective feature.} awards effects of continuous features undue strength for most real data, since a change from, for instance, the lower 16\% to the upper 16\% of the distribution will equal roughly twice the effect of a change in the binary feature. Using two standard deviations as a compaability factor would, in contrast, equivocate this change with the flip of the binary feature, which we believe is a better default.
+We want to stress that the choice of \(\kappa\) should, if possible, in general be made on a case-by-case (feature-by-feature) basis, using all available knowledge about the data at hand. But, irrespective of this, we also want to emphasize that the choice should be made. If you do not make it explicitly, then it will be implicitly dictated through the combination of normalization and type of penalization you use.
+
+Finally, note that the reasoning of comparability above rests on the assumption of no noise.
+And we are, in fact, in general instead more interested in the expected value of the estimators, which depend on the noise level. In the case of large class-imbalances and large noise, for instance, our previous results (see \Cref{fig:bias-var-onedim-lasso} for instance), suggest that the estimators for normally distributed and binary features will not be comparable in this case.
+
+% TODO: Say something about over and undersampling.
 

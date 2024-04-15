@@ -1,6 +1,58 @@
 \section{Experiments}
 \label{sec:experiments}
 
+In the following sections, we present the results of our experiments. We begin by examining the variability and bias in the estimates of the regression coefficients. We then move on to predictive performance and hyperparameter selection. We also consider the effect of class imbalance on the estimates of the regression coefficients. Finally, we look at the effect of interactions between features on the estimates of the regression coefficients.
+
+In all cases where we use simulated data, we generate our response vector according to
+\[
+  \vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon},
+\]
+with \(\vec{\varepsilon} \sim \normal(\vec{0}, \sigma_\varepsilon^2 \mat{I})\), where \(\mat{X}\) is the design matrix, \(\vec{\beta}^*\) is the vector of true regression coefficients, and \(\sigma_\varepsilon^2\) is the noise level.
+
+We consider two types of features: binary and quasi-normal features.
+To generate binary vectors, sample \(\ceil{qn}\) indexes uniformly at randomly without replacement from \(\{1,2,\dots,n\}\) and set the corresponding elements to one and the remaining ones to zero.
+To generate quasi-normal features, we generate a linear sequence \(\vec{w}\) with \(n\) values from  \(10^{-4}\) to \(1 - 10^{-4}\), set
+\[
+  x_{ij} = \cdf^{-1}(w_i)
+\]
+and then shuffle the elements of \(\vec{x}_j\) uniformly at random.
+
+In each case, we fit an elastic net model parameterized through \(\lambda_1 = \alpha \lambda\), \(\lambda_2 = (1 - \alpha)\lambda\).
+
+Throughout the experiments, we have used the \pkg{Lasso.jl} package~\citep{kornblith2024} to fit the elastic net, which implements the coordinate descent algorithm~\citep{friedman2010}.
+All experiments were coded using the Julia programming language~\citep{bezanson2017} and the code is availabe at \url{XXX}.
+% TODO: Add link to reposiory.
+
+\subsection{Variability and Bias in Estimates}
+
+In our first experiment, we consider a simple linear regression model with \(p = 1\,000\) features, out of which the first 20 features correspond to signals, with \(\beta_j^*\) decreasing from 1 to 0.1 linearly.
+The class balance of the first 20 features decreases linearly on a log-scale from 0.5 to 0.99.
+We estimate the regression coefficients using the lasso and ridge regression and compare the estimates to the true coefficients. The results are shown in~\Cref{fig:binary-decreasing}.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/binary_decreasing.pdf}
+  \caption{%
+    Estimates of the regression coefficients, \(\hat{\vec{\beta}}\), for the first 40 coefficients in the experiment. All of the features are binary and the first 20 features correspond to true signals, with a geometrically decreasing class balance from 0.5 to 0.99. The remaining features have a class balance that's randomly sampled from a uniform distribution with parameters 0.5 and 0.99.}
+  \label{fig:binary-decreasing}
+\end{figure}
+
+
+
+
+
+
+\subsection{Predictive Performance}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/binary_data_sim.pdf}
+  \caption{%
+    Mean-squared error of \(y - \hat y\) for different types of normalizaion and types of class imbalances in a data set with only binary features.
+  }
+  \label{fig:binary-sim}
+\end{figure}
+
 \subsection{Hyperparameter Selection}
 
 \begin{figure}[htpb]
@@ -20,25 +72,6 @@
     Support and NMSE of the lasso for different values of \(\delta\) and \(\lambda\).
   }
   \label{fig:hyperopt-support}
-\end{figure}
-
-\subsection{Predictive Performance}
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_data_sim.pdf}
-  \caption{%
-    Mean-squared error of \(y - \hat y\) for different types of normalizaion and types of class imbalances in a data set with only binary features.
-  }
-  \label{fig:binary-sim}
-\end{figure}
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_decreasing.pdf}
-  \caption{%
-    Estimates of the regression coefficients, \(\hat{\vec{\beta}}\), for the first 40 coefficients in the experiment. All of the features are binary and the first 20 features correspond to true signals, with a geometrically decreasing class balance from 0.5 to 0.99. The remaining features have a class balance that's randomly sampled from a uniform distribution with parameters 0.5 and 0.99.}
-  \label{fig:binary-decreasing}
 \end{figure}
 
 \subsection{Mixed Data}

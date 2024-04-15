@@ -11,11 +11,14 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5,
   s = (q - q^2)^δ
 
   if α == 1
-    λ = λ / 0.25^δ
+    # λ = λ / 0.25^δ
+    λ = λ * 4^δ
   elseif α == 0
-    λ = λ / 0.25^(2*δ)
+    # λ = λ / 0.25^(2 * δ)
+    λ = λ * 4^(2 * δ)
   else
-    λ = λ / 0.25^(1.31*δ)
+    # TODO: This is arbitrary and does not work exactly.
+    λ = λ / 0.25^(1.31 * δ)
   end
 
   λ1 = λ * α
@@ -71,4 +74,3 @@ outfile = @projectroot("data", "binary_onedim_bias_var.json");
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
-
