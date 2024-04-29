@@ -61,9 +61,9 @@ Norm-scaling, scaling by a norm, is seldom used in practice and more often encou
 
 A special case of normalization is the adaptive lasso~\citep{zou2006}, which is a two-step procedure. In the first step, a model, often ordinary least-squares regression (OLS) or ridge regression, is fit to the data. The estimated coefficients from the model are then used to scale the features.
 
-\subsection{The Elastic Net}
+\subsection{The Lasso and Ridge Regression}
 
-From now on, we will direct our focus on the elastic net, which is a combination of the \(\ell_1\) and \(\ell_2\) penalties. The elastic net, for the normalized feature matrix \(\tilde{\mat{X}}\), is represented by the following convex optimization problem:
+From now on, we will direct our focus on ridge regression and the lasso. Both of these models are special cases of the elastic net, which is the ordinary-least squares regression objective plus a combination of the \(\ell_1\) and \(\ell_2\) penalties. For the normalized feature matrix \(\tilde{\mat{X}}\), the problem is therefore represented by the following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( L(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).

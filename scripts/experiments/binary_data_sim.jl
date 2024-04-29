@@ -24,7 +24,7 @@ function binary_simulation_varyq_experiment(n, p, s, delta, q, snr)
 
   x, y, β_true, _ = generate_binary_data(n, p, s, q_type, beta_type, snr)
 
-  err, _, β_est = holdout_validation(x, y, Normal(), delta, "nmse")
+  err, _, β_est = holdout_validation(x, y, Normal(), delta, "nmse", train_size = 0.5)
 
   return err, β_est, β_true
 end

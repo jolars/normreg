@@ -1,15 +1,42 @@
+using ColorSchemes
 using DataFrames
-using NormReg
 using JSON
 using LaTeXStrings
+using NormReg
+using PlotThemes
 using Plots
 using ProjectRoot
+
+using PythonPlot: matplotlib
 
 json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
 df = DataFrame(json_data);
 df_subset = subset(df);
 
-set_plot_defaults()
+function set_plot_defaults2(backend = "pyplot")
+  # theme(:wong2)
+  default(framestyle = :box, label = nothing, tick_direction = :out, palette = :tableau_10)
+  if backend == "gr"
+    gr()
+  else
+    default(
+      guidefontsize = 10,
+      titlefontsize = 10,
+      background_color_outside = :transparent,
+      legend_background_color = :transparent,
+      thickness_scaling = 0.9,
+      grid = false,
+    )
+    pythonplot()
+    matplotlib.rcParams["text.usetex"] = true
+    matplotlib.rcParams["font.family"] = "serif"
+    # matplotlib.rcParams["font.size"] = 9
+    matplotlib.rcParams["lines.markersize"] = 3
+    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{mathtools}\\usepackage[ebgaramond,textscale=0,semibold,vvarbb,amsthm]{newtx}\\usepackage{bm}"
+  end
+end
+
+set_plot_defaults2()
 
 df_lasso = subset(df_subset, :alpha => a -> a .== 1.0);
 df_ridge = subset(df_subset, :alpha => a -> a .== 0.0);
@@ -87,8 +114,8 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 # l = @layout[grid(n_rows, n_cols) a{0.20w}]
 l = (n_rows, n_cols)
 
-pl = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
+pl = plot(plots..., layout = l, size = (460, 300), left_margin = 3mm, bottom_margin = 3mm)
 
-file_path = @projectroot("paper", "plots", "mixed_data.pdf");
+file_path = @projectroot("paper", "plots", "mixed_data_thesis.pdf");
 
 savefig(pl, file_path)
