@@ -29,12 +29,12 @@ All experiments were coded using the Julia programming language~\citep{bezanson2
 
 \subsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
 
-In our first experiment, we consider fitting the lasso to a simulated data set with \(n=50\) observations and \(p = \num{1000}\) features, out of which the first 20 features correspond to signals, with \(\beta_j^*\) decreasing from 1 to 0.1 linearly.
+In our first experiment, we consider fitting the lasso to a simulated data set with \(n=500\) observations and \(p = \num{1000}\) features, out of which the first 20 features correspond to signals, with \(\beta_j^*\) decreasing linearly from 1 to 0.1.
 We introduce corelation between the features by copying the first \(\ceil{\rho n/2}\) values from the first feature to each of the following features.
-The class balance of the first 20 features decreases linearly on a log-scale from 0.5 to 0.99.
+In addition, we set the class balance of the first 20 features so that it decreases linearly on a log-scale from 0.5 to 0.99.
 We estimate the regression coefficients using the lasso and ridge regression and compare the estimates to the true coefficients. We run the experiment for 50 iterations in each case and aggregate the results by reporting means and standard deviations.
 
-The results~(\Cref{fig:binary-decreasing}) show that there is a  significant effect of class balance, particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theoretical results from \Cref{sec:theory-binary-features}. At \(q=0.99\) (feature 20), for instance, the estimate (\(\hat{\beta}_j\)) is consistently zero. There is an effect also in the case of standardization (\(\delta = 1/2\)), although it is less pronounced. For \(\delta=1\) (variance scaling), we see that the effect of class balance on the estimates is, if anything, the reverse when the class imbalance is severe. What is also clear is that the variance of the estimates increase with class imbalance and that this effected is augmented with larger values of \(\delta\). The level of correlation between the features introduces additional variance in the estimates but also seems to increase the effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
+The results~(\Cref{fig:binary-decreasing}) show that there is a considerable effect of class balance, particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theoretical results from \Cref{sec:theory-binary-features}. At \(q=0.99\) (feature 20), for instance, the estimate (\(\hat{\beta}_j\)) is consistently zero when \(\delta = 0\). There is an effect also in the case of standardization (\(\delta = 1/2\)), but it is less pronounced. For \(\delta=1\) (variance scaling), we see that the effect of class balance on the estimates is, if anything, the reverse when the class imbalance is severe. What is also clear is that the variance of the estimates increase with class imbalance and that this effected is augmented with larger values of \(\delta\). The level of correlation between the features introduces additional variance in the estimates but also seems to increase the effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
 
 \begin{figure}[htpb]
   \centering
@@ -61,7 +61,7 @@ The results~(\Cref{fig:binary-sim}) show that the optimal normalization type in 
   \label{fig:binary-sim}
 \end{figure}
 
-\subsection{Normalization as a Hyperparamter}\label{sec:hyperparameter-optimization}
+\subsection{Normalization as a Hyperparamter}\label{sec:experiments-hyperparameter}
 
 % TODO: consider reparameterizing with respect to lambda/delta
 
@@ -109,7 +109,7 @@ In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation s
 
 \subsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before. These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\).
+In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with \(n = \num{1000}\). These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\).
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) to avoid the effect of class imbalance, whereas for ridge we instead need \(\delta =1/2\) (standardization). As our theory suggests, this extra scaling mitigates this class-balance dependency at the cost of added variance.
 
@@ -117,21 +117,27 @@ The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results 
   \centering
   \includegraphics{plots/mixed_data.pdf}
   \caption{%
-    Comparison between lasso and ridge estimators for a two-dimensional problem where one feature is generated from \(\bernoulli(q)\) and the other from \(\normal(0, 0.5)\) and the features are normalized in various ways.}
+    Lasso and ridge estimates for a two-dimensional problem where one feature is a binary feature with class balance \(q\), \(\bernoulli(q)\), and the other is a quasi-normal feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\) observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal feature. The binary feature, meanwhile, is centered by its mean and scaled by \((q-q^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report means and standard deviations of the estimates.}
+  % TODO: fix scaling parameterizaiton here. we are adjust to put features on even footing.
   \label{fig:lasso-ridge-comparison}
 \end{figure}
 
 Note that we do not see the bias reduction that we observed in our theoretical results for high \(q\) values and \(\delta \geq 1/2\) in \Cref{fig:lasso-ridge-comparison}. This is related to the error term (signal-to-noise ratio) and level of \(q\). Typically, we would need stronger class imbalance and larger error for the effect to show up in our experiments.
 
-\subsection{Interactions}
+\subsection{Interactions}\label{sec:experiments-interactions}
 
+In our final experiment, we study the effect of normalization and class balance on interactions when using the lasso. Our example consists of a two-feature problem with an added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q=0.9\) and the second quasi-normal with standard deviation 0.5. We set \(n=1000\). Note that we perform normalization \emph{after} the interaction term is added.
 
-
+The results show, as before, that class balance (which, recall, is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta \in \{0, 1/2\}\). Somewhat surprisingly, however, the interaction term does not seem to be affected by the normalization type for any of the cases in which it is present.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/interactions.pdf}
   \caption{%
-    The effect of different normalization strategies for mixed data with interactions.
+    Lasso estimates for a three-feature problem where the third feature is an interaction term between the first two features. The first feature is binary with class balance \(q=0.9\) and the second is quasi-normal with standard deviation 0.5. The signal-to-noise ratio is 0.5. The experiment is run for 50 iterations and we aggregate and report means across all iterations.
   }
 \end{figure}
+
+Note that the interaction in this experiment naturally introduces correlation between the features and that this has an effect on the lasso estimates since we, for instance, can penalize the main effect whilst still retaining information about it in the interaction term.
+
+

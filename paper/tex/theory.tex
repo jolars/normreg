@@ -255,21 +255,21 @@ A fundamental problem in the context of mixed data is how to put the binary and 
 In essence, we need to say something about how an effect associated with a one-unit change in the binary feature (a flip) relates to a one-unit change in the continuous feature.
 Since we assume our continuous feature to be normal, however, we will instead reason about change in terms of standard deviations of the normal feature.
 
-To setup this situation more formally, we will say that the effect of a binary feature \(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if, for some non-zero choice of \(\lambda_1\) or \(\lambda_2\),
+To setup this situation more formally, we will say that the effect of a binary feature \(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if
 \[
   \beta^*_1 = \kappa \sigma_{2}\beta^*_2,
 \]
-where \(\sigma_2\) is the standard deviation of \(\vec{x}_2\) and \(\kappa > 0\) is the comparability scaling factor, which represents the number of standard deviations (of the continuous feature) we consider achieves comparability between the features' effects.
+where \(\sigma_2\) is the standard deviation of \(\vec{x}_2\) and \(\kappa > 0\) is a scaling factor that represents the number of standard deviations (of the continuous feature) we consider achieves comparability between the features' effects. Note that \(\sigma_2 \beta_2^*\) is just the standardized coefficient for the normal feature.
 
 \begin{example}
-  Assume \(\kappa = 2\). Then if \(\vec{x}_2\) is sampled from \(\normal(\mu, 1/2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = \beta_2^*\).
+  Assume \(\kappa = 2\). If \(\vec{x}_2\) is sampled from \(\normal(\mu, 1/2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = \beta_2^*\).
 \end{example}
 \begin{example}
-  Assume \(\kappa = 1\). Then if \(\vec{x}_2\) is sampled from \(\normal(\mu, 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = 4\beta_2^*\).
+  Assume \(\kappa = 1\). If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = 4\beta_2^*\).
 \end{example}
 
 Note that this definition refers to the data-generating mechanism, and not the regularized estimates.
-What we ultimately want for comparability, however, is for the following to hold:
+What we ultimately want for comparability, however, is for the following relationship to hold:
 \[
   \hat{\beta}_1 = \kappa \sigma_{2}\hat{\beta}_2.
 \]
@@ -285,16 +285,16 @@ Then it should hold that
   \frac{\st_{\lambda_1}\left(\frac{n\beta_1^* (q - q^2)}{s_1}\right)}{s_1\left(\frac{n(q - q^2)}{s_1^2} + \lambda_2\right)}              & = \frac{\kappa \st_{\lambda_1}\left(\frac{n\beta_1^*}{\kappa} \right)}{n + \lambda_2}.
 \end{alignat}
 % First observe that there is no simple function \(s_j\) for which \Cref{eq:comparable-effects} holds in general (\(q \in [0, 1]\), \(\lambda_1,\lambda_2 \in \mathbb{R}^+\)). 
-Starting with the lasso case, \(\lambda_2 = 0\), we observe that \(s_1 = \kappa (q - q^2)\) suffices for equality.
-If we have the ridge case, \(\lambda_1 = 0\), on the other hand, then \(s_1 = (q - q^2)^{1/2}\) will have the same effect.
+For the lasso (\(\lambda_2 = 0\)) and ridge regression (\(\lambda_1=0\)), we observe that \(s_1 = \kappa (q - q^2)\) and \(s_1 = (q - q^2)^{1/2}\), respectively, are the values for which \Cref{eq:comparable-effects} hold.
 In other words, we can achieve comparability in the lasso by scaling each binary feature with its variance times \(\kappa\), the number of standard deviations we consider achieves comparability between the features' effects.
-For ridge regression, we can achieve comparability by scaling with standard deviation, irrespective of \(\kappa\).
+And for ridge regression, we can achieve comparability by scaling with standard deviation, irrespective of \(\kappa\).
 
 % For other choices of \(\lambda_1\), \(\lambda_2\), and \(\delta\), we can only achieve comparability for a specific level of class balance, and never for \(\lambda_1 >0\), \(\lambda_2 >0\).
-Let this \emph{baseline} level be \(q_0\).
-To achieve equality for \(\lambda_2 = 0\), we need \(s_1 =\kappa (q_0 - q_0^2)^{1 - \delta}(q - q^2)^\delta\). Similarly, for \(\lambda_1 = 0\), we need \(s_1 = (q_0 - q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_0 = 1/2\), to have effects be equivalent for the class-balanced case.
+For any other choices of \(s_1\), equality can only hold for a specific level of class balance.. If we let this level be called \(q_0\), then, to achieve equality for \(\lambda_2 = 0\), we need \(s_1 =\kappa (q_0 - q_0^2)^{1 - \delta}(q - q^2)^\delta\). Similarly, for \(\lambda_1 = 0\), we need \(s_1 = (q_0 - q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_0 = 1/2\), to have effects be equivalent for the class-balanced case.
 
-In addition, we will use \(\kappa = 2\) throughout the rest of the paper. That is, we will say that the effects are comparable if the effect of a flip in the binary feature equals the effect of a two-standard deviation change in the normal feature. We base this argument on the discussion by \citet{gelman2008}, who argues that the classical approach of comparing standardized coefficients\footnote{Coefficients multiplied by the standard deviation of the respective feature.} awards effects of continuous features undue strength for most real data, since a change from, for instance, the lower to the upper 16\% of the distribution will equal approximately twice the effect of a change in the binary feature. Using two standard deviations as a comparability factor would, in contrast, equivocate this change with the flip of the binary feature, which we believe is a better default.
+Note that this also means that there is an implicit relationship between the strength of penalization for binary and normal features, which depends on the level of class balance and normalization type. This means, for instance, that even in the class-balanced case (\(q = 1/2\)), we have to account for the type of normalization if we want binary and normal features to be treated equally
+
+For the rest of this paper, we will use \(\kappa = 2\). That is, we will say that the effects are comparable if the effect of a flip in the binary feature equals the effect of a two-standard deviation change in the normal feature. We base this argument on the discussion by \citet{gelman2008}, who argues that the classical approach of comparing standardized coefficients\footnote{Coefficients multiplied by the standard deviation of the respective feature.} awards effects of continuous features undue strength for most real data, since a change from, for instance, the lower to the upper 16\% of the distribution will equal approximately twice the effect of a change in the binary feature. Using two standard deviations as a comparability factor would, in contrast, equivocate this change with the flip of the binary feature, which we believe is a better default.
 We want to stress that the choice of \(\kappa\) should, if possible, in general be made on a case-by-case (feature-by-feature) basis, using all available knowledge about the data at hand. But, irrespective of this, we also want to emphasize that the choice should be made. If you do not make it explicitly, then it will be implicitly dictated through the combination of normalization and penalization types you use.
 
 Finally, note that the reasoning of comparability above rests on the assumption of no noise.
