@@ -9,7 +9,7 @@ using NormReg
 
 set_plot_defaults()
 
-colors = [RGB(204 / 255, 50 / 255, 85 / 255) delta_palette(3:5)]
+colors = [:black delta_palette([1, 3, 4])]
 linestyles = [:dash :solid :solid :solid]
 
 file = @projectroot("data", "hyperopt.csv")
@@ -94,7 +94,7 @@ for (i, d) in enumerate(df_grouped)
 
   optim = result[argmin(result.err), [:lambda, :err]]
 
-  scatter!(pl2, [optim.lambda], [optim.err], color = colors[1])
+  scatter!(pl2, [optim.lambda], [optim.err], color = :white)
 
   push!(plots, pl2)
 end
