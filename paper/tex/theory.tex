@@ -103,8 +103,8 @@ Using \(\delta = 0\), for instance, leads the true coefficient \(\beta_j^*\) in 
 \[
   s_j = 4^{\delta - 1} (q - q^2)^\delta.
 \]
-This only resolves the issue for the penalization due to the \(\ell_1\) norm (the lasso part).
-To achieve a similar effect for the ridge part, we would need a similar modification.
+This only resolves the issue for the lasso.
+To achieve a similar effect for ridge regression, we would need another (but similar) modification.
 Since all features are binary under our current assumptions, however, we will for now just assume that we scale \(\lambda_1\) and \(\lambda_2\) to account for this effect\footnote{We do this in all of the following examples.}, which is equivalent to modifying \(s_j\). We will, however, return to this issue later in \Cref{sec:mixed-data}, since it has important implications in the situation when \(\mat{X}\) contains both binary and continuous features.
 
 % TODO: This makes it seem like it would make more sense to adjust λ instead of the scaling parameter to compensate for class balance.
@@ -133,7 +133,7 @@ In \Cref{fig:selection-probability}, we plot this probability for various settin
   \centering
   \includegraphics[]{plots/selection_probability.pdf}
   \caption{%
-    Probability of selection in the elastic net problem given a measurement noise level \(\sigma_\varepsilon\), a regularization parameter \(\lambda_1\), and a class balance \(q\). The scaling factor is parameterized by \(s_j = (q - q^2)^\delta\), \(\delta \geq 0\). The dotted line represents the asymptotic limit for the standardization case, \(\delta = 1/2\).}
+    Probability of selection in the lasso given a measurement noise level \(\sigma_\varepsilon\), a regularization parameter \(\lambda_1\), and a class balance \(q\). The scaling factor is parameterized by \(s_j = (q - q^2)^\delta\), \(\delta \geq 0\). The dotted line represents the asymptotic limit for the standardization case, \(\delta = 1/2\).}
   \label{fig:selection-probability}
 \end{figure}
 
@@ -163,12 +163,11 @@ Now we turn to the impact of class imbalance on bias and variance of the elastic
 %     \end{cases}
 %   \]
 % \end{remark}
-%
+
 \Cref{thm:classbalance-bias} shows that the bias of the elastic net estimator when \(0 \leq \delta < 1/2\) approaches
-\(-\beta_j^*\) as \(q \rightarrow 1^+\). Interestingly, when \(\delta = 1/2\) (standardization), the lasso estimate does not vanish completely. Instead, it approaches the
+\(-\beta_j^*\) as \(q \rightarrow 1^+\). Interestingly, when \(\delta = 1/2\) (standardization), the estimate does not in fact tend to zero. Instead, it approaches the
 true coefficient scaled by the probability that a standard normal variable is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the
 estimate is unbiased asymptotically, which is related to the scaled variance of the error term. Note that this unbiasedness is paralleled by a surge in variance and therefore also a rise in mean-squared error, and only serves to demonstrate that the cost of the decoupling of \(q\) is unbearable in the large noise--large imbalance scenario.
-
 In \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as \(q \rightarrow 1^+\).
 
 \begin{theorem}
@@ -204,8 +203,8 @@ In \Cref{fig:bias-var-onedim-lasso}, we now visualize bias, variance, and mean-s
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_lasso.pdf}
   \caption{%
-    Bias, variance, and mean-squared error for a one-dimensional lasso problem.
-    The dotted lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\). \(\lambda\) is set to
+    Bias, variance, and mean-squared error for a one-dimensional lasso problem. We show these measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q\)), and scaling factors (\(\delta\)).
+    The dotted lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\).
   }
   \label{fig:bias-var-onedim-lasso}
 \end{figure}
@@ -214,7 +213,8 @@ In \Cref{fig:bias-var-onedim-lasso}, we now visualize bias, variance, and mean-s
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_ridge.pdf}
   \caption{%
-    Bias, variance, and mean-squared error for a one-dimensional ridge problem.
+    Bias, variance, and mean-squared error for one-dimensional ridge regression. We show these measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q\)), and scaling factors (\(\delta\)).
+    The dotted lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\).
   }
   \label{fig:bias-var-onedim-ridge}
 \end{figure}
@@ -226,17 +226,17 @@ We also consider a version of the same setup, but with \(p\) linearly spaced in 
 \begin{figure}[htpb]
   \centering
   \subcaptionbox{%
-    The power of the lasso in the sense of detecting all of the true signals.
-    In this simulation it is constant over \(p\) and thus we have computed it across a grid of \(q\) values (class balances) instead.
+    The power (probability of detecting all true signals) of the lasso.
+    In our orthogonal setting, power is constant over \(p\), which is why we have omitted the parameter in the plot.
     \label{fig:binary-power}
   }{\includegraphics[]{plots/power.pdf}}\hfill%
   \subcaptionbox{%
-    False discovery rate (FDR), as in the rate of coefficients that are incorrectly set to non-zero as a proportion of the number of discoveries (estimated coefficients that are nonzero) and normalized mean squared error (NMSE).
+    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to the total number of estimated coefficients that are nonzero (discoveries).
     \label{fig:binary-fdr-mse}
   }{\includegraphics[]{plots/fdr_mse.pdf}}
   % \includegraphics[]{plots/beta-bias-multidim.pdf}
   \caption{%
-    Mean squared error (MSE), false discovery rate (FDR), and power for a lasso problem with
+    Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
   \label{fig:mse-fdr-power-binary}
@@ -247,8 +247,8 @@ In \Cref{sec:experiments}, we will continue to study binary features in simulate
 \subsection{Mixed Data}\label{sec:mixed-data}
 
 In this section, we consider the case where the features are made up of a mix of continuous and and binary features.
-Throughout the section, we will continue to assume that \(\mat{X}\) is fixed and that the features are orthogonal.
-To limit our scope further, we will also restrict our focus to the case where the continuous features are normally distributed.
+Throughout the section, we will continue to assume that \(\mat{X}\) is fixed and that the features are orthogonal to one another.
+As in our theoreticalt results, we will also restrict our focus to the case where the continuous features are normally distributed.
 
 A fundamental problem in the context of mixed data is how to put the binary and normal features on the same scale, which we need to do in order for regularization to be, roughly speaking, ``fair'', given that the solution is sensitive to the scale of the features.
 In essence, we need to say something about how an effect associated with a one-unit change in the binary feature (a flip) relates to a one-unit change in the continuous feature.
@@ -258,13 +258,13 @@ To setup this situation more formally, we will say that the effect of a binary f
 \[
   \beta^*_1 = \kappa \sigma_{2}\beta^*_2,
 \]
-where \(\sigma_2\) is the standard deviation of \(\vec{x}_2\) and \(\kappa > 0\) is a scaling factor that represents the number of standard deviations (of the continuous feature) we consider achieves comparability between the features' effects. Note that \(\sigma_2 \beta_2^*\) is just the standardized coefficient for the normal feature.
+where \(\sigma_2\) is the standard deviation of \(\vec{x}_2\) and \(\kappa > 0\) is a scaling factor that represents the number of standard deviations (of the continuous feature) we consider achieves comparability between the features' effects. (Note that \(\sigma_2 \beta_2^*\) is just the standardized coefficient for the normal feature.) We illustrate this notion of comparability by a couple of examples.
 
 \begin{example}
   Assume \(\kappa = 2\). If \(\vec{x}_2\) is sampled from \(\normal(\mu, 1/2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = \beta_2^*\).
 \end{example}
 \begin{example}
-  Assume \(\kappa = 1\). If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = 4\beta_2^*\).
+  Assume \(\kappa = 1\). If \(\vec{x}_2\) is sampled from \(\normal(\mu, 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if \(\beta_1^* = 2\beta_2^*\).
 \end{example}
 
 Note that this definition refers to the data-generating mechanism, and not the regularized estimates.
@@ -272,9 +272,8 @@ What we ultimately want for comparability, however, is for the following relatio
 \[
   \hat{\beta}_1 = \kappa \sigma_{2}\hat{\beta}_2.
 \]
-Put plainly, we want the effects of regularization to be distributed evenly across the regularized estimates.
+Put plainly, we want the effects of regularization to be distributed evenly across the estimates.
 The crux of the problem is how to choose the scaling factor \(s_j\) for the binary features in order to achieve this effect for a given \(\kappa\).
-
 Let us assume that we have two features, \(\vec{x}_1\) and \(\vec{x}_2\), where \(\vec{x}_1\) is binary and \(\vec{x}_2\) is normally distributed and that their effects are comparable in the sense given above.
 Then it should hold that
 \begin{alignat}{3}

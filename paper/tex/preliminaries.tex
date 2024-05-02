@@ -56,9 +56,7 @@ For regularized methods, it is typically the case that we standardize with the u
 A common alternative to standardization, particularly when data is sparse, is to scale the features by their maximum absolute value (max--abs normalization). This method has no impact on binary data\footnote{Except in the extreme case when all values are 0.}, and therefore retains sparsity. For other types of data, it scales the features to take values in the range \([-1, 1]\). Since the scaling is determined by a single value for each feature, the method is naturally sensitive to outliers. In addition, it is for many types of continuous data, such as normally distributed data, the case that the sample maximum depends on the sample size, which makes the method problematic for much continuous data. In \Cref{thm:maxabs-gev}~(\Cref{sec:additional-theory}), we study how this effect comes into play in the case when the feature is normally distributed.
 
 Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value scaling, min-max normalization retains sparsity and also shares its sensitivity to outliers and sample size. Unlike max--abs scaling, min--max scaling is not sensitive to the \emph{location} of the data, only its \emph{spread}.
-
 Norm-scaling, scaling by a norm, is seldom used in practice and more often encountered in theoretical work. The norm can be any \(p\)-norm, and the choice of \(p\) will determine the scaling. Standard choices are \(p=1\), when the scaling is the sum of the absolute values of the features, and \(p=2\), where it is the Euclidean norm.
-
 A special case of normalization is the adaptive lasso~\citep{zou2006}, which is a two-step procedure. In the first step, a model, often ordinary least-squares regression (OLS) or ridge regression, is fit to the data. The estimated coefficients from the model are then used to scale the features.
 
 \subsection{The Lasso and Ridge Regression}
