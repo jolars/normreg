@@ -66,10 +66,10 @@ A special case of normalization is the adaptive lasso~\citep{zou2006}, which is 
 From now on, we will direct our focus on ridge regression and the lasso. Both of these models are special cases of the elastic net~\citep{zou2005}, which is the ordinary-least squares regression objective regularized by a combination of the \(\ell_1\) and squared \(\ell_2\) norms. For the normalized feature matrix \(\tilde{\mat{X}}\), the elastic net is represented by the following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( L(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
 \end{equation}
 We define \((\hat{\beta}_0^{(n)}, \hat{\vec{\beta}}^{(n)})\) as a solution to the optimization problem in \Cref{eq:elastic-net}.
-When \(\lambda_1 > 0\) and \(\lambda_2 = 0\), the elastic net is equivalent to the lasso, and when \(\lambda_1 = 0\) and \(\lambda_2 > 0\), it is equivalent to ridge regression. Expanding \(L\) in \Cref{eq:elastic-net}, we have
+When \(\lambda_1 > 0\) and \(\lambda_2 = 0\), the elastic net is equivalent to the lasso, and when \(\lambda_1 = 0\) and \(\lambda_2 > 0\), it is equivalent to ridge regression. Expanding \(f\) in \Cref{eq:elastic-net}, we have
 \[
   \begin{aligned}
     \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
@@ -101,7 +101,7 @@ If the features of the normalized design matrix are orthogonal, that is, \(\tild
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
-The inclusion of an intercept, \(\beta_0\), ensures that the location of the
+The inclusion of an intercept, \(\beta_0\), ensures that the locations of the
 features (their means) does not affect the solution (except for the intercept itself). Therefore,
 we will from now on assume that the features are mean-centered, that is, \(c_j = \bar{\vec{x}}_j\) for all \(j\) and therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then given by the following set of equations~\citep{donoho1994}:
 \begin{equation*}

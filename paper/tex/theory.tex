@@ -94,7 +94,7 @@ The presence of the factor \(q - q^2\) in \(\mu\), \(\sigma^2\), and \(d_j\) mea
 \end{equation}
 This expression shows that the class balance, \(q\), directly affects the estimator. For values of \(q\) close to \(0\) or \(1\), the input into the soft-thresholding part of the estimator will diminish and consequently force the estimate to zero, that is, unless we use the scaling factor \(s_j = (q - q^2)\), in which case the soft-thresholding part will be unaffected by class imbalance. This choice will not, however, mitigate the impact of class imbalance on the ridge part of the estimator, for which we would instead need \(s_j = \sqrt{q - q^2}\). For any other choices of \(\delta\), such as \(\delta = 0\), \(q\) will affect the estimator through both the ridge and lasso parts.
 
-Based on these facts, we will consider the scaling parameterization \(s_j = (q-q^2)^\delta\), \(\delta \geq 0\). This includes the cases that we are primary interested in, that is,
+Based on these facts, we will consider the scaling parameterization \(s_j = (q-q^2)^\delta\), \(\delta \geq 0\). This includes the cases that we are primarily interested in, that is,
 \(\delta = 0\) (no scaling), \(\delta = 1/2\) (standard-deviation scaling), and \(\delta = 1\) (variance scaling). Note that the last of these types, variance scaling, is not a standard type of normalization; yet, as we have already seen, it has some interesting properties
 in the context of binary features.
 
