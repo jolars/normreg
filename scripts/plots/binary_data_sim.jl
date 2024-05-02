@@ -2,7 +2,7 @@ using DataFrames
 using NormReg
 using StatsBase
 using StatsPlots
-
+using ColorSchemes
 using JSON
 using LaTeXStrings
 using Plots
@@ -53,7 +53,7 @@ for (i, dd) in enumerate(groups)
     ribbon = :err_confidence_error,
     yformatter = yformatter,
     ylims = (ymin, ymax),
-    color = delta_palette(3:5),
+    color = delta_palette([1, 3, 4]),
   )
 
   if i == 1
