@@ -23,6 +23,8 @@ n_rows = length(unique(df_subset.norm_strategy))
 n_cols = length(unique(df_subset.beta))
 n_groups = 3
 
+labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
+
 plots = []
 
 for (i, df_group) in enumerate(df_grouped)
@@ -39,7 +41,8 @@ for (i, df_group) in enumerate(df_grouped)
 
     # ylabel = j == 1 ? "Strategy " * string(d.norm_strategy[1]) : ""
     ylabel = j == 1 ? L"\hat{\beta}_j" : ""
-    xlabel = i == n_rows ? L"\delta" : ""
+    # xlabel = i == n_rows ? L"\delta" : ""
+    xlabel = j == 3 ? L"\delta" : ""
 
     beta = join(d.beta[1], "\\;")
 
@@ -55,7 +58,9 @@ for (i, df_group) in enumerate(df_grouped)
       delta,
       dd.mean_betas,
       group = dd.var,
-      legend = false,
+      labels = labels,
+      # legend = j == n_cols ? true : :none,
+      legendposition = j == n_cols ? :outerright : :none,
       title = title,
       xformatter = xformatter,
       xlabel = xlabel,
@@ -68,20 +73,24 @@ for (i, df_group) in enumerate(df_grouped)
   end
 end
 
-layout = @layout[grid(n_rows, n_cols) a{0.20w}]
+# layout = @layout[grid(n_rows, n_cols) a{0.20w}]
+layout = (n_rows, n_cols)
 
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
+#
+# legend = bar(
+#   zeros(1, n_groups),
+#   showaxis = false,
+#   grid = false,
+#   linecolor = :white,
+#   label = labels,
+#   framestyle = :none,
+#   legend_position = :topleft,
+#   background_color_subplot = :transparent,
+# )
 
-legend = plot(
-  zeros(1, n_groups),
-  showaxis = false,
-  grid = false,
-  label = labels,
-  legend_position = :topleft,
-  background_color_subplot = :transparent,
-)
-
-plots = plot(plots..., legend, layout = layout, size = (FULL_WIDTH, 160))
+# plots = plot(plots..., legend, layout = layout, size = (FULL_WIDTH, 160))
+plots = plot(plots..., layout = layout, size = (FULL_WIDTH, 160))
 
 file_path = @projectroot("paper", "plots", "interactions.pdf")
 savefig(plots, file_path)
