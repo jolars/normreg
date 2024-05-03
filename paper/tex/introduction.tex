@@ -5,7 +5,7 @@ When the data you want to model is high-dimensional, that is, the number of feat
   f(\beta_0, \vec\beta; \mat X, \vec y) = g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta)
 \]
 is a composite function within which we have added a penalty term \(h(\vec\beta)\).
-In contrast to \(g\), this penalty depends only on the coefficients (\(\vec{\beta}s\)).
+In contrast to \(g\), this penalty depends only on \(\vec{\beta}\).
 The intercept, \(\beta_0\), is not typically penalized.
 
 Some of the most common penalties are the \(\ell_1\) norm and squared \(\ell_2\) norm penalties, that is \(h(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(h(\vec\beta) = \lVert \vec\beta \rVert_2^2/2\)\footnote{Division by two in this case is used only for convenience.}, which, if \(h\) is the standard ordinary least-squares objective, represent lasso~\citep{tibshirani1996,santosa1986,donoho1994} and ridge (Tikhonov) regression respectively.
