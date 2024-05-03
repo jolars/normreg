@@ -288,7 +288,7 @@ In other words, we can achieve comparability in the lasso by scaling each binary
 And for ridge regression, we can achieve comparability by scaling with standard deviation, irrespective of \(\kappa\).
 
 % For other choices of \(\lambda_1\), \(\lambda_2\), and \(\delta\), we can only achieve comparability for a specific level of class balance, and never for \(\lambda_1 >0\), \(\lambda_2 >0\).
-For any other choices of \(s_1\), equality can only hold for a specific level of class balance.. If we let this level be called \(q_0\), then, to achieve equality for \(\lambda_2 = 0\), we need \(s_1 =\kappa (q_0 - q_0^2)^{1 - \delta}(q - q^2)^\delta\). Similarly, for \(\lambda_1 = 0\), we need \(s_1 = (q_0 - q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_0 = 1/2\), to have effects be equivalent for the class-balanced case.
+For any other choices of \(s_1\), equality can only hold for a specific level of class balance. If we let this level be called \(q_0\), then, to achieve equality for \(\lambda_2 = 0\), we need \(s_1 =\kappa (q_0 - q_0^2)^{1 - \delta}(q - q^2)^\delta\). Similarly, for \(\lambda_1 = 0\), we need \(s_1 = (q_0 - q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_0 = 1/2\), to have effects be equivalent for the class-balanced case.
 
 Note that this also means that there is an implicit relationship between the strength of penalization for binary and normal features, which depends on the level of class balance and normalization type. This means, for instance, that even in the class-balanced case (\(q = 1/2\)), we have to account for the type of normalization if we want binary and normal features to be treated equally
 
