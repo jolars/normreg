@@ -128,9 +128,10 @@ Note that we do not see the bias reduction that we observed in our theoretical r
 
 In our final experiment, we study the effect of normalization and class balance on interactions when using the lasso. Our example consists of a two-feature problem with an added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q=0.9\) and the second quasi-normal with standard deviation 0.5. We set \(n=1000\). Note that we perform normalization \emph{after} the interaction term is added.
 
-The results show, as before, that class balance (which, recall, is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta \in \{0, 1/2\}\). Somewhat surprisingly, however, the interaction term does not seem to be affected by the normalization type for any of the cases in which it is present.
+The results~(\Cref{fig:interactions}) show, as before, that class balance (which, recall, is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta \in \{0, 1/2\}\). Somewhat surprisingly, however, the interaction term does not seem to be affected by the normalization type for any of the cases in which it is present.
 
 \begin{figure}[htpb]
+  \label{fig:interactions}
   \centering
   \includegraphics[]{plots/interactions.pdf}
   \caption{%
