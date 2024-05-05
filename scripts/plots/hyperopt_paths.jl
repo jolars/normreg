@@ -76,7 +76,7 @@ for (i, d) in enumerate(df_grouped)
 
   ylab = i == 1 ? "NMSE" : ""
 
-  xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
+  xlab = i == ceil(Int32, n_cols / 2) ? L"\lambda/\lambda_{\text{max}}" : ""
 
   pl2 = plot(
     result.lambda,
