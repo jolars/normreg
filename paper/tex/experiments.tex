@@ -108,7 +108,8 @@ In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation s
 
 \subsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with \(n = \num{1000}\). These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\).
+In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with \(n = \num{1000}\). These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 = 1/2\), we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2 \times (1/4)^{1-\delta}(q-q^2)^\delta\).
+For the lasso, we set the level of penalization to
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) to avoid the effect of class imbalance, whereas for ridge we instead need \(\delta =1/2\) (standardization). As our theory suggests, this extra scaling mitigates this class-balance dependency at the cost of added variance.
 
