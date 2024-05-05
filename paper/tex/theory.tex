@@ -2,16 +2,32 @@
 
 % TODO: write a table of the bias and variance formulations for each type instead.
 
-Now, assume that \(\mat{X}\) and \(\vec{\beta}\) are fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). As in the previous section, we assume that the feature vectors are orthogonal. We are interested in the expected value of \Cref{eq:orthogonal-solution}, \(\E \hat{\beta}_j\). Let
+Now, assume that \(\mat{X}\) is fixed and that \(\vec{y} = \mat{X}\vec{\beta} + \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed noise with mean zero and finite variance \(\sigma_\varepsilon^2\). As in the previous section, we assume that the feature vectors are orthogonal. We are interested in the expected value of \Cref{eq:orthogonal-solution}, \(\E \hat{\beta}_j\). Let
 \[
-  Z = \tilde{\vec{x}}_j^\T \vec{y} = \tilde{\vec{x}}_j^\T(\mat{X}\vec{\beta} + \vec{\varepsilon}),
+  Z = \tilde{\vec{x}}_j^\T \vec{y} = \tilde{\vec{x}}_j^\T(\mat{X}\vec{\beta}^* + \vec{\varepsilon}) = \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j^* + \boldsymbol{\varepsilon})
+  \qquad
+  \text{and}
   \qquad
   d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2)
 \]
 so that \(\hat{\beta}_j = \st_{\lambda_1}(Z)/d_j\). Since \(d_j\) is fixed under our assumptions, we will direct most of our focus towards \(S_{\lambda_1}(Z)\). First observe that
+\[
+  \begin{aligned}
+    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - c_j)^\T (\vec{x}_j - c_j) = \frac{\vec{x}_j^\T\vec{x}_j - nc_j^2}{s^2_j} = \frac{n v_j}{s_j^2}, \\
+    \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{n v_j}{s_j},
+  \end{aligned}
+\]
+where \(v_j\) is the uncorrected sample variance of \(\vec{x}_j\). This means that
+\begin{equation}
+  \label{eq:z-d}
+  Z = \frac{\beta_j^* n v_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  \qquad\text{and}\qquad
+  d_j = s_j\left(\frac{n v_j}{s_j^2} + \lambda_2\right).
+\end{equation}
+For the expected value and variance we then have
 \begin{align*}
-  \E Z   & = \mu = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j,  \\
-  \var Z & = \sigma^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2.
+  \E Z   & = \mu = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j,      \\
+  \var Z & = \sigma^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j\sigma_\varepsilon^2 .
 \end{align*}
 
 The expected value of the soft-thresholding estimator is
@@ -42,7 +58,7 @@ and that the variance of the elastic net estimator is therefore
 
 Next, we add the additional assumption that \(\vec{\varepsilon}\) is normally distributed. Then
 \[
-  Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
+  Z \sim \normal\left(\mu = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma^2 = \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j \sigma_\varepsilon^2 \right).
 \]
 Let \(\theta = -\mu -\lambda_1 \) and \(\gamma = \mu - \lambda_1\). Then the expected value of soft-thresholding of \(Z\) is
 \begin{align}
@@ -72,20 +88,26 @@ Plugging \Cref{eq:mean-centered-eval,eq:mc-var-part1,eq:mc-var-part2} into \Cref
 \subsection{Binary Features}\label{sec:theory-binary-features}
 
 The main focus in this paper is the case when \(\vec{x_j}\) is a binary feature with class balance \(q = \bar{\vec{x}}_j\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and \(\sum_{i=1}^n x_{ij} = nq\).
-In this case, we observe that
+In this case, inserting \(v_j = (q - q^2)\) (the uncorrected sample variance for a binary feature) into \Cref{eq:z-d}, we have
 \[
-  \begin{aligned}
-    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}, \\
-    \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{nq(1 - q)}{s_j}.
-  \end{aligned}
+  Z = \frac{\beta_j^* n(q - q^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  ,\qquad
+  d_j = s_j\left(\frac{n(q - q^2)}{s_j^2} + \lambda_2\right),
 \]
-And consequently
+
+% \[
+%   \begin{aligned}
+%     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq^2 + nq^2) = \frac{nq(1-q)}{s^2_j}, \\
+%     \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{nq(1 - q)}{s_j}.
+%   \end{aligned}
+% \]
+and consequently
 \[
-  \mu = \frac{\beta^*_j nq(1 - q)}{s_j}, \qquad \sigma^2 = \frac{\sigma_\varepsilon^2nq(1 - q)}{s^2_j}, \qquad d_j = \frac{nq(1 -q)}{s_j}  + \lambda_2 s_j.
+  \mu = \frac{\beta^*_j n(q - q^2)}{s_j}\qquad \text{and} \qquad \sigma^2 = \frac{\sigma_\varepsilon^2n(q - q^2)}{s^2_j}.
 \]
 We will allow ourselves to abuse notation and overload the definitions of \(\mu\), \(\sigma^2\), and \(d_j\) as functions of \(q\). Then, an expression for the expected value of the elastic net estimate with respect to \(q\) can be obtained by plugging in \(\mu\) and \(\sigma\) into \Cref{eq:mean-centered-eval}.
 
-The presence of the factor \(q - q^2\) in \(\mu\), \(\sigma^2\), and \(d_j\) means that there is a relationship between class balance and the elastic net estimator and that this relationship is mediated by the scaling factor \(s_j\). To achieve some initial intuition for this relationship, we begin by considering the noiseless case (\(\sigma_\varepsilon = 0\)) in which, inserting  \(\mu\), \(\sigma\), and \(d_j\) into \Cref{eq:orthogonal-solution} yields
+The presence of the factor \(q - q^2\) in \(\mu\), \(\sigma^2\), and \(d_j\) means that there is a relationship between class balance and the elastic net estimator and that this relationship is mediated by the scaling factor \(s_j\). To achieve some initial intuition for this relationship, we begin by considering the noiseless case (\(\sigma_\varepsilon = 0\)) in which, inserting  \(\mu\) and \(d_j\) into \Cref{eq:orthogonal-solution} yields
 \begin{equation}
   \label{eq:noiseless-estimator}
   \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\intercal \vec{y})}{s_j\left(\tilde{\vec{x}}_j^\intercal \tilde{\vec{x}}_j + \lambda_2\right)}
