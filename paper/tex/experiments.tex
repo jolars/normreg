@@ -109,7 +109,7 @@ In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation s
 \subsection{Mixed Data}\label{sec:experiments-mixed-data}
 
 In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with \(n = \num{1000}\). These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 = 1/2\), we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2 \times (1/4)^{1-\delta}(q-q^2)^\delta\).
-For the lasso, we set the level of penalization to
+For the lasso, we set the level of penalization to \(\lambda_\text{max}/(2n)\) and for ridge regression, we set the level of penalization to \(2\lambda_\text{max}/n\).\footnote{This makes the level of regularization comparable between the two cases.}
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) to avoid the effect of class imbalance, whereas for ridge we instead need \(\delta =1/2\) (standardization). As our theory suggests, this extra scaling mitigates this class-balance dependency at the cost of added variance.
 
@@ -126,7 +126,7 @@ Note that we do not see the bias reduction that we observed in our theoretical r
 
 \subsection{Interactions}\label{sec:experiments-interactions}
 
-In our final experiment, we study the effect of normalization and class balance on interactions when using the lasso. Our example consists of a two-feature problem with an added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q=0.9\) and the second quasi-normal with standard deviation 0.5. We set \(n=1000\). Note that we perform normalization \emph{after} the interaction term is added.
+In our final experiment, we study the effect of normalization and class balance on interactions when using the lasso. Our example consists of a two-feature problem with an added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q=0.9\) and the second quasi-normal with standard deviation 0.5. We set \(n=1000\) and specify \(\lambda_1 = n/4\) as the level of regularization. Note that we normalize \emph{after} the interaction term is added.
 
 The results~(\Cref{fig:interactions}) show, as before, that class balance (which, recall, is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta \in \{0, 1/2\}\). Somewhat surprisingly, however, the interaction term does not seem to be affected by the normalization type for any of the cases in which it is present.
 
