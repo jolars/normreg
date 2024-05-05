@@ -127,7 +127,7 @@ Using \(\delta = 0\), for instance, leads the true coefficient \(\beta_j^*\) in 
 \]
 This only resolves the issue for the lasso.
 To achieve a similar effect for ridge regression, we would need another (but similar) modification.
-Since all features are binary under our current assumptions, however, we will for now just assume that we scale \(\lambda_1\) and \(\lambda_2\) to account for this effect\footnote{We do this in all of the following examples.}, which is equivalent to modifying \(s_j\). We will, however, return to this issue later in \Cref{sec:mixed-data}, since it has important implications in the situation when \(\mat{X}\) contains both binary and continuous features.
+Since all features are binary under our current assumptions, however, we will for now just assume that we scale \(\lambda_1\) and \(\lambda_2\) to account for this effect,\footnote{We do this in all of the following examples.} which is equivalent to modifying \(s_j\). We will return to this issue later in \Cref{sec:mixed-data} where we consider mixes of binary and normally distributed features in, in which case this has significant implications.
 
 % TODO: This makes it seem like it would make more sense to adjust λ instead of the scaling parameter to compensate for class balance.
 
