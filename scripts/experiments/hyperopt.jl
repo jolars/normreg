@@ -52,7 +52,9 @@ lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
     support_size[i] = sum(coefs[:, i] .!= 0)
   end
 
-  return err, lambda, support_size
+  lambda_out = lambda ./ lambda_max
+
+  return err, lambda_out, support_size
 end
 
 max_delta = maximum(delta)

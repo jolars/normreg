@@ -46,7 +46,8 @@ for (j, d_alpha) in enumerate(df_alpha)
 
     colorbar_title = i == n_cols ? "NMSE" : ""
 
-    xlab = j == n_rows && i == ceil(Int32, n_cols / 2) ? L"\lambda" : ""
+    xlab =
+      j == n_rows && i == ceil(Int32, n_cols / 2) ? L"\lambda/\lambda_{\text{max}}" : ""
 
     model = d[1, :alpha] == 1.0 ? "Lasso\n" : "Ridge\n"
 
@@ -65,7 +66,7 @@ for (j, d_alpha) in enumerate(df_alpha)
       xformatter = xformatter,
       xscale = :log10,
       ylims = (0.0, 1.0),
-      xlims = (1e-4, 2),
+      xlims = (1e-4, 1),
       xticks = [1e-4, 1e-2, 1],
       grid = false,
       colorbar = true,
