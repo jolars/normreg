@@ -33,6 +33,7 @@ export normalize_features
 export normalize_features2
 export normalize_features_unadjusted
 export unstandardize_coefficients
+export scaling_factors
 
 include("cv.jl")
 export cross_validate
@@ -51,5 +52,10 @@ export binary_mean
 export binary_selection_prob
 export binary_stddev
 export binary_variance
+
+include("solver.jl")
+export elasticnet
+export ridge
+export ridge2
 
 end
