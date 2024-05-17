@@ -20,9 +20,10 @@ function path_simulation(dataset, normalization, model = "gaussian")
 
   x_norm, centers, scales = normalize_features_unadjusted(Array(x), normalization)
 
-  res = fit(LassoPath, x_norm, y, dist, standardize = false)
+  # res = fit(LassoPath, x_norm, y, dist, standardize = false)
+  betas, intercepts, λ = elasticnet(x_norm, y)
 
-  _, betas = unstandardize_coefficients(res.b0, res.coefs, centers, scales)
+  _, betas = unstandardize_coefficients(intercepts, betas, centers, scales)
 
   return betas
 end

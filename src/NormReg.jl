@@ -55,7 +55,6 @@ export binary_variance
 
 include("solver.jl")
 export elasticnet
-export ridge
-export ridge2
+export cdsolver
 
 end
