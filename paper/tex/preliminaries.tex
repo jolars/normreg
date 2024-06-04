@@ -59,9 +59,9 @@ Min-max normalization scales the data to lie in \([0, 1]\). As with maximum abso
 Norm-scaling, scaling by a norm, is seldom used in practice and more often encountered in theoretical work. The norm can be any \(p\)-norm, and the choice of \(p\) will determine the scaling. Standard choices are \(p=1\), when the scaling is the sum of the absolute values of the features, and \(p=2\), where it is the Euclidean norm.
 A special case of normalization is the adaptive lasso~\citep{zou2006}, which is a two-step procedure. In the first step, a model, often ordinary least-squares regression (OLS) or ridge regression, is fit to the data. The estimated coefficients from the model are then used to scale the features.
 
-\subsection{The Lasso and Ridge Regression}
+\subsection{The Elastic Net}
 
-From now on, we will direct our focus on ridge regression and the lasso. Both of these models are special cases of the elastic net~\citep{zou2005}, which is the ordinary-least squares regression objective regularized by a combination of the \(\ell_1\) and squared \(\ell_2\) norms. For the normalized feature matrix \(\tilde{\mat{X}}\), the elastic net is represented by the following convex optimization problem:
+From now on, we will direct our focus on the elastic net~\citep{zou2005}, which is the ordinary-least squares regression objective regularized by a combination of the \(\ell_1\) and squared \(\ell_2\) norms. For the normalized feature matrix \(\tilde{\mat{X}}\), the elastic net is represented by the following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
