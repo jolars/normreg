@@ -6,6 +6,7 @@ using NormReg
 using PlotThemes
 using Plots
 using ProjectRoot
+using Plots.PlotMeasures
 
 using PythonPlot: matplotlib
 
@@ -13,30 +14,7 @@ json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
 df = DataFrame(json_data);
 df_subset = subset(df);
 
-function set_plot_defaults2(backend = "pyplot")
-  # theme(:wong2)
-  default(framestyle = :box, label = nothing, tick_direction = :out, palette = :tableau_10)
-  if backend == "gr"
-    gr()
-  else
-    default(
-      guidefontsize = 10,
-      titlefontsize = 10,
-      background_color_outside = :transparent,
-      legend_background_color = :transparent,
-      thickness_scaling = 0.9,
-      grid = false,
-    )
-    pythonplot()
-    matplotlib.rcParams["text.usetex"] = true
-    matplotlib.rcParams["font.family"] = "serif"
-    # matplotlib.rcParams["font.size"] = 9
-    matplotlib.rcParams["lines.markersize"] = 3
-    matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{mathtools}\\usepackage[ebgaramond,textscale=0,semibold,vvarbb,amsthm]{newtx}\\usepackage{bm}"
-  end
-end
-
-set_plot_defaults2()
+set_plot_defaults()
 
 df_lasso = subset(df_subset, :alpha => a -> a .== 1.0);
 df_ridge = subset(df_subset, :alpha => a -> a .== 0.0);
@@ -54,13 +32,15 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 for (j, dd) in enumerate(df_grouped)
   groups = groupby(dd, :delta, sort = true)
   for (i, d) in enumerate(groups)
-    model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
+    alpha = d.alpha[1]
+    # model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
 
-    yguide = i == 1 ? model * L"\hat{\beta}_j" : ""
+    yguide =
+      i == 1 ? L"""\begin{gathered}\hat{\beta}_j\\\alpha = %$(alpha)\end{gathered}""" : ""
 
     yformatter = i == 1 ? :auto : _ -> ""
 
-    xformatter = if j > 1
+    xformatter = if j == n_rows
       x -> round(x, digits = 2)
     else
       x -> ""
@@ -74,7 +54,7 @@ for (j, dd) in enumerate(df_grouped)
       ""
     end
 
-    xlabel = j == 2 && i == 2 ? L"q" : ""
+    xlabel = j == n_rows && i == 2 ? L"q" : ""
 
     betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
     yerr = Float64.(mapreduce(permutedims, vcat, d.betas_std[1]))
@@ -114,8 +94,14 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 # l = @layout[grid(n_rows, n_cols) a{0.20w}]
 l = (n_rows, n_cols)
 
-pl = plot(plots..., layout = l, size = (460, 300), left_margin = 3mm, bottom_margin = 3mm)
+pl = plot(
+  plots...,
+  layout = l,
+  size = (FULL_WIDTH * 0.8, 400),
+  left_margin = 3mm,
+  bottom_margin = 3mm,
+)
 
-file_path = @projectroot("paper", "plots", "mixed_data_thesis.pdf");
+file_path = @projectroot("paper", "plots", "mixed_data.pdf");
 
 savefig(pl, file_path)

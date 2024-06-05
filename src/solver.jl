@@ -113,11 +113,11 @@ end
 
 function elasticnet(
   x::AbstractMatrix{<:Real},
-  y::Vector{<:Real},
+  y::Vector{<:Real};
   α::Number = 1,
   λ::Union{Nothing,Vector{<:Real}} = nothing,
   w1::Vector{<:Real} = ones(size(x, 2)),
-  w2::Vector{<:Real} = ones(size(x, 2));
+  w2::Vector{<:Real} = ones(size(x, 2)),
   fit_intercept::Bool = true,
   path_length::Int = 100,
   devmax::Number = 0.999,
@@ -131,16 +131,31 @@ function elasticnet(
   intercept = mean(y) * fit_intercept
   residual = y .- intercept
 
-  w1 = w1 * p / sum(w1)
-  w2 = w2 * p / sum(w2)
+  # w1 = w1 * p / sum(w1)
+  # w2 = w2 * p / sum(w2)
+
+  # only screen when l1 penalty is involved
+  screen = α > 0
+
+  screened = screen ? zeros(Bool, p) : ones(Bool, p)
 
   λminratio = n > p ? 1e-4 : 1e-2
+  c = x' * (y .- fit_intercept * mean(y))
+  tmp = abs.(c) ./ (max(1e-3, α) * w1)
+  max_ind = argmax(tmp)
+  λmax = tmp[max_ind]
 
-  if isnothing(λ)
-    tmp = abs.(x' * (y .- fit_intercept * mean(y))) ./ (max(1e-3, α) * w1)
-    max_ind = argmax(tmp)
-    λmax = tmp[max_ind]
+  auto_lambda = isnothing(λ)
+
+  if auto_lambda
     λ = collect(logspace(λmax, λmax * λminratio, path_length))
+    if screen
+      # turn on the first active variable
+      screened[max_ind] = true
+    end
+  elseif screen
+    lambda2 = w2 .* (1 - α) * λ[1]
+    screened = abs.(c) .> w1 .* α * (2 * λ[1] - λmax)
   end
 
   path_length = length(λ)
@@ -152,37 +167,26 @@ function elasticnet(
   intercepts = zeros(path_length)
   betas = zeros(p, path_length)
 
-  screened = zeros(Bool, p)
-
-  # only screen when l1 penalty is involved
-  screen = α > 0
-
-  if screen
-    screened[max_ind] = true
-  else
-    screened .= true
-  end
-
   dev_null = 0.5 * norm(residual)^2
   dev_ratio = dev_null
+
+  working_set = findall(screened)
 
   for i in 1:path_length
     lambda1 = w1 .* α * λ[i]
     lambda2 = w2 .* (1 - α) * λ[i]
 
-    residual = y .- intercept .- x * beta
+    residual = y .- intercept .- x[:, working_set] * beta[working_set]
 
     if i > 1 && screen
       screened[1:p] .= false
-      for j in 1:p
-        # strong rule screening
-        c = -dot(x[:, j], residual) + lambda2[j] * beta[j]
-        screened[j] = abs(c) > w1[j] .* α * (2 * λ[i] - λ[i - 1])
-      end
+      c = x' * residual .- lambda2 .* beta
+      screened = abs.(c) .> w1 .* α * (2 * λ[i] - λ[i - 1])
     end
 
     while true
       working_set = findall(screened)
+      beta[working_set] .= 0.0
 
       beta, intercept, _, _, _ = cdsolver(
         x,
@@ -205,8 +209,8 @@ function elasticnet(
 
         for j in 1:p
           if !screened[j]
-            c = dot(x[:, j], residual) - lambda2[j] * beta[j]
-            if abs(c) > w1[j] .* α * λ[i]
+            c_j = dot(x[:, j], residual) - lambda2[j] * beta[j]
+            if abs(c_j) >= w1[j] .* α * λ[i]
               println("Violation: Adding $j to the working set")
               screened[j] = true
               any_violations = true
@@ -234,12 +238,14 @@ function elasticnet(
       println("Iteration: $i, df: $df, dev_ratio: $dev_ratio, dev_change: $dev_change")
     end
 
-    if i > 1 && ((α > 0 && df > dfmax) || dev_ratio > devmax || dev_change < fdev)
-      if verbose
-        println("Early stopping at iteration: $i")
+    if auto_lambda && i > 1
+      if (α > 0 && df > dfmax) || dev_ratio > devmax || dev_change < fdev
+        if verbose
+          println("Early stopping at iteration: $i")
+        end
+        path_length = i
+        break
       end
-      path_length = i
-      break
     end
   end
 

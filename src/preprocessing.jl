@@ -72,6 +72,47 @@ function normalize_features_unadjusted(x::AbstractMatrix, method::String = "std"
   return x_normalized, centers, scales
 end
 
+function scaling_factors(
+  x::AbstractMatrix,
+  delta::Real = 0;
+  intersections::Vector{Int} = Int[],
+)
+  p = size(x, 2)
+  scales = ones(1, p)
+
+  binary = find_binary_features(x)
+
+  # if center
+  #   centers = mean(x, dims = 1)
+  # else
+  #   centers = zeros(1, p)
+  # end
+
+  # always scale continuos features by standard deviation
+
+  for j in 1:p
+    if binary[j]
+      mod = 0.5 / (0.25^delta)
+      scales[j] = mod * var(x[:, j], corrected = false)^delta
+    else
+      # conditionally scale interaction effects
+      if j in intersections
+        mod = 0.5 / (0.25^delta)
+        nz = findall(x[:, j] .!= 0)
+        scales[j] =
+          std(x[nz, j], corrected = false) * mod * var(x[:, j], corrected = false)^delta
+      else
+        mod = 0.5 / (0.25^delta)
+        scales[j] = std(x[:, j], corrected = false)
+      end
+    end
+  end
+
+  scales[scales .== 0] .= 1
+
+  return scales
+end
+
 function normalize_features(
   x::AbstractMatrix,
   delta::Real = 0;

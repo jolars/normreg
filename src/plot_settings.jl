@@ -15,6 +15,7 @@ function set_plot_defaults(backend = "pyplot")
   else
     default(
       titlefontsize = 11,
+      thickness_scaling = 0.9,
       background_color_outside = :transparent,
       legend_background_color = :transparent,
     )

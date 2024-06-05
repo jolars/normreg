@@ -4,7 +4,6 @@ using Distributions
 using DrWatson
 using Statistics
 using DataFrames
-using Lasso
 using Plots
 using JSON
 using ProjectRoot
@@ -31,38 +30,46 @@ function binary_gaussian_simulation(
   for i in 1:n_qs
     beta_hat = zeros(n_it, p)
     for k in 1:n_it
+      # println("Iteration: $k, q: $(qs[i])\r")
       x1 = generate_pseudobernoulli(n, q = qs[i])
       x2 = generate_pseudonormal(n; μ = 0, σ = 0.5)
       # x3 = generate_pseudonormal(n; μ = 0, σ = 2)
 
-      # x = [x1 x2 x3]
       x = [x1 x2]
+      # x = [x1 x2 x3]
 
       σe = √(var(x * beta) / snr)
 
       y = x * beta + rand(Normal(0, σe), n)
 
-      x_std, centers, scales = normalize_features(x, delta)
+      # x_std, centers, scales = normalize_features(x, delta)
 
-      λmax = maximum(abs.(x_std' * (y .- mean(y))))
+      w = vec(scaling_factors(x, delta))
 
-      λ = α == 0 ? λmax * 2 / n : λmax * 0.5 / n
+      λmax = maximum(abs.(x' * (y .- mean(y))))
 
-      model = Lasso.fit(
-        Lasso.LassoPath,
-        x_std,
-        y,
-        Normal(),
-        α = α,
-        standardize = false,
-        λ = [λ],
-        intercept = true,
-      )
+      # λ = α == 0 ? λmax * 2 : λmax * 0.5
+      λ = λmax * 0.5
 
-      _, beta_hat_it = unstandardize_coefficients(model.b0, model.coefs, centers, scales)
+      beta_hat_it, _, _ = elasticnet(x, y, α = α, λ = [λ], w1 = w, w2 = w)
+
+      # model = Lasso.fit(
+      #   Lasso.LassoPath,
+      #   x_std,
+      #   y,
+      #   Normal(),
+      #   α = α,
+      #   standardize = false,
+      #   λ = [λ/n],
+      #   intercept = true,
+      # )
+
+      # _, beta_hat_it_unstd =
+      #   unstandardize_coefficients(intercepts, beta_hat_it, centers, scales)
+      beta_hat_it_unstd = beta_hat_it
 
       # Compute the average across the iterations
-      beta_hat[k, :] = beta_hat_it
+      beta_hat[k, :] = beta_hat_it_unstd
     end
     betas[:, i] = mean(beta_hat, dims = 1)
     betas_std[:, i] = std(beta_hat, dims = 1)
@@ -72,7 +79,7 @@ function binary_gaussian_simulation(
 end
 
 param_dict =
-  Dict("alpha" => [0, 1], "delta" => [0, 0.5, 1], "snr" => [0.5], "dummy" => "dummy")
+  Dict("alpha" => [0, 0.5, 1], "delta" => [0, 0.5, 1], "snr" => [0.5], "dummy" => "dummy")
 
 expanded_params = dict_list(param_dict);
 
