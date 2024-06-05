@@ -17,14 +17,17 @@ To generate quasi-normal features, we generate a linear sequence \(\vec{w}\) wit
 \]
 and then shuffle the elements of \(\vec{x}_j\) uniformly at random.
 
-In each case, we fit either the lasso (the elastic net with \(\lambda_1 = \alpha \lambda\) ) or ridge (the elastic net with \(\lambda_2 = (1 - \alpha)\lambda\)). To normalize the data, we use
-standardization for all quasi-normally distributed features and otherwise
+In each case, we fit either the lasso (the elastic net with \(\lambda_1 = \alpha \lambda\) ) or ridge (the elastic net with \(\lambda_2 = (1 - \alpha)\lambda\)). Instead of normalizing the data, we use the weighted elastic net outlined in \Cref{sec:weighted-elasticnet} and scale the coefficients within the penalization term. For normal data, we use
 \[
-  s_j = (q - q^2)^\delta,
+  u_j = \frac{1}{n}\sum_{i=1}^p (x_{ij} - \bar{\vec{x}}_j)^2\qquad\text{and}\qquad v_j= u_j^2,
+\]
+that is, uncorrected standard deviation and variance. This is equivalent to normalizing the design matrix with standardization. For binary data, we use
+\[
+  u_j = v_j = (q - q^2)^\delta,
 \]
 which is equivalent to the (uncorrected) sample variance raised to the power of \(\delta\).
 
-Throughout the experiments, we have used the \pkg{Lasso.jl} package~\citep{kornblith2024} to fit lasso or ridge regression, which implements the coordinate descent algorithm by \citet{friedman2010}. All experiments were coded using the Julia programming language~\citep{bezanson2017} and the code is availabe at \url{https://github.com/jolars/normreg}.
+We use a coordinate descent solver to fit the elastic net, in which we have implemented a variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All experiments were coded using the Julia programming language~\citep{bezanson2017} and the code is availabe at \url{https://github.com/jolars/normreg}.
 
 \subsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
 
@@ -109,7 +112,7 @@ In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation s
 \subsection{Mixed Data}\label{sec:experiments-mixed-data}
 
 In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with \(n = \num{1000}\). These features are constructed so that their effects are comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using \(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 = 1/2\), we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2 \times (1/4)^{1-\delta}(q-q^2)^\delta\).
-For the lasso, we set the level of penalization to \(\lambda_\text{max}/(2n)\) and for ridge regression, we set the level of penalization to \(2\lambda_\text{max}/n\).\footnote{This makes the level of regularization comparable between the two cases.}
+For the lasso, we set the level of penalization to \(\lambda_\text{max}/2\) and for ridge regression, we set the level of penalization to \(2\lambda_\text{max}\).\footnote{This makes the level of regularization comparable between the two cases.}
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) to avoid the effect of class imbalance, whereas for ridge we instead need \(\delta =1/2\) (standardization). As our theory suggests, this extra scaling mitigates this class-balance dependency at the cost of added variance.
 
