@@ -8,9 +8,10 @@ term to the objective function that punishes models with large coefficients
 (\(\vec\beta\)). If we let \(g(\vec\beta; \mat X, \vec y)\) be the original objective
 function---which when minimized improves the model's fit to the data (\(\mat X, \vec
 y\))---then
-\[
+\begin{equation}
+  \label{eq:general-objective}
   f(\beta_0, \vec\beta; \mat X, \vec y) = g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta)
-\]
+\end{equation}
 is a composite function within which we have added a penalty term \(h(\vec\beta)\). In
 contrast to \(g\), this penalty depends only on \(\vec{\beta}\). The intercept,
 \(\beta_0\), is not typically penalized.
@@ -61,12 +62,41 @@ selected as well as their signs and magnitudes.
   \label{fig:realdata-paths}
 \end{figure}
 
-In addition, discussions on the choice of normalization are often focused on computational
-aspects and data storage requirements, rather than on the statistical properties of the
-choice of normalization. In our paper, we argue that normalization should rather we
-considered as an integral part of the model and that it is problematic to base the choice
-of normalization on the type of data storage, which implicitly encodes the belief that the
-information in a data set is different if it is stored in a sparse viz-a-viz dense format.
-At the time of writing, for instance, the popular machine learning library
+% TODO: maybe put this paragraph the discussion instead
+Recommendations for the choice of normalization are often based on computational aspects
+and data storage requirements, rather than on the statistical properties of the choice of
+normalization. At the time of writing, for instance, the popular machine learning library
 \texttt{scikit-learn}~\citep{scikit-learndevelopers2024} recommends max--abs scaling in the
-case of sparse data.
+particular case of sparse data. We argue that this is misguided since basing the choice of
+normalization on the type of data storage encodes a belief that the information in a data
+set is somehow different if it is stored in a sparse viz-a-viz dense format. In constrast,
+we believe that normalization should rather be considered an integral part of the model.
+
+There are moreover many unexplored questions regarding what effect the choice of
+normalization has for features of different types. In particular, there is no consensus on
+how to normalize binary features---where observations take values 0 and 1. Nor is there, as
+far as we have been able to ascertain, research that attempts to bridge this knowledge gap.
+Anecdotal suggestions include not normalizing binary features at all, or to normalize them
+as you would if it were continuous data.
+
+In this paper, we will focus on three models that each correspond to a particular case of
+\Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The latter
+of these, the elastic net, is in fact a generalization of the previous two, and is the
+optimization problem of minimizing the following objective function,
+%
+\begin{equation*}
+  \underbrace{\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2}_{g(\beta_0, \vec{\beta}; \mat{X}, \vec{y})}  + \underbrace{\lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2}_{h(\vec{\beta})}.
+\end{equation*}
+%
+Setting \(\lambda_1 = 0\), we obtain the ridge regression objective, whilst setting
+\(\lambda_2 = 0\), we get the lasso. All of these methods have become staples in the field
+of statistics and machine learning and are accompanied by a large body of theoretical work
+as well as numerous practical applications. In this paper, we will focus on how these
+models are affected by the use of normalization when they are fit to binary features. We
+pay particular attention to the case when these binary features are imbalanced, that is,
+have relatively many ones or zeroes. In this case, we demonstrate that the choice of
+normalization directly influences the size of the regression coefficients and that this
+effect is different for the lasso and ridge regression. We also show how to mitigate this
+effect to remove this class imbalance bias. In the case of the elastic net, however, we
+show that there is no simple normalization method that can mitigate this bias and that we
+instead need to consider weighting the penalty term in the elastic net.
