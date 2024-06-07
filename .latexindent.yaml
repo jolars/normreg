@@ -1,0 +1,17 @@
+defaultIndent: "  "
+specialBeginEnd:
+  leftRightParen:
+    begin: '\\left\('
+    end: '\\right\)'
+    lookForThis: 1
+  leftRightSquare:
+    begin: '\\left\['
+    end: '\\right\]'
+    lookForThis: 1
+  leftRightCurly:
+    begin: '\\left\\{'
+    end: '\\right\\}'
+    lookForThis: 1
+modifyLineBreaks:
+  textWrapOptions:
+    columns: 92
