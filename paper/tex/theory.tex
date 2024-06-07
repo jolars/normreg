@@ -269,23 +269,24 @@ In \Cref{sec:experiments}, we will continue to study binary features in simulate
 \subsection{Weighted Elastic Net}\label{sec:weighted-elasticnet}
 
 We have so far shown that certain choices of scaling can mitigate the class-balance bias imposed by the lasso and ridge regression. But we have also demonstrated that there is no choice of scaling in the case of the elastic net that can achieve the same effect.
-\Cref{eq:noiseless-estimator}, however, suggests a natural alternative to scaling of the design matrix, which is to introduce feature-wise scaling in the penalty term. In \Cref{eq:noiseless-estimator}, this would entail setting \(s_j=1\) and multiplying \(\lambda_1\) and \(\lambda_2\) with \(s_j\). Formally, we transform the objective function \(f\) in \Cref{eq:elastic-net} into
+\Cref{eq:noiseless-estimator}, however, suggests a natural alternative to normalization, which is to introduce feature-wise weights in the penalty term. In \Cref{eq:noiseless-estimator}, this would entail setting \(s_j=1\) and multiplying \(\lambda_1\) and \(\lambda_2\) with \(s_j\). Formally, we transform the objective function \(f\) in \Cref{eq:elastic-net} into
 \[
   \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =
   \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
 \]
 with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors. We call this for the \emph{weighted elastic net}, wich is equivalent to the original form when
-\[
+\begin{equation}
+  \label{eq:weighted-normal-equivalence}
   \vec{u} = \diag\left(\mat{S}^{-1}\right), \qquad \text{and}\qquad \vec{v} = \diag\left(\mat{S}^{-2}\right),
-\]
+\end{equation}
 which can be seen by substituting \(\mat{S}\vec{\beta} = \tilde{\vec{\beta}}\) in the original objective formulation.
 With this alternative formulation, we can can control class-balance bias by setting
 \[
   u_j = v_j = (q - q^2)^{\delta},
 \]
-and counteract it, at least in the noiseless case, with \(\delta = 1\) as before. This alternative mitigates the need to normalize the design matrix altogether (since the locations of the features are inconsequential with respect to the resulting model coefficients as long as we include an intercept). This is the approach we will therefore take in the following sections, but stress that there is no difference in results between the two approaches as far as the lasso and ridge regression are concerned.
+and counteract it, at least in the noiseless case, with \(\delta = 1\) as before. This alternative mitigates the need to normalize the design matrix altogether (since the locations of the features are inconsequential with respect to the resulting model coefficients as long as we include an intercept). This is the approach we will therefore take in the following sections, but stress that there is no difference in results between the two approaches as far as the lasso and ridge regression are concerned. Note, however, that the effect of \(\delta\) is is only comparable between the two approaches for the particular choice of \(\vec{u}\) and \(\vec{v}\) given in \Cref{eq:weighted-normal-equivalence}.
 
-Finally, note that the estimated coefficients from the weighted elastic net are on the same scale as the original (non-normalized data), so there is no need to rescale the coefficients.
+Finally, note that the estimated coefficients from the weighted elastic net are on the same scale as the original (non-normalized data), so there is no need to rescale the coefficients in the weighted elastic net.
 
 \subsection{Mixed Data}\label{sec:mixed-data}
 
