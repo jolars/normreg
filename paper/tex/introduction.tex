@@ -29,17 +29,14 @@ mentioned ones---shrink coefficients in proportion to their sizes.
 % TODO: Maybe say something about ℓ₀ (best subset) regularization
 The issue with this type of shrinkage is that it is typically sensitive to the scales of
 the features in \(\mat X\). A common remedy is to \emph{normalize} the features before
-fitting the model by translating and dividing each column by respective translation and
-scaling factors. For some problems, such factors may arise naturally from knowledge of the
-problem at hand. A researcher may for instance have collected data on coordinates within a
-limited area and know that the coordinates are measured in meters. Often, however, these
-scaling factors must be estimated from data. The most popular choices for this type of
-scaling are based only on the marginal distributions of the features. Some types of
-normalization, such as that applied in the adaptive lasso\footnote{The adaptive lasso
-  typically uses estimates of the regression coefficients, typically from ordinary-least
-  squares or ridge regression, to scale the features with.}~\citep{zou2006}, however, are
-based on the conditional distributions of the features and the response. After fitting the
-model, the estimated coefficients are then usually returned to their original scale.
+fitting the model by shifting and dividing each column by respective centering and scaling
+factors. For some problems such factors arise naturally from knowledge of the problem at
+hand. In most cases, however, they must be estimated from data. A common stategy, for
+instance, i to translate by the mean of each feature and scale by the standard deviation,
+which is called \emph{standardization}. Standardization along with most other popular
+choices for of normalization are based only on the marginal distributions of the features.
+Some types, such as the normalization applied in the adaptive lasso~\citep{zou2006},
+however, are based on the conditional distributions of the features and the response.
 Another reason for normalizing the features is to improve the performance and stability of
 optimization algorithms used to fit the model. We will not cover this aspect in this paper,
 but note that it is an important one.
