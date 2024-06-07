@@ -2,7 +2,12 @@
 
 \subsection{Proof of \Cref{thm:maxabs-gev}}
 
-If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the Gumbel distribution for a absolutely continuous cumulative distribution function~\citep[Theorem 10.5.2]{nagaraja2003} is
+If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the
+Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in
+distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice
+of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the
+Gumbel distribution for a absolutely continuous cumulative distribution
+function~\citep[Theorem 10.5.2]{nagaraja2003} is
 \[
   \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
 \]
@@ -14,8 +19,9 @@ We have
                               & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
   \end{aligned}
 \]
-where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density functions of the standard normal distribution respectively.
-Next, we follow \citet[example 10.5.3]{nagaraja2003} and observe that
+where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density
+functions of the standard normal distribution respectively. Next, we follow \citet[example
+  10.5.3]{nagaraja2003} and observe that
 \[
   \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
 \]
@@ -23,7 +29,8 @@ since
 \[
   \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
 \]
-In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n f_Y(b_n)\big)^{-1}\).
+In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n
+f_Y(b_n)\big)^{-1}\).
 
 \subsection{Proof of \Cref{thm:classbalance-bias}}
 
@@ -56,7 +63,9 @@ Before we proceed, note the following limits, which we will make repeated use of
   \end{cases}
 \end{equation}
 
-Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for now assuming that they are well-defined and that the limits of the remaining terms also exist seperately, we have
+Starting with the terms involving \(\cdf\) inside the limit in \Cref{eq:eval-qlimit}, for
+now assuming that they are well-defined and that the limits of the remaining terms also
+exist seperately, we have
 \begin{align}
    & \lim_{q \rightarrow 1^+} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d_j} \cdf \left(\frac{\gamma}{\sigma}\right)\right)                                                                                                                                                                                      \nonumber                                                        \\
    & = \lim_{q \rightarrow 1^+} \Bigg(\left(\frac{\beta_j^* n}{n + \lambda_2 (q-q^2)^{2\delta - 1}} + \frac{\lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2 (q-q^2)^{\delta}} \right) \cdf \left(\frac{\theta}{\sigma}\right)  \nonumber                                                                                                                                                                                    \\
@@ -73,16 +82,21 @@ Considering the first term in \Cref{eq:eval-qlimit-terms}, we see that
     \beta_j^*                                    & \text{if } \delta > 1/2.
   \end{cases}
 \]
-For the second term in \Cref{eq:eval-qlimit-terms}, we start by observing that if
-\(\delta = 1\), then \(q(1-q)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow 1^+}(q - q^2)^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases (\(\delta \geq 1\)).
+For the second term in \Cref{eq:eval-qlimit-terms}, we start by observing that if \(\delta
+= 1\), then \(q(1-q)^{\delta - 1} = 1\), and if \(\delta > 1\), then \(\lim_{q\rightarrow
+  1^+}(q - q^2)^{\delta - 1} = 0\). Moreover, the arguments of \(\cdf\) approach 0 in the
+limit for \(\delta \geq 1\), which means that the entire term vanishes in both cases
+(\(\delta \geq 1\)).
 
-For \(0 \leq \delta < 1\), the limit is indeterminite of the form \(\infty \times 0\). We define
+For \(0 \leq \delta < 1\), the limit is indeterminite of the form \(\infty \times 0\). We
+define
 \[
   f(q) = \cdf \left(\frac{\theta}{\sigma}\right) - \cdf \left(\frac{\gamma}{\sigma}\right)
   \qquad\text{and}\qquad
   g(q) = n(q - q^2)^{1-\delta} + \lambda_2(q - q^2)^\delta,
 \]
-such that we can express the limit as \(\lim_{q \rightarrow 1^+}f(q)/g(q)\). The corresponding derivatives are
+such that we can express the limit as \(\lim_{q \rightarrow 1^+}f(q)/g(q)\). The
+corresponding derivatives are
 \[
   \begin{aligned}
     f'(q) & = \left(-\frac{a}{2}(1-2q)(q - q^2)^{-1/2} - b(\delta - 1/2)(1-2q)(q - q^2)^{\delta - 3/2}\right)\pdf\left(\frac{\theta}{\sigma}\right)                 \\
@@ -90,7 +104,8 @@ such that we can express the limit as \(\lim_{q \rightarrow 1^+}f(q)/g(q)\). The
     g'(q) & = n(1 - \delta)(1-2q)(q - q^2)^{-\delta} + \lambda_2 \delta(1 - 2q) (q - q^2)^{\delta - 1}
   \end{aligned}
 \]
-Note that \(f(q)\) and \(g(q)\) are both differentiable and \(g'(q) \neq 0\) everywhere in the interval \((1/2, 1)\). Now note that we have
+Note that \(f(q)\) and \(g(q)\) are both differentiable and \(g'(q) \neq 0\) everywhere in
+the interval \((1/2, 1)\). Now note that we have
 \begin{multline}
   \label{eq:eval-qlimit-secondterm}
   \frac{f'(q)}{g'(q)} = \frac{1}{n(1-\delta)(q-q^2)^{1/2-\delta} + \lambda_2 \delta (1-2q)(q - q^2)^{\delta-1/2}} \\
@@ -102,7 +117,8 @@ For \(\delta = 1/2\), we have
 \[
   \lim_{q \rightarrow 1^+} \frac{f'(q)}{g'(q)} = -\frac{a}{n + \lambda_2} \lim_{q \rightarrow 1^+}\left(\pdf\left(\frac{\theta}{\sigma}\right) + \pdf\left(\frac{\gamma}{\sigma}\right)\right) = -\frac{a}{n + \lambda_2} \pdf(-b)
 \]
-so that we can use L'Hôpital's rule to show that the second term in \Cref{eq:eval-qlimit-terms} becomes
+so that we can use L'Hôpital's rule to show that the second term in
+\Cref{eq:eval-qlimit-terms} becomes
 \begin{equation}
   \label{eq:eval-qlimit-stdcase}
   -\frac{2\beta_j^*\lambda_1\sqrt{n}}{\sigma_\varepsilon(n + \lambda_2)} \pdf\left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
@@ -127,13 +143,15 @@ Now we proceed to consider the terms involving \(\pdf\) in \Cref{eq:eval-qlimit}
 \end{equation}
 For \(0 \leq \delta < 1/2\), we observe that the exponential terms in \(\pdf\) dominate in the limit, and so we can distribute the limit and consider the limits of the respective terms individually, which both vanish.
 
-For \(\delta \geq 1/2\), the limit in \Cref{eq:eval-qlimit-pdfterm} has an indeterminate form of the type \(\infty \times 0\). Define
+For \(\delta \geq 1/2\), the limit in \Cref{eq:eval-qlimit-pdfterm} has an indeterminate
+form of the type \(\infty \times 0\). Define
 \[
   u(q) = \pdf\left(\frac{\gamma}{\sigma}\right) - \pdf\left(\frac{\theta}{\sigma}\right)
   \qquad\text{and}\qquad
   v(q) = n(q - q^2)^{1/2} + \lambda_2 (q - q^2)^{2\delta - 1/2}
 \]
-which are both differentiable in the interval \((1/2, 1)\) and \(v'(q) \neq 0\) everywhere in this interval. The derivatives are
+which are both differentiable in the interval \((1/2, 1)\) and \(v'(q) \neq 0\) everywhere
+in this interval. The derivatives are
 \[
   \begin{aligned}
     u'(q) & = -\pdf\left(\frac{\gamma}{\sigma}\right)\frac{\gamma}{\sigma} \left(\frac{1}{2}\left(a(1-2q)(q - q^2)^{-1/2}\right) - b(\delta - 1/2)(1- 2q)(q - q^2)^{\delta - 3/2}\right)                  \\
@@ -158,15 +176,18 @@ For \(\delta = 1/2\), we have
 \[
   \lim_{q \rightarrow 1^+} \frac{u'(q)}{v'(q)} = -\frac{a}{n + \lambda_2}\left(-b \pdf(-b) - b \pdf(-b)\right) + 0 = 2ab \pdf(-b) = \frac{2 \beta_j^* \lambda_1}{\sigma_\varepsilon^2(n + \lambda_2)} \pdf \left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
 \]
-Using L'Hôpital's rule, the second term in \Cref{eq:eval-qlimit-pdfterm} must consequently be
+Using L'Hôpital's rule, the second term in \Cref{eq:eval-qlimit-pdfterm} must consequently
+be
 \[
   \frac{2 \beta_j^* \lambda_1\sqrt{n}}{\sigma_\varepsilon(n + \lambda_2)} \pdf \left(\frac{-\lambda_1}{\sigma_\varepsilon\sqrt{n}}\right).
 \]
 which cancels with \Cref{eq:eval-qlimit-stdcase}.
 
-For \(\delta > 1/2\), we first observe that the first term in \Cref{eq:eval-qlimit-pdfterm-split} tends to zero due to \Cref{eq:eval-sigma-limits} and
-the properties of the standard normal distribution. For the second term, we note that this is essentially
-of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is therefore 0 here.
+For \(\delta > 1/2\), we first observe that the first term in
+\Cref{eq:eval-qlimit-pdfterm-split} tends to zero due to \Cref{eq:eval-sigma-limits} and
+the properties of the standard normal distribution. For the second term, we note that this
+is essentially of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is
+therefore 0 here.
 
 \subsection{Proof of \Cref{thm:classbalance-variance}}
 
@@ -187,10 +208,12 @@ We start by noting the following identities:
     \frac{\sigma}{d}          & = \frac{\sigma_\varepsilon \sqrt{n}}{n(q-q^2)^\frac{1}{2} + \lambda_2 (q-q^2)^{2\delta - 1/2}}.
   \end{aligned}
 \]
-Expansions involving \(\gamma\), instead of \(\theta\), have identical expansions up to sign changes of the individual terms.
-Also recall the definitions provided in the proof of \Cref{thm:classbalance-bias}.
+Expansions involving \(\gamma\), instead of \(\theta\), have identical expansions up to
+sign changes of the individual terms. Also recall the definitions provided in the proof of
+\Cref{thm:classbalance-bias}.
 
-Starting with the case when \(0 \leq \delta < 1/2\), we write the limit of \Cref{eq:varthm-var} as
+Starting with the case when \(0 \leq \delta < 1/2\), we write the limit of
+\Cref{eq:varthm-var} as
 \begin{align*}
    & \lim_{q \rightarrow }\var \hat{\beta}_j                                                                                                                                                                                                                                                                                                                                             \\
    & = \sigma_\varepsilon^2 n  \lim_{q \rightarrow 1^+} \frac{1}{\left(n(q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2}\bigg(1 + \erf\left(\frac{\theta}{\sigma \sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right)\bigg)                                                                                               \\
@@ -216,7 +239,8 @@ And
 \[
   \lim_{q \rightarrow 1^+} \frac{f_1'(q)}{g'(q)} = \lim_{q \rightarrow 1^+} \frac{f_2'(q)}{g'(q)} = 0
 \]
-due to the dominance of the exponential terms as \(\theta/\sigma\) and \(\gamma/\sigma\) both tend to \(-\infty\). Thus \(f_1/g\) and \(f_2/g\) also tend to 0 by L'Hôpital's rule.
+due to the dominance of the exponential terms as \(\theta/\sigma\) and \(\gamma/\sigma\)
+both tend to \(-\infty\). Thus \(f_1/g\) and \(f_2/g\) also tend to 0 by L'Hôpital's rule.
 
 Similar reasoning shows that
 \[
@@ -224,13 +248,17 @@ Similar reasoning shows that
 \]
 The same result applies to the respective terms involving \(\gamma\).
 
-And since we in \Cref{thm:classbalance-bias} showed that \(\lim_{q\rightarrow 1^+} \frac{1}{d} \E \hat{\beta}_j = 0\), the limit of \Cref{eq:varthm-var} must be 0.
+And since we in \Cref{thm:classbalance-bias} showed that \(\lim_{q\rightarrow 1^+}
+\frac{1}{d} \E \hat{\beta}_j = 0\), the limit of \Cref{eq:varthm-var} must be 0.
 
 For \(\delta = 1/2\), we start by establishing that
 \[
   \lim_{q \rightarrow 1^+} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \lim_{q \rightarrow 1^+} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right)
 \]
-is a positive constant since \(\theta/\sigma \rightarrow -b\), \(\sigma = \sigma_\varepsilon \sqrt{n}\), \(\theta \rightarrow - \lambda\), and \(\theta\sigma \rightarrow - \sigma_\varepsilon \sqrt{n}\lambda\). An identical argument can be made in the case of
+is a positive constant since \(\theta/\sigma \rightarrow -b\), \(\sigma =
+\sigma_\varepsilon \sqrt{n}\), \(\theta \rightarrow - \lambda\), and \(\theta\sigma
+\rightarrow - \sigma_\varepsilon \sqrt{n}\lambda\). An identical argument can be made in
+the case of
 \[
   \lim_{q \rightarrow 1^+} \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z.
 \]
@@ -238,8 +266,9 @@ We then have
 \[
   \lim_{q \rightarrow 1^+} \frac{1}{d^2} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \frac{C^+}{\lim_{q\rightarrow 1^+} d^2} = \frac{C^+}{0} = \infty,
 \]
-where \(C^+\) is some positive constant.
-And because \(\lim_{q\rightarrow 1^+} \frac{1}{d} \E \hat{\beta}_j = \beta_j^*\)~(\Cref{thm:classbalance-bias}), the limit of \Cref{eq:varthm-var} must be \(\infty\).
+where \(C^+\) is some positive constant. And because \(\lim_{q\rightarrow 1^+} \frac{1}{d}
+\E \hat{\beta}_j = \beta_j^*\)~(\Cref{thm:classbalance-bias}), the limit of
+\Cref{eq:varthm-var} must be \(\infty\).
 
 Finally, for the case when \(\delta > 1/2\), we have
 \begin{multline*}
