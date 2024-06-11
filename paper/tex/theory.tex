@@ -189,10 +189,10 @@ In \Cref{fig:selection-probability}, we plot this probability for various settin
 mitigates the influence of class imbalance on selection probability. The lower the value of
 \(\delta\), the larger the effect of class imbalance becomes. Note that the probability of
 selection initially decreases also in the case when \(\delta \geq 1\). This is a
-consequence of increased variance of \(Z\) dues to the scaling factor that scales the
-measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as \(q\) approaches 1, the
-probability picks up again and eventually approaches 1 for these \(\delta \in \{1, 1.5\}\).
-The reason for this is that the variance of \(Z\) eventually explodes (again due to the
+consequence of increased variance of \({Z_j}\) due to the scaling factor that scales the
+measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as \(q_j\) approaches 1, the
+probability picks up again and eventually approaches 1 for \(\delta \in \{1, 1.5\}\). The
+reason for this is that the variance of \({Z_j}\) eventually explodes (again due to the
 scaling), which ultimately removes the soft-thresholding effect altogether. Note that the
 selection probability is unaffected by \(\lambda_2\) (the ridge penalty), so these results
 hold for any value of it.
