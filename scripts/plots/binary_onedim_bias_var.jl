@@ -95,12 +95,12 @@ function plot_binary_bias_var(df, α = 0)
         hline!(pl, [lev], linestyle = :dot, linecolor = :black)
       end
 
-      if variable == "var" && dd.α == 0
+      if variable == "var" && α == 0
         β = 2
         n = 100
         σe = dd.sigma_e[1]
         group = subset(dd, :delta => d -> d .== 0.25)
-        λ = group.lambda[1] * (1 - group.α[1])
+        λ = group.lambda[1] * (1 - α)
         lev = σe^2 * n / λ^2
         hline!(pl, [lev], linestyle = :dot, linecolor = :black)
       end
