@@ -1,6 +1,7 @@
 using JSON
 using NormReg
 using DrWatson
+using Random
 using ProjectRoot
 
 function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5, α::Real = 1)
@@ -10,6 +11,8 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5,
 
   s = (q - q^2)^δ
 
+  u = v = 1.0
+
   if α == 1
     # λ = λ / 0.25^δ
     λ = λ * 4^δ
@@ -17,16 +20,19 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5,
     # λ = λ / 0.25^(2 * δ)
     λ = λ * 4^(2 * δ)
   else
-    # TODO: This is arbitrary and does not work exactly.
-    λ = λ / 0.25^(1.31 * δ)
+    # λ = λ * 4^δ
+    q0 = 0.5
+    u = v = 2 * (q0 - q0^2)^(1 - δ) * (q - q^2)^δ
+    s = 1
   end
 
-  λ1 = λ * α
+  λ1 = λ * α * u
+  λ2 = λ * (1 - α) * v
 
   μ = binary_mean(β, n, q, s)
   σ = binary_stddev(σe, n, q, s)
 
-  d = binary_d(n, q, s, λ, α)
+  d = binary_d(n, q, s, λ2)
 
   θ = -(μ + λ1)
   γ = μ - λ1
@@ -45,7 +51,7 @@ param_dict = Dict{String,Any}(
   "sigma_e" => [0.25, 0.5, 1, 2],
   "delta" => [0, 1 / 4, 1 / 2, 1.0, 1.5],
   "lambda" => [0.2],
-  "α" => [0, 0.5, 1],
+  "α" => [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
 )
 param_expanded = dict_list(param_dict)
 

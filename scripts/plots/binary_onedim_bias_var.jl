@@ -2,6 +2,7 @@ using DataFrames
 using JSON
 using LaTeXStrings
 using NormReg
+using Distributions
 using Plots
 using Plots.PlotMeasures
 using ProjectRoot
@@ -78,13 +79,13 @@ function plot_binary_bias_var(df, α = 0)
         xticks = 0.5:0.25:1,
         title = title,
         legend = false,
+        palette = pal,
         # legend = i == 1 && j == 4,
         # legend_position = :outerright,
-        c,
       )
 
       # Plot asymptotic limit for standardization case
-      if i == 2 && dd.α[1] > 0
+      if variable == "bias" && dd.α[1] == 1
         β = 2
         n = 100
         σe = dd.sigma_e[1]
@@ -94,14 +95,22 @@ function plot_binary_bias_var(df, α = 0)
         hline!(pl, [lev], linestyle = :dot, linecolor = :black)
       end
 
-      if variable == "var" && dd.α[1] == 0
+      if variable == "var" && dd.α == 0
         β = 2
         n = 100
         σe = dd.sigma_e[1]
-        std_group = subset(dd, :delta => d -> d .== 0.25)
-        λ = std_group.lambda[1] * (1 - std_group.α[1])
-        # lev = 2 * β * cdf(Normal(), -λ / (σe * sqrt(n))) - β
+        group = subset(dd, :delta => d -> d .== 0.25)
+        λ = group.lambda[1] * (1 - group.α[1])
         lev = σe^2 * n / λ^2
+        hline!(pl, [lev], linestyle = :dot, linecolor = :black)
+      end
+
+      if variable == "bias" && α > 0 && α < 1
+        β = 2
+        n = 100
+        group = subset(dd, :delta => d -> d .== 1)
+        λ2 = group.lambda[1] * (1 - group.α[1])
+        lev = β * n / (n + λ2) - β
         hline!(pl, [lev], linestyle = :dot, linecolor = :black)
       end
 
@@ -113,13 +122,15 @@ function plot_binary_bias_var(df, α = 0)
 
   legendvals = collect(zeros(n_delta)')
 
+  legend_title = α > 0 && α < 1 ? L"\omega" : L"\delta"
+
   legend = plot(
     legendvals,
     showaxis = false,
     grid = false,
     label = lab,
     legend_position = :left,
-    legend_title = L"\delta",
+    legend_title = legend_title,
     palette = pal,
     background_color_subplot = :transparent,
     framestyle = :none,

@@ -95,12 +95,13 @@ lasso~\citep{zou2006}, which is a two-step procedure. In the first step, a model
 ordinary least-squares regression (OLS) or ridge regression, is fit to the data. The
 estimated coefficients from the model are then used to scale the features.
 
-\subsection{The Elastic Net}
+\subsection{The Lasso, Ridge Regression, and the Elastic Net}
 
-From now on, we will direct our focus on the elastic net~\citep{zou2005}, which is the
-ordinary-least squares regression objective regularized by a combination of the \(\ell_1\)
-and squared \(\ell_2\) norms. For the normalized feature matrix \(\tilde{\mat{X}}\), the
-elastic net is represented by the following convex optimization problem:
+In this paper we focus on the lasso and ridge regression as well as their generalization:
+elastic net. The latter of these is the ordinary-least squares regression objective
+regularized by a combination of the \(\ell_1\) and squared \(\ell_2\) norms. For the
+normalized feature matrix \(\tilde{\mat{X}}\), the elastic net is represented by the
+following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
@@ -130,18 +131,38 @@ where \(g\) is a subgradient of the \(\ell_1\) norm that has elements \(g_i\) su
   \end{cases}
 \]
 
+\subsection{Weighted Penalization}\label{sec:weighted-elasticnet}
+
+One alternative to normalization, which will be of particular interested in the case of the
+elastic net, is to weight the coefficients in the penalty term---and instead of minimizing
+\Cref{eq:elastic-net} given the normalized design \(\tilde{\mat{X}}\) minimize the
+following objective:
+\[
+  \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =
+  \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
+\]
+with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors. We
+call this the \emph{weighted elastic net}, which is equivalent to the original form when
+\begin{equation}
+  \label{eq:weighted-normal-equivalence}
+  \vec{u} = \diag\left(\mat{S}^{-1}\right), \qquad \text{and}\qquad \vec{v} = \diag\left(\mat{S}^{-2}\right),
+\end{equation}
+which can be seen by substituting \(\mat{S}\vec{\beta} = \tilde{\vec{\beta}}\) in \Cref{eq:elastic-net}. Note that this one-to-one correspondence is specific to the elastic net. The connection is not guaranteed to hold for other choices of \(g\), and even if it does might require different choices of \(\vec{u}\) and \(\vec{u}\).
+
 \subsection{Orthogonal Features}
 
 If the features of the normalized design matrix are orthogonal, that is,
 \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
 \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right) \), then
 \Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
+%
 \[
   \begin{cases}
     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 - \tilde{\vec{x}}_j^\T\vec{y} + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j=1,\dots,p, \\
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
+%
 The inclusion of an intercept, \(\beta_0\), ensures that the locations of the features
 (their means) does not affect the solution (except for the intercept itself). Therefore, we
 will from now on assume that the features are mean-centered, that is, \(c_j =
@@ -166,11 +187,14 @@ coefficients, which will now be on the scale of the normalized features. We, how
 interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem.
 To obtain these, we transform the coefficients from the normalized poblem,
 \(\hat\beta^{(n)}_j\), back via
+%
 \begin{equation}
   \label{eq:orthogonal-solution}
   \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j} \quad\text{for}\quad j = 1,2,\dots,p.
 \end{equation}
-There is a similar transformation for the intercept which we omit here since we are not interested in it.
+%
+There is a similar transformation for the intercept which we omit here since we are not
+interested in it.
 
 Note that this rescaling is not needed in the weighted elastic
 net~(\Cref{sec:weighted-elasticnet}), since the estimated coefficients are then on the same

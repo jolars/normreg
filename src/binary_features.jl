@@ -10,8 +10,8 @@ function binary_stddev(σe, n, q, s)
   return sqrt(v)
 end
 
-function binary_d(n, q, s, λ, α = 1)
-  return n * (q - q^2) / s + s * (1 - α) * λ
+function binary_d(n, q, s, λ2)
+  return n * (q - q^2) / s + s * λ2
 end
 
 function binary_expected_value(θ, γ, σ, d; print_components = false)
@@ -53,18 +53,18 @@ function binary_variance(θ, γ, σ, d)
   return (1 / d^2) * (a + b) - binary_expected_value(θ, γ, σ, d)^2
 end
 
-function binary_selection_prob(β, n, q, delta, lambda, σe)
+function binary_selection_prob(β, n, q, delta, λ1, σe)
   X = Normal()
 
   s = (q - q^2)^delta
 
-  lambda = lambda / (0.5 - 0.5^2)^delta
+  λ1 = λ1 / (0.5 - 0.5^2)^delta
 
   X = Normal()
   μ = binary_mean(β, n, q, s)
   σ = binary_stddev(σe, n, q, s)
 
-  prob = cdf(X, (μ - lambda) / σ) + cdf(X, (-μ - lambda) / σ)
+  prob = cdf(X, (μ - λ1) / σ) + cdf(X, (-μ - λ1) / σ)
 
   return prob, lambda
 end

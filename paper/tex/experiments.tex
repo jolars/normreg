@@ -1,29 +1,30 @@
 \section{Experiments}
 \label{sec:experiments}
 
-In the following sections, we present the results of our experiments. We begin by examining
-the variability and bias in the estimates of the regression coefficients. We then move on
-to predictive performance and hyperparameter selection. We also consider the effect of
-class imbalance on the estimates of the regression coefficients. Finally, we look at the
-effect of interactions between features on the estimates of the regression coefficients.
+In the following sections, we present the results of our experiments. We have split the
+section into two parts, focusing in the first part (\Cref{sec:experiments-lassoridge}) on
+normalization in the cases of the lasso and ridge regression. In the second part, we turn
+to the elastic net, focusing on solving class balance bias via penalty weighting.
+
+\subsection{The Lasso and Ridge Regresion}\label{sec:experiments-lassoridge}
+
+We begin by examining the variability and bias in the estimates of the regression
+coefficients. We then move on to predictive performance and hyperparameter selection. We
+also consider the effect of class imbalance on the estimates of the regression
+coefficients. Finally, we look at the effect of interactions between features on the
+estimates of the regression coefficients.
 
 In all cases where we use simulated data, we generate our response vector according to
-\[
-  \vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon},
-\]
-with \(\vec{\varepsilon} \sim \normal(\vec{0}, \sigma_\varepsilon^2 \mat{I})\), where
-\(\mat{X}\) is the design matrix, \(\vec{\beta}^*\) is the vector of true regression
-coefficients, and \(\sigma_\varepsilon^2\) is the noise level.
-
-We consider two types of features: binary and quasi-normal features. To generate binary
-vectors, we sample \(\ceil{qn}\) indexes uniformly at random without replacement from
-\(\{1,2,\dots,n\}\) and set the corresponding elements to one and the remaining ones to
-zero. To generate quasi-normal features, we generate a linear sequence \(\vec{w}\) with
-\(n\) values from \(10^{-4}\) to \(1 - 10^{-4}\), and set
-\[
-  x_{ij} = \cdf^{-1}(w_i)
-\]
-and then shuffle the elements of \(\vec{x}_j\) uniformly at random.
+\(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon},\) with \(\vec{\varepsilon} \sim
+\normal(\vec{0}, \sigma_\varepsilon^2 \mat{I})\), where \(\mat{X}\) is the design matrix,
+\(\vec{\beta}^*\) is the vector of true regression coefficients, and
+\(\sigma_\varepsilon^2\) is the noise level. We consider two types of features: binary and
+quasi-normal features. To generate binary vectors, we sample \(\ceil{nq_j}\) indexes
+uniformly at random without replacement from \(\{1,2,\dots,n\}\) and set the corresponding
+elements to one and the remaining ones to zero. To generate quasi-normal features, we
+generate a linear sequence \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 -
+10^{-4}\), and set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the elements of
+\(\vec{x}_j\) uniformly at random.
 
 In each case, we fit either the lasso (the elastic net with \(\lambda_1 = \alpha \lambda\)
 ) or ridge (the elastic net with \(\lambda_2 = (1 - \alpha)\lambda\)). Instead of
@@ -34,18 +35,16 @@ normal data, we use
   u_j = \frac{1}{n}\sum_{i=1}^p (x_{ij} - \bar{\vec{x}}_j)^2\qquad\text{and}\qquad v_j= u_j^2,
 \]
 that is, uncorrected standard deviation and variance. This is equivalent to normalizing the
-design matrix with standardization. For binary data, we use
-\[
-  u_j = v_j = (q - q^2)^\delta,
-\]
-which is equivalent to the (uncorrected) sample variance raised to the power of \(\delta\).
+design matrix with standardization. For binary data, we use \(u_j = v_j = (q_j -
+q_j^2)^\delta,\) which is equivalent to the (uncorrected) sample variance raised to the
+power of \(\delta\).
 
 We use a coordinate descent solver to fit the elastic net, which we have implemented as a
 variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All
 experiments were coded using the Julia programming language~\citep{bezanson2017} and the
 code is availabe at \url{https://github.com/jolars/normreg}.
 
-\subsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
+\subsubsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
 
 In our first experiment, we consider fitting the lasso to a simulated data set with
 \(n=500\) observations and \(p = \num{1000}\) features, out of which the first 20 features
@@ -60,7 +59,7 @@ means and standard deviations.
 
 The results~(\Cref{fig:binary-decreasing}) show that there is a considerable effect of
 class balance, particularly in the case of no scaling (\(\delta = 0\)), which corroborates
-our theoretical results from \Cref{sec:theory-binary-features}. At \(q=0.99\), for
+our theoretical results from \Cref{sec:theory-binary-features}. At \(q_j=0.99\), for
 instance, the estimate (\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\).
 There is a similar effect also in the case of standardization (\(\delta = 1/2\)), but it is
 less pronounced. For \(\delta=1\) (variance scaling), we see that the effect of class
@@ -78,14 +77,14 @@ effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
   \label{fig:binary-decreasing}
 \end{figure}
 
-\subsection{Predictive Performance}\label{sec:predictive-performance}
+\subsubsection{Predictive Performance}\label{sec:predictive-performance}
 
 In this experiment, we consider predictive performance in terms of mean-squared error of
-the lasso given different levels of class balance (\(q \in \{0.5, 0.9, 0.99\}\)),
+the lasso given different levels of class balance (\(q_j \in \{0.5, 0.9, 0.99\}\)),
 signal-to-noise ratio, and normalization (\(\delta\)). As in the previous section, all of
 the features are binary, but here we have used \(n=300\), \(p = \num{1000}\). The \(k=10\)
 first features correspond to true signals with \(\beta^*_j = 1\) and all have class balance
-\(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
+\(q_j\). To set signal-to-noise ratio levels, we rely on the same choice as in
 \citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6.
 
 To estimate prediction performance, we use a standard hold-out validation method equal
@@ -106,12 +105,12 @@ all. In general, \(\delta=1/2\) works well for these specific combinations of se
   \centering
   \includegraphics[]{plots/binary_data_sim.pdf}
   \caption{%
-    Normalized mean-squared prediction error in a lasso model for different types of normalization (\(\delta\)), types of class imbalances (\(q\)), and signal-to-noise ratios (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The error is aggregated test-set error from hold-out validation with \(100\) observations in each of the training, validation, and test sets. The plot shows means and Student's \(t\)-based 95\% confidence intervals.
+    Normalized mean-squared prediction error in a lasso model for different types of normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The error is aggregated test-set error from hold-out validation with \(100\) observations in each of the training, validation, and test sets. The plot shows means and Student's \(t\)-based 95\% confidence intervals.
   }
   \label{fig:binary-sim}
 \end{figure}
 
-\subsection{Normalization as a Hyperparameter}\label{sec:experiments-hyperparameter}
+\subsubsection{Normalization as a Hyperparameter}\label{sec:experiments-hyperparameter}
 
 % TODO: consider reparameterizing with respect to lambda/delta
 
@@ -189,17 +188,17 @@ visible here by looking at the support size.
   \label{fig:hyperopt-support}
 \end{figure}
 
-\subsection{Mixed Data}\label{sec:experiments-mixed-data}
+\subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
 In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing
 mixed data. In this experiment, we construct a quasi-normal feature with mean zero and
-standard deviation 1/2 and a binary feature with varying class balance \(q\). We set the
+standard deviation 1/2 and a binary feature with varying class balance \(q_j\). We set the
 signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with
 \(n = \num{1000}\). These features are constructed so that their effects are comparable
 under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using
 \(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 = 1/2\),
 we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2 \times
-(1/4)^{1-\delta}(q-q^2)^\delta\). For the lasso, we set the level of penalization to
+(1/4)^{1-\delta}(q_j-q_j^2)^\delta\). For the lasso, we set the level of penalization to
 \(\lambda_\text{max}/2\) and for ridge regression, we set the level of penalization to
 \(2\lambda_\text{max}\).\footnote{This makes the level of regularization comparable between
   the two cases.}
@@ -214,23 +213,23 @@ of added variance.
   \centering
   \includegraphics{plots/mixed_data.pdf}
   \caption{%
-    Lasso and ridge estimates for a two-dimensional problem where one feature is a binary feature with class balance \(q\), \(\bernoulli(q)\), and the other is a quasi-normal feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\) observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal feature. The binary feature, meanwhile, is centered by its mean and scaled by \((q-q^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report means and standard deviations of the estimates.}
+    Lasso and ridge estimates for a two-dimensional problem where one feature is a binary feature with class balance \(q_j\), \(\bernoulli(q_j)\), and the other is a quasi-normal feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\) observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal feature. The binary feature, meanwhile, is centered by its mean and scaled by \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report means and standard deviations of the estimates.}
   % TODO: fix scaling parameterizaiton here. we are adjust to put features on even footing.
   \label{fig:lasso-ridge-comparison}
 \end{figure}
 
 Note that we do not see the bias reduction that we observed in our theoretical results for
-high \(q\) values and \(\delta \geq 1/2\) in \Cref{fig:lasso-ridge-comparison}. This is
-related to the error term (signal-to-noise ratio) and level of \(q\). Typically, we would
+high \(q_j\) values and \(\delta \geq 1/2\) in \Cref{fig:lasso-ridge-comparison}. This is
+related to the error term (signal-to-noise ratio) and level of \(q_j\). Typically, we would
 need stronger class imbalance and larger error for the effect to show up in our
 experiments.
 
-\subsection{Interactions}\label{sec:experiments-interactions}
+\subsubsection{Interactions}\label{sec:experiments-interactions}
 
 In our final experiment, we study the effect of normalization and class balance on
 interactions when using the lasso. Our example consists of a two-feature problem with an
 added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with
-class balance \(q=0.9\) and the second quasi-normal with standard deviation 0.5. We set
+class balance \(q_j=0.9\) and the second quasi-normal with standard deviation 0.5. We set
 \(n=1000\) and specify \(\lambda_1 = n/4\) as the level of regularization. Note that we
 normalize \emph{after} the interaction term is added.
 
@@ -252,4 +251,6 @@ Note that the interaction in this experiment naturally introduces correlation be
 features and that this has an effect on the lasso estimates since we, for instance, can
 penalize the main effect whilst still retaining information about it in the interaction
 term.
+
+\subsection{The Elastic Net}\label{sec:experiments-elasticnet}
 
