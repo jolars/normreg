@@ -15,3 +15,5 @@ specialBeginEnd:
 modifyLineBreaks:
   textWrapOptions:
     columns: 92
+    blocksBeginWith:
+      other: '\\Cref'
