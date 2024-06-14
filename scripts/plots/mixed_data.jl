@@ -10,19 +10,16 @@ using Plots.PlotMeasures
 
 using PythonPlot: matplotlib
 
-json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
-df = DataFrame(json_data);
-df_subset = subset(df);
-
 set_plot_defaults()
 
-df_lasso = subset(df_subset, :alpha => a -> a .== 1.0);
-df_ridge = subset(df_subset, :alpha => a -> a .== 0.0);
+json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
+df = DataFrame(json_data);
+df_subset = subset(df, :alpha => a -> a .== 1.0 .|| a .== 0.0);
 
 df_grouped = (groupby(df_subset, [:alpha], sort = true));
 
-n_rows = length(unique(df.alpha))
-n_cols = length(unique(df.delta))
+n_rows = length(unique(df_subset.alpha))
+n_cols = length(unique(df_subset.delta))
 n_groups = 2
 
 plots = []
@@ -33,10 +30,10 @@ for (j, dd) in enumerate(df_grouped)
   groups = groupby(dd, :delta, sort = true)
   for (i, d) in enumerate(groups)
     alpha = d.alpha[1]
-    # model = d.alpha[1] == 1 ? "Lasso\n" : "Ridge\n"
+    model = alpha == 1 ? "Lasso" : "Ridge"
 
     yguide =
-      i == 1 ? L"""\begin{gathered}\hat{\beta}_j\\\alpha = %$(alpha)\end{gathered}""" : ""
+      i == 1 ? L"""\begin{gathered}\text{%$(model)}\\\hat{\beta}_j\end{gathered}""" : ""
 
     yformatter = i == 1 ? :auto : _ -> ""
 
@@ -70,7 +67,7 @@ for (j, dd) in enumerate(df_grouped)
       title = title,
       xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
-      legendposition = j == 1 && i == n_cols ? :bottomleft : :none,
+      legendposition = j == 1 && i == n_cols ? :outerright : :none,
       labels = labels,
     )
 
@@ -78,26 +75,14 @@ for (j, dd) in enumerate(df_grouped)
   end
 end
 
-# labels =
-#   [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" L"\operatorname{Normal}(0, 2)"]
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 
-# legend = plot(
-#   zeros(1, n_groups),
-#   showaxis = false,
-#   grid = false,
-#   label = labels,
-#   legend_position = :topleft,
-#   background_color_subplot = :transparent,
-# )
-
-# l = @layout[grid(n_rows, n_cols) a{0.20w}]
 l = (n_rows, n_cols)
 
 pl = plot(
   plots...,
   layout = l,
-  size = (FULL_WIDTH * 0.8, 400),
+  size = (FULL_WIDTH * 0.83, 260),
   left_margin = 3mm,
   bottom_margin = 3mm,
 )

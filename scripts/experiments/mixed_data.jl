@@ -42,16 +42,21 @@ function binary_gaussian_simulation(
 
       y = x * beta + rand(Normal(0, σe), n)
 
-      # x_std, centers, scales = normalize_features(x, delta)
+      if α == 0 || α == 1
+        x_std, centers, scales = normalize_features(x, delta)
 
-      w = vec(scaling_factors(x, delta))
+        λmax = maximum(abs.(x_std' * (y .- mean(y))))
 
-      λmax = maximum(abs.(x' * (y .- mean(y))))
+        λ = α == 0 ? λmax * 2 : λmax * 0.5
+        res = elasticnet(x_std, y, α = α, λ = [λ])
+        _, beta_hat_it = unstandardize_coefficients(res.β0, res.β, centers, scales)
+      else
+        w = vec(scaling_factors(x, delta))
+        λmax = maximum(abs.(x' * (y .- mean(y))))
 
-      # λ = α == 0 ? λmax * 2 : λmax * 0.5
-      λ = λmax * 0.5
-
-      beta_hat_it, _, _ = elasticnet(x, y, α = α, λ = [λ], w1 = w, w2 = w)
+        λ = λmax * 0.5
+        beta_hat_it, _, _ = elasticnet(x, y, α = α, λ = [λ], w1 = w, w2 = w)
+      end
 
       # model = Lasso.fit(
       #   Lasso.LassoPath,
@@ -64,12 +69,8 @@ function binary_gaussian_simulation(
       #   intercept = true,
       # )
 
-      # _, beta_hat_it_unstd =
-      #   unstandardize_coefficients(intercepts, beta_hat_it, centers, scales)
-      beta_hat_it_unstd = beta_hat_it
-
       # Compute the average across the iterations
-      beta_hat[k, :] = beta_hat_it_unstd
+      beta_hat[k, :] = beta_hat_it
     end
     betas[:, i] = mean(beta_hat, dims = 1)
     betas_std[:, i] = std(beta_hat, dims = 1)
@@ -104,4 +105,4 @@ open(outfile, "w") do f
   write(f, JSON.json(results))
 end
 
-include(@projectroot("scripts", "plots", "mixed_data.jl"))
+# include(@projectroot("scripts", "plots", "mixed_data.jl"))
