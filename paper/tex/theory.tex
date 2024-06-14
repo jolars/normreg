@@ -217,7 +217,7 @@ the elastic net estimator in the limit as \(q_j \rightarrow 1^+\).
 
 \begin{theorem}
   \label{thm:classbalance-bias}
-  If \(\vec{x}_j\) is a binary feature with class balance \(q_j \in (0, 1)\), \(\lambda_1 \in (0,\infty)\), \(\lambda_2 \in [0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q_j - q_j^2)^{\delta}\), \(\delta \geq 0\)  then
+  If \(\vec{x}_j\) is a binary feature with class balance \(q_j \in (0, 1)\), \(\lambda_1 \in [0,\infty)\), \(\lambda_2 \in [0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q_j - q_j^2)^{\delta}\), \(\delta \geq 0\)  then
   \[
     \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
