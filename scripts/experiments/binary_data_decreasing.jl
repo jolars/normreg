@@ -15,11 +15,11 @@ function binary_decreasingq_simulation(n, p, s, delta, q_type, snr, rho)
 
   σ = √(var(x * β_true) / snr)
 
-  lambda = 2 * σ * sqrt(2 * log(p)) / n
+  λ = 2 * σ * sqrt(2 * log(p))
 
-  res = fit(LassoPath, x, y, Normal(), standardize = false, λ = [lambda], maxncoef = p)
+  res = elasticnet(x, y, λ = [λ])
 
-  _, coefs_unstandardized = unstandardize_coefficients(res.b0, res.coefs, centers, scales)
+  _, coefs_unstandardized = unstandardize_coefficients(res.β0, res.β, centers, scales)
 
   return 0, coefs_unstandardized, β_true
 end
