@@ -24,20 +24,14 @@ uniformly at random without replacement from \(\{1,2,\dots,n\}\) and set the cor
 elements to one and the remaining ones to zero. To generate quasi-normal features, we
 generate a linear sequence \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 -
 10^{-4}\), and set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the elements of
-\(\vec{x}_j\) uniformly at random.
+\(\vec{x}_j\) uniformly at random. In each case, we fit either the lasso (the elastic net
+with \(\lambda_1 = \alpha \lambda\) ) or ridge (the elastic net with \(\lambda_2 = (1 -
+\alpha)\lambda\)).
 
-In each case, we fit either the lasso (the elastic net with \(\lambda_1 = \alpha \lambda\)
-) or ridge (the elastic net with \(\lambda_2 = (1 - \alpha)\lambda\)). Instead of
-normalizing the data, we use the weighted elastic net outlined in
-\Cref{sec:weighted-elasticnet} and scale the coefficients within the penalization term. For
-normal data, we use
-\[
-  u_j = \frac{1}{n}\sum_{i=1}^p (x_{ij} - \bar{\vec{x}}_j)^2\qquad\text{and}\qquad v_j= u_j^2,
-\]
-that is, uncorrected standard deviation and variance. This is equivalent to normalizing the
-design matrix with standardization. For binary data, we use \(u_j = v_j = (q_j -
-q_j^2)^\delta,\) which is equivalent to the (uncorrected) sample variance raised to the
-power of \(\delta\).
+To normalize the data, we use standardization (centering and scaling by mean and standard
+deviation) for all our quasi-normal features. For quasi-binary features, we center by mean
+and scale by \(s_j = (q_j-q_j^2)^\delta\), where \(\delta = 0\) corresponds to no scaling,
+\(\delta = 1/2\) to standardization, and \(\delta = 1\) to variance scaling.
 
 We use a coordinate descent solver to fit the elastic net, which we have implemented as a
 variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All
