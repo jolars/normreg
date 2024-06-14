@@ -214,15 +214,14 @@ We start by noting the following identities:
     \frac{\sigma}{d}          & = \frac{\sigma_\varepsilon \sqrt{n}}{n(q-q^2)^\frac{1}{2} + \lambda_2 (q-q^2)^{2\delta - 1/2}}.
   \end{aligned}
 \]
-Expansions involving \(\gamma\), instead of \(\theta\), have identical expansions up to
-sign changes of the individual terms. Also recall the definitions provided in the proof of
+Expansions involving \(\gamma\) instead of \(\theta\) have identical expansions up to sign
+changes of the individual terms. Also recall the definitions provided in the proof of
 \Cref{thm:classbalance-bias}.
 
 Starting with the case when \(0 \leq \delta < 1/2\), we write the limit of
 \Cref{eq:varthm-var} as
 \begin{align*}
-   & \lim_{q \rightarrow }\var \hat{\beta}_j                                                                                                                                                                                                                                                                                                                                             \\
-   & = \sigma_\varepsilon^2 n  \lim_{q \rightarrow 1^+} \frac{1}{\left(n(q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2}\bigg(1 + \erf\left(\frac{\theta}{\sigma \sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right)\bigg)                                                                                               \\
+   & \lim_{q \rightarrow 1^+} \var \hat{\beta}_j                                                                                                                                                                                                                                                                                                                                         \\ & = \sigma_\varepsilon^2 n  \lim_{q \rightarrow 1^+} \frac{1}{\left(n(q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2}\bigg(1 + \erf\left(\frac{\theta}{\sigma \sqrt{2}}\right) - \frac{\theta}{\sigma}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta^2}{2\sigma^2}\right)\bigg)                                                                                               \\
    & \phantom{= {}} + \sigma_\varepsilon^2 n  \lim_{q \rightarrow 1^+} \frac{1}{\left(n(q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2}\bigg(1 + \erf\left(\frac{\gamma}{\sigma\sqrt{2}}\right) - \frac{\gamma}{\sigma} \sqrt{\frac{2}{\pi}} \exp\left(- \frac{\gamma^2}{2\sigma^2}\right)\bigg)                                                                               \\
    & \phantom{= {}}+ \lim_{q \rightarrow 1^+} \frac{2\theta\sigma}{d^2} \pdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1^+} \frac{\theta^2}{d^2} \cdf\left(\frac{\theta}{\sigma}\right) + \lim_{q \rightarrow 1^+} \frac{2\gamma}{d^2} \sigma \pdf\left(\frac{\gamma}{\sigma}\right) + \lim_{q \rightarrow 1^+}\frac{\gamma^2}{d^2} \cdf\left(\frac{\gamma}{\sigma}\right) \\
    & \phantom{= {}}- \left( \lim_{q\rightarrow 1^+}\frac{1}{d}\E \hat{\beta}_j\right)^2,
@@ -247,7 +246,6 @@ And
 \]
 due to the dominance of the exponential terms as \(\theta/\sigma\) and \(\gamma/\sigma\)
 both tend to \(-\infty\). Thus \(f_1/g\) and \(f_2/g\) also tend to 0 by L'Hôpital's rule.
-
 Similar reasoning shows that
 \[
   \lim_{q \rightarrow 1^+} \frac{2\theta \sigma}{d^2} \pdf \left(\frac{\theta}{\sigma}\right) = \lim_{q \rightarrow 1^+} \frac{\theta^2}{d^2} \cdf \left(\frac{\theta}{\sigma}\right) = 0.
@@ -263,11 +261,8 @@ For \(\delta = 1/2\), we start by establishing that
 is a positive constant since \(\theta/\sigma \rightarrow -b\), \(\sigma =
 \sigma_\varepsilon \sqrt{n}\), \(\theta \rightarrow - \lambda\), and \(\theta\sigma
 \rightarrow - \sigma_\varepsilon \sqrt{n}\lambda\). An identical argument can be made in
-the case of
-\[
-  \lim_{q \rightarrow 1^+} \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du z.
-\]
-We then have
+the case of \(\lim_{q \rightarrow 1^+} \int_{\lambda}^{\infty}(z - \lambda)^2 f_Z(z) \du
+z.\) We then have
 \[
   \lim_{q \rightarrow 1^+} \frac{1}{d^2} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \frac{C^+}{\lim_{q\rightarrow 1^+} d^2} = \frac{C^+}{0} = \infty,
 \]
@@ -305,8 +300,8 @@ notation. We have
   \mu    & = \beta^*(q -q^2)^\omega,                     & \frac{\theta}{\sigma} & = -a\sqrt{q-q^2} - b(q-q^2)^{\omega - 1/2},                                           \\
   \sigma & = \sigma_\varepsilon \sqrt{n(q-q^2)},         & \frac{\gamma}{\sigma} & = a\sqrt{q-q^2} - b(q-q^2)^{\omega - 1/2},                                            \\
   d      & = n(q-q^2) + \lambda_2(q-q^2)^\omega.\,       & \frac{\theta}{d}      & = \frac{-\beta^*n - \lambda_1(q-q^2)^{\omega - 1}}{n + \lambda_2(q-q^2)^{\omega -1}}, \\
-  \theta & = -\beta^*n(q-q^2) - \lambda_1(q-q^2)^\omega, & \frac{\gamma}{d}      & = \frac{\beta^*n - \lambda_1(q-q^2)^{\omega - 1}}{n + \lambda_2(q-q^2)^{\omega -1}}.  \\
-  \gamma & = \beta^*n(q-q^2) - \lambda_1(q-q^2)^\omega,
+  \theta & = -\beta^*n(q-q^2) - \lambda_1(q-q^2)^\omega, & \frac{\gamma}{d}      & = \frac{\beta^*n - \lambda_1(q-q^2)^{\omega - 1}}{n + \lambda_2(q-q^2)^{\omega -1}},  \\
+  \gamma & = \beta^*n(q-q^2) - \lambda_1(q-q^2)^\omega.
 \end{align*}
 
 First note the following limit (which is analogous to that in \Cref{eq:eval-sigma-limits}).
@@ -330,7 +325,8 @@ Starting with the terms involving \(\cdf\) and assuming that the limit can be di
 we have
 \begin{align}
   \lim_{q \rightarrow 1^+} \left(-\frac{\theta}{d} \cdf\left(\frac{\theta}{\sigma}\right) + \frac{\gamma}{d} \cdf \left(\frac{\gamma}{\sigma}\right)\right)
-   & = \lim_{q\rightarrow 1^+} \frac{\beta^*_n + \lambda_1(q-q^2)^{\omega -1}}{n + \lambda_2(q-q^2)^{\omega - 1}}\cdf\left(\frac{\theta}{\sigma}\right) + \lim_{q\rightarrow 1^+} \frac{\beta^*_n - \lambda_1(q-q^2)^{\omega -1}}{n + \lambda_2(q-q^2)^{\omega - 1}}\cdf\left(\frac{\gamma}{\sigma}\right) \nonumber \\
+   & = \lim_{q\rightarrow 1^+} \frac{\beta^* n + \lambda_1(q-q^2)^{\omega -1}}{n + \lambda_2(q-q^2)^{\omega - 1}}\cdf\left(\frac{\theta}{\sigma}\right) \nonumber                \\
+   & \phantom{= {}} + \lim_{q\rightarrow 1^+} \frac{\beta^* n - \lambda_1(q-q^2)^{\omega -1}}{n + \lambda_2(q-q^2)^{\omega - 1}}\cdf\left(\frac{\gamma}{\sigma}\right) \nonumber \\
    & =\begin{cases}
         0                              & \text{if } 0 \leq \omega < 1, \\
         \frac{\beta^*n}{n + \lambda_2} & \text{if } \omega = 1,        \\
