@@ -1,6 +1,5 @@
 using DataFrames
 using DrWatson
-using Lasso
 using LinearAlgebra
 using JSON
 using NormReg
