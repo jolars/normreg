@@ -67,8 +67,12 @@ effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
   \centering
   \includegraphics[]{plots/binary_decreasing.pdf}
   \caption{%
-    Estimates of the regression coefficients from the lasso, \(\hat{\vec{\beta}}\), for the first 30 coefficients in the experiment. All of the features are binary and the first 20 features correspond to true signals with \(\beta_j^* = 2\) and geometrically decreasing class balance from 0.5 to 0.99. The remaining features have a class balance \(q_j \in [0.5, 0.99]\), distributed linearly among the features. The plot shows means and standard deviations averaged over 50 iterations.}
-  \label{fig:binary-decreasing}
+    Estimates of the regression coefficients from the lasso, \(\hat{\vec{\beta}}\), for the
+    first 30 coefficients in the experiment. All of the features are binary and the first 20
+    features correspond to true signals with \(\beta_j^* = 2\) and geometrically decreasing
+    class balance from 0.5 to 0.99. The remaining features have a class balance \(q_j \in [0.5,
+      0.99]\), distributed linearly among the features. The plot shows means and standard
+    deviations averaged over 50 iterations.} \label{fig:binary-decreasing}
 \end{figure}
 
 \subsubsection{Predictive Performance}\label{sec:predictive-performance}
@@ -99,9 +103,12 @@ all. In general, \(\delta=1/2\) works well for these specific combinations of se
   \centering
   \includegraphics[]{plots/binary_data_sim.pdf}
   \caption{%
-    Normalized mean-squared prediction error in a lasso model for different types of normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The error is aggregated test-set error from hold-out validation with \(100\) observations in each of the training, validation, and test sets. The plot shows means and Student's \(t\)-based 95\% confidence intervals.
-  }
-  \label{fig:binary-sim}
+    Normalized mean-squared prediction error in a lasso model for different types of
+    normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios
+    (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The
+    error is aggregated test-set error from hold-out validation with \(100\) observations in
+    each of the training, validation, and test sets. The plot shows means and Student's
+    \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
 \end{figure}
 
 \subsubsection{Normalization as a Hyperparameter}\label{sec:experiments-hyperparameter}
@@ -152,9 +159,10 @@ worse prediction errors.
   \centering
   \includegraphics[]{plots/hyperopt_surfaces.pdf}
   \caption{%
-    Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The dotted path shows the smallest NMSE as a function of \(\lambda\). The dot marks the combination with the smallest error.
-  }
-  \label{fig:hyperopt-contours}
+    Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set
+    across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The
+    dotted path shows the smallest NMSE as a function of \(\lambda\). The dot marks the
+    combination with the smallest error. } \label{fig:hyperopt-contours}
 \end{figure}
 
 We would like to point out that there is a dependency between \(\lambda\) and \(\delta\)
@@ -177,9 +185,11 @@ visible here by looking at the support size.
   \centering
   \includegraphics[]{plots/hyperopt_paths.pdf}
   \caption{%
-    Support size and normalized mean-squared error (NMSE) for the validation set for the lasso fit to datasets \data{a1a}, \data{w1a}, and \data{rhee2006} across combinations of \(\delta\) and \(\lambda\). The optimal \(\delta\) is marked with dashed black lines and the best combination of \(\delta\) (among 0, 1/2, and 1) and \(\lambda\) is shown as a dot.
+    Support size and normalized mean-squared error (NMSE) for the validation set for the lasso
+    fit to datasets \data{a1a}, \data{w1a}, and \data{rhee2006} across combinations of
+    \(\delta\) and \(\lambda\). The optimal \(\delta\) is marked with dashed black lines and
+    the best combination of \(\delta\) (among 0, 1/2, and 1) and \(\lambda\) is shown as a dot. \label{fig:hyperopt-support}
   }
-  \label{fig:hyperopt-support}
 \end{figure}
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
@@ -207,9 +217,14 @@ of added variance.
   \centering
   \includegraphics{plots/mixed_data.pdf}
   \caption{%
-    Lasso and ridge estimates for a two-dimensional problem where one feature is a binary feature with class balance \(q_j\), \(\bernoulli(q_j)\), and the other is a quasi-normal feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\) observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal feature. The binary feature, meanwhile, is centered by its mean and scaled by \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report means and standard deviations of the estimates.}
-  % TODO: fix scaling parameterizaiton here. we are adjust to put features on even footing.
-  \label{fig:lasso-ridge-comparison}
+    Lasso and ridge estimates for a two-dimensional problem where one feature is a binary
+    feature with class balance \(q_j\), \(\bernoulli(q_j)\), and the other is a quasi-normal
+    feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\)
+    observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal
+    feature. The binary feature, meanwhile, is centered by its mean and scaled by
+    \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
+    means and standard deviations of the estimates.\label{fig:lasso-ridge-comparison}
+  }
 \end{figure}
 
 Note that we do not see the bias reduction that we observed in our theoretical results for
@@ -237,8 +252,11 @@ affected by the normalization type for any of the cases in which it is present.
   \centering
   \includegraphics[]{plots/interactions.pdf}
   \caption{%
-    Lasso estimates for a three-feature problem where the third feature is an interaction term between the first two features. The first feature is binary (quasi-Bernoulli) with class balance \(q=0.9\) and the second is quasi-normal with standard deviation 0.5. The signal-to-noise ratio is 0.5. The experiment is run for 50 iterations and we aggregate and report means across all iterations.
-  }
+    Lasso estimates for a three-feature problem where the third feature is an interaction term
+    between the first two features. The first feature is binary (quasi-Bernoulli) with class
+    balance \(q=0.9\) and the second is quasi-normal with standard deviation 0.5. The
+    signal-to-noise ratio is 0.5. The experiment is run for 50 iterations and we aggregate and
+    report means across all iterations. }
 \end{figure}
 
 Note that the interaction in this experiment naturally introduces correlation between the
@@ -247,4 +265,18 @@ penalize the main effect whilst still retaining information about it in the inte
 term.
 
 \subsection{The Elastic Net}\label{sec:experiments-elasticnet}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics{plots/mixed_data_elnet.pdf}
+  \caption{%
+    Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
+    feature with class balance \(q_j\), \(\bernoulli(q_j)\), and the other is a quasi-normal
+    feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\)
+    observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal
+    feature. The binary feature, meanwhile, is centered by its mean and scaled by
+    \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
+    means and standard deviations of the estimates. \label{fig:mixed-data-elnet}
+  }
+\end{figure}
 
