@@ -66,5 +66,5 @@ function binary_selection_prob(β, n, q, delta, λ1, σe)
 
   prob = cdf(X, (μ - λ1) / σ) + cdf(X, (-μ - λ1) / σ)
 
-  return prob, lambda
+  return prob, λ1
 end

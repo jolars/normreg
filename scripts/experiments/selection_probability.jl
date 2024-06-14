@@ -100,7 +100,7 @@ for (j, dd) in enumerate(subgrouped_df)
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_sigma), size = (FULL_WIDTH, 190))
+plot_output = plot(plots..., layout = (1, n_sigma), size = (0.9 * FULL_WIDTH, 165))
 
 file_path = @projectroot("paper", "plots", "selection_probability.pdf")
 savefig(plot_output, file_path)

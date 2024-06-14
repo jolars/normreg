@@ -77,7 +77,7 @@ end
 layout = (n_rows, n_cols)
 
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
-#
+
 # legend = bar(
 #   zeros(1, n_groups),
 #   showaxis = false,

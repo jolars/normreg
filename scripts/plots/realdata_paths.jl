@@ -90,7 +90,7 @@ for (i, d) in enumerate(groupby(df, :normalization))
   end
 end
 
-plot_output = plot(plots..., layout = (n_rows, n_cols), size = (FULL_WIDTH, 350))
+plot_output = plot(plots..., layout = (n_rows, n_cols), size = (FULL_WIDTH, 340))
 
 file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
 

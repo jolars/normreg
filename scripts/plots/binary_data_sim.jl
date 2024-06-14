@@ -12,8 +12,8 @@ using Statistics
 
 set_plot_defaults("pyplot");
 
-json = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
-df = DataFrame(json);
+jsondata = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
+df = DataFrame(jsondata);
 df_filtered = select(df, [:it, :delta, :q, :snr, :err]);
 df_subset = subset(df_filtered)
 
@@ -67,7 +67,7 @@ for (i, dd) in enumerate(groups)
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_qtypes), size = (FULL_WIDTH, 220))
+plot_output = plot(plots..., layout = (1, n_qtypes), size = (0.8 * FULL_WIDTH, 180))
 
 file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)
