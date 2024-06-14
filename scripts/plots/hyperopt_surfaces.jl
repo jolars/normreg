@@ -104,7 +104,3 @@ l = (n_rows, n_cols)
 plot_output = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
 
 savefig(@projectroot("paper", "plots", "hyperopt_surfaces.pdf"))
-
-# plot_talk = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
-#
-# savefig(@projectroot("paper", "plots", "hyperopt_surfaces.pdf"))
