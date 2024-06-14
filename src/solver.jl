@@ -249,5 +249,5 @@ function elasticnet(
     end
   end
 
-  return betas[:, 1:path_length], intercepts[1:path_length], λ[1:path_length]
+  return (β = betas[:, 1:path_length], β0 = intercepts[1:path_length], λ = λ[1:path_length])
 end
