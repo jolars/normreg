@@ -228,18 +228,6 @@ the elastic net estimator in the limit as \(q_j \rightarrow 1^+\).
   \]
 \end{theorem}
 
-% \begin{remark}[Ridge Regression]
-%   Asume the conditions of \Cref{thm:classbalance-bias} but that \(\lambda_1 = 0\). Then
-%   \[
-%     \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
-%     \begin{cases}
-%       0                                & \text{if } 0 \leq \delta < 1/2,     \\
-%       \frac{n\beta_j^*}{n + \lambda_2} & \text{if } \delta = 1/2,            \\
-%       \beta^*_j                        & \text{if } \delta \geq \frac{1}{2}.
-%     \end{cases}
-%   \]
-% \end{remark}
-
 \Cref{thm:classbalance-bias} shows that the bias of the elastic net estimator when \(0 \leq
 \delta < 1/2\) approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^+\). Interestingly, when
 \(\delta = 1/2\) (standardization), the estimate does not in fact tend to zero. Instead, it
