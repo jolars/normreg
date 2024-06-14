@@ -79,8 +79,12 @@ function binary_gaussian_simulation(
   return betas, betas_std, qs
 end
 
-param_dict =
-  Dict("alpha" => [0, 0.5, 1], "delta" => [0, 0.5, 1], "snr" => [0.5], "dummy" => "dummy")
+param_dict = Dict(
+  "alpha" => [0, 0.25, 0.5, 0.75, 1],
+  "delta" => [0, 0.5, 1],
+  "snr" => [0.5],
+  "dummy" => "dummy",
+)
 
 expanded_params = dict_list(param_dict);
 
