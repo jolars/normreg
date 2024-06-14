@@ -476,12 +476,14 @@ As far as expected value and variance of the weighted elastic net estimator is c
 the quantities in \Cref{eq:mean-centered-eval} and \Cref{eq:mean-centered-variance} apply
 directly in the case of the weighted elastic net given \(s_j = 1\) for all \(j\) and
 replacing \(\lambda_1\) as in the previous paragraph and \(\lambda_2\) with \(\lambda_2
-(q_j - q_j^2)^\omega\). The asymptotic results differ slightly however, and here we will
-present the differences---starting with the expected value of the elastic net estimator.
+(q_j - q_j^2)^\omega\). On the other hand, the asymptotic results differ slightly as we
+will show next, starting with the expected value.
 
 \begin{theorem}
   \label{thm:weighted-elasticnet-bias}
-  For the weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\lambda_1 > 0\) and \(\lambda_2 > 0\), it holds that
+  Let \(\vec{x}_j\) be a binary feature with class balance \(q_j \in (0, 1)\) and take
+  \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
+  weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
   \[
     \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
     \begin{cases}
@@ -492,13 +494,40 @@ present the differences---starting with the expected value of the elastic net es
   \]
 \end{theorem}
 
+This result is similar to the one for the unweighted but normalized elastic net. The only
+difference arises in the case when \(\omega = 1\), in which case the limit is unaffected by
+\(\lambda_1\) in the case of the weighted elastic net.
+
+\begin{theorem}
+  \label{thm:weighted-elasticnet-variance}
+  Let \(\vec{x}_j\) be a binary feature with class balance \(q_j \in (0, 1)\) and take
+  \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
+  weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
+  \[
+    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \begin{cases}
+      0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
+      \infty & \text{if } \delta \geq \frac{1}{2}.
+    \end{cases}
+  \]
+\end{theorem}
+
+This result mimics the result for asymptotic variance in the case of the unweighted elastic
+net.
+
+In \Cref{fig:binary-onedim-bias-var-elnet}, we plot bias, variance, and mean-squared error
+for the weighted elastic net. Again, we see that the asymptotic behavior of bias as \(q_j
+\rightarrow 1^+\) depends on the noise level and that there is a
+
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_elnet.pdf}
-  \caption{%
-    Bias, variance, and mean-squared error in the case of the weighted elastic net.
-  }
   \label{fig:binary-onedim-bias-var-elnet}
+  \caption{%
+    Bias, variance, and mean-squared error in the case of the one-dimensional weighted elastic net. The measures are shown for different noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and values of (\(\omega\)), which controls the weights that are set to \(u_j = v_j = 2\times 4^{\omega - 1}(q-q^2)^\omega\) in order for the results to be comparable across different values of \(\omega\).
+    The dotted lines represent the asymptotic bias of the estimator
+    in the case of \(\omega = 1\). In the case of \(\omega > 1\), the limit of the bias is zero.
+  }
 \end{figure}
 
 As in the previous section \Cref{sec:mixed-data}, we modify the weighting factor to account

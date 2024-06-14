@@ -195,7 +195,7 @@ the properties of the standard normal distribution. For the second term, we note
 is essentially of the same form as \Cref{eq:eval-qlimit-secondterm} and that the limit is
 therefore 0 here.
 
-\subsection{Proof of \Cref{thm:classbalance-variance}}
+\subsection{Proof of \Cref{thm:classbalance-variance}}\label{sec:classbalance-variance-proof}
 
 The variance of the elastic net estimator is given by
 \begin{multline}
@@ -255,9 +255,10 @@ The same result applies to the respective terms involving \(\gamma\). And since 
 \hat{\beta}_j = 0\), the limit of \Cref{eq:varthm-var} must be 0.
 
 For \(\delta = 1/2\), we start by establishing that
-\[
+\begin{equation}
+  \label{eq:var-deltahalf-integral}
   \lim_{q \rightarrow 1^+} \int_{-\infty}^{-\lambda}(z+ \lambda)^2 f_Z(z) \du z = \lim_{q \rightarrow 1^+} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right)
-\]
+\end{equation}
 is a positive constant since \(\theta/\sigma \rightarrow -b\), \(\sigma =
 \sigma_\varepsilon \sqrt{n}\), \(\theta \rightarrow - \lambda\), and \(\theta\sigma
 \rightarrow - \sigma_\varepsilon \sqrt{n}\lambda\). An identical argument can be made in
@@ -271,14 +272,13 @@ where \(C^+\) is some positive constant. And because \(\lim_{q\rightarrow 1^+} \
 \Cref{eq:varthm-var} must be \(\infty\).
 
 Finally, for the case when \(\delta > 1/2\), we have
-\begin{multline*}
+\begin{multline}
+  \label{eq:var-deltagthalf-integral}
   \lim_{q \rightarrow 1^+} \frac{1}{d^2} \left(\sigma^2 \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y + 2 \theta \sigma \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y + \theta^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\right) \\
-  \begin{aligned}
-    = \lim_{q \rightarrow 1^+} \Bigg( & \frac{n \sigma^2}{ \left(n (q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2} \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y                                                                                        \\
-                                      & - \frac{2\sigma_\varepsilon \sqrt{n}\left(\beta^* n (q- q^2)^{1 - \delta} - \lambda_1\right)}{\left(n(q-q^2)^{3/4 - \delta/2} + \lambda_2(q-q^2)^{3\delta / 2 - 1/4}\right)^2} \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y \\
-                                      & + \left(\frac{-\beta^*n(q-q^2)^{1-\delta} - \lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2(q-q^2)^\delta}\right)^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\Bigg).
-  \end{aligned}
-\end{multline*}
+  = \lim_{q \rightarrow 1^+} \Bigg( \frac{n \sigma^2}{ \left(n (q-q^2)^{1/2} + \lambda_2(q-q^2)^{2\delta - 1/2}\right)^2} \int_{-\infty}^\frac{\theta}{\sigma} y^2 \pdf(y) \du y
+  \\- \frac{2\sigma_\varepsilon \sqrt{n}\left(\beta^* n (q- q^2)^{1 - \delta} - \lambda_1\right)}{\left(n(q-q^2)^{3/4 - \delta/2} + \lambda_2(q-q^2)^{3\delta / 2 - 1/4}\right)^2} \int_{-\infty}^\frac{\theta}{\sigma} y \pdf(y) \du y \\
+  + \left(\frac{-\beta^*n(q-q^2)^{1-\delta} - \lambda_1}{n(q-q^2)^{1-\delta} + \lambda_2(q-q^2)^\delta}\right)^2 \int_{-\infty}^\frac{\theta}{\sigma} \pdf(y) \du y\Bigg).
+\end{multline}
 Inspection of the exponents involving the factor \((q - q^2)\) shows that the first term inside the limit will dominate. And since the upper limit of the integrals, \(\theta/\sigma \rightarrow  0\)  as \(q \rightarrow 1^+\), the limit must be \(\infty\).
 
 \subsection{Proof of \Cref{cor:ridge-variance}}
@@ -405,3 +405,19 @@ and therefore that
 \]
 for \(0 \leq \omega \). The limit in \Cref{eq:eval-qlimit-weighted} is given by
 \Cref{eq:eval-qlimit-terms-weighted}.
+
+\subsection{Proof of \Cref{thm:weighted-elasticnet-variance}}
+
+This proof is in many ways equivalent to that in the case of variance of the normalized
+unweighted elastic net (\Cref{sec:classbalance-variance-proof}) and we therefore omit many
+of the details here.
+
+In the case of \(0 \leq \omega < 1/2\), the proof is simplified since the \(d^2\) term
+tends to \(\infty\) whilst the numerator takes the same limit as in the normalized case,
+which means that the limit is \(0\) in this case. For \(\omega = 1/2\), we consider
+\Cref{eq:var-deltahalf-integral} and observe that it again tends to a positive constant
+whilst \(\lim_{q\rightarrow 1^+} d^2 = 0\), which means that the limit of the expression,
+and hence variance of the estimator, tends to \(\infty\). For \(\omega > 1/2\), an
+identical argument for the expression in \Cref{eq:var-deltagthalf-integral} holds and the
+limit is therefore \(\infty\) in this case as well.
+
