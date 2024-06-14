@@ -59,8 +59,8 @@ for (i, df_group) in enumerate(df_grouped)
       xvar,
       yvar;
       legend = false,
-      markercolor = :black,
-      markersize = 2,
+      markercolor = :transparent,
+      markersize = 0,
       title = title,
       xformatter = xformatter,
       xlabel = xlabel,
@@ -70,7 +70,15 @@ for (i, df_group) in enumerate(df_grouped)
       yguideposition = yguideposition,
     )
 
-    yerror!(1:size(out, 2), yvar; yerror = yerror, markercolor = :transparent)
+    yerror!(
+      1:size(out, 2),
+      yvar;
+      yerror = yerror,
+      markercolor = :transparent,
+      markerstrokecolor = :grey,
+    )
+
+    scatter!(1:size(out, 2), yvar; markercolor = :black, markersize = 2)
 
     push!(plots, pl)
   end
