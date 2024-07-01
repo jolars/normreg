@@ -63,8 +63,10 @@
   \frametitle{Presentation}
 
   \begin{itemize}
-    \item PhD student at Lund University (supervised by Jonas Wallin). As of September, post doc at Copenhagen University.
-    \item Work so far: mostly computational optimization and algorithms for speeding up sparse regression.
+    \item PhD student at Lund University (supervised by Jonas Wallin). As of September, post doc at
+          Copenhagen University.
+    \item Work so far: mostly computational optimization and algorithms for speeding up sparse
+          regression.
   \end{itemize}
 \end{frame}
 
@@ -123,7 +125,8 @@
   \frametitle{General Setup}
 
   \begin{itemize}
-    \item Data consists of a \alert{fixed} matrix of features \(\mat{X} \in \mathbb{R}^{n \times p}\) and a response vector \(\vec{y} \in \mathbb{R}^n\).
+    \item Data consists of a \alert{fixed} matrix of features \(\mat{X} \in \mathbb{R}^{n \times p}\)
+          and a response vector \(\vec{y} \in \mathbb{R}^n\).
     \item \(\vec{y}\) comes from a linear model, that is,
           \[
             y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i \quad\text{for} \quad i \in 1,\dots,n,
@@ -168,7 +171,8 @@
                 \lambda_2 & = (1- \alpha)\lambda
               \end{align*}
               with \(\alpha \in [0, 1]\).
-        \item For each \(\alpha\), solve the elastic net over a sequence of \(\lambda\): the \textbf{elastic net path}.
+        \item For each \(\alpha\), solve the elastic net over a sequence of \(\lambda\): the
+              \textbf{elastic net path}.
       \end{itemize}
     \end{column}
     \begin{column}{0.45\textwidth}
@@ -208,7 +212,8 @@
 \begin{frame}[c]
   \frametitle{Sensitivity to Scale}
 
-  Since both the lasso and ridge penalize the \emph{norm} of the coefficients, they are sensitive to the scale of the features.
+  Since both the lasso and ridge penalize the \emph{norm} of the coefficients, they are
+  sensitive to the scale of the features.
 
   \pause
 
@@ -244,19 +249,17 @@
 
   \begin{itemize}[<+->]
     \item The solution to the scale sensitivity is to normalized the features (before fitting).
-    \item Let \(\tilde{\mat X}\) be the normalized feature matrix, with
-          elements
+    \item Let \(\tilde{\mat X}\) be the normalized feature matrix, with elements
           \[
             \tilde{x}_{ij} = \frac{x_{ij} - c_{j}}{s_j},
           \]
-          where \(x_{ij}\) is an element of the (unnormalized) feature matrix
-          and \(c_j\) and \(s_j\) are the \emph{centering} and \emph{scaling} factors respectively.
+          where \(x_{ij}\) is an element of the (unnormalized) feature matrix and \(c_j\) and \(s_j\)
+          are the \emph{centering} and \emph{scaling} factors respectively.
     \item Usage of key terms ambiguous in literature.
     \item After fitting, we transform the coefficients back to their original scale via
           \[
             \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j} \quad\text{for}\quad j = 1,2,\dots,p.
           \]
-
 
   \end{itemize}
 
@@ -271,13 +274,10 @@
   % \end{block}
 \end{frame}
 
-
-
 \begin{frame}[c]
   \begin{table}[hbt]
     \centering
     \caption{Common ways to normalize \(\mat{X}\)}
-    \label{tab:normalization-types}
     \begin{tabular}{lll}
       \toprule
       Normalization    & Centering (\(c_{j}\))              & Scaling (\(s_j\))                                         \\
@@ -315,11 +315,17 @@
   \frametitle{Motivation}
 
   \begin{itemize}[<+->]
-    \item So normalization matters and you might expect that there should be lot of literature on the topic.
-    \item But the short summary of the literature on the topic is that there is no literature on the topic.
-    \item Everyone agrees that you need to normalize (for most data), but how to do so is not discussed and often motivated by being ``standard''.
-    \item Documentation for popular machine learning packages advocate different normalization strategies when data is sparse.
-    \item Consensus for approximately normal features but little discussion on binary features and choice seems domain-specific. (Statisticians standardize, machine learning people scale to $[0, 1]$ or $[-1, 1]$.)
+    \item So normalization matters and you might expect that there should be lot of literature on the
+          topic.
+    \item But the short summary of the literature on the topic is that there is no literature on the
+          topic.
+    \item Everyone agrees that you need to normalize (for most data), but how to do so is not
+          discussed and often motivated by being ``standard''.
+    \item Documentation for popular machine learning packages advocate different normalization
+          strategies when data is sparse.
+    \item Consensus for approximately normal features but little discussion on binary features and
+          choice seems domain-specific. (Statisticians standardize, machine learning people scale to
+          $[0, 1]$ or $[-1, 1]$.)
   \end{itemize}
 \end{frame}
 
@@ -349,7 +355,8 @@
 \begin{frame}[c]
   \frametitle{Orthogonal Features}
 
-  There is not an explicit solution to the elastic net problem in general (unless \(\lambda_1 = 0\)).
+  There is not an explicit solution to the elastic net problem in general (unless \(\lambda_1
+  = 0\)).
 
   \bigskip\pause
 
@@ -359,7 +366,8 @@
       \[
         \tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag(\tilde{\vec{x}}_1^\intercal \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p),
       \]
-      then there is an explicit solution to the elastic net problem\footnote[frame]{We have also assumed that the features are mean-centered here.}:
+      then there is an explicit solution to the elastic net problem\footnote[frame]{We have also
+        assumed that the features are mean-centered here.}:
       \begin{equation*}
         \hat\beta_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{s_j\left(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2\right)},
       \end{equation*}
@@ -392,7 +400,8 @@
 
   \bigskip\pause
 
-  Letting \(Z = \tilde{\vec{x}}^\intercal \vec{y}\) and assuming that \(\varepsilon_i\) is i.i.d. with mean zero and finite variance \(\sigma_\varepsilon^2\), we have
+  Letting \(Z = \tilde{\vec{x}}^\intercal \vec{y}\) and assuming that \(\varepsilon_i\) is
+  i.i.d. with mean zero and finite variance \(\sigma_\varepsilon^2\), we have
   \begin{align*}
     \E Z   & = \mu = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j,  \\
     \var Z & = \sigma^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2.
@@ -451,12 +460,14 @@
 \begin{frame}[c]
   \frametitle{Normally Distributed Noise}
 
-  We now assume that \(\varepsilon_i \sim \normal{(0, \sigma_\varepsilon^2)}\), which means that
+  We now assume that \(\varepsilon_i \sim \normal{(0, \sigma_\varepsilon^2)}\), which means
+  that
   \[
     Z \sim \normal\left(\tilde{\vec{x}}_j^\T\vec{x}_j \beta_j, \sigma_\varepsilon^2 \lVert \tilde{\vec{x}}_j\rVert_2^2 \right).
   \]
 
-  Let \(\theta = -\mu -\lambda_1 \) and \(\gamma = \mu - \lambda_1\). Then the expected value of soft-thresholding of \(Z\) is
+  Let \(\theta = -\mu -\lambda_1 \) and \(\gamma = \mu - \lambda_1\). Then the expected value
+  of soft-thresholding of \(Z\) is
   \begin{align*}
     \E \st_{\lambda_1}(Z) & = \int_{-\infty}^\frac{\theta}{\sigma} (\sigma u - \theta) \pdf(u) \du u + \int_{-\frac{\gamma}{\sigma}}^\infty (\sigma u + \gamma) \pdf(u) \du u                                               \nonumber \\
                           & = -\theta \cdf\left(\frac{\theta}{\sigma}\right) - \sigma \pdf\left(\frac{\theta}{\sigma}\right) + \gamma \cdf\left(\frac{\gamma}{\sigma}\right) + \sigma \pdf\left(\frac{\gamma}{\sigma}\right)
@@ -472,8 +483,8 @@
 \begin{frame}[c]
   \frametitle{Binary Features}
 
-  Let's say we have a binary feature \(\vec{x}_j\), such that \(x_{ij} \in \{0, 1\}\).
-  Let \(q \in [0, 1]\) be the class balance of this feature, that is: \(q = \bar{\vec{x}}_j\).
+  Let's say we have a binary feature \(\vec{x}_j\), such that \(x_{ij} \in \{0, 1\}\). Let
+  \(q \in [0, 1]\) be the class balance of this feature, that is: \(q = \bar{\vec{x}}_j\).
 
   \bigskip
 
@@ -503,7 +514,9 @@
   \pause
   \begin{itemize}[<+->]
     \item Means that the elastic net estimator depends on class balance (\(q\)).
-    \item To remove the effect of \(q\), an intuitive setting would be \(s_j = q - q^2\) (the variance of \(\vec{x}_j\)) in the case of the lasso and \(s_j = \sqrt{q-q^2}\) (the standard deviation of \(\vec{x}_j\)) in the case of the ridge.
+    \item To remove the effect of \(q\), an intuitive setting would be \(s_j = q - q^2\) (the
+          variance of \(\vec{x}_j\)) in the case of the lasso and \(s_j = \sqrt{q-q^2}\) (the
+          standard deviation of \(\vec{x}_j\)) in the case of the ridge.
     \item Suggests the parametrization
           \[
             s_j = (q - q^2)^\delta, \qquad \delta \geq 0.
@@ -522,7 +535,8 @@
 \begin{frame}[c]
   \frametitle{Probability of Selection}
 
-  Since \(\mat{X}\) is fixed and \(\vec{\varepsilon}\) is normal, it is straightforward to compute the probability of selection:
+  Since \(\mat{X}\) is fixed and \(\vec{\varepsilon}\) is normal, it is straightforward to
+  compute the probability of selection:
   \[
     \Pr(\hat{\beta}_j \neq 0) = \cdf\left(\frac{\mu - \lambda_1}{\sigma}\right) + \cdf\left(\frac{- \mu -\lambda_1}{\sigma}\right).
   \]
@@ -594,7 +608,6 @@
   \end{figure}
 \end{frame}
 
-
 \begin{frame}[c]
   \frametitle{Mixed Data}
 
@@ -631,12 +644,14 @@
 \begin{frame}[c]
   \frametitle{Choice of Scaling in Mixed Data}
 
-  For the two-standard deviation notion of comparability to hold, we need to modify our scaling factor \(s_j\).
+  For the two-standard deviation notion of comparability to hold, we need to modify our
+  scaling factor \(s_j\).
 
   \bigskip\pause
 
-  As before, we assume that \(\vec{x}_1\) is binary and
-  \(X_2 \sim \normal(\mu, 1/2)\), \(\beta_1^* = \beta_2^* = 1\) so that they have \emph{comparable} effects. Also assume we standardize \(\vec{x}_2\).
+  As before, we assume that \(\vec{x}_1\) is binary and \(X_2 \sim \normal(\mu, 1/2)\),
+  \(\beta_1^* = \beta_2^* = 1\) so that they have \emph{comparable} effects. Also assume we
+  standardize \(\vec{x}_2\).
 
   \medskip
 
@@ -647,7 +662,8 @@
 
   \medskip\pause
 
-  The choice \(s_1 = (2 (q - q^2))^\delta\) works when classes are balanced (\(q = 0.5\)). But no clear chocie for the elastic net case.
+  The choice \(s_1 = (2 (q - q^2))^\delta\) works when classes are balanced (\(q = 0.5\)).
+  But no clear chocie for the elastic net case.
 \end{frame}
 
 \section{Experiments}
@@ -688,7 +704,6 @@
       Comparison between lasso and ridge estimators for features generated to resemble features from various distributions.}
   \end{figure}
 \end{frame}
-
 
 \begin{frame}[c]
   \frametitle{Hyperparameter Optimization}
@@ -747,7 +762,8 @@
       \item Class balance plays a crucial role for binary features.
       \item Effect depends on penalty
       \item Normalization mediates this effect at the cost of increased variance.
-      \item Need to consider the notion of comparability between normal and binary features in mixed data.
+      \item Need to consider the notion of comparability between normal and binary features in mixed
+            data.
     \end{itemize}
   \end{exampleblock}
 
@@ -786,7 +802,8 @@
         \item Min--max normalization is sometimes used in continuous data
         \item Very sensitive to outliers
         \item But also depend on sample size!
-        \item In other words, results in model validation with varying sample sizes can yield very strange results.
+        \item In other words, results in model validation with varying sample sizes can yield very
+              strange results.
       \end{itemize}
 
       % \begin{theorem}
@@ -815,7 +832,6 @@
   \end{columns}
 
 \end{frame}
-
 
 \end{document}
 
