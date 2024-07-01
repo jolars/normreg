@@ -32,20 +32,18 @@ where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). This means 
 \end{equation}
 For the expected value and variance of \({Z_j}\) we then have
 \begin{align*}
-  \E {Z_j}   & = \mu_j = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j,      \\
-  \var {Z_j} & = \sigma_j^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j\sigma_\varepsilon^2 .
+  \E {Z_j}   & = \mu_j = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta^*_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta^*_j = \frac{\beta_j^* n \nu_j}{s_j},            \\
+  \var {Z_j} & = \sigma_j^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j\sigma_\varepsilon^2 = \frac{n\nu_j\sigma_\varepsilon^2}{s_j^2}.
 \end{align*}
 
 The expected value of the soft-thresholding estimator is
-\begin{align*}
-  \label{eq:st-expected-value}
-  \E \st_\lambda({Z_j}) & = \int_{-\infty}^\infty \st_\lambda(z) f_{Z_j}(z) \du z                                                   \nonumber \\
-                        & = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_{Z_j}(z) \du z                         \nonumber \\
-                        & = \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z.
-\end{align*}
+\begin{multline*}
+  \E \st_\lambda({Z_j}) = \int_{-\infty}^\infty \st_\lambda(z) f_{Z_j}(z) \du z
+  = \int_{-\infty}^\infty \ind{|z| > \lambda} (z -\sign(z)\lambda) f_{Z_j}(z) \du z
+  \\= \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z.
+\end{multline*}
 And then the bias of \(\hat\beta_j\) with respect to the true coefficient \(\beta_j^*\) is
 \begin{equation*}
-  \label{eq:betahat-bias}
   \E \hat\beta_j - \beta_j^* = \frac{1}{d_j}\E \st_\lambda({Z_j}) - \beta^*_j.
 \end{equation*}
 
@@ -55,10 +53,9 @@ Finally, we note that the variance of the soft-thresholding estimator is
   \var {S_\lambda({Z_j})} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_{Z_j}(z) \du z - \left(\E \st_\lambda({Z_j})\right)^2
 \end{equation}
 and that the variance of the elastic net estimator is therefore
-\begin{equation}
-  \label{eq:betahat-variance}
+\begin{equation*}
   \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda({Z_j}).
-\end{equation}
+\end{equation*}
 
 \subsection{Normally Distributed Noise}
 
@@ -88,7 +85,6 @@ Next, computing \Cref{eq:st-variance} gives
 Consequently, we can also
 compute the mean-squared error via the bias-variance decomposition
 \begin{equation*}
-  \label{eq:betahat-mse}
   \mse (\hat\beta_j, \beta^*_j) = \var\hat\beta_j + \left(\E \hat\beta_j - \beta^*_j\right)^2.
 \end{equation*}
 
@@ -96,7 +92,7 @@ compute the mean-squared error via the bias-variance decomposition
 
 The main focus in this paper is the case when \(\vec{x_j}\) is a binary feature with class
 balance \(q_j = \bar{\vec{x}}_j\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and
-\(\sum_{i=1}^n x_{ij} = nq\). In this case, inserting \(v_j = (q_j - q_j^2)\) (the
+\(\sum_{i=1}^n x_{ij} = nq\). In this case, inserting \(\nu_j = (q_j - q_j^2)\) (the
 uncorrected sample variance for a binary feature) into \Cref{eq:z-d}, we have
 \[
   {Z_j} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}
@@ -207,8 +203,10 @@ selection probability is unaffected by \(\lambda_2\).
   \centering
   \includegraphics[]{plots/selection_probability.pdf}
   \caption{%
-    Probability of selection in the lasso given a measurement noise level \(\sigma_\varepsilon\), a regularization parameter \(\lambda_1\), and a class balance \(q_j\). The scaling factor is parameterized by \(s_j = (q_j - q_j^2)^\delta\), \(\delta \geq 0\). The dotted line represents the asymptotic limit for the standardization case, \(\delta = 1/2\).}
-  \label{fig:selection-probability}
+    Probability of selection in the lasso given a measurement noise level
+    \(\sigma_\varepsilon\), a regularization parameter \(\lambda_1\), and a class balance
+    \(q_j\). The scaling factor is set to \(s_j = (q_j - q_j^2)^\delta\), \(\delta
+    \geq 0\). The dotted line represents the asymptotic limit for \(\delta = 1/2\) (the standardization case). \label{fig:selection-probability}}
 \end{figure}
 
 Now we turn to the impact of class imbalance on bias and variance of the elastic net
@@ -284,20 +282,20 @@ hyper-parameters in the elastic net \((\lambda_1, \lambda_2)\)
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_lasso.pdf}
   \caption{%
-    Bias, variance, and mean-squared error for a one-dimensional lasso problem. We show these measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and scaling factors (\(\delta\)).
-    The dotted lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\).
-  }
-  \label{fig:bias-var-onedim-lasso}
+    Bias, variance, and mean-squared error for a one-dimensional lasso problem. We show these
+    measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and
+    scaling factors (\(\delta\)). The dotted lines represent the asymptotic bias of the lasso
+    estimator in the case of \(\delta = 1/2\). } \label{fig:bias-var-onedim-lasso}
 \end{figure}
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_ridge.pdf}
   \caption{%
-    Bias, variance, and mean-squared error for one-dimensional ridge regression. We show these measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and scaling factors (\(\delta\)).
-    The dotted lines represent the asymptotic bias of the lasso estimator in the case of \(\delta = 1/2\).
-  }
-  \label{fig:bias-var-onedim-ridge}
+    Bias, variance, and mean-squared error for one-dimensional ridge regression. We show these
+    measures for various noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and
+    scaling factors (\(\delta\)). The dotted lines represent the asymptotic bias of the lasso
+    estimator in the case of \(\delta = 1/2\). } \label{fig:bias-var-onedim-ridge}
 \end{figure}
 
 So far, we have only considered a single binary feature. But under the assumption of
@@ -324,20 +322,19 @@ noisy, but better-balanced, features.
 \begin{figure}[htpb]
   \centering
   \subcaptionbox{%
-    The power (probability of detecting all true signals) of the lasso.
-    In our orthogonal setting, power is constant over \(p\), which is why we have omitted the parameter in the plot.
-    \label{fig:binary-power}
+    The power (probability of detecting all true signals) of the lasso. In our orthogonal
+    setting, power is constant over \(p\), which is why we have omitted the parameter in the
+    plot. \label{fig:binary-power}
   }{\includegraphics[]{plots/power.pdf}}\hfill%
   \subcaptionbox{%
-    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to the total number of estimated coefficients that are nonzero (discoveries).
-    \label{fig:binary-fdr-mse}
-  }{\includegraphics[]{plots/fdr_mse.pdf}}
+    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to
+    the total number of estimated coefficients that are nonzero (discoveries).
+    \label{fig:binary-fdr-mse} }{\includegraphics[]{plots/fdr_mse.pdf}}%%
   % \includegraphics[]{plots/beta-bias-multidim.pdf}
   \caption{%
     Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
-  \label{fig:mse-fdr-power-binary}
 \end{figure}
 
 In \Cref{sec:experiments}, we will continue to study binary features in simulated
@@ -523,9 +520,13 @@ for the weighted elastic net. Again, we see that the asymptotic behavior of bias
   \centering
   \includegraphics[]{plots/binary_onedim_bias_var_elnet.pdf}
   \caption{%
-    Bias, variance, and mean-squared error in the case of the one-dimensional weighted elastic net. The measures are shown for different noise levels (\(\sigma_\varepsilon\)), class balances (\(q_j\)), and values of (\(\omega\)), which controls the weights that are set to \(u_j = v_j = 2\times 4^{\omega - 1}(q-q^2)^\omega\) in order for the results to be comparable across different values of \(\omega\).
-    The dotted lines represent the asymptotic bias of the estimator
-    in the case of \(\omega = 1\). In the case of \(\omega > 1\), the limit of the bias is zero. \label{fig:binary-onedim-bias-var-elnet}
+    Bias, variance, and mean-squared error in the case of the one-dimensional weighted elastic
+    net. The measures are shown for different noise levels (\(\sigma_\varepsilon\)), class
+    balances (\(q_j\)), and values of (\(\omega\)), which controls the weights that are set to
+    \(u_j = v_j = 2\times 4^{\omega - 1}(q-q^2)^\omega\) in order for the results to be
+    comparable across different values of \(\omega\). The dotted lines represent the asymptotic
+    bias of the estimator in the case of \(\omega = 1\). In the case of \(\omega > 1\), the
+    limit of the bias is zero. \label{fig:binary-onedim-bias-var-elnet}
   }
 \end{figure}
 
