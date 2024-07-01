@@ -143,11 +143,11 @@ following objective:
 \]
 with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors. We
 call this the \emph{weighted elastic net}, which is equivalent to the original form when
-\begin{equation}
-  \label{eq:weighted-normal-equivalence}
-  \vec{u} = \diag\left(\mat{S}^{-1}\right), \qquad \text{and}\qquad \vec{v} = \diag\left(\mat{S}^{-2}\right),
-\end{equation}
-which can be seen by substituting \(\mat{S}\vec{\beta} = \tilde{\vec{\beta}}\) in \Cref{eq:elastic-net}. Note that this one-to-one correspondence is specific to the elastic net. The connection is not guaranteed to hold for other choices of \(g\), and even if it does might require different choices of \(\vec{u}\) and \(\vec{u}\).
+\(u_j = s_j\) and \(v_j = s_j^2\), which can be seen by substituting \(\beta_js_j =
+\tilde{\beta}_j\) in \Cref{eq:elastic-net} and solving for \(\tilde{\vec{\beta}}\). Note
+that this one-to-one correspondence is specific to the elastic net. The connection is not
+guaranteed to hold for other choices of \(g\), and even if it does might require different
+choices of \(\vec{u}\) and \(\vec{u}\).
 
 \subsection{Orthogonal Features}
 
