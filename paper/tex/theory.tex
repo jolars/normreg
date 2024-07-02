@@ -188,16 +188,16 @@ express the probability of selection in the limit as \(q_j \rightarrow 1^+\) as
 \end{equation}
 
 In \Cref{fig:selection-probability}, we plot this probability for various settings of
-\(\delta\) for a single feature. Our intuition from the noise-less case holds: \(\delta\)
-mitigates the influence of class imbalance on selection probability. The lower the value of
-\(\delta\), the larger the effect of class imbalance becomes. Note that the probability of
-selection initially decreases also in the case when \(\delta \geq 1\). This is a
-consequence of increased variance of \({Z_j}\) due to the scaling factor that scales the
-measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as \(q_j\) approaches 1, the
-probability picks up again and eventually approaches 1 for \(\delta \in \{1, 1.5\}\). The
-reason for this is that the variance of \({Z_j}\) eventually explodes (again due to the
-scaling), which ultimately removes the soft-thresholding effect altogether. Note that the
-selection probability is unaffected by \(\lambda_2\).
+\(\delta\) for a single feature. Our intuition from the noise-less case holds: suitable
+choices of \(\delta\) can mitigate the influence of class imbalance on selection
+probability. The lower the value of \(\delta\), the larger the effect of class imbalance
+becomes. Note that the probability of selection initially decreases also in the case when
+\(\delta \geq 1\). This is a consequence of increased variance of \({Z_j}\) due to the
+scaling factor that scales the measurement noise \(\sigma_\varepsilon^2\) upwards. Then, as
+\(q_j\) approaches 1, the probability picks up again and eventually approaches 1 for
+\(\delta \in \{1, 1.5\}\). The reason for this is that the variance of \({Z_j}\) eventually
+explodes (again due to the scaling), which ultimately removes the soft-thresholding effect
+altogether. Note that the selection probability is unaffected by \(\lambda_2\).
 
 \begin{figure}[htpb]
   \centering
@@ -513,6 +513,7 @@ This result mimics the result for asymptotic variance in the case of the unweigh
 net with normalization. In \Cref{fig:binary-onedim-bias-var-elnet}, we plot bias, variance,
 and mean-squared error for the weighted elastic net. Again, we see that the asymptotic
 behavior of bias as \(q_j \rightarrow 1^+\) depends on the noise level and that there is a
+bias--variance tradeoff with respect to \(\omega\).
 
 \begin{figure}[htpb]
   \centering
