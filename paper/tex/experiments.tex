@@ -2,16 +2,9 @@
 
 In the following sections, we present the results of our experiments. We have split the
 section into two parts, focusing in the first part (\Cref{sec:experiments-lassoridge}) on
-normalization in the cases of the lasso and ridge regression. In the second part, we turn
-to the elastic net, focusing on solving class balance bias via penalty weighting.
-
-\subsection{The Lasso and Ridge Regresion}\label{sec:experiments-lassoridge}
-
-We begin by examining the variability and bias in the estimates of the regression
-coefficients. We then move on to predictive performance and hyperparameter selection. We
-also consider the effect of class imbalance on the estimates of the regression
-coefficients. Finally, we look at the effect of interactions between features on the
-estimates of the regression coefficients.
+normalization in the cases of the lasso and ridge regression. In the second part
+(\Cref{sec:experiments-elasticnet}), we turn to the elastic net, focusing on solving class
+balance bias via penalty weighting.
 
 In all cases where we use simulated data, we generate our response vector according to
 \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon},\) with \(\vec{\varepsilon} \sim
@@ -23,19 +16,27 @@ uniformly at random without replacement from \(\{1,2,\dots,n\}\) and set the cor
 elements to one and the remaining ones to zero. To generate quasi-normal features, we
 generate a linear sequence \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 -
 10^{-4}\), and set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the elements of
-\(\vec{x}_j\) uniformly at random. In each case, we fit either the lasso (the elastic net
-with \(\lambda_1 = \alpha \lambda\) ) or ridge (the elastic net with \(\lambda_2 = (1 -
-\alpha)\lambda\)).
-
-To normalize the data, we use standardization (centering and scaling by mean and standard
-deviation) for all our quasi-normal features. For quasi-binary features, we center by mean
-and scale by \(s_j = (q_j-q_j^2)^\delta\), where \(\delta = 0\) corresponds to no scaling,
-\(\delta = 1/2\) to standardization, and \(\delta = 1\) to variance scaling.
+\(\vec{x}_j\) uniformly at random.
 
 We use a coordinate descent solver to fit the elastic net, which we have implemented as a
 variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All
 experiments were coded using the Julia programming language~\citep{bezanson2017} and the
 code is availabe at \url{https://github.com/jolars/normreg}.
+
+\subsection{Normalization in the Lasso and Ridge Regression}\label{sec:experiments-lassoridge}
+
+In this section, we consider fitting either the lasso (the elastic net with \(\lambda_1 >
+\lambda_2 = 0\) ) or ridge (the elastic net with \(\lambda_2 > \lambda_1 = 0\)) to
+normalized data sets. We begin by examining the variability and bias in the estimates of
+the regression coefficients. We then move on to predictive performance and hyperparameter
+selection. We also consider the effect of class imbalance on the estimates of the
+regression coefficients. Finally, we look at the effect of interactions between features on
+the estimates of the regression coefficients.
+
+To normalize the data, we use standardization (centering and scaling by mean and standard
+deviation) for all our quasi-normal features. For quasi-binary features, we center by mean
+and scale by \(s_j = (q_j-q_j^2)^\delta\), where \(\delta = 0\) corresponds to no scaling,
+\(\delta = 1/2\) to standardization, and \(\delta = 1\) to variance scaling.
 
 \subsubsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
 
@@ -263,7 +264,15 @@ features and that this has an effect on the lasso estimates since we, for instan
 penalize the main effect whilst still retaining information about it in the interaction
 term.
 
-\subsection{The Elastic Net}\label{sec:experiments-elasticnet}
+\subsection{The Weighted Elastic Net}\label{sec:experiments-elasticnet}
+
+In this section, we focus on the weighted elastic net, which, as we showed in
+\Cref{sec:weighted-elasticnet}, can be used as an alternative to normalization to correct
+for class balance bias in the elastic net. To simplify the presentation, we parameterize
+the elastic net as \(\lambda_1 = \alpha \lambda \) and \(\lambda_2 = (1-\alpha) \lambda\),
+so that \(\alpha\) controls the balance between the two penalties.
+
+\subsubsection{Mixed Data}\label{sec:experiments-mixed-data-elasticnet}
 
 \begin{figure}[htpb]
   \centering
