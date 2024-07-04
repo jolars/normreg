@@ -90,10 +90,16 @@ compute the mean-squared error via the bias-variance decomposition
 
 \subsection{Binary Features}\label{sec:theory-binary-features}
 
-The main focus in this paper is the case when \(\vec{x_j}\) is a binary feature with class
-balance \(q_j = \bar{\vec{x}}_j\), that is, \(x_{ij} \in \{0, 1\}\) for all \(i\) and
-\(\sum_{i=1}^n x_{ij} = nq\). In this case, inserting \(\nu_j = (q_j - q_j^2)\) (the
-uncorrected sample variance for a binary feature) into \Cref{eq:z-d}, we have
+The main focus in this paper is the case when \(\bm{x}_j\) is a binary feature, such that
+\(x_{ij} \in \{0, 1\}\) for all \(i\). We define the \emph{class balance} of this feature
+as \(q_j = \bar{\bm{x}}_j\): the proportion of ones. For the majority of our results it
+would make no difference if we were to swap the ones and zeros as long as an intercept is
+included, and ``class balance'' is hence equivalent to the proportion of either. But later
+on, as we turn to the case of interactions in \Cref{sec:interactions}, we will see that the
+choice in fact has considerable consequences.
+
+In the case of binary features, inserting \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
+variance for a binary feature) into \Cref{eq:z-d} yields
 \[
   {Z_j} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}
   ,\qquad
@@ -448,6 +454,8 @@ instance), suggest that the estimators for normally distributed and binary featu
 not be comparable in this case.
 
 % TODO: Say something about over and undersampling.
+
+\subsection{Interactions}\label{sec:interactions}
 
 \subsection{The Elastic Net, and Penalty Weighting}\label{sec:binary-weighting}
 
