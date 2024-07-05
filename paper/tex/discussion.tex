@@ -9,6 +9,16 @@ lasso, for instance, our results show that features with large class imbalances 
 regularized heavily, and provided that \(\lambda\) is large enough might stand little
 chance of being selected, even if the true effect of the feature on the response is large.
 
+The primary driver of this is the relationship between the variance of the features in the
+design and the lasso and ridge estimators. Regardless of the distribution of the feature,
+its variance together with the true effect and type of normalization will determine the
+amount of shrinkage applied to that feature's respective coefficient. This works naturally
+in the case of normally distributed features, since for two features with equivalent
+effects but different scales, the true coefficients are also different. But for binary
+features---at least in our interpretation thereof---this is not the case. The effect of a
+change from zero to one in a binary feature, we argue, should not depend on its class
+balance.
+
 We have, however, found that scaling binary features with standard deviation in the case of
 ridge regression and variance in the case of the lasso mitigates this effect, but that
 doing so comes at the price of increased variance. This effectively means that the choice
