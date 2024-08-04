@@ -1062,9 +1062,9 @@ version = "0.9.20"
 
 [[deps.PythonPlot]]
 deps = ["Colors", "CondaPkg", "LaTeXStrings", "PythonCall", "Sockets", "Test", "VersionParsing"]
-git-tree-sha1 = "88b305afa25e1bc4379f182152273dfc55a814b4"
+git-tree-sha1 = "6ec334b52f9547f84fde749e512a97d0372ae395"
 uuid = "274fc56d-3b97-40fa-a1cd-1b4a50311bf9"
-version = "1.0.3"
+version = "1.0.5"
 
 [[deps.Qt6Base_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
