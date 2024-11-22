@@ -55,7 +55,7 @@ for (j, d_alpha) in enumerate(df_alpha)
 
     title = j == 1 ? dataset : ""
 
-    pl = contourf(
+    pl = StatsPlots.contourf(
       x,
       y,
       z,

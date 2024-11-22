@@ -1,6 +1,10 @@
 using Distributions
 using Statistics
 
+function delta_palette(ind)
+  return ColorSchemes.Johnson[ind]'
+end
+
 function confidence_interval(x, level = 0.95)
   n = length(x)
 
@@ -22,4 +26,3 @@ function confidence_error(x, level = 0.95)
 
   return q * se
 end
-
