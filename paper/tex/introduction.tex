@@ -7,14 +7,14 @@ of full rank. A common remedy to this problem is to \emph{regularize} the model 
 term to the objective function that punishes models with large coefficients
 (\(\vec\beta\)). If we let \(g(\vec\beta; \mat X, \vec y)\) be the original objective
 function---which when minimized improves the model's fit to the data (\(\mat X, \vec
-y\))---then
+y\))---then we are interested in minimized the following objective:
 \begin{equation}
   \label{eq:general-objective}
-  f(\beta_0, \vec\beta; \mat X, \vec y) = g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta)
+  f(\beta_0, \vec\beta; \mat X, \vec y) = g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta),
 \end{equation}
-is a composite function within which we have added a penalty term \(h(\vec\beta)\). In
-contrast to \(g\), this penalty depends only on \(\vec{\beta}\). The intercept,
-\(\beta_0\), is not typically penalized.
+which is composed of \(g\) and a penalty term \(h(\vec\beta)\). In
+contrast to former, this penalty depends only on \(\vec{\beta}\)\footnote{Note that
+  we do not penalize the intercept \(\beta_0\).}
 
 Some of the most common penalties are the \(\ell_1\) norm and squared \(\ell_2\) norm
 penalties, that is \(h(\vec\beta) = \lVert \vec\beta \rVert_1\) or \(h(\vec\beta) = \lVert
