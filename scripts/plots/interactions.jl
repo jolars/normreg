@@ -12,7 +12,14 @@ set_plot_defaults();
 
 json_data = JSON.parsefile(@projectroot("data", "interactions.json"));
 df = DataFrame(json_data);
-df_subset = subset(df, :q => q -> q .== 0.9, :norm_strategy => n -> n .== 1)
+
+df_subset = subset(
+  df,
+  :q => q -> q .== 0.9,
+  :norm_strategy => n -> n .== 1,
+  :mu => m -> m .== 0,
+  :center_before => c -> c .== true,
+);
 
 df_grouped = @chain df_subset begin
   select([:betas, :norm_strategy, :it, :q, :delta, :beta])

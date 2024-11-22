@@ -97,12 +97,9 @@ function scaling_factors(
     else
       # conditionally scale interaction effects
       if j in intersections
-        mod = 0.5 / (0.25^delta)
         nz = findall(x[:, j] .!= 0)
-        scales[j] =
-          std(x[nz, j], corrected = false) * mod * var(x[:, j], corrected = false)^delta
+        scales[j] = std(x[nz, j], corrected = false)
       else
-        mod = 0.5 / (0.25^delta)
         scales[j] = std(x[:, j], corrected = false)
       end
     end
@@ -117,9 +114,10 @@ function normalize_features(
   x::AbstractMatrix,
   delta::Real = 0;
   center::Bool = true,
-  intersections::Vector{Int} = Int[],
+  interactions::Vector{Int} = Int[],
+  interactionmethod = 1,
 )
-  p = size(x, 2)
+  n, p = size(x)
   scales = ones(1, p)
 
   binary = find_binary_features(x)
@@ -130,22 +128,35 @@ function normalize_features(
     centers = zeros(1, p)
   end
 
-  # always scale continuos features by standard deviation
+  # always scale continuous features by standard deviation
 
   for j in 1:p
     if binary[j]
       mod = 0.5 / (0.25^delta)
-      # mod = 2^delta
       scales[j] = mod * var(x[:, j], corrected = false)^delta
     else
       # conditionally scale interaction effects
-      if j in intersections
-        mod = 0.5 / (0.25^delta)
-        nz = findall(x[:, j] .!= 0)
-        scales[j] =
-          std(x[nz, j], corrected = false) * mod * var(x[:, j], corrected = false)^delta
+      if j in interactions
+        if interactionmethod == 1
+          scales[j] = std(x[:, j], corrected = false)
+        elseif interactionmethod == 2
+          nz = findall(x[:, j] .!= 0)
+          scales[j] = std(x[nz, j], corrected = false)
+        elseif interactionmethod == 3
+          sigma = std(x[:, 2], corrected = false)
+          q = length(findall(x[:, 1] .== 1)) / n
+          # q = mean(x[:, j])
+          # mod = 0.5 / (0.25^delta)
+          # mod = 1e-5
+          # mod = 0.01
+          mod = 1
+          scales[j] = q * sigma * mod
+          scales[j] = 0.25
+        elseif interactionmethod == 4
+          # do nothing, already scaled
+        end
       else
-        mod = 0.5 / (0.25^delta)
+        # Continuous: scale with standard deviation
         scales[j] = std(x[:, j], corrected = false)
       end
     end
