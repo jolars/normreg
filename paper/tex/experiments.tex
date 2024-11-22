@@ -235,12 +235,12 @@ experiments.
 
 \subsubsection{Interactions}\label{sec:experiments-interactions}
 
-In our final experiment, we study the effect of normalization and class balance on
-interactions when using the lasso. Our example consists of a two-feature problem with an
-added interaction term given by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with
-class balance \(q_j=0.9\) and the second quasi-normal with standard deviation 0.5. We set
-\(n=1000\) and specify \(\lambda_1 = n/4\) as the level of regularization. Note that we
-normalize \emph{after} the interaction term is added.
+Here we study the effects of normalization and class balance on interactions when using the
+lasso. Our example consists of a two-feature problem with an added interaction term given
+by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q_j=0.9\)
+and the second quasi-normal with standard deviation 0.5. We set \(n=1000\) and specify
+\(\lambda_1 = n/4\) as the level of regularization. Note that we normalize \emph{after} the
+interaction term is added.
 
 The results~(\Cref{fig:interactions}) show, as before, that class balance (which, recall,
 is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta
@@ -250,7 +250,7 @@ affected by the normalization type for any of the cases in which it is present.
 \begin{figure}[htpb]
   \label{fig:interactions}
   \centering
-  \includegraphics[]{plots/interactions.pdf}
+  \includegraphics[]{plots/interactions-classbalance.pdf}
   \caption{%
     Lasso estimates for a three-feature problem where the third feature is an interaction term
     between the first two features. The first feature is binary (quasi-Bernoulli) with class
