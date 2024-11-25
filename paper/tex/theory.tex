@@ -1,7 +1,6 @@
 \section{Bias and Variance of the Elastic Net Estimator}\label{sec:theory}
 
 % TODO: write a table of the bias and variance formulations for each type instead.
-
 Now, assume that \(\mat{X}\) is fixed and that \(\vec{y} = \mat{X}\vec{\beta} +
 \vec{\varepsilon}\), where \(\varepsilon_i\) is identically and independently distributed
 noise with mean zero and finite variance \(\sigma_\varepsilon^2\). As in the previous
@@ -16,7 +15,7 @@ expected value of \Cref{eq:orthogonal-solution}, \(\E \hat{\beta}_j\). Let
 \]
 so that \(\hat{\beta}_j = \st_{\lambda_1}({Z_j})/d_j\). Since \(d_j\) is fixed under our
 assumptions, we will direct most of our focus towards \(S_{\lambda_1}({Z_j})\). First
-observe that
+observe that since \(c_j = \bar{\bm{x}}_j\),
 \[
   \begin{aligned}
     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - c_j)^\T (\vec{x}_j - c_j) = \frac{\vec{x}_j^\T\vec{x}_j - nc_j^2}{s^2_j} = \frac{n \nu_j}{s_j^2}, \\
@@ -167,7 +166,6 @@ return to this issue later in \Cref{sec:mixed-data} where we consider mixes of b
 normally distributed features, in which case this has significant implications.
 
 % TODO: This makes it seem like it would make more sense to adjust λ instead of the scaling parameter to compensate for class balance.
-
 We now leave the noise-less scenario and proceed to consider how class balance affects the
 probability of selection, bias, and variance of the elastic net estimator, starting with
 the first of these. A consequence of the normal error distribution and consequent normal
@@ -456,6 +454,36 @@ not be comparable in this case.
 % TODO: Say something about over and undersampling.
 
 \subsection{Interactions}\label{sec:interactions}
+
+The elastic net can be extended to include interaction terms between the features. Previous
+literature on this topic has focused on hierarchical
+interactions~\citep{bien2013,zemlianskaia2022,lim2015} but have not dealt with the possible
+influence of normalization. Here, we will consider simple interactions with no restriction
+on the presence of main effects. We also limit our discussion to pairwise interactions. For
+our simplified analysis, we let \(\vec{x}_1\) and \(\vec{x}_2\) be two features of the data
+and \(\bm{x}_3\) their interaction. Our model is \(\bm{y}=\beta_0 + \bm{X\beta} +
+\bm{\varepsilon}\) as before, with \(\beta_3\) representing the effect of the interaction.
+
+We consider two cases in which we assume that the features are orthogonal and that
+\(\vec{x}_1\) is binary with class balance \(q_1\). In the first case, we let \(\bm{x}_2\)
+be normal with mean \(\mu\) and variance \(\sigma^2\), and in the second caset \(\bm{x}_2\)
+be binary with class balance \(q_2\). To construct the interaction feature, we center the
+main features and then multiply element-wise. The elements of the interaction term are
+therefore given by \(x_{3,i} = (x_{1,i} - \bar{\bm{x}}_1)(x_{2,i} - \bar{\bm{x}}_2)\). The
+main motivation for centering is that it removes correlation between the main features and
+the interaction, which would otherwise affect the estimates. Centering normal features is
+also important because it ensures that their means do not factor into the estimation of
+their effects, which is otherwise the case since the variance of \(\bm{x}_3\) would then be
+\(q_1(\sigma^2 + \mu^2(1 - q_1))\) in the case when \(\bm{x}_1\) is centered and \((q_1 -
+q_1^2)(\sigma^2 + \mu^2)\) otherwise. Centering binary features is also important because
+the variance of the interaction term is otherwise \(q_1\sigma^2\) (provided \(\bm{x}_2\) is
+centered), which would mean that the encoding of values of the binary feature would
+directly affect the interaction term.
+
+If both features are centered before computing the interaction term, the variance becomes
+\(\sigma^2 q(1-q)\), which suggests using \(s_3 = \sigma (q - q^2)^\delta\), along the
+lines of our previous reasoning. In \Cref{sec:experiments-interactions}, we will study the
+effects of doing this in simulated experiments.
 
 \subsection{The Elastic Net, and Penalty Weighting}\label{sec:binary-weighting}
 
