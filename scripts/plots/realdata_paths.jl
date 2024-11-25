@@ -30,8 +30,8 @@ for (i, d) in enumerate(groupby(df, :normalization))
 
     betas = betas[:, 1:n_choose]
 
-    first_ten = findfirst(dropdims(sum(betas .!= 0, dims = 1) .>= 5, dims = 1))
-    var_ind = findall(Array(betas[:, first_ten]) .!= 0)
+    first_five = findfirst(dropdims(sum(betas .!= 0, dims = 1) .>= 5, dims = 1))
+    var_ind = findall(Array(betas[:, first_five]) .!= 0)
 
     coefs = betas ./ maximum(abs.(betas))
 
