@@ -420,3 +420,5 @@ _wip/
 *.bcf-SAVE-ERROR
 
 Manifest.toml
+
+.direnv
