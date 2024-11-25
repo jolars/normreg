@@ -92,6 +92,7 @@ for (i, df_group) in enumerate(df_grouped)
       legendposition = j == n_cols && i == 2 ? :outerright : :none,
       title = title,
       xformatter = xformatter,
+      xticks = [0.2, 0.5, 0.8],
       xlabel = xlabel,
       yformatter = yformatter,
       ylabel = ylabel,
