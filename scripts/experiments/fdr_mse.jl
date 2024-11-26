@@ -119,7 +119,7 @@ grouped_df = groupby(df_long, [:variable])
 
 plots = []
 
-colors = delta_palette(3:5)
+colors = delta_palette([1, 3, 5])
 
 for (i, d) in enumerate(grouped_df)
   # subgrouped_df = groupby(df_long, [:q])

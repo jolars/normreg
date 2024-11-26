@@ -77,7 +77,7 @@ df_sorted = sort(df, :delta);
 df_power = unique(select(df_sorted, [:q, :delta, :power]));
 df_power.delta = string.(df_power.delta);
 
-colors = delta_palette(3:5)
+colors = delta_palette([1, 3, 5])
 
 power_plot = @df df_power plot(
   :q,
