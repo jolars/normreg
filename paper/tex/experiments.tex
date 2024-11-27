@@ -84,7 +84,7 @@ first features correspond to true signals with \(\beta^*_j = 1\) and all have cl
 \(q_j\). To set signal-to-noise ratio levels, we rely on the same choice as in
 \citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6.
 
-To estimate prediction performance, we use a standard hold-out validation method equal
+To estimate prediction performance, we use a standard hold-out validation method with equal
 splits for the training, validation, and test sets. We fit a full lasso path, parameterized
 by a log-spaced grid of 100 values\footnote{This is a standard choice of grid, used for
   instance by \citet{friedman2010}}, from \(\lambda_\text{max}\) (the value of \(\lambda\) at
