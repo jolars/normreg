@@ -5,7 +5,7 @@
   };
 
   outputs =
-    { systems, nixpkgs, ... }@inputs:
+    { systems, nixpkgs, ... }:
     let
       eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
     in
@@ -18,9 +18,8 @@
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
             (julia-lts.withPackages [
-              "Lasso"
-              "CSV"
               "ColorSchemes"
+              "CSV"
               "DataFrames"
               "DataFramesMeta"
               "Distributions"
@@ -30,16 +29,19 @@
               "GLM"
               "IterativeSolvers"
               "JSON"
-              "LIBSVMdata"
+              "Lasso"
+              "LanguageServer"
               "LaTeXStrings"
+              "LIBSVMdata"
               "LinearAlgebra"
               "MLBase"
-              "PlotThemes"
               "Plots"
+              "PlotThemes"
               "ProjectRoot"
               "PythonPlot"
               "QuadGK"
               "Random"
+              "Revise"
               "Roots"
               "SparseArrays"
               "SpecialFunctions"
