@@ -26,17 +26,14 @@ of normalization constitutes a bias--variability trade-off with respect to imbal
 binary features.
 
 To study these effects theoretically and in practice, we have introduced the scaling
-parameterization
-\[
-  s_j = (q_j - q_j^2)^\delta,
-\]
-which, for instance, includes the cases \(\delta=0\) (no scaling), \(\delta = 1/2\)
-(standard deviation scaling), and \(\delta=1\) (variance scaling). These, in turn,
-correspond to standard choices of normalization types for this kind of data. The common
-variants max--abs and min--max normalization, for instance, in practice correspond to
-\(\delta = 0\) in the case of binary data, whilst standardization corresponds to \(\delta =
-1/2\). As far as we know, scaling with \(\delta=1\) have previously not been considered in
-the literature nor to any extent that we are aware of in practice.
+parameterization $s_j = (q_j - q_j^2)^\delta,$ which includes the cases \(\delta=0\) (no
+scaling), \(\delta = 1/2\) (standard deviation scaling), and \(\delta=1\) (variance
+scaling). These, in turn, correspond to standard choices of normalization types for this
+kind of data. The common variants max--abs and min--max normalization, for instance, in
+practice correspond to \(\delta = 0\) in the case of binary data, whilst standardization
+corresponds to \(\delta = 1/2\). As far as we know, scaling with \(\delta=1\) have
+previously not been considered in the literature nor to any extent that we are aware of in
+practice.
 
 Our results demonstrate, however, that the choice of \(\delta\) affects the lasso and ridge
 estimates heavily in many cases. This is particularly true with respect to selective
@@ -51,15 +48,15 @@ depend on the error in the data-generating process, which is typically unknown. 
 alternative, we investigated choosing \(\delta\) in a data-driven manner by optimizing over
 \(\delta\) as if it were a hyperparameter~(\Cref{sec:experiments-hyperparameter}).
 
-We have also studied the case of mixed data: designs that consist of both binary and
-normally distributed features. In this setting, our first finding is that there is an
-implicit relationship between the choice of normalization and the manner in which
-regularization affects binary viz-a-viz normally distributed features. For instance, the
-choice of max--abs normaliation carries a specific assumption about how the effect of a
-binary feature should be compared to that of a normally distributed feature. There is still
-much uncertainty about how to best handle the mixed data case and no ground truth given
-that a binary feature can mean any number of things---few of which are directly comparable
-to a continuous feature.
+We have also studied the case of mixed data: designs that include both binary and normally
+distributed features. In this setting, our first finding is that there is an implicit
+relationship between the choice of normalization and the manner in which regularization
+affects binary viz-a-viz normally distributed features. For instance, the choice of
+max--abs normalization carries a specific assumption about how the effect of a binary
+feature should be compared to that of a normally distributed feature. There is still much
+uncertainty about how to best handle the mixed data case and no ground truth given that a
+binary feature can mean any number of things---few of which are directly comparable to a
+continuous feature.
 
 In our experimental results, we touch briefly on the case of interactions. In this case, it
 seems that the interaction term between a normal feature and a binary one is more-or-less
@@ -71,14 +68,14 @@ this two-feature setting), which may call for conditional normalization strategi
 remain to be explored in this area.
 
 Finally, note that our theoretical results are limited by several assumptions: 1) a fixed
-feature matrix \(\mat{X}\), 2) orthogonality between the features, and 3) normal and
-idependent errors. In future studies, it would be interesting to relax these assumptions
-and study the effects of normalization in a more general setting. For instance, the
-assumption of orthogonality could be relaxed to allow for correlated features, which is
-often the case in practice. This would allow for a more general understanding of the
-effects of normalization in regularized regression models. We have also limited ourselves
-to the case of the lasso and ridge regression. Investigating to which extent, if any, the
-effects we observe generalize to other models as well would yield valuable insights. We
-have also focused on the case of binary and continuous features here, but we are convinced
-that the case of categorical features is also of interest and might raise additional
-challenges with respect to normalization.
+feature matrix \(\mat{X}\), 2) orthogonal features, and 3) normal and independent errors.
+In future studies, it would be interesting to relax these assumptions and study the effects
+of normalization in a more general setting. For instance, the assumption of orthogonality
+could be relaxed to allow for correlated features, which is often the case in practice.
+This would allow for a more general understanding of the effects of normalization in
+regularized regression models. We have also limited ourselves to the case of the lasso and
+ridge regression. Investigating to which extent, if any, the effects we observe generalize
+to other models as well would yield valuable insights. We have also focused on the case of
+binary and continuous features here, but we are convinced that the case of categorical
+features is also of interest and might raise additional challenges with respect to
+normalization.

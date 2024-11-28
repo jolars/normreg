@@ -97,9 +97,20 @@ and applications for real data.
 We pay particular attention to the case when these binary features are imbalanced, that is,
 have relatively many ones or zeroes. In this case, we demonstrate that the choice of
 normalization directly influences the estimated regression coefficients and that this
-effect is different for the lasso and ridge regression. We also show that this bias can be
-mitigated by scaling with variance rather than standard deviation, but that this that this
-comes at the cost of increased variance. In the case of the elastic net, we show that there
-is no simple normalization method that can mitigate this bias but that it is possible to
-circumvent it by instead weighting the penalty terms in the elastic net.
+effect is different for the lasso and ridge regression. In the case of he lasso, we show
+that this bias can be mitigated by scaling with variance rather than standard deviation,
+but that this that this comes at the cost of increased variance. For ridge regression, we
+instead need to scale by standard deviation. In the case of the elastic net, however, we
+show that there is no simple normalization method that can mitigate this bias but that it
+is possible to circumvent it by instead weighting the penalty terms in the elastic net.
+
+We also study the case of mixed data and show that the choice of normalization has implicit
+consequences for the relative weighting of binary and normal features, even in the case
+when the binary features are balanced. If we believe, for instance, that a unit change in
+the binary variable should equal a certain change in the normal variable (say, two standard
+deviations), then scaling must be modified to take this into account.
+
+% TODO: complete this paragraph
+Finally, we look at a simple case of interactions between normal and binary features, and
+demonstrate what?
 

@@ -5,17 +5,16 @@ In the following sections, we present the results of our experiments. In
 ridge regression. In \Cref{sec:experiments-elasticnet}, we turn to the elastic net,
 focusing on solving class balance bias via penalty weighting.
 
-In all cases where we use simulated data, we generate our response vector according to
-\(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon},\) with \(\vec{\varepsilon} \sim
-\normal(\vec{0}, \sigma_\varepsilon^2 \mat{I})\), where \(\mat{X}\) is the design matrix,
-\(\vec{\beta}^*\) is the vector of true regression coefficients, and
-\(\sigma_\varepsilon^2\) is the noise level. We consider two types of features: binary and
-quasi-normal features. To generate binary vectors, we sample \(\ceil{nq_j}\) indexes
-uniformly at random without replacement from \(\{1,2,\dots,n\}\) and set the corresponding
-elements to one and the remaining ones to zero. To generate quasi-normal features, we
-generate a linear sequence \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 -
-10^{-4}\), and set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the elements of
-\(\vec{x}_j\) uniformly at random.
+For all simulated data we generate our response vector according to \(\vec{y} =
+\mat{X}\vec{\beta}^* + \vec{\varepsilon},\) with \(\vec{\varepsilon} \sim \normal(\vec{0},
+\sigma_\varepsilon^2 \mat{I})\), where \(\mat{X}\) is the design matrix and
+\(\vec{\beta}^*\) the vector of true regression coefficients. We consider two types of
+features: binary and quasi-normal features. To generate binary vectors, we sample
+\(\ceil{nq_j}\) indexes uniformly at random without replacement from \(\{1,2,\dots,n\}\)
+and set the corresponding elements to one and the remaining ones to zero. To generate
+quasi-normal features, we generate a linear sequence \(\vec{w}\) with \(n\) values from
+\(10^{-4}\) to \(1 - 10^{-4}\), set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the
+elements of \(\vec{x}_j\) uniformly at random.
 
 We use a coordinate descent solver to fit the elastic net, which we have implemented as a
 variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All
@@ -95,8 +94,8 @@ set error and aggregate the results across 100 iterations.
 The results~(\Cref{fig:binary-sim}) show that the optimal normalization type in terms of
 prediction power depends on the class balance of the true signals. If the imbalance is
 severe, then we gain from using \(\delta=1/2\) or \(1\), which gives a chance of recovering
-the true signals. If everything is balanced, however, then we do better by not scaling at
-all. In general, \(\delta=1/2\) works well for these specific combinations of settings.
+the true signals. If everything is balanced, however, then we do better by not scaling. In
+general, \(\delta=1/2\) works well for these specific combinations of settings.
 
 \begin{figure}[htpb]
   \centering
@@ -113,7 +112,6 @@ all. In general, \(\delta=1/2\) works well for these specific combinations of se
 \subsubsection{Normalization as a Hyperparameter}\label{sec:experiments-hyperparameter}
 
 % TODO: consider reparameterizing with respect to lambda/delta
-
 Our previous results (particularly those from \Cref{sec:predictive-performance}) suggest
 that the choice of normalization matters for predictive performance. These results have
 relied on knowledge of the measurement error (signal-to-noise ratio), which we do not have
@@ -191,18 +189,21 @@ visible here by looking at the support size.
   }
 \end{figure}
 
+% TODO: describe these data sets better wrt class balances etc. Perhaps put it 
+% in the appendix
+
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data}, we discovered that extra care needs to be taken when normalizing
-mixed data. In this experiment, we construct a quasi-normal feature with mean zero and
-standard deviation 1/2 and a binary feature with varying class balance \(q_j\). We set the
-signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as before, with
-\(n = \num{1000}\). These features are constructed so that their effects are comparable
-under the notion of comparability that we introduce in \Cref{sec:mixed-data}, using
-\(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 = 1/2\),
-we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2 \times
-(1/4)^{1-\delta}(q_j-q_j^2)^\delta\). For the lasso, we set the level of penalization to
-\(\lambda_\text{max}/2\) and for ridge regression, we set it to
+In \Cref{sec:mixed-data}, we discovered that special care needs to be taken when
+normalizing mixed data. In this experiment, we construct a quasi-normal feature with mean
+zero and standard deviation 1/2 and a binary feature with varying class balance \(q_j\). We
+set the signal-to-noise ratio to 0.5 and generate our response vector \(\vec{y}\) as
+before, with \(n = \num{1000}\). These features are constructed so that their effects are
+comparable under the notion of comparability that we introduce in \Cref{sec:mixed-data},
+using \(\kappa = 2\). In order to preserve the comparability for the baseline case \(q_0 =
+1/2\), we use the scaling introduced in \Cref{sec:mixed-data}, which leads to \(s_j = 2
+\times (1/4)^{1-\delta}(q_j-q_j^2)^\delta\). For lasso and ridge, respectively, we set the
+level of penalization to \(\lambda_\text{max}/2\) and
 \(2\lambda_\text{max}\).\footnote{This makes the level of regularization comparable between
   the two cases.}
 
@@ -210,7 +211,11 @@ The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results 
 \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) to avoid the effect of
 class imbalance, whereas for ridge we instead need \(\delta =1/2\) (standardization). As
 our theory suggests, this extra scaling mitigates this class-balance dependency at the cost
-of added variance.
+of added variance. Note that we do not see the bias reduction that we observed in our
+theoretical results for high \(q_j\) values and \(\delta \geq 1/2\) in
+\Cref{fig:lasso-ridge-comparison}. This is related to the error term (signal-to-noise
+ratio) and level of \(q_j\). We would need stronger class imbalance and larger error for
+the effect to show up here.
 
 \begin{figure}[htpb]
   \centering
@@ -226,42 +231,48 @@ of added variance.
   }
 \end{figure}
 
-Note that we do not see the bias reduction that we observed in our theoretical results for
-high \(q_j\) values and \(\delta \geq 1/2\) in \Cref{fig:lasso-ridge-comparison}. This is
-related to the error term (signal-to-noise ratio) and level of \(q_j\). Typically, we would
-need stronger class imbalance and larger error for the effect to show up in our
-experiments.
-
 \subsubsection{Interactions}\label{sec:experiments-interactions}
 
 Here we study the effects of normalization and class balance on interactions when using the
 lasso. Our example consists of a two-feature problem with an added interaction term given
-by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q_j=0.9\)
-and the second quasi-normal with standard deviation 0.5. We set \(n=1000\) and specify
-\(\lambda_1 = n/4\) as the level of regularization. Note that we normalize \emph{after} the
-interaction term is added.
+by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q\) and the
+second quasi-normal with standard deviation 0.5. We set \(n=1000\), specify \(\lambda_1 =
+n/4\). Then, we standardize the normal feature and normalize the binary feature by
+centering by its mean and scaling by \(\kappa (q - q^2)\), with \(\kappa = 2\). We consider
+three different strategies for choosing \(s_3\), the scaling of the interaction feature:
+% TODO: this should probably be part of the theoretical section instead
+\begin{enumerate}
+  \item \(s_3 = \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{i3} - \bar{x}_3)^2}\). In other words, we just scale with standard deviation.
+  \item \(s_3 = \sqrt{\frac{1}{|\mathcal{A}|}\sum_{i :\mathcal{A}} (x_{i3} - c)^2},\)
+        with \(\mathcal{A} = \{i : x_{2i} = 0\}\), and \(c = \frac{1}{|\mathcal{A}|} \sum_{i \in \mathcal{A}} x_{3i}\).
+        In other words, we scale by the standard deviation of the active features.
+  \item \(s_3 = s_1s_2\)
+\end{enumerate}
 
-The results~(\Cref{fig:interactions}) show, as before, that class balance (which, recall,
-is set to 0.9 here) has a dramatic effect on estimates of the binary feature when \(\delta
-\in \{0, 1/2\}\). Somewhat surprisingly, however, the interaction term does not seem to be
-affected by the normalization type for any of the cases in which it is present.
+The results~(\Cref{fig:interactions}) show that the only strategy that consistently picks
+the correct model is strategy 3, in which the scale is the product of the scales of
+\(\bm{x}_1\) and \(\bm{x}_2\). Strategy 1, meanwhile, selects the correct model as long as
+the class balance of the binary feature is close to 1/2, but fails to pick up on the
+interaction effect if the binary feature is too imbalanced, and in general shrinks it too
+much. Strategy 2, in which we base our scale only on the subset of observations for which
+the binary feature is 1, only seems to perform reasonably well when \(q\) is close to zero,
+as it converges towards strategy 3.
+
+% TODO: work out theoretically why s3 is working so well
 
 \begin{figure}[htpb]
   \label{fig:interactions}
   \centering
   \includegraphics[]{plots/interactions-classbalance.pdf}
   \caption{%
-    Lasso estimates for a three-feature problem where the third feature is an interaction term
-    between the first two features. The first feature is binary (quasi-Bernoulli) with class
-    balance \(q=0.9\) and the second is quasi-normal with standard deviation 0.5. The
-    signal-to-noise ratio is 0.5. The experiment is run for 50 iterations and we aggregate and
-    report means across all iterations. }
+    Lasso estimates for a three-feature problem where the third feature is an
+    interaction term between the first two features. The first feature is
+    binary (quasi-Bernoulli) with class balance \(q\) and the second is
+    quasi-normal with standard deviation 0.5. The signal-to-noise ratio is 1.
+    The experiment is run for 50 iterations and we aggregate and report means
+    across all iterations.
+  }
 \end{figure}
-
-Note that the interaction in this experiment naturally introduces correlation between the
-features and that this has an effect on the lasso estimates since we, for instance, can
-penalize the main effect whilst still retaining information about it in the interaction
-term.
 
 \subsection{The Weighted Elastic Net}\label{sec:experiments-elasticnet}
 
@@ -271,18 +282,24 @@ for class balance bias in the elastic net. To simplify the presentation, we para
 the elastic net as \(\lambda_1 = \alpha \lambda \) and \(\lambda_2 = (1-\alpha) \lambda\),
 so that \(\alpha\) controls the balance between the two penalties.
 
-\subsubsection{Mixed Data}\label{sec:experiments-mixed-data-elasticnet}
+We conduct an experiment with the same setup as in \Cref{sec:experiments-mixed-data}, but
+here we use the weighted elastic net instead with \(\alpha \in \{0.25, 0.75\}\). We use
+\(n=1000\) and run the simulations fro 50 iterations for different values of \(\omega\),
+using the weights \(u_j = v_j = (q_j - q_j^2)^{\omega}\), as we suggested in
+\Cref{sec:binary-weighting}. Our results (\Cref{fig:mixed-data-elnet}) show that \(\omega =
+1\) leads to seemingly unbiased estimates of the binary feature at the cost of increased
+variance.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics{plots/mixed_data_elnet.pdf}
   \caption{%
     Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
-    feature with class balance \(q_j\), \(\bernoulli(q_j)\), and the other is a quasi-normal
+    feature with class balance \(q\), \(\bernoulli(q)\), and the other is a quasi-normal
     feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\)
     observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
-    \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
+    \((q-q^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
     means and standard deviations of the estimates. \label{fig:mixed-data-elnet}
   }
 \end{figure}

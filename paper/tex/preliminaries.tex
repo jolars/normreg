@@ -21,19 +21,15 @@ process of centering and scaling the feature matrix, which we formalize in
 \begin{definition}[Normalization]
   \label{def:normalization}
   % Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with each row equal to \([c_1, c_2, c_n]^\T\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
-  Let \(\tilde{\mat X}\) be the normalized feature matrix, with elements
-  \[
-    \tilde{x}_{ij} = \frac{x_{ij} - c_{j}}{s_j},
-  \]
-  where \(x_{ij}\) is an element of the (unnormalized) feature matrix \(\mat{X}\) and \(c_j\)
-  and \(s_j\) are the \emph{centering} and \emph{scaling} factors respectively.
+  Let \(\tilde{\mat X}\) be the normalized feature matrix, with elements \(\tilde{x}_{ij} =
+  (x_{ij} - c_{j})/s_j,\) where \(x_{ij}\) is an element of the (unnormalized) feature matrix
+  \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and \emph{scaling} factors
+  respectively.
 \end{definition}
 
 Some authors refer to this procedure as \emph{standardization}, but here we define
 standardization only as the case when centering with the arithmetic mean and scaling with
-the (uncorrected) standard deviation. Also note that normalization is sometimes defined as
-the process of scaling the \emph{samples}, rather than the features. We will not consider
-this type of normalization in this paper.
+the (uncorrected) standard deviation.
 
 \subsection{Types of Normalization}
 
@@ -62,15 +58,13 @@ most common choices in \Cref{tab:normalization-types}.
 \end{table}
 
 Standardization is perhaps the most common type of normalization, at least in the field of
-statistics. It is sometimes known as \emph{z-scoring} or \emph{z-transformation}. One of
-the benefits of using standardization is that it simplifies certain aspects of fitting the
-model. For instance, the intercept term \(\hat\beta_0\) is equal to the mean of the
-response \(\vec y\). For regularized methods, it is typically the case that we standardize
-with the uncorrected sample standard deviation (division by \(n\)). The downside of
-standardization is that it involves centering by the mean, which typically destroys
-sparsity in the data structure. This is not a problem when the data is stored as a dense
-matrix; but when the data is sparse, it can lead to a significant increases in memory usage
-and processing time.
+statistics. One of its benefits is that it simplifies certain aspects of fitting the model.
+For instance, the intercept term \(\hat\beta_0\) is equal to the mean of the response
+\(\vec y\). For regularized methods, it is typically the case that we standardize with the
+uncorrected sample standard deviation (division by \(n\)). The downside of standardization
+is that it involves centering by the mean, which typically destroys sparsity in the data
+structure. This is not a problem when the data is stored as a dense matrix; but when the
+data is sparse, it can lead to a significant increases in memory usage and processing time.
 
 A common alternative to standardization, particularly when data is sparse, is to scale the
 features by their maximum absolute value (max--abs normalization). This method has no
@@ -86,22 +80,19 @@ play in the case when the feature is normally distributed.
 Min-max normalization scales the data to lie in \([0, 1]\). As with maximum absolute value
 scaling, min-max normalization retains sparsity and also shares its sensitivity to outliers
 and sample size. Unlike max--abs scaling, min--max scaling is not sensitive to the
-\emph{location} of the data, only its \emph{spread}. Norm-scaling, scaling by a norm, is
-seldom used in practice and more often encountered in theoretical work. The norm can be any
+\emph{location} of the data, only its \emph{spread}. In norm-scaling, the norm can be any
 \(p\)-norm, and the choice of \(p\) will determine the scaling. Standard choices are
 \(p=1\), when the scaling is the sum of the absolute values of the features, and \(p=2\),
-where it is the Euclidean norm. A special case of normalization is the adaptive
-lasso~\citep{zou2006}, which is a two-step procedure. In the first step, a model, often
-ordinary least-squares regression (OLS) or ridge regression, is fit to the data. The
-estimated coefficients from the model are then used to scale the features.
+where it is the Euclidean norm. It can of course be used together with centering by some
+location, and in the case when \(p=2\) this would amount to standardization. A special case
+of normalization is the adaptive lasso~\citep{zou2006}, which is a two-step procedure. In
+the first step a model, often ordinary least-squares regression (OLS) or ridge regression,
+is fit to the data. The estimated coefficients from the model are then used to scale the
+features.
 
 \subsection{The Lasso, Ridge Regression, and the Elastic Net}
 
-In this paper we focus on the lasso and ridge regression as well as their generalization:
-elastic net. The latter of these is the ordinary-least squares regression objective
-regularized by a combination of the \(\ell_1\) and squared \(\ell_2\) norms. For the
-normalized feature matrix \(\tilde{\mat{X}}\), the elastic net is represented by the
-following convex optimization problem:
+The elastic net is represented by the following convex optimization problem:
 \begin{equation}
   \label{eq:elastic-net}
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
@@ -177,13 +168,13 @@ equations~\citep{donoho1994}:
 \end{equation*}
 where \(\st\) is the soft-thresholding operator, defined as
 \[
-  \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0) = \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
+  \st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0). %= \ind{|z|>\lambda}\big(z - \sign(z)\lambda\big).
 \]
 
 \subsection{Rescaling Regression Coefficients}
 
 Normalization changes the optimization problem and therefore its solution, the
-coefficients, which will now be on the scale of the normalized features. We, however, are
+coefficients, which will now be on the scale of the normalized features. But we are
 interested in \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem.
 To obtain these, we transform the coefficients from the normalized poblem,
 \(\hat\beta^{(n)}_j\), back via
@@ -194,8 +185,6 @@ To obtain these, we transform the coefficients from the normalized poblem,
 \end{equation}
 %
 There is a similar transformation for the intercept which we omit here since we are not
-interested in it.
-
-Note that this rescaling is not needed in the weighted elastic
+interested in it. Note that this rescaling is not needed in the weighted elastic
 net~(\Cref{sec:weighted-elasticnet}), since the estimated coefficients are then on the same
 scale as the original (non-normalized) data.
