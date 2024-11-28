@@ -96,7 +96,7 @@ for (i, df_group) in enumerate(df_grouped)
       xlabel = xlabel,
       yformatter = yformatter,
       ylabel = ylabel,
-      ylims = (-0.1, 2),
+      ylims = (-0.1, 1.1),
     )
 
     push!(plots, pl)
