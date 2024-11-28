@@ -28,17 +28,7 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
     x[:, 2] .-= mean(x[:, 2])
   end
 
-  if norm_strategy == 4
-    x1 = copy(x[:, 1])
-    x1 = (x1 .- mean(x1)) / std(x1)
-    x2 = copy(x[:, 2])
-    x2 = (x2 .- mean(x2)) / std(x2)
-
-    x[:, 3] = x[:, 1] .* x[:, 2]
-    x[:, 3] = (x[:, 3] .- mean(x[:, 3]))
-  else
-    x[:, 3] .= x[:, 1] .* x[:, 2]
-  end
+  x[:, 3] .= x[:, 1] .* x[:, 2]
 
   σ = √(var(x * β) / snr)
   y = x * β .+ rand(Normal(0, σ), n)
@@ -48,7 +38,11 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
   scales = ones(1, 3)
   centers = mean(x, dims = 1)
 
-  scale_mod = 0.5 / (0.25^delta)
+  q0 = 0.5
+  κ = 2
+
+  scale_mod = κ * (q0 - q0^2)^(1 - delta)
+
   scales[1] = scale_mod * var(x[:, 1], corrected = false)^delta
   scales[2] = std(x[:, 2], corrected = false)
 
@@ -58,8 +52,6 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
     scales[3] = std(x[nz_ind, 3], corrected = false)
   elseif norm_strategy == 3
     scales[3] = (q - q^2) * scales[2]
-  elseif norm_strategy == 4
-    scales[3] = std(x[:, 3], corrected = false)
   end
 
   scales[scales .== 0] .= 1
@@ -80,7 +72,7 @@ end
 param_dict = Dict(
   "it" => collect(1:50),
   "beta" => [[1, 1, 0], [1, 1, 1], [1, 0, 1], [0, 1, 1], [0, 0, 1]],
-  "norm_strategy" => [1, 2, 3, 4],
+  "norm_strategy" => [1, 2, 3],
   "delta" => [1],
   "q" => collect(range(0.01, 0.99, 20)),
   "mu" => [5],
