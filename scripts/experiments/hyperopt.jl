@@ -1,4 +1,3 @@
-using LIBSVMdata
 using Random
 using Lasso
 using NormReg
@@ -6,18 +5,6 @@ using LaTeXStrings
 using CSV
 using DataFrames
 using ProjectRoot
-
-datagrabber = function (dataset)
-  if dataset in ["rhee2006"]
-    xy = CSV.read(@projectroot("data", "$(dataset).csv"), DataFrame)
-    y = xy[:, 1]
-    x = Matrix(xy[:, 2:end])
-  else
-    x, y = load_dataset(dataset, dense = false, replace = false, verbose = false)
-  end
-
-  return x, y
-end
 
 lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
   Random.seed!(1234)

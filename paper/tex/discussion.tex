@@ -1,13 +1,12 @@
 \section{Discussion}\label{sec:discussion}
 
-In this paper, we have studied the effects of normalization in ridge regression and the
-lasso for features that are binary---an issue that has so far been treated with disregarded
-in the literature. We have discovered the class imbalance of binary features---the
-proportion of ones and zeros in the features---have a pronounced effect on both lasso and
-ridge estimates, and that this effect depends on the type of normalization used. For the
-lasso, for instance, our results show that features with large class imbalances will be
-regularized heavily, and provided that \(\lambda\) is large enough might stand little
-chance of being selected, even if the true effect of the feature on the response is large.
+We have studied the effects of normalization in ridge regression and the lasso for binary
+features---an issue that has so far been neglected in the literature. We have discovered
+the class balance (proportion of ones and zeros) of these binary features have a pronounced
+effect on both lasso and ridge estimates, and that this effect depends on the type of
+normalization used. For the lasso, for instance, our results show that features with large
+class imbalances stand little chance of being selected even when the their relationships
+with the response are strong.
 
 The primary driver of this is the relationship between the variance of the features in the
 design and the lasso and ridge estimators. Regardless of the distribution of the feature,
@@ -15,57 +14,45 @@ its variance together with the true effect and type of normalization will determ
 amount of shrinkage applied to that feature's respective coefficient. This works naturally
 in the case of normally distributed features, since for two features with equivalent
 effects but different scales, the true coefficients are also different. But for binary
-features---at least in our interpretation thereof---this is not the case. The effect of a
-change from zero to one in a binary feature, we argue, should not depend on its class
-balance.
+features, this means that a one-unit change is treated differently among binary features
+with different class balances, which has consequences that we believe may surprise users of
+these models. It means, for instance, that collecting additional data on a subgroup in the
+data set influences the estimates from the model in a specific direction. We have, however,
+found that scaling binary features with standard deviation in the case of ridge regression
+and variance in the case of the lasso mitigates this effect, but that doing so comes at the
+price of increased variance. This effectively means that the choice of normalization
+constitutes a bias--variance trade-off.
 
-We have, however, found that scaling binary features with standard deviation in the case of
-ridge regression and variance in the case of the lasso mitigates this effect, but that
-doing so comes at the price of increased variance. This effectively means that the choice
-of normalization constitutes a bias--variability trade-off with respect to imbalanced
-binary features.
-
-To study these effects theoretically and in practice, we have introduced the scaling
-parameterization $s_j = (q_j - q_j^2)^\delta,$ which includes the cases \(\delta=0\) (no
-scaling), \(\delta = 1/2\) (standard deviation scaling), and \(\delta=1\) (variance
-scaling). These, in turn, correspond to standard choices of normalization types for this
-kind of data. The common variants max--abs and min--max normalization, for instance, in
-practice correspond to \(\delta = 0\) in the case of binary data, whilst standardization
-corresponds to \(\delta = 1/2\). As far as we know, scaling with \(\delta=1\) have
-previously not been considered in the literature nor to any extent that we are aware of in
-practice.
-
-Our results demonstrate, however, that the choice of \(\delta\) affects the lasso and ridge
-estimates heavily in many cases. This is particularly true with respect to selective
-inference, in which case \(\delta=0\) scaling will reduce the chances of finding the true
-model via the lasso in class-imbalanced settings~(\Cref{sec:experiments-varbias}). But it
-will also bias the regression coefficients in both the lasso and ridge, which may also lead
-to suboptimal predictive performance~(\Cref{sec:predictive-performance}).
-
-Both our theoretical results~(\Cref{sec:theory-binary-features}) and
+To study these effects, we have introduced the scaling parameterization $s_j = (q_j -
+  q_j^2)^\delta,$ which includes the cases \(\delta=0\) (no scaling, as in max--abs and
+min--max normalization), \(\delta = 1/2\) (standard deviation scaling, as in
+standardization), and \(\delta=1\) (variance scaling). As far as we know, scaling with
+\(\delta=1\) has not been considered in the literature before. Our results demonstrate that
+the choice of \(\delta\) affects the lasso and ridge estimates in many cases. This is
+especially true with respect to feature selection, in which case \(\delta=0\) will reduce
+the chances of finding the true model via the lasso in class-imbalanced
+settings~(\Cref{sec:experiments-varbias}). But it also biases the regression coefficients
+in both the lasso and ridge, which may lead to suboptimal predictive
+performance~(\Cref{sec:predictive-performance}). Both our theoretical
+results~(\Cref{sec:theory-binary-features}) and
 experiments~(\Cref{sec:experiments-varbias}) show that the optimal choice of \(\delta\) may
 depend on the error in the data-generating process, which is typically unknown. As an
-alternative, we investigated choosing \(\delta\) in a data-driven manner by optimizing over
-\(\delta\) as if it were a hyperparameter~(\Cref{sec:experiments-hyperparameter}).
+alternative, we have investigated choosing \(\delta\) in a data-driven manner by optimizing
+over \(\delta\) as if it were a hyperparameter~(\Cref{sec:experiments-hyperparameter}).
 
 We have also studied the case of mixed data: designs that include both binary and normally
-distributed features. In this setting, our first finding is that there is an implicit
-relationship between the choice of normalization and the manner in which regularization
-affects binary viz-a-viz normally distributed features. For instance, the choice of
-max--abs normalization carries a specific assumption about how the effect of a binary
-feature should be compared to that of a normally distributed feature. There is still much
-uncertainty about how to best handle the mixed data case and no ground truth given that a
-binary feature can mean any number of things---few of which are directly comparable to a
-continuous feature.
+distributed features~(\Cref{sec:mixed-data}). In this setting, our first finding is that
+there is an implicit relationship between the choice of normalization and the manner in
+which regularization affects binary viz-a-viz normally distributed features, even when the
+binary feature is perfectly balances. The choice of max--abs normalization, for instance,
+carries a specific assumption about how the effect of a binary feature should be compared
+to that of a normally distributed feature.
 
-In our experimental results, we touch briefly on the case of interactions. In this case, it
-seems that the interaction term between a normal feature and a binary one is more-or-less
-unaffected by the class balance of the latter~(\Cref{sec:experiments-interactions}). An
-interesting avenue for future research could be to study this in more detail, both
-theoretically and empirically. One particular problem with interactions is that the
-interaction term depends on the location, and not just the scale, of the normal feature (in
-this two-feature setting), which may call for conditional normalization strategies. Much
-remain to be explored in this area.
+When it comes to the case of simple interactions between binary and normal features
+features~(\Cref{sec:experiments-interactions}), our conclusions are that the interaction
+feature should be computed after centering both the binary and normal feature and that
+scaling with the product of the standard deviation and \((q-q^2)\) mitigates the class
+balance bias in this case.
 
 Finally, note that our theoretical results are limited by several assumptions: 1) a fixed
 feature matrix \(\mat{X}\), 2) orthogonal features, and 3) normal and independent errors.
@@ -75,7 +62,8 @@ could be relaxed to allow for correlated features, which is often the case in pr
 This would allow for a more general understanding of the effects of normalization in
 regularized regression models. We have also limited ourselves to the case of the lasso and
 ridge regression. Investigating to which extent, if any, the effects we observe generalize
-to other models as well would yield valuable insights. We have also focused on the case of
-binary and continuous features here, but we are convinced that the case of categorical
-features is also of interest and might raise additional challenges with respect to
-normalization.
+to other models as well would yield valuable insights. For instance, it would be
+interesting to see if these effects hold for more complicated models such as regularizesd
+neural networks. Finally, we have also focused on the case of binary and continuous
+features here, but we are convinced that categorical features are also of interest and
+might raise additional challenges with respect to normalization.

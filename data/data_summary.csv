@@ -1,0 +1,7 @@
+dataset,n,p,response,design,q
+a1a,1605,123,binary,binary,0.9700934579439252
+w1a,2477,300,binary,binary,0.9761808639483246
+rhee2006,842,361,continuous,binary,0.995249406175772
+housing,506,13,continuous,mixed,0.9308300395256917
+leukemia,38,7129,binary,continuous,NaN
+triazines,186,60,continuous,mixed,0.9731182795698925

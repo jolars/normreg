@@ -1,39 +1,30 @@
 \section{Experiments}\label{sec:experiments}
 
-In the following sections, we present the results of our experiments. In
+In the following sections we present the results of our experiments. In
 \Cref{sec:experiments-lassoridge}, we focus on normalization in the cases of the lasso and
 ridge regression. In \Cref{sec:experiments-elasticnet}, we turn to the elastic net,
 focusing on solving class balance bias via penalty weighting.
 
 For all simulated data we generate our response vector according to \(\vec{y} =
 \mat{X}\vec{\beta}^* + \vec{\varepsilon},\) with \(\vec{\varepsilon} \sim \normal(\vec{0},
-\sigma_\varepsilon^2 \mat{I})\), where \(\mat{X}\) is the design matrix and
-\(\vec{\beta}^*\) the vector of true regression coefficients. We consider two types of
-features: binary and quasi-normal features. To generate binary vectors, we sample
-\(\ceil{nq_j}\) indexes uniformly at random without replacement from \(\{1,2,\dots,n\}\)
-and set the corresponding elements to one and the remaining ones to zero. To generate
-quasi-normal features, we generate a linear sequence \(\vec{w}\) with \(n\) values from
-\(10^{-4}\) to \(1 - 10^{-4}\), set \(x_{ij} = \cdf^{-1}(w_i)\) and then shuffle the
-elements of \(\vec{x}_j\) uniformly at random.
+\sigma_\varepsilon^2 \mat{I})\). We consider two types of features: binary and quasi-normal
+features. To generate binary vectors, we sample \(\ceil{nq_j}\) indexes uniformly at random
+without replacement from \(\{1,2,\dots,n\}\) and set the corresponding elements to one and
+the remaining ones to zero. To generate quasi-normal features, we generate a linear
+sequence \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 - 10^{-4}\), set \(x_{ij} =
+\cdf^{-1}(w_i)\), and then shuffle the elements of \(\vec{x}_j\) uniformly at random.
 
-We use a coordinate descent solver to fit the elastic net, which we have implemented as a
-variant of the coordinate descent algorithm outlined by \citet{friedman2010}. All
-experiments were coded using the Julia programming language~\citep{bezanson2017} and the
-code is available at \url{https://github.com/jolars/normreg}.
+We use a coordinate descent solver to fit the elastic net, which we have based on the
+algorithm outlined by \citet{friedman2010}. All experiments were coded using the Julia
+programming language~\citep{bezanson2017} and the code is available at
+\url{https://github.com/jolars/normreg}.
 
 \subsection{Normalization in the Lasso and Ridge Regression}\label{sec:experiments-lassoridge}
 
-In this section, we consider fitting either the lasso (the elastic net with \(\lambda_1 >
-\lambda_2 = 0\) ) or ridge (the elastic net with \(\lambda_2 > \lambda_1 = 0\)) to
-normalized data sets. We begin by examining the variability and bias in the estimates of
-the regression coefficients. We then move on to predictive performance and hyperparameter
-selection. We also consider the effect of class imbalance on the estimates of the
-regression coefficients. Finally, we look at the effect of interactions between features on
-the estimates of the regression coefficients.
-
+In this section we consider fitting the lasso and ridge regression to normalized data sets.
 To normalize the data, we use standardization (centering and scaling by mean and standard
-deviation) for all our quasi-normal features. For quasi-binary features, we center by mean
-and scale by \(s_j = (q_j-q_j^2)^\delta\), where \(\delta = 0\) corresponds to no scaling,
+deviation) for all our quasi-normal features. For binary features, we center by mean and
+scale by \(s_j = (q_j-q_j^2)^\delta\), where \(\delta = 0\) corresponds to no scaling,
 \(\delta = 1/2\) to standardization, and \(\delta = 1\) to variance scaling.
 
 \subsubsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
@@ -45,21 +36,21 @@ dependence between the features by copying the first \(\ceil{\rho n/2}\) values 
 first feature to each of the following features. In addition, we set the class balance of
 the first 20 features so that it decreases linearly on a log-scale from 0.5 to 0.99. We
 estimate the regression coefficients using the lasso, setting \(\lambda_1 = 2
-\sigma_\varepsilon \sqrt{2 \log p }\) and compare the estimates to the true coefficients.
-We run the experiment for 50 iterations in each case and aggregate the results by reporting
-means and standard deviations.
+\sigma_\varepsilon \sqrt{2 \log p }\) and compare the estimates to \(\bm{\beta}^*\). We run
+the experiment for 50 iterations in each case and aggregate the results by reporting means
+and standard deviations.
 
-The results~(\Cref{fig:binary-decreasing}) show that there is a considerable effect of
-class balance, particularly in the case of no scaling (\(\delta = 0\)), which corroborates
-our theoretical results from \Cref{sec:theory-binary-features}. At \(q_j=0.99\), for
-instance, the estimate (\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\).
-There is a similar effect also in the case of standardization (\(\delta = 1/2\)), but it is
-less pronounced. For \(\delta=1\) (variance scaling), we see that the effect of class
-balance on the estimates is, if anything, the reverse when the class imbalance is severe.
-What is also clear is that the variance of the estimates increase with class imbalance and
-that this effect increases together with \(\delta\). The level of correlation between the
-features introduces additional variance in the estimates but also seems to increase the
-effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
+The results~(\Cref{fig:binary-decreasing}) show that class balance has considerable effect,
+particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theoretical
+results from \Cref{sec:theory-binary-features}. At \(q_j=0.99\), for instance, the estimate
+(\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). There is a similar effect
+also in the case of standardization (\(\delta = 1/2\)), but it is less pronounced. For
+\(\delta=1\) (variance scaling), we see that the effect of class balance on the estimates
+is, if anything, the reverse when the class imbalance is severe. What is also clear is that
+the variance of the estimates increase with class imbalance and that this effect increases
+together with \(\delta\). The level of correlation between the features introduces
+additional variance in the estimates but also seems to increase the effect of class
+imbalance in the cases when \(\delta = 0\) or \(1/2\).
 
 \begin{figure}[htpb]
   \centering
@@ -78,22 +69,21 @@ effect of class imbalance in the cases when \(\delta = 0\) or \(1/2\).
 In this experiment, we consider predictive performance in terms of mean-squared error of
 the lasso given different levels of class balance (\(q_j \in \{0.5, 0.9, 0.99\}\)),
 signal-to-noise ratio, and normalization (\(\delta\)). As in the previous section, all of
-the features are binary, but here we have used \(n=300\), \(p = \num{1000}\). The \(k=10\)
-first features correspond to true signals with \(\beta^*_j = 1\) and all have class balance
-\(q_j\). To set signal-to-noise ratio levels, we rely on the same choice as in
-\citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6.
-
-To estimate prediction performance, we use a standard hold-out validation method with equal
-splits for the training, validation, and test sets. We fit a full lasso path, parameterized
-by a log-spaced grid of 100 values\footnote{This is a standard choice of grid, used for
-  instance by \citet{friedman2010}}, from \(\lambda_\text{max}\) (the value of \(\lambda\) at
-which the first feature enters the model) to \(10^{-2}\lambda_\text{max}\) on the training
-set and pick a \(\lambda\) based on validation set error. Then we compute the hold-out test
-set error and aggregate the results across 100 iterations.
+the features are binary, but here we have used \(n=300\) and \(p = \num{1000}\). The
+\(k=10\) first features correspond to true signals with \(\beta^*_j = 1\) and all have
+class balance \(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
+\citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6. We use standard
+hold-out validation with equal splits for training, validation, and test sets. And we fit a
+full lasso path, parameterized by a log-spaced grid of 100 values\footnote{This is a
+  standard choice of grid, used for instance by \citet{friedman2010}}, from
+\(\lambda_\text{max}\) (the value of \(\lambda\) at which the first feature enters the
+model) to \(10^{-2}\lambda_\text{max}\) on the training set and pick \(\lambda\) based on
+validation set error. Then we compute the hold-out test set error and aggregate the results
+across 100 iterations.
 
 The results~(\Cref{fig:binary-sim}) show that the optimal normalization type in terms of
 prediction power depends on the class balance of the true signals. If the imbalance is
-severe, then we gain from using \(\delta=1/2\) or \(1\), which gives a chance of recovering
+severe, then we gain by using \(\delta=1/2\) or \(1\), which gives a chance of recovering
 the true signals. If everything is balanced, however, then we do better by not scaling. In
 general, \(\delta=1/2\) works well for these specific combinations of settings.
 
@@ -116,32 +106,19 @@ Our previous results (particularly those from \Cref{sec:predictive-performance})
 that the choice of normalization matters for predictive performance. These results have
 relied on knowledge of the measurement error (signal-to-noise ratio), which we do not have
 reliable estimates of in practice (at least not in the high-dimensional context). An
-alterative that, however, comes naturally as a consequence of our particular
+alternative that, however, comes naturally as a consequence of our particular
 parameterization using \(\delta\), is to treat the choice of normalization as a
 hyperparameter and optimize over it. This is the approach we take in this experiment.
 
-We set up a grid of \(\lambda\) values as in \Cref{sec:predictive-performance} and, in
-addition, also create a linearly spaced grid of \(\delta\) values in \([0, 1]\). We split
-the data into a 50/50 training/validation set split and for each point in this
-two-dimensional grid fit the lasso or ridge to the training set and compute a hold-out
-validation set error. We do this for three data sets: \data{a1a}~\citep{becker1996},
-\data{rhee2006}~\citep{rhee2006}, and \data{w1a}~\citep{platt1998}.
+We set up a grid of \(\lambda\) values as in \Cref{sec:predictive-performance} and create a
+linearly spaced grid of \(\delta\) values in \([0, 1]\). We split the data into a equal
+training and validation set splits and for each point in this two-dimensional grid fit the
+lasso or ridge to the training set and compute validation set error. We use three data
+sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006}, and
+\data{w1a}~\citep{platt1998}. See \Cref{sec:data-summary} for details about these data
+sets.
 
-\begin{table}[hbtp]
-  \centering
-  \caption{Details of the real datasets used in the experiments}
-  \begin{tabular}{lS[table-format=4.0]S[table-format=3.0]l}
-    \toprule
-    Dataset         & {\(n\)} & {\(p\)} & {Response} \\
-    \midrule
-    \data{w1a}      & 2477    & 300     & Binary     \\
-    \data{a1a}      & 1605    & 123     & Binary     \\
-    \data{rhee2006} & 842     & 361     & Continuous \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-We show estimated level-curves of validation set error, in terms of normalized mean-squared
+We show estimated level curves of validation set error in terms of normalized mean-squared
 error (NMSE), in \Cref{fig:hyperopt-contours}. For \data{a1a}, the lasso is generally quite
 insensitive to the type of normalization, even if the optimal value is around 0.2. For
 ridge regression, lower values of \(\delta\) clearly work better. With the \data{w1a} data
@@ -163,20 +140,19 @@ worse prediction errors.
 \end{figure}
 
 We would like to point out that there is a dependency between \(\lambda\) and \(\delta\)
-here that make it difficult to interpret the relationship between them and the error. This
-comes from the fact that scaling with a smaller value (as in \(\delta = 1\)) increases the
-sizes of the vectors, which means that the level of penalization is relaxed, relatively
-speaking.
+that make it difficult to interpret the relationship between them and the error. This comes
+from the fact that scaling with a smaller value (as in \(\delta = 1\)) increases the sizes
+of the vectors, which means that the level of penalization is relaxed, relatively speaking.
 
 In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation set, also
 plotted the size of the support of the lasso (cardinality of the set of features that have
-corresponding nonzero coefficients). Here, however, we only show results for \(\delta \in
-\{0, 1/2, 1\}\). It is clear that \(\delta = 1/2\) works quite well for all of these three
-data sets, being able to attain a value close to the mininum for each of the three data
-sets. This is not the case for \(\delta \in \{0, 1\}\), for which the best possible
-prediction error is considerably worse. This is particularly the case with \(\delta =0\)
-and the \data{w1a} data set. The dependency between \(\lambda\) and \(\delta\) is also
-visible here by looking at the support size.
+corresponding nonzero coefficients). Here we only show results for \(\delta \in \{0, 1/2,
+1\}\). It is clear that \(\delta = 1/2\) works quite well for all of these three data sets,
+being able to attain a value close to the mininum for each of the three data sets. This is
+not the case for \(\delta \in \{0, 1\}\), for which the best possible prediction error is
+considerably worse. This is particularly the case with \(\delta =0\) and the \data{w1a}
+data set. The dependency between \(\lambda\) and \(\delta\) is also visible here by looking
+at the support size.
 
 \begin{figure}[htpb]
   \centering
@@ -267,10 +243,11 @@ as it converges towards strategy 3.
   \caption{%
     Lasso estimates for a three-feature problem where the third feature is an
     interaction term between the first two features. The first feature is
-    binary (quasi-Bernoulli) with class balance \(q\) and the second is
-    quasi-normal with standard deviation 0.5. The signal-to-noise ratio is 1.
-    The experiment is run for 50 iterations and we aggregate and report means
-    across all iterations.
+    binary with class balance \(q\) and the second is quasi-normal with
+    standard deviation 0.5. The signal-to-noise ratio is 1. The experiment was
+    run for 50 iterations and we aggregate and report means across all
+    iterations. Please see \Cref{sec:experiments-interactions} for information
+    about the different strategies.
   }
 \end{figure}
 
@@ -280,26 +257,24 @@ In this section, we focus on the weighted elastic net, which, as we showed in
 \Cref{sec:weighted-elasticnet}, can be used as an alternative to normalization to correct
 for class balance bias in the elastic net. To simplify the presentation, we parameterize
 the elastic net as \(\lambda_1 = \alpha \lambda \) and \(\lambda_2 = (1-\alpha) \lambda\),
-so that \(\alpha\) controls the balance between the two penalties.
-
-We conduct an experiment with the same setup as in \Cref{sec:experiments-mixed-data}, but
-here we use the weighted elastic net instead with \(\alpha \in \{0.25, 0.75\}\). We use
-\(n=1000\) and run the simulations fro 50 iterations for different values of \(\omega\),
-using the weights \(u_j = v_j = (q_j - q_j^2)^{\omega}\), as we suggested in
-\Cref{sec:binary-weighting}. Our results (\Cref{fig:mixed-data-elnet}) show that \(\omega =
-1\) leads to seemingly unbiased estimates of the binary feature at the cost of increased
-variance.
+so that \(\alpha\) controls the balance between the two penalties. We conduct an experiment
+with the same setup as in \Cref{sec:experiments-mixed-data}, but here we use the weighted
+elastic net instead with \(\alpha \in \{0.25, 0.75\}\). We use \(n=1000\) and run the
+simulations fro 50 iterations for different values of \(\omega\), using the weights \(u_j =
+v_j = (q_j - q_j^2)^{\omega}\), as we suggested in \Cref{sec:binary-weighting}. Our results
+(\Cref{fig:mixed-data-elnet}) show that \(\omega = 1\) leads to seemingly unbiased
+estimates of the binary feature at the cost of increased variance.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics{plots/mixed_data_elnet.pdf}
   \caption{%
     Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
-    feature with class balance \(q\), \(\bernoulli(q)\), and the other is a quasi-normal
-    feature with standard deviation 1/2, \(\normal(0, 0.5)\). Here, we have \(n = \num{1000}\)
-    observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal
+    feature with class balance \(q\) (\(\bernoulli(q)\)), and the other is a quasi-normal
+    feature with standard deviation 1/2 (\(\normal(0, 0.5)\)). Here, we have \(n = \num{1000}\)
+    observations. The signal-to-noise ratio is 0.5. In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
-    \((q-q^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
+    \((q-q^2)^\delta\). The experiment was run for 50 iterations and we aggregate and report
     means and standard deviations of the estimates. \label{fig:mixed-data-elnet}
   }
 \end{figure}
