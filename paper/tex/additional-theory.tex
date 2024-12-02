@@ -51,3 +51,55 @@ For min--max scaling, the situation is similar and we omit the details here. The
 is that the scaling factor is strongly dependent on the sample size, which makes it
 unsuitable for normally distributed data in several situations, such as on-line learning
 (where sample size changes over time) or model validation with uneven data splits.
+
+\subsection{Derivation of Bias and Variance of the Elastic Net Estimator}
+\label{sec:bias-var-deriv}
+
+Here, we derive the results in \Cref{sec:theory} in more detail. We have
+\[
+  {Z_j} = \tilde{\vec{x}}_j^\T \vec{y} = \tilde{\vec{x}}_j^\T(\mat{X}\vec{\beta}^* + \vec{\varepsilon}) = \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j^* + \boldsymbol{\varepsilon})
+  \qquad
+  \text{and}
+  \qquad
+  d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2)
+\]
+so that \(\hat{\beta}_j = \st_{\lambda_1}({Z_j})/d_j\). Since \(d_j\) is fixed under our
+assumptions, we focus on \(S_{\lambda_1}({Z_j})\). First observe that since \(c_j =
+\bar{\bm{x}}_j\),
+\[
+  \begin{aligned}
+    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - c_j)^\T (\vec{x}_j - c_j) = \frac{\vec{x}_j^\T\vec{x}_j - nc_j^2}{s^2_j} = \frac{n \nu_j}{s_j^2}, \\
+    \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{n \nu_j}{s_j},
+  \end{aligned}
+\]
+where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). This means that
+\begin{equation}
+  {Z_j} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  \qquad\text{and}\qquad
+  d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right).
+\end{equation}
+For the expected value and variance of \({Z_j}\) we then have
+\begin{align*}
+  \E {Z_j}   & = \mu_j = \E \left( \tilde{\vec{x}}_j^\T (\vec{x}_j\beta^*_j + \vec{\varepsilon}) \right)  = \tilde{\vec{x}}_j^\T\vec{x}_j \beta^*_j = \frac{\beta_j^* n \nu_j}{s_j},            \\
+  \var {Z_j} & = \sigma_j^2 = \var\left(\tilde{\vec{x}}_j ^\T \vec{\varepsilon}\right) = \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j\sigma_\varepsilon^2 = \frac{n\nu_j\sigma_\varepsilon^2}{s_j^2}.
+\end{align*}
+
+The expected value of the soft-thresholding estimator is
+\begin{equation*}
+  \E \st_\lambda({Z_j}) = \int_{-\infty}^\infty \st_\lambda(z) f_{Z_j}(z) \du z
+  = \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z.
+\end{equation*}
+And then the bias of \(\hat\beta_j\) with respect to the true coefficient \(\beta_j^*\) is
+\begin{equation*}
+  \E \hat\beta_j - \beta_j^* = \frac{1}{d_j}\E \st_\lambda({Z_j}) - \beta^*_j.
+\end{equation*}
+
+Finally, we note that the variance of the soft-thresholding estimator is
+\begin{equation}
+  % \label{eq:st-variance}
+  \var {S_\lambda({Z_j})} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)^2 f_{Z_j}(z) \du z - \left(\E \st_\lambda({Z_j})\right)^2
+\end{equation}
+and that the variance of the elastic net estimator is therefore
+\begin{equation*}
+  \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda({Z_j}).
+\end{equation*}

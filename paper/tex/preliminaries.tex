@@ -45,17 +45,17 @@ data is sparse, it may increase memory use and processing time.
   \label{tab:normalization-types}
   \begin{tabular}{lll}
     \toprule
-    Normalization            & Centering (\(c_{j}\))                               & Scaling (\(s_j\))                                         \\
+    Normalization            & Centering (\(c_{j}\))                               & Scaling (\(s_j\))                                                          \\
     \midrule
-    Standardization          & \(\bar{\bm{x}}_j = \frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    Standardization          & \(\bar{\bm{x}}_j = \frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\hat{\sigma}_j = \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
     \addlinespace
-    Max--Abs                 & 0                                                   & \(\max_i(|x_{ij}|)\)                                      \\
+    Max--Abs                 & 0                                                   & \(\max_i(|x_{ij}|)\)                                                       \\
     \addlinespace
-    Min--Max                 & \(\min_i(x_{ij})\)                                  & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    Min--Max                 & \(\min_i(x_{ij})\)                                  & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                                        \\
     \addlinespace
-    \(\ell_1\)-Normalization & 0 or \(\bm{\bar{x}}_j\)                             & \(\lVert \vec{x}_j\rVert_p\), \(p \in \{1,2,\dots\}\)     \\
+    \(\ell_1\)-Normalization & 0 or \(\bm{\bar{x}}_j\)                             & \(\lVert \vec{x}_j\rVert_p\), \(p \in \{1,2,\dots\}\)                      \\
     \addlinespace
-    Adaptive Lasso           & 0                                                   & \(\beta_j^\text{OLS}\)                                    \\
+    Adaptive Lasso           & 0                                                   & \(\beta_j^\text{OLS}\)                                                     \\
     \bottomrule
   \end{tabular}
 \end{table}
