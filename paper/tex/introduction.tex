@@ -80,11 +80,13 @@ deed any other), however, have yet to be investigated.
 In this paper we will begin to bridge this knowledge gap by studying normalization in the
 context of binary data. We will focus on three models that each correspond to a particular
 case of \Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The
-latter of these, the elastic net, is a generalization of the previous two, and is the
-optimization problem of minimizing the following objective function:
-\begin{equation*}
-  \underbrace{\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2}_{g(\beta_0, \vec{\beta}; \mat{X}, \vec{y})}  + \underbrace{\lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2}_{h(\vec{\beta})}.
-\end{equation*}
+latter of these, the elastic net, is a generalization of the previous two, and is
+represented by the following optimization problem
+%
+\begin{equation}
+  \label{eq:elastic-net}
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
+\end{equation}
 %
 Setting \(\lambda_1 = 0\) results in the ridge regression objective, whereas \(\lambda_2 =
 0\) gives us the lasso. These methods are staples in the field of statistics and machine
