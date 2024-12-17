@@ -25,7 +25,8 @@ param_dict = Dict{String,Any}(
   "q" => collect(0.5:0.001:0.999),
   "delta" => [0, 1 / 4, 1 / 2, 1.0, 1.5],
   "lambda" => [0.002],
-  "sigma_e" => [0.25, 0.5, 1, 2],
+  # "sigma_e" => [0.25, 0.5, 1, 2],
+  "sigma_e" => [0.25, 1],
 )
 param_expanded = dict_list(param_dict);
 
@@ -100,7 +101,7 @@ for (j, dd) in enumerate(subgrouped_df)
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_sigma), size = (0.9 * FULL_WIDTH, 165))
+plot_output = plot(plots..., layout = (1, n_sigma), size = (320, 165))
 
 file_path = @projectroot("paper", "plots", "selection_probability.pdf")
 savefig(plot_output, file_path)

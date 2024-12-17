@@ -43,13 +43,14 @@ models differ significantly depending on type of normalization, yielding differe
 terms of feature selection as well as signs and magnitudes of the corresponding
 coefficients.
 
+% TODO: reduce image to one row?
 \begin{figure}[bpt]
   \centering
-  \includegraphics[]{plots/realdata_paths.pdf}
+  \includegraphics[]{plots/realdata_paths_small.pdf}
   \caption{%
     Lasso paths for real datasets using two types of normalization:
     standardization and maximum absolute value normalization (max--abs). We have fit
-    the lasso path to four different datasets:
+    the lasso path to two different datasets:
     \data{housing}~\citep{harrison1978}, \data{leukemia}~\citep{golub1999},
     \data{triazines}~\citep{king}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
     for more information about these data sets.) For each
@@ -82,12 +83,13 @@ In this paper we will begin to bridge this knowledge gap by studying normalizati
 context of binary data. We will focus on three models that each correspond to a particular
 case of \Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The
 latter of these, the elastic net, is a generalization of the previous two, and is
-represented by the following optimization problem
+represented by the following optimization problem:
 %
-\begin{equation}
+\begin{multline}
   \label{eq:elastic-net}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\left( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)=\frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\right).
-\end{equation}
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\bigg( f(\beta_0, \vec{\beta};\vec{X},\vec{y},\lambda_1,\lambda_2)= \\
+  \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\bigg).
+\end{multline}
 %
 Setting \(\lambda_1 = 0\) results in the ridge regression objective, whereas \(\lambda_2 =
 0\) gives us the lasso. These methods are staples in the field of statistics and machine

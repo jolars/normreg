@@ -1,40 +1,25 @@
 \PassOptionsToPackage{dvipsnames}{xcolor}
 
-\documentclass[10pt]{article} % For LaTeX2e
-\usepackage[preprint]{tmlr}
+\documentclass{article} % For LaTeX2e
 
-% If accepted, instead use the following line for the camera-ready submission:
-%\usepackage[accepted]{tmlr}
-% To de-anonymize and remove mentions to TMLR (for example for posting to preprint servers), instead use the following:
-%\usepackage[preprint]{tmlr}
+\usepackage[accepted]{icml2025}
+
+\usepackage{graphicx}
 
 \usepackage{amssymb,amsmath,amsthm,mathtools}
-\usepackage{hyperref}
-\usepackage{url}
 \usepackage{upquote}
 \usepackage{booktabs}
 
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 
-\usepackage{xcolor}
-
-\usepackage{caption}
-\usepackage{subcaption}
+\usepackage{subfigure}
 
 \usepackage{siunitx}
 
 \usepackage{hyperref}
-\hypersetup{
-  colorlinks = true,
-  breaklinks = true,
-  linkcolor  = black,
-  filecolor  = MidnightBlue,
-  citecolor  = MidnightBlue,
-  urlcolor   = MidnightBlue
-}
 
-\usepackage{cleveref}
+\usepackage[capitalize,noabbrev]{cleveref}
 
 \usepackage{todonotes}
 
@@ -42,31 +27,75 @@
 \input{math_commands.tex}
 \input{tex/macros.tex}
 
-
-\title{Class-Balance Bias in Regularized Regression}
+\icmltitlerunning{Class-Balance Bias in Regularized Regression}
 
 % Authors must not appear in the submitted version. They should be hidden
 % as long as the tmlr package is used without the [accepted] or [preprint] options.
 % Non-anonymous submissions will be rejected without review.
 
-\author{%
-  \name Johan Larsson \email jola@math.ku.dk\\
-  \addr Department of Mathematical Sciences\\University of Copenhagen
-  \AND
-  \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
-  \addr Department of Statistics\\Lund University
-}
-
-\newcommand{\fix}{\marginpar{FIX}}
-\newcommand{\new}{\marginpar{NEW}}
-
-\def\month{MM}  % Insert correct month for camera-ready version
-\def\year{YYYY} % Insert correct year for camera-ready version
-\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
-
 \begin{document}
 
-\maketitle
+\twocolumn[
+  \icmltitle{Class-Balance Bias in Regularized Regression}
+
+  % It is OKAY to include author information, even for blind
+  % submissions: the style file will automatically remove it for you
+  % unless you've provided the [accepted] option to the icml2025
+  % package.
+
+  % List of affiliations: The first argument should be a (short)
+  % identifier you will use later to specify author affiliations
+  % Academic affiliations should list Department, University, City, Region, Country
+  % Industry affiliations should list Company, City, Region, Country
+
+  % You can specify symbols, otherwise they are numbered in order.
+  % Ideally, you should not use this facility. Affiliations will be numbered
+  % in order of appearance and this is the preferred way.
+  \icmlsetsymbol{equal}{*}
+
+  %
+  % \author{%
+  %   \name Johan Larsson \email jola@math.ku.dk\\
+  %   \addr Department of Mathematical Sciences\\University of Copenhagen
+  %   \AND
+  %   \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
+  %   \addr Department of Statistics\\Lund University
+  % }
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Johan Larsson}{ucph,lu}
+    \icmlauthor{Jonas Wallin}{lu}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{ucph}{Department of Mathematical Sciences, University of Copenhagen}
+  \icmlaffiliation{lu}{Department of Statistics, Lund University}
+
+  \icmlcorrespondingauthor{Johan Larsson}{jola@math.ku.dk}
+
+  % You may provide any keywords that you
+  % find helpful for describing your paper; these are used to populate
+  % the "keywords" metadata in the PDF but will not be shown in the document
+  \icmlkeywords{
+    Normalization,
+    Standardization,
+    Regularization,
+    Feature Engineering,
+    ICML
+  }
+
+  \vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
   \input{tex/abstract.tex}
@@ -78,13 +107,6 @@
 \input{tex/experiments.tex}
 \input{tex/discussion.tex}
 
-% \subsubsection*{Broader Impact Statement}
-%
-% In this optional section, TMLR encourages authors to discuss possible repercussions of their work,
-% notably any potential negative impact that a user of this research should be aware of.
-% Authors should consult the TMLR Ethics Guidelines available on the TMLR website
-% for guidance on how to approach this subject.
-
 % \subsubsection*{Acknowledgments}
 %
 % Use unnumbered third level headings for the acknowledgments. All
@@ -92,12 +114,15 @@
 % Only add this information once your submission is accepted and deanonymized.
 
 \bibliography{normreg}
-\bibliographystyle{tmlr}
+\bibliographystyle{icml2025}
 
+\newpage
 \appendix
+\onecolumn
 
 \input{tex/additional-theory.tex}
 \input{tex/proofs.tex}
+\input{tex/additional-results.tex}
 \input{tex/data-summary.tex}
 
 \end{document}
