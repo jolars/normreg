@@ -30,8 +30,7 @@ for (j, dd) in enumerate(df_grouped)
   for (i, d) in enumerate(groups)
     alpha = d.alpha[1]
 
-    yguide =
-      i == 1 ? L"""\begin{gathered}\alpha = %$(alpha)\\\hat{\beta}_j\end{gathered}""" : ""
+    yguide = i == 1 ? L"\hat{\beta}_j\; (\alpha = %$(alpha))" : ""
 
     yformatter = i == 1 ? :auto : _ -> ""
 
@@ -65,7 +64,8 @@ for (j, dd) in enumerate(df_grouped)
       title = title,
       xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
-      legendposition = j == 1 && i == n_cols ? :outerright : :none,
+      legendposition = j == 2 && i == 2 ? :outertop : :none,
+      legendcolumns = 2,
       labels = labels,
     )
 
@@ -80,9 +80,9 @@ l = (n_rows, n_cols)
 pl = plot(
   plots...,
   layout = l,
-  size = (FULL_WIDTH * 0.83, 260),
-  left_margin = 3mm,
-  bottom_margin = 3mm,
+  size = (320, 250),
+  left_margin = [0mm 2mm 2mm],
+  bottom_margin = 1mm,
 )
 
 file_path = @projectroot("paper", "plots", "mixed_data_elnet.pdf");

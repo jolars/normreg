@@ -14,8 +14,14 @@ results = JSON.parsefile(@projectroot("data", "binary_onedim_bias_var.json"));
 
 df = DataFrame(results);
 
-function plot_binary_bias_var(df, α = 0)
-  df_subset = subset(df, :α => a -> a .== α)
+function plot_binary_bias_var(
+  df,
+  α = 0,
+  sigma_e = [0.25, 0.5, 1.0, 2.0],
+  fig_width = NormReg.FULL_WIDTH,
+  fig_height = 400,
+)
+  df_subset = subset(df, :α => a -> a .== α, :sigma_e => s -> s .∈ Ref(sigma_e))
   df_long = stack(df_subset, Not([:q, :sigma_e, :delta, :lambda, :α]))
 
   n_delta = length(unique(df_subset.delta))
@@ -136,9 +142,13 @@ function plot_binary_bias_var(df, α = 0)
     framestyle = :none,
   )
 
-  l = @layout[grid(3, n_sigma) a{0.12w}]
+  if n_sigma == 4
+    l = @layout[grid(3, n_sigma) a{0.12w}]
+  else
+    l = @layout[grid(3, n_sigma) a{0.20w}]
+  end
 
-  plotlist = plot(plots..., legend, layout = l, size = (FULL_WIDTH, 400))
+  plotlist = plot(plots..., legend, layout = l, size = (fig_width, fig_height))
 
   return plotlist
 end
@@ -150,3 +160,15 @@ elnet_plot = plot_binary_bias_var(df, 0.5)
 savefig(lasso_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_lasso.pdf"))
 savefig(ridge_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_ridge.pdf"))
 savefig(elnet_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_elnet.pdf"))
+
+lasso_plot_small = plot_binary_bias_var(df, 0, [0.25, 1.0], 320, 300)
+savefig(
+  lasso_plot_small,
+  @projectroot("paper", "plots", "binary_onedim_bias_var_lasso_small.pdf")
+)
+
+elnet_plot_small = plot_binary_bias_var(df, 0.5, [0.25, 1.0], 320, 300)
+savefig(
+  elnet_plot_small,
+  @projectroot("paper", "plots", "binary_onedim_bias_var_elnet_small.pdf")
+)

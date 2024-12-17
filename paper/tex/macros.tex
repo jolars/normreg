@@ -38,19 +38,18 @@
 % \newcommand{\T}[1]{{1}^{\mathsf{T}}}
 \newcommand{\ind}[1]{\operatorname{I}_{#1}}
 
-% environments
+% ICML Theorem Styles
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{corollary}{Corollary}[theorem]
-\newtheorem{lemma}{Lemma}[section]
-\newtheorem{proposition}{Proposition}[section]
-
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{example}{Example}[section]
-
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Remark}
 
 \newcommand{\todojl}[1]{\todo[color=green!40]{#1}}
 
@@ -58,3 +57,4 @@
 
 \newcommand{\pkg}[1]{\textsf{#1}}
 \newcommand{\data}[1]{\texttt{#1}}
+

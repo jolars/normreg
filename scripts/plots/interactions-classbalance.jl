@@ -107,7 +107,7 @@ layout = (n_rows, n_cols)
 
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
 
-plots = plot(plots..., layout = layout, size = (FULL_WIDTH, 350))
+plots = plot(plots..., layout = layout, size = (660, 320))
 
 file_path = @projectroot("paper", "plots", "interactions-classbalance.pdf")
 savefig(plots, file_path)

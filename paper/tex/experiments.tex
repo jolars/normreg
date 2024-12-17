@@ -54,7 +54,7 @@ imbalance in the cases when \(\delta = 0\) or \(1/2\).
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/binary_decreasing.pdf}
+  \includegraphics[]{plots/binary_decreasing_small.pdf}
   \caption{%
     Estimates of the regression coefficients from the lasso, \(\hat{\vec{\beta}}\), for the
     first 30 coefficients in the experiment. All of the features are binary and the first 20
@@ -136,37 +136,15 @@ worse prediction errors.
     Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set
     across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The
     dotted path shows the smallest NMSE as a function of \(\lambda\). The dot marks the
-    combination with the smallest error. } \label{fig:hyperopt-contours}
+    combination with the smallest error.
+  }
+  \label{fig:hyperopt-contours}
 \end{figure}
 
 We would like to point out that there is a dependency between \(\lambda\) and \(\delta\)
 that make it difficult to interpret the relationship between them and the error. This comes
 from the fact that scaling with a smaller value (as in \(\delta = 1\)) increases the sizes
 of the vectors, which means that the level of penalization is relaxed, relatively speaking.
-
-In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation set, also
-plotted the size of the support of the lasso (cardinality of the set of features that have
-corresponding nonzero coefficients). Here we only show results for \(\delta \in \{0, 1/2,
-1\}\). It is clear that \(\delta = 1/2\) works quite well for all of these three data sets,
-being able to attain a value close to the mininum for each of the three data sets. This is
-not the case for \(\delta \in \{0, 1\}\), for which the best possible prediction error is
-considerably worse. This is particularly the case with \(\delta =0\) and the \data{w1a}
-data set. The dependency between \(\lambda\) and \(\delta\) is also visible here by looking
-at the support size.
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/hyperopt_paths.pdf}
-  \caption{%
-    Support size and normalized mean-squared error (NMSE) for the validation set for the lasso
-    fit to datasets \data{a1a}, \data{w1a}, and \data{rhee2006} across combinations of
-    \(\delta\) and \(\lambda\). The optimal \(\delta\) is marked with dashed black lines and
-    the best combination of \(\delta\) (among 0, 1/2, and 1) and \(\lambda\) is shown as a dot. \label{fig:hyperopt-support}
-  }
-\end{figure}
-
-% TODO: describe these data sets better wrt class balances etc. Perhaps put it 
-% in the appendix
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
@@ -203,8 +181,9 @@ the effect to show up here.
     observations. The signal-to-noise ratio is 0.5 In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
     \((q_j-q_j^2)^\delta\). The experiment is run for 50 iterations and we aggregate and report
-    means and standard deviations of the estimates.\label{fig:lasso-ridge-comparison}
+    means and standard deviations of the estimates.
   }
+  \label{fig:lasso-ridge-comparison}
 \end{figure}
 
 \subsubsection{Interactions}\label{sec:experiments-interactions}
@@ -236,7 +215,7 @@ as it converges towards strategy 3.
 
 % TODO: work out theoretically why s3 is working so well
 
-\begin{figure}[htpb]
+\begin{figure*}[htpb]
   \label{fig:interactions}
   \centering
   \includegraphics[]{plots/interactions-classbalance.pdf}
@@ -249,7 +228,7 @@ as it converges towards strategy 3.
     iterations. Please see \Cref{sec:experiments-interactions} for information
     about the different strategies.
   }
-\end{figure}
+\end{figure*}
 
 \subsection{The Weighted Elastic Net}\label{sec:experiments-elasticnet}
 

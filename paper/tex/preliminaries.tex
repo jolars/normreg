@@ -1,15 +1,13 @@
 \section{Preliminaries}
 
-Throughout this paper, we assume that the data is generated from a linear model,
-\[
-  y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i \quad\text{for}\quad i \in \{1, 2, \dots, n\},
-\]
-where we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept and
-coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat X\)
-is the \(n \times p\) design matrix with features \(\vec x_j\) and \(\vec y\) the \(n
+Throughout this paper, we assume that the data is generated from a linear model, \(y_i =
+\beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i\) for \(i \in [n]\) where \([n] =
+\{1,2,\dots,n\}\) and we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept
+and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat
+X\) is the \(n \times p\) design matrix with features \(\vec x_j\) and \(\vec y\) the \(n
 \times 1\) response vector. Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\)
 to denote our estimates of the intercept and coefficients. Unless we state otherwise, we
-assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
+assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.%
 
 There is much ambiguity regarding key terms in the field of normalization. \emph{Scaling},
 \emph{standardization}, and \emph{normalization} are for instance used interchangeably
@@ -39,23 +37,30 @@ downside of standardization is that it involves centering by the mean, which des
 sparsity. This is not a problem when \(\bm{X}\) is stored as a dense matrix; but when the
 data is sparse, it may increase memory use and processing time.
 
+% TODO: move to appendix?
 \begin{table}[hbt]
   \centering
-  \caption{Common ways to normalize a matrix of features}
+  \caption{
+    Common ways to normalize a matrix of features using centering and scaling
+    factors \(c_j\) and \(s_j\), respectively. Note that \(\bar{x}_j =
+    n^{-1}\sum_{i=1}^n x_{ij}\).
+  }
   \label{tab:normalization-types}
+  \vskip 0.15in
+  \small
   \begin{tabular}{lll}
     \toprule
-    Normalization            & Centering (\(c_{j}\))                               & Scaling (\(s_j\))                                                          \\
+    Normalization            & \(c_{j}\)          & \(s_j\)                                                   \\
     \midrule
-    Standardization          & \(\bar{\bm{x}}_j = \frac{1}{n}\sum_{i=1}^n x_{ij}\) & \(\hat{\sigma}_j = \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    Standardization          & \(\bar{x}_j\)      & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
     \addlinespace
-    Max--Abs                 & 0                                                   & \(\max_i(|x_{ij}|)\)                                                       \\
+    Max--Abs                 & 0                  & \(\max_i|x_{ij}|\)                                        \\
     \addlinespace
-    Min--Max                 & \(\min_i(x_{ij})\)                                  & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                                        \\
+    Min--Max                 & \(\min_i(x_{ij})\) & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
     \addlinespace
-    \(\ell_1\)-Normalization & 0 or \(\bm{\bar{x}}_j\)                             & \(\lVert \vec{x}_j\rVert_p\), \(p \in \{1,2,\dots\}\)                      \\
+    \(\ell_1\)-Normalization & 0 or \(\bar{x}_j\) & \(\lVert \vec{x}_j\rVert_p\), \(p \in \{1,2,\dots\}\)     \\
     \addlinespace
-    Adaptive Lasso           & 0                                                   & \(\beta_j^\text{OLS}\)                                                     \\
+    Adaptive Lasso           & 0                  & \(\beta_j^\text{OLS}\)                                    \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -85,7 +90,8 @@ Let \((\hat{\beta}_0^{(n)}, \hat{\vec{\beta}}^{(n)})\) be a solution to the prob
 \Cref{eq:elastic-net}. Expanding \(f\) in \Cref{eq:elastic-net}, we have
 \[
   \begin{aligned}
-    \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
+     & \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) \\
+     & + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
   \end{aligned}
 \]
 Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT
@@ -106,14 +112,17 @@ where \(g\) is a subgradient of the \(\ell_1\) norm that has elements \(g_i\) su
   \end{cases}
 \]
 
-\subsection{Weighted Penalization}\label{sec:weighted-elasticnet}
+\subsection{Weighted Penalization}%
+\label{sec:weighted-elasticnet}
 
 One alternative to normalization, which will be of particular interest in the case of the
 elastic net, is to weight the coefficients in the penalty term---and instead of minimizing
 \Cref{eq:elastic-net} minimize the following objective:
 \[
-  \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =
-  \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
+  \begin{multlined}
+    \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =\\
+    \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
+  \end{multlined}
 \]
 with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors. We
 call this the \emph{weighted elastic net}, which is equivalent to the original form when
@@ -129,7 +138,7 @@ If the features of the normalized design matrix are orthogonal, that is,
 %
 \[
   \begin{cases}
-    \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j \beta_j + \tilde{\vec{x}}_j^\T \ones \beta_0 - \tilde{\vec{x}}_j^\T\vec{y} + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j=1,\dots,p, \\
+    \tilde{\vec{x}}_j^\T (\tilde{\vec{x}}_j \beta_j + \ones \beta_0 - \vec{y}) + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j \in [p], \\
     n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
   \end{cases}
 \]
