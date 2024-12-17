@@ -1,17 +1,14 @@
-Regularized models are often sensitive to the scales of the features in the data. It has
+Regularized models are often sensitive to the scales of the features in the data and it has
 therefore become standard practice to normalize (center and scale) features before fitting
-the model. There are, however, many different ways to normalize the features and the choice
-you make may have dramatic effects on the resulting model. For the lasso, for instance,
-entirely different sets of features may be selected depending on which type of
-normalization is used. In spite of this, the interplay between normalization and
-regularization has not been studied previously. In this paper, we begin to bridge this
-knowledge gap by studying binary and normally distributed features in the context of lasso,
-ridge, and elastic net regression. We show that the class balances of binary features
-directly influences the corresponding regression coefficients and this effect depends on
-the combination of normalization strategy and regularization method (lasso, ridge, or
-elastic net) used. We moreover show that this bias can be mitigated by scaling binary
-features with their variance in the case of the lasso and standard deviation in the case of
-ridge regression, but that this comes at the cost of increased variance. For the elastic
-net, we demonstrate that scaling the penalty weights, rather than the features, can achieve
-the same effect. We also tackle the case of mixes of binary and normal features as well as
-interactions and provide some intial results on how to normalize features in these cases.
+the model. But there are many different ways to normalize the features and the choice may
+have dramatic effects on the resulting model. In this paper, we study binary and normally
+distributed features in the context of lasso, ridge, and elastic net regression. We show
+that the class balances of binary features directly influences the regression coefficients
+and that this effect depends on the combination of normalization strategy and
+regularization method (lasso, ridge, or elastic net) used. We moreover show that this bias
+can be mitigated by scaling binary features with their variance in the case of the lasso
+and standard deviation in the case of ridge regression, but that this comes at the cost of
+increased variance. For the elastic net, we demonstrate that scaling the penalty weights,
+rather than the features, can achieve the same effect. Finally, we also tackle the case of
+mixes of binary and normal features as well as interactions and provide some intial results
+on how to normalize features in these cases.
