@@ -21,6 +21,46 @@ In this section we present additional and extended results from the main section
   \label{fig:realdata-paths-full}
 \end{figure}
 
+\subsection{Power and False Discoveries for Multiple Features}%
+\label{sec:power-fdr-multiple}
+
+Here, we study how the power of correctly detecting \(k=10\) signals under \(q_j\) linearly
+spaced in \([0.5, 0.99]\)~(\Cref{fig:binary-power}). We set \(\beta^*_j = 2\) for each of
+the signals, use \(n = 100\,000\), and let \(\sigma_\varepsilon = 1\). The level of
+regularization is set to \(\lambda_1 = n 4^\delta/10\). As we can see, the power is
+directly related to \(q_j\) and for unbalanced features stronger the higher the choice of
+\(\delta\) is.
+
+We also consider a version of the same setup, but with \(p\) linearly spaced in \([20,
+    100]\) and compute normalized mean-squared error (NMSE) and false discovery rate
+(FDR)~(\Cref{fig:binary-fdr-mse}). As before, we let \(k = 10\) and consider three
+different levels of class imbalance. The remaining \(p-k\) features have class balances
+spaced evenly on a logarithmic scale from 0.5 to 0.99. Unsurprisingly, the increase in
+power gained from selecting \(\delta = 1\) imposes increased false discovery rates. We also
+see that the mean-squared error depends on class balance. In line with our previous
+results, \(\delta \in \{0, 1/2\}\) appears to work well for balanced features whilst
+\(\delta = 1\) works better when there are large imbalances. In the case when \(q_j =
+0.99\), the model under scaling with \(\delta = 0\) does not detect any of the true
+signals.
+
+\begin{figure*}[htpb]
+  \centering
+  \subfigure[%
+    The power (probability of detecting all true signals) of the lasso. In our orthogonal
+    setting, power is constant over \(p\), which is why we have omitted the parameter in the
+    plot. \label{fig:binary-power}
+  ]{\includegraphics[]{plots/power.pdf}}\hfill%
+  \subfigure[%
+    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to
+    the total number of estimated coefficients that are nonzero (discoveries).
+    \label{fig:binary-fdr-mse}]{\includegraphics[]{plots/fdr_mse.pdf}}%%
+  % \includegraphics[]{plots/beta-bias-multidim.pdf}
+  \caption{%
+    Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
+    \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
+  }
+\end{figure*}
+
 \subsection{Bias and Variance of Lasso and Ridge Estimators}%
 \label{sec:additional-results-biasvar}
 
