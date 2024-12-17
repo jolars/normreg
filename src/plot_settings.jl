@@ -5,7 +5,7 @@ using PlotThemes
 
 using PythonPlot: matplotlib
 
-const global FULL_WIDTH = 630
+const global FULL_WIDTH = 660
 
 function set_plot_defaults(; backend = "pyplot", target = "icml")
   # theme(:wong2)

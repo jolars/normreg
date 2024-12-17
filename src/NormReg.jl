@@ -44,6 +44,7 @@ export split_data
 include("utils.jl")
 export confidence_error
 export confidence_interval
+export datagrabber
 
 include("binary_features.jl")
 export binary_d

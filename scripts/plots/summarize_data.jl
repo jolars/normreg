@@ -4,6 +4,7 @@ using DataFrames
 using ProjectRoot
 using Plots
 using StatsPlots
+using StatsBase
 
 set_plot_defaults()
 
