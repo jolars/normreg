@@ -24,7 +24,7 @@ function set_plot_defaults(; backend = "pyplot", target = "icml")
       pythonplot()
       matplotlib.rcParams["text.usetex"] = true
       matplotlib.rcParams["font.family"] = "serif"
-      matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{times}\\usepackage{amsfonts}\\usepackage{amssymb}\\usepackage{mathtools}"
+      matplotlib.rcParams["text.latex.preamble"] = "\\usepackage{newtx}\\usepackage{amsfonts}\\usepackage{mathtools}"
     else
       default(
         titlefontsize = 11,

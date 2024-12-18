@@ -136,3 +136,21 @@ at the support size.
   }
   \label{fig:hyperopt-support}
 \end{figure}
+
+\subsection{Interactions}%
+\label{sec:additional-experiments-interactions}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/interactions-classbalance.pdf}
+  \caption{%
+    Lasso estimates for a three-feature problem where the third feature is an
+    interaction term between the first two features. The first feature is
+    binary with class balance \(q\) and the second is quasi-normal with
+    standard deviation 0.5. The signal-to-noise ratio is 1. The experiment was
+    run for 50 iterations and we aggregate and report means across all
+    iterations. Please see \Cref{sec:experiments-interactions} for information
+    about the different strategies.
+  }
+  \label{fig:interactions-full}
+\end{figure}

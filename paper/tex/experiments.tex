@@ -215,10 +215,9 @@ as it converges towards strategy 3.
 
 % TODO: work out theoretically why s3 is working so well
 
-\begin{figure*}[htpb]
-  \label{fig:interactions}
+\begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/interactions-classbalance.pdf}
+  \includegraphics[]{plots/interactions-classbalance-small.pdf}
   \caption{%
     Lasso estimates for a three-feature problem where the third feature is an
     interaction term between the first two features. The first feature is
@@ -226,9 +225,12 @@ as it converges towards strategy 3.
     standard deviation 0.5. The signal-to-noise ratio is 1. The experiment was
     run for 50 iterations and we aggregate and report means across all
     iterations. Please see \Cref{sec:experiments-interactions} for information
-    about the different strategies.
+    about the different strategies and \Cref{fig:interactions-full}
+    (\Cref{sec:additional-experiments-interactions}) for plots showing multiple
+    combinations of true coefficients.
   }
-\end{figure*}
+  \label{fig:interactions}
+\end{figure}
 
 \subsection{The Weighted Elastic Net}\label{sec:experiments-elasticnet}
 
