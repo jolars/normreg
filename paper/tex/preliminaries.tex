@@ -6,26 +6,24 @@ Throughout this paper, we assume that the data is generated from a linear model,
 and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat
 X\) is the \(n \times p\) design matrix with features \(\vec x_j\) and \(\vec y\) the \(n
 \times 1\) response vector. Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\)
-to denote our estimates of the intercept and coefficients. Unless we state otherwise, we
-assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.%
+to denote our estimates of the intercept and coefficients. We will also assume \(\mat{X}\),
+\(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
 
-There is much ambiguity regarding key terms in the field of normalization. \emph{Scaling},
-\emph{standardization}, and \emph{normalization} are for instance used interchangeably
-throughout the literature. Here, we define \emph{normalization} as the process of centering
-and scaling the feature matrix, which we now formalize.
+There is considerable ambiguity regarding key terms in the literature. Here, we define
+\emph{normalization} as the process of centering and scaling the feature matrix, which we
+now formalize.
 
 \begin{definition}[Normalization]
   \label{def:normalization}
-  % Let \(\mat S\) be the \emph{scaling matrix}, which is a \(p \times p\) diagonal matrix with entries \(s_1, s_2, \dots, s_p\). Let \(\mat C\) be the \emph{centering matrix}, which is an \(n \times p\) matrix with each row equal to \([c_1, c_2, c_n]^\T\). Then the \emph{normalized design matrix} \(\tilde{\mat X}\) is defined as \(\tilde{\mat X} = (\mat X - \mat C)\mat S^{-1}\).
-  Let \(\tilde{\mat X}\) be the normalized feature matrix, with elements \(\tilde{x}_{ij} =
-  (x_{ij} - c_{j})/s_j,\) where \(x_{ij}\) is an element of the (unnormalized) feature matrix
-  \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and \emph{scaling} factors
-  respectively.
+  Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
+  \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
+  \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
+  \emph{scaling} factors respectively.
 \end{definition}
 
-Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
-but here we define standardization only as the case when centering with the mean and
-scaling with the (uncorrected) standard deviation.
+% Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
+% but here we define standardization only as the case when centering with the mean and
+% scaling with the (uncorrected) standard deviation.
 
 \subsection{Types of Normalization}
 
@@ -60,7 +58,7 @@ data is sparse, it may increase memory use and processing time.
     \addlinespace
     \(\ell_1\)-Normalization & 0 or \(\bar{x}_j\) & \(\lVert \vec{x}_j\rVert_1\)                              \\
     \addlinespace
-    Adaptive Lasso           & 0                  & \(\beta_j^\text{OLS}\)                                    \\
+    Adaptive Lasso           & 0                  & \(\hat{\beta}_j^\text{OLS}\)                              \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -72,7 +70,7 @@ sparsity. For other types of data, it scales the features to take values in the 
 \([-1, 1]\). Since the scaling is determined by a single value for each feature, the method
 is naturally sensitive to outliers. For many types of data, such as normally distributed
 data, it is also often the case that the sample maximum depends on sample size, which often
-makes use of the method problematic~(\Cref{thm:maxabs-gev}~(\Cref{sec:additional-theory})
+makes use of the method problematic~(\Cref{thm:maxabs-gev}~(\Cref{sec:additional-theory})).
 
 % TODO: should we study l1-normalization more?
 Min-max normalization scales the data to lie in \([0, 1]\). As with the max--abs method,
@@ -84,73 +82,16 @@ processing. A special case of normalization is the adaptive lasso~\citep{zou2006
 a two-step procedure. First we fit a model such as ordinary least-squares (OLS) or ridge
 regression. Then we use the estimated coefficients to scale the features and refit.
 
-\subsection{The Lasso, Ridge Regression, and the Elastic Net}
+\subsection{Lasso, Ridge, and Elastic Net Regression}
 
-Let \((\hat{\beta}_0^{(n)}, \hat{\vec{\beta}}^{(n)})\) be a solution to the problem in
-\Cref{eq:elastic-net}. Expanding \(f\) in \Cref{eq:elastic-net}, we have
-\[
-  \begin{aligned}
-     & \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) \\
-     & + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
-  \end{aligned}
-\]
-Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT
-stationarity condition yields the following system of equations:
-\begin{equation}
-  \label{eq:kkt-elasticnet}
-  \begin{cases}
-    \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0 - \vec{y}) + \lambda_1 g + \lambda_2 \vec\beta \ni \vec{0}, \\
-    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} - \vec{y}^\T \vec{1} = 0,
-  \end{cases}
-\end{equation}
-where \(g\) is a subgradient of the \(\ell_1\) norm that has elements \(g_i\) such that
-\[
-  g_i \in
-  \begin{cases}
-    \{\sign{\beta_i}\} & \text{if } \beta_i \neq 0, \\
-    [-1, 1]            & \text{otherwise}.
-  \end{cases}
-\]
-
-\subsection{Weighted Penalization}%
-\label{sec:weighted-elasticnet}
-
-One alternative to normalization, which will be of particular interest in the case of the
-elastic net, is to weight the coefficients in the penalty term---and instead of minimizing
-\Cref{eq:elastic-net} minimize the following objective:
-\[
-  \begin{multlined}
-    \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =\\
-    \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
-  \end{multlined}
-\]
-with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors. We
-call this the \emph{weighted elastic net}, which is equivalent to the original form when
-\(u_j = s_j\) and \(v_j = s_j^2\), which can be seen by substituting \(\beta_js_j =
-\tilde{\beta}_j\) in \Cref{eq:elastic-net} and solving for \(\tilde{\vec{\beta}}\).
-
-\subsection{Orthogonal Features}
-
-If the features of the normalized design matrix are orthogonal, that is,
-\(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
-\tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right) \), then
-\Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
-%
-\[
-  \begin{cases}
-    \tilde{\vec{x}}_j^\T (\tilde{\vec{x}}_j \beta_j + \ones \beta_0 - \vec{y}) + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j \in [p], \\
-    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
-  \end{cases}
-\]
-%
-The inclusion of the intercept ensures that the locations (means) of the features do not
-affect the solution (except for the intercept itself). We will therefore from now on assume
-that the features are mean-centered so that \(c_j = \bar{\vec{x}}_j\) for all \(j\) and
-therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then
-given by the following set of equations~\citep{donoho1994}:
+If we include an intercept and assume that the features of the normalized design matrix are
+orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} =
+\diag\left(\tilde{\vec{x}}_1^\T \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal
+\tilde{\vec{x}}_p\right) \), the solution to the coefficients in the elastic net problem is
+given by
 %
 \begin{equation*}
-  \label{eq:orthogonal-solution-normalized}
+  % \label{eq:orthogonal-solution-normalized}
   \hat{\beta}^{(n)}_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2},
   \qquad
   \hat{\beta}_0^{(n)} = \frac{\vec{y}^\T \ones}{n},
@@ -159,20 +100,9 @@ given by the following set of equations~\citep{donoho1994}:
 where \(\st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0)\) is the soft-thresholding
 operator.
 
-\subsection{Rescaling Regression Coefficients}
-
 Normalization changes the optimization problem and its solution, the coefficients, which
 will now be on the scale of the normalized features. But we are interested in
 \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain
 these, we transform the coefficients from the normalized poblem, \(\hat\beta^{(n)}_j\),
-back via
-%
-\begin{equation}
-  \label{eq:orthogonal-solution}
-  \hat\beta_j = \frac{\hat\beta^{(n)}_j}{s_j} \quad\text{for}\quad j = 1,2,\dots,p.
-\end{equation}
-%
-There is a similar transformation for the intercept but we omit here since we are not
-interested in it. Note that this rescaling is not needed in the weighted elastic
-net~(\Cref{sec:weighted-elasticnet}), since the estimated coefficients are kept on the same
-scale as the original (non-normalized) data.
+back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\). There is a similar
+transformation for the intercept but we omit here since we are not interested in it.

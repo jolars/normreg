@@ -14,11 +14,13 @@ section, we assume that the features are orthogonal. Let \({Z_j} = \tilde{\vec{x
 \end{equation}
 where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). Please see
 \Cref{sec:bias-var-deriv} for a derivation of this and the following results.
-Then the bias and variance of \Cref{eq:orthogonal-solution} are given by
-\begin{align*}
-  \E \hat\beta_j - \beta_j^* & = \frac{1}{d_j}\E \st_\lambda({Z_j}) - \beta^*_j, \\
-  \var \hat\beta_j           & = \frac{1}{d_j^2} \var \st_\lambda({Z_j})
-\end{align*}
+Then the bias and variance of \(\hat{\beta}_j\) are given by
+\(\E \hat\beta_j - \beta_j^* = d_j^{-1}\E \st_\lambda({Z_j}) - \beta^*_j\) and
+\(\var \hat\beta_j = d_j^{-2} \var \st_\lambda({Z_j})\),
+% \begin{align*}
+%   \E \hat\beta_j - \beta_j^* & = \frac{1}{d_j}\E \st_\lambda({Z_j}) - \beta^*_j, \\
+%   \var \hat\beta_j           & = \frac{1}{d_j^2} \var \st_\lambda({Z_j})
+% \end{align*}
 where
 \begin{multline*}
   \E \st_\lambda({Z_j}) = \\
@@ -41,10 +43,11 @@ Then
 Let \(\theta_j = -\mu_j -\lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\). Then the
 expected value of soft-thresholding of \({Z_j}\) is
 \begin{align}
-  \E \st_{\lambda_1}({Z_j}) & = \int_{-\infty}^\frac{\theta_j}{\sigma_j} (\sigma_j u - \theta_j) \pdf(u) \du u                                                                     \nonumber  \\
-                            & \phantom{={}}+ \int_{-\frac{\gamma_j}{\sigma_j}}^\infty (\sigma_j u + \gamma_j) \pdf(u) \du u                                               \nonumber           \\
-                            & = -\theta_j \cdf\left(\frac{\theta_j}{\sigma_j}\right) - \sigma_j \pdf\left(\frac{\theta_j}{\sigma_j}\right)                                          \nonumber \\
-                            & \phantom{={}}+ \gamma_j \cdf\left(\frac{\gamma_j}{\sigma_j}\right) + \sigma_j \pdf\left(\frac{\gamma_j}{\sigma_j}\right) \label{eq:mean-centered-eval}
+  \E \st_{\lambda_1}({Z_j})
+  % & = \int_{-\infty}^\frac{\theta_j}{\sigma_j} (\sigma_j u - \theta_j) \pdf(u) \du u                                                                     \nonumber  \\
+  %                           & \phantom{={}}+ \int_{-\frac{\gamma_j}{\sigma_j}}^\infty (\sigma_j u + \gamma_j) \pdf(u) \du u                                               \nonumber           \\
+   & = -\theta_j \cdf\left(\frac{\theta_j}{\sigma_j}\right) - \sigma_j \pdf\left(\frac{\theta_j}{\sigma_j}\right)                                          \nonumber \\
+   & \phantom{={}}+ \gamma_j \cdf\left(\frac{\gamma_j}{\sigma_j}\right) + \sigma_j \pdf\left(\frac{\gamma_j}{\sigma_j}\right) \label{eq:mean-centered-eval}
 \end{align}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability density and cumulative distribution
 functions of the standard normal distribution, respectively. Finally, computing \Cref{eq:st-variance} gives us
@@ -71,10 +74,8 @@ choice then matters.
 In the case of binary features, inserting \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
 variance for a binary feature) into \Cref{eq:z-d} yields
 \[
-  \begin{aligned}
-    {Z_j} & = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \\
-    d_j   & = s_j\left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
-  \end{aligned}
+  {Z_j} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \quad
+  d_j  = \frac{n(q_j - q_j^2)}{s_j} + s_j\lambda_2,
 \]
 % \[
 %   \begin{aligned}
@@ -84,7 +85,7 @@ variance for a binary feature) into \Cref{eq:z-d} yields
 % \]
 and consequently
 \[
-  \mu_j = \frac{\beta^*_j n(q_j - q_j^2)}{s_j}\qquad \text{and} \qquad \sigma_j^2 = \frac{\sigma_\varepsilon^2n(q_j- q_j^2)}{s^2_j}.
+  \mu_j = \frac{\beta^*_j n(q_j - q_j^2)}{s_j}\quad \text{and} \quad \sigma_j^2 = \frac{\sigma_\varepsilon^2n(q_j- q_j^2)}{s^2_j}.
 \]
 %
 We obtain the expected value of the elastic net estimate with respect to \(q_j\) by
@@ -94,7 +95,7 @@ The presence of the factor \(q_j - q_j^2\) in \(\mu_j\), \(\sigma_j^2\), and \(d
 indicates a link between class balance and the elastic net estimator and that this
 relationship is mediated by the scaling factor \(s_j\). To achieve some initial intuition
 for this relationship, we consider the noiseless case (\(\sigma_\varepsilon = 0\)) in
-which, inserting \(\mu_j\) and \(d_j\) into \Cref{eq:orthogonal-solution} yields
+which, we have
 \begin{equation}
   \label{eq:noiseless-estimator}
   \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\intercal \vec{y})}{s_j\left(\tilde{\vec{x}}_j^\intercal \tilde{\vec{x}}_j + \lambda_2\right)}
@@ -281,19 +282,15 @@ simulated experiments. For now, however, we turn to the case of mixed data.
 
 \subsection{Mixed Data}\label{sec:mixed-data}
 
-In this section we consider the case where features are made up of a mix of continuous and
-binary features. Throughout the section we continue to assume that \(\mat{X}\) is fixed and
-that the features are orthogonal to one another and restrict our scope to the case where
-the continuous features are normally distributed.
-
-A fundamental problem with mixed data is deciding how to put binary and normal features on
-the same scale in order to regularize each type of feature fairly. In principle we need to
-match a one-unit change in the binary feature with some amount of change in the normal
-feature. To setup this situation formally, we will say that the effects of a binary feature
-\(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if \(\beta^*_1 =
-\kappa \sigma \beta^*_2\), where \(\kappa > 0\) represents the number of standard
-deviations of the normal feature we consider to be comparable to one unit on the binary
-feature. We illustrate this notion of comparability by the following examples.
+In this section we consider the case where features are made up of a mix of normal and
+binary features. A fundamental problem is then deciding how to put binary and normal
+features on the same scale in order to regularize each type of feature fairly. In principle
+we need to match a one-unit change in the binary feature with some amount of change in the
+normal feature. To setup this situation formally, we will say that the effects of a binary
+feature \(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if
+\(\beta^*_1 = \kappa \sigma \beta^*_2\), where \(\kappa > 0\) represents the number of
+standard deviations of the normal feature we consider to be comparable to one unit on the
+binary feature. We illustrate this notion of comparability by the following examples.
 
 % TODO: illustrate this with a figure
 \begin{example}
@@ -398,11 +395,24 @@ bias imposed by the lasso and ridge regularization. But we have also
 demonstrated~(\Cref{sec:theory-binary-features}) that there is no (simple) choice of
 scaling that can achieve the same effect for the elastic net.
 \Cref{eq:noiseless-estimator}, however, suggests a natural alternative to normalization,
-which is to use the weighted elastic net~(\Cref{sec:weighted-elasticnet}). We can then
-control class-balance bias by setting our weights according to \(u_j = v_j = (q_j -
-q_j^2)^{\omega}\) and counteract it, at least in the noiseless case, with \(\omega = 1\).
-For the lasso and ridge regression, this is equivalent to using \(\delta = 1\) and \(\delta
-= 1/2\) respectively.
+which is to use the weighted elastic net, in which we minimize the following objective:
+\[
+  \begin{multlined}
+    \tilde{f}(\beta_0, \vec{\beta}, \mat{X}, \vec{y}, \lambda_1, \lambda_2) =\\
+    \frac{1}{2} \lVert \vec{y} - \beta_0 - \mat{X}\vec{\beta}\rVert_2^2 + \lambda_1 \sum_{j=1}^p u_j |\beta_j| + \frac{\lambda_2}{2} \sum_{j=1}^p v_j \beta_j^2,
+  \end{multlined}
+\]
+with \(\vec{u}\) and \(\vec{v}\) being \(p\)-length vectors of positive scaling factors.
+This is equivalent to the standard elastic net for a normalized feature matrix when \(u_j =
+s_j\) and \(v_j = s_j^2\), which can be seen by substituting \(\beta_js_j =
+\tilde{\beta}_j\) in \Cref{eq:elastic-net} and solving for \(\tilde{\vec{\beta}}\). Note
+that we do not need to rescale the coefficients from this problem as we would for the
+standard elastic net on normalized data.
+
+We can then control class-balance bias by setting our weights according to \(u_j = v_j =
+(q_j - q_j^2)^{\omega}\) and counteract it, at least in the noiseless case, with \(\omega =
+1\). For the lasso and ridge regression, this is equivalent to using \(\delta = 1\) and
+\(\delta = 1/2\) respectively.
 
 Results analogous to those in \Cref{sec:theory-binary-features} can be attained with a few
 small modifications for the weighted elastic net case. Starting with selection probability,
