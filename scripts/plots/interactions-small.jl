@@ -34,30 +34,17 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Intera
 plots = []
 
 for (i, df_subgroup) in enumerate(df_grouped)
-  # df_subgroup = df_subgrouped[1]
   df_subgroup_subset = select(df_subgroup, [:betas, :it, :q])
   n_q = length(unique(df_subgroup.q))
   n_it = length(unique(df_subgroup.it))
   df_wide = reduce(hcat, df_subgroup_subset.betas)
   df_wide_cut = reshape(df_wide, (3, n_it, n_q))
   df_final = permutedims(df_wide_cut, [2, 3, 1])
-  # d = flatten(df_subgroup_subset, [:betas])
-  # d.var = repeat(1:3, size(df_subgroup_subset)[1])
 
   ylabel = i == 1 ? L"\hat{\beta}_j" : ""
   title = L"\text{Strategy %$(df_subgroup.norm_strategy[1])}"
 
-  # xlabel = i == n_rows ? L"\delta" : ""
   xlabel = i == 2 ? L"q" : ""
-
-  # delta = df_subgroup.delta[1]
-
-  # title = i == 1 ? L"$\beta^*=[%$(beta)]^\intercal$" : ""
-  # title = i == 1 ? L"$\delta = %$(delta)$" : ""
-
-  # delta = string.(dd.delta)
-
-  # xformatter = i == n_rows ? :auto : _ -> ""
 
   yformatter = i == 1 ? :auto : _ -> ""
 
@@ -72,10 +59,8 @@ for (i, df_subgroup) in enumerate(df_grouped)
     y,
     ribbon = (y_err, y_err),
     labels = labels,
-    # legendposition = i == n_cols ? :outerright : :none,
     legendposition = :none,
     title = title,
-    # xformatter = xformatter,
     xticks = [0.2, 0.5, 0.8],
     xlabel = xlabel,
     yformatter = yformatter,
@@ -86,7 +71,6 @@ for (i, df_subgroup) in enumerate(df_grouped)
   push!(plots, pl)
 end
 
-# layout = (1, n_cols)
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
 legendvals = collect(zeros(3)')
 
@@ -96,16 +80,15 @@ legend = plot(
   ribbon = (1, 1),
   grid = false,
   label = labels,
-  legend_position = :bottom,
-  # legend_title = legend_title,
-  # palette = pal,
-  legendcolumns = 1,
+  legend_position = (-0.17, 0),
+  legendcolumns = 3,
   background_color_subplot = :transparent,
   framestyle = :none,
 )
-layout = @layout[a{0.35h}; grid(1, 3)]
 
-plots = plot(legend, plots..., layout = layout, size = (320, 200))
+layout = @layout[a{0.15h}; grid(1, 3)]
+
+plots = plot(legend, plots..., layout = layout, size = (320, 170))
 
 file_path = @projectroot("paper", "plots", "interactions-classbalance-small.pdf")
 savefig(plots, file_path)

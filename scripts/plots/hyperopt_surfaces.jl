@@ -43,13 +43,11 @@ function plot_hyperopt_surface(df, datasets = ["a1a", "w1a", "rhee2006"])
 
       z = permutedims(reshape(err, length(x), length(y)), [2, 1])
 
-      legend = i == n_cols ? true : false
-
       yformatter = i == 1 ? :auto : _ -> ""
 
       xformatter = j == n_rows ? :auto : _ -> ""
 
-      colorbar_title = i == n_cols ? "NMSE" : ""
+      colorbar_title = i == n_cols && j == 2 ? "NMSE" : ""
 
       xlab =
         j == n_rows && ((n_cols % 2 == 0) || (i == ceil(Int, n_cols / 2))) ?

@@ -104,7 +104,7 @@ df_small = DataFrames.subset(df, :dataset => d -> d .== "triazines" .|| d .== "w
 
 plots_small = plot_realpaths(df_small)
 
-plot_output = plot(plots_small..., layout = (2, 2), size = (320, 300))
+plot_output = plot(plots_small..., layout = (2, 2), size = (320, 280))
 
 file_path_small = @projectroot("paper", "plots", "realdata_paths_small.pdf")
 
