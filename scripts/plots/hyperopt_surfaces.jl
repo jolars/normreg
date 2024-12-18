@@ -1,6 +1,8 @@
 using Plots
 using StatsPlots
 using LaTeXStrings
+using DataFrames
+using NormReg
 using CSV
 using Plots
 using ProjectRoot
