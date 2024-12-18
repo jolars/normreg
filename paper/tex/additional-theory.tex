@@ -1,7 +1,66 @@
 \section{Additional Theory}
 \label{sec:additional-theory}
 
-\subsection{Why Maximum--Absolute and Min--Max Scaling are Unsuitable for Normally Distributed Data}
+\subsection{Solution to the Elastic Net}%
+\label{sec:elastic-net-estimator}
+
+Let \((\hat{\beta}_0^{(n)}, \hat{\vec{\beta}}^{(n)})\) be a solution to the problem in
+\Cref{eq:elastic-net}. Expanding \(f\) in \Cref{eq:elastic-net}, we have
+\[
+  \begin{aligned}
+     & \frac{1}{2}\left( \vec y^\T \vec y - 2(\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T\vec{y} + (\tilde{\mat{X}}\vec{\beta} + \beta_0)^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0)\right) \\
+     & + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2.
+  \end{aligned}
+\]
+Taking the subdifferential with respect to \(\vec{\beta}\) and \(\beta_0\), the KKT
+stationarity condition yields the following system of equations:
+\begin{equation}
+  \label{eq:kkt-elasticnet}
+  \begin{cases}
+    \tilde{\mat{X}}^\T(\tilde{\mat{X}}\vec{\beta} + \beta_0 - \vec{y}) + \lambda_1 g + \lambda_2 \vec\beta \ni \vec{0}, \\
+    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} - \vec{y}^\T \vec{1} = 0,
+  \end{cases}
+\end{equation}
+where \(g\) is a subgradient of the \(\ell_1\) norm that has elements \(g_i\) such that
+\[
+  g_i \in
+  \begin{cases}
+    \{\sign{\beta_i}\} & \text{if } \beta_i \neq 0, \\
+    [-1, 1]            & \text{otherwise}.
+  \end{cases}
+\]
+
+\subsubsection{Orthogonal Features}
+
+If the features of the normalized design matrix are orthogonal, that is,
+\(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
+\tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right) \), then
+\Cref{eq:kkt-elasticnet} can be decomposed into a set of \(p + 1\) conditions:
+%
+\[
+  \begin{cases}
+    \tilde{\vec{x}}_j^\T (\tilde{\vec{x}}_j \beta_j + \ones \beta_0 - \vec{y}) + \lambda_2 \beta_j + \lambda_1 g \ni 0, & j \in [p], \\
+    n \beta_0 + (\tilde{\mat{X}}\vec{\beta})^\T \vec{1} -  \vec{y}^\T \ones = 0.
+  \end{cases}
+\]
+%
+The inclusion of the intercept ensures that the locations (means) of the features do not
+affect the solution (except for the intercept itself). We will therefore from now on assume
+that the features are mean-centered so that \(c_j = \bar{\vec{x}}_j\) for all \(j\) and
+therefore \(\tilde{\vec{x}}_j^\T \ones = 0\). A solution to the system of equations is then
+given by the following set of equations~\citep{donoho1994}:
+%
+\begin{equation*}
+  \label{eq:orthogonal-solution-normalized}
+  \hat{\beta}^{(n)}_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2},
+  \qquad
+  \hat{\beta}_0^{(n)} = \frac{\vec{y}^\T \ones}{n},
+\end{equation*}
+%
+where \(\st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0)\) is the soft-thresholding
+operator.
+
+\subsection{Why Maximum--Absolute and Min--Max Scaling are Unsuitable for Normally Distributed Data}%
 \label{sec:maxabs-theory}
 
 In \Cref{thm:maxabs-gev}, we show that the scaling factor in the max--abs method converges
