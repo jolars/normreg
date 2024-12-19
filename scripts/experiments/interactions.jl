@@ -49,9 +49,9 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
   if norm_strategy == 1
     scales[3] = std(x[:, 3], corrected = false)
   elseif norm_strategy == 2
-    scales[3] = std(x[nz_ind, 3], corrected = false)
-  elseif norm_strategy == 3
     scales[3] = (q - q^2) * scales[2]
+  elseif norm_strategy == 3
+    scales[3] = std(x[nz_ind, 3], corrected = false)
   end
 
   scales[scales .== 0] .= 1

@@ -15,18 +15,9 @@ df = DataFrame(json_data);
 
 df_subset = subset(
   df,
-  # :beta => b -> map(x -> x == [0, 0, 1], b),
   :center_before => c -> c .== true,
   :delta => d -> d .== 1,
-);
-
-df_tmp = subset(
-  df,
-  :center_before => c -> c .== true,
-  :delta => d -> d .== 1,
-  :q => q -> q .== 0.51,
-  :beta => b -> map(x -> x == [1, 1, 1], b),
-  :norm_strategy => s -> s .== 1,
+  :norm_strategy => n -> n .∈ Ref([1, 2]),
 );
 
 df_grouped = @chain df_subset begin
@@ -107,7 +98,7 @@ layout = (n_rows, n_cols)
 
 labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
 
-plots = plot(plots..., layout = layout, size = (660, 320))
+plots = plot(plots..., layout = layout, size = (FULL_WIDTH, 260))
 
 file_path = @projectroot("paper", "plots", "interactions-classbalance.pdf")
 savefig(plots, file_path)

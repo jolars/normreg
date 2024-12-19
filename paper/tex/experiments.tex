@@ -194,26 +194,20 @@ by \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q
 second quasi-normal with standard deviation 0.5. We set \(n=1000\), specify \(\lambda_1 =
 n/4\). Then, we standardize the normal feature and normalize the binary feature by
 centering by its mean and scaling by \(\kappa (q - q^2)\), with \(\kappa = 2\). We consider
-three different strategies for choosing \(s_3\), the scaling of the interaction feature:
-% TODO: this should probably be part of the theoretical section instead
-\begin{enumerate}
-  \item \(s_3 = \sqrt{\frac{1}{n}\sum_{i=1}^n (x_{i3} - \bar{x}_3)^2}\). In other words, we just scale with standard deviation.
-  \item \(s_3 = \sqrt{\frac{1}{|\mathcal{A}|}\sum_{i :\mathcal{A}} (x_{i3} - c)^2},\)
-        with \(\mathcal{A} = \{i : x_{2i} = 0\}\), and \(c = \frac{1}{|\mathcal{A}|} \sum_{i \in \mathcal{A}} x_{3i}\).
-        In other words, we scale by the standard deviation of the active features.
-  \item \(s_3 = s_1s_2\)
-\end{enumerate}
+two different strategies for choosing \(s_3\): in the first strategy, which we call
+\emph{Strateg 1}, we simply standardize the resulting interaction feature.
+% TODO: make a reference to where this is done
+In the second strategy, \emph{Strategy 2} we center with mean and scale with \(s_1s_2\)
+(the product of the scales of the binary and normal features).
 
 The results~(\Cref{fig:interactions}) show that the only strategy that consistently picks
-the correct model is strategy 3, in which the scale is the product of the scales of
+the correct model is strategy 2, in which the scale is the product of the scales of
 \(\bm{x}_1\) and \(\bm{x}_2\). Strategy 1, meanwhile, selects the correct model as long as
 the class balance of the binary feature is close to 1/2, but fails to pick up on the
 interaction effect if the binary feature is too imbalanced, and in general shrinks it too
 much. Strategy 2, in which we base our scale only on the subset of observations for which
 the binary feature is 1, only seems to perform reasonably well when \(q\) is close to zero,
 as it converges towards strategy 3.
-
-% TODO: work out theoretically why s3 is working so well
 
 \begin{figure}[htpb]
   \centering

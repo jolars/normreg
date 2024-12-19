@@ -18,6 +18,7 @@ df_subset = subset(
   :beta => b -> map(x -> x == [1, 1, 1], b),
   :center_before => c -> c .== true,
   :delta => d -> d .== 1,
+  :norm_strategy => n -> n .∈ Ref([1, 2]),
 );
 
 df_grouped = @chain df_subset begin
@@ -44,7 +45,7 @@ for (i, df_subgroup) in enumerate(df_grouped)
   ylabel = i == 1 ? L"\hat{\beta}_j" : ""
   title = L"\text{Strategy %$(df_subgroup.norm_strategy[1])}"
 
-  xlabel = i == 2 ? L"q" : ""
+  xlabel = L"q"
 
   yformatter = i == 1 ? :auto : _ -> ""
 
@@ -59,7 +60,7 @@ for (i, df_subgroup) in enumerate(df_grouped)
     y,
     ribbon = (y_err, y_err),
     labels = labels,
-    legendposition = :none,
+    legendposition = i == n_cols ? :outerright : :none,
     title = title,
     xticks = [0.2, 0.5, 0.8],
     xlabel = xlabel,
@@ -71,24 +72,9 @@ for (i, df_subgroup) in enumerate(df_grouped)
   push!(plots, pl)
 end
 
-labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Interaction"]
-legendvals = collect(zeros(3)')
+layout = (1, 2)
 
-legend = plot(
-  legendvals,
-  showaxis = false,
-  ribbon = (1, 1),
-  grid = false,
-  label = labels,
-  legend_position = (-0.17, 0),
-  legendcolumns = 3,
-  background_color_subplot = :transparent,
-  framestyle = :none,
-)
-
-layout = @layout[a{0.15h}; grid(1, 3)]
-
-plots = plot(legend, plots..., layout = layout, size = (320, 170))
+plots = plot(plots..., layout = layout, size = (320, 150))
 
 file_path = @projectroot("paper", "plots", "interactions-classbalance-small.pdf")
 savefig(plots, file_path)
