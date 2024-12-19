@@ -82,7 +82,8 @@ processing. A special case of normalization is the adaptive lasso~\citep{zou2006
 a two-step procedure. First we fit a model such as ordinary least-squares (OLS) or ridge
 regression. Then we use the estimated coefficients to scale the features and refit.
 
-\subsection{Lasso, Ridge, and Elastic Net Regression}
+\subsection{Lasso, Ridge, and Elastic Net Regression}%
+\label{sec:elastic-net-solution}
 
 If we include an intercept and assume that the features of the normalized design matrix are
 orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} =
@@ -90,12 +91,12 @@ orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} =
 \tilde{\vec{x}}_p\right) \), the solution to the coefficients in the elastic net problem is
 given by
 %
-\begin{equation*}
-  % \label{eq:orthogonal-solution-normalized}
+\begin{equation}
+  \label{eq:orthogonal-solution-normalized}
   \hat{\beta}^{(n)}_j = \frac{\st_{\lambda_1}\left(\tilde{\vec{x}}_j^\T \vec{y}\right)}{\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2},
   \qquad
   \hat{\beta}_0^{(n)} = \frac{\vec{y}^\T \ones}{n},
-\end{equation*}
+\end{equation}
 %
 where \(\st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0)\) is the soft-thresholding
 operator. (See \Cref{sec:elastic-net-estimator} for a derivation of this.)
