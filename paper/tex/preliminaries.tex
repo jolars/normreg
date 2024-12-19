@@ -1,15 +1,11 @@
 \section{Preliminaries}
 
-Throughout this paper, we assume that the data is generated from a linear model, \(y_i =
-\beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i\) for \(i \in [n]\) where \([n] =
-\{1,2,\dots,n\}\) and we use \(\beta_0^*\) and \(\vec\beta^*\) to denote the true intercept
-and coefficients, respectively, and \(\varepsilon_i\) to denote measurement noise. \(\mat
-X\) is the \(n \times p\) design matrix with features \(\vec x_j\) and \(\vec y\) the \(n
-\times 1\) response vector. Furthermore, we use \(\hat\beta_0\) and \(\hat{\vec{\beta}}\)
-to denote our estimates of the intercept and coefficients. We will also assume \(\mat{X}\),
-\(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
+Throughout the paper we assume that the response \(\vec{y}\) is generated according to
+\(y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i\) for \(i \in [n]\) where \([n]
+= \{1,2,\dots,n\}\). \(\mat X\) is the \(n \times p\) design matrix with features \(\vec
+x_j\). We assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed.
 
-There is considerable ambiguity regarding key terms in the literature. Here, we define
+There is ambiguity regarding key terms in the literature. Here, we define
 \emph{normalization} as the process of centering and scaling the feature matrix, which we
 now formalize.
 
@@ -27,21 +23,22 @@ now formalize.
 
 \subsection{Normalization Strategies}
 
-There are many different strategies for normalizing the design matrix. We list a few common
-choices in \Cref{tab:normalization-types}. Standardization is perhaps the most popular type
-of normalization, at least in the field of statistics. One of its benefits is that it
+There are many different normalization strategies and we have listed a few common choices
+in \Cref{tab:normalization-types}. Standardization is perhaps the most popular type of
+normalization, at least in the field of statistics. One of its benefits is that it
 simplifies certain aspects of fitting the model, such as fitting the intercept. The
 downside of standardization is that it involves centering by the mean, which destroys
-sparsity. This is not a problem when \(\bm{X}\) is stored as a dense matrix; but when the
-data is sparse, it may increase memory use and processing time.
+sparsity.
+% This is not a problem when \(\bm{X}\) is stored as a dense matrix; but when the
+% data is sparse, it may increase memory use and processing time.
 
 % TODO: move to appendix?
 \begin{table}[hbt]
   \centering
   \caption{
     Common ways to normalize a matrix of features using centering and scaling
-    factors \(c_j\) and \(s_j\), respectively. Note that \(\bar{x}_j =
-    n^{-1}\sum_{i=1}^n x_{ij}\).
+    factors \(c_j\) and \(s_j\), respectively. Note that \(\bar{x}_j\) is
+    the arithmetic mean of feature \(j\).
   }
   \label{tab:normalization-types}
   \vskip 0.15in
@@ -57,30 +54,22 @@ data is sparse, it may increase memory use and processing time.
     Min--Max                 & \(\min_i(x_{ij})\) & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
     \addlinespace
     \(\ell_1\)-Normalization & 0 or \(\bar{x}_j\) & \(\lVert \vec{x}_j\rVert_1\)                              \\
-    \addlinespace
-    Adaptive Lasso           & 0                  & \(\hat{\beta}_j^\text{OLS}\)                              \\
+    % \addlinespace
+    % Adaptive Lasso           & 0                  & \(\hat{\beta}_j^\text{OLS}\)                              \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-When the data is sparse, a common alternative to standardization is to scale features by
-their maximum absolute values (max--abs normalization). This method has no impact on binary
-data\footnote{Except in the extreme case when all values are 0.} and therefore retains
-sparsity. For other types of data, it scales the features to take values in the range
-\([-1, 1]\). Since the scaling is determined by a single value for each feature, the method
-is naturally sensitive to outliers. For many types of data, such as normally distributed
-data, it is also often the case that the sample maximum depends on sample size, which often
-makes use of the method problematic~(\Cref{thm:maxabs-gev}~(\Cref{sec:additional-theory})).
-
-% TODO: should we study l1-normalization more?
-Min-max normalization scales the data to lie in \([0, 1]\). As with the max--abs method,
-min-max normalization retains sparsity and also shares its sensitivity to outliers and
-sample size. Unlike max--abs scaling, however, min--max scaling is not sensitive to the
-\emph{location} of the data, only its \emph{spread}. In \(\ell_1\)-normalization, each
-feature is scaled with its sum of absolute value. The method is common in signal
-processing. A special case of normalization is the adaptive lasso~\citep{zou2006}, which is
-a two-step procedure. First we fit a model such as ordinary least-squares (OLS) or ridge
-regression. Then we use the estimated coefficients to scale the features and refit.
+When \(\bm{X}\) is sparse, a common alternative to standardization is to use either
+min--max or max--abs (maximum absolute value) normalization, which scales the data to lie
+in respectively \([0, 1]\) or \([-1, 1]\) and retains sparsity when the features are
+binary. These methods are, however, both sensitive to outliers. For many types of data,
+such as normally distributed data, it is also often the case that the sample maximum
+depends on sample size, which often makes use of min--max and max--abs normalization
+problematic~(\Cref{thm:maxabs-gev}).
+% A special case of normalization is the adaptive
+% lasso~\citep{zou2006}, in which the coefficients from an initial model fit (typically OLS
+% or ridge regression) are used as scaling factors.
 
 \subsection{Lasso, Ridge, and Elastic Net Regression}%
 \label{sec:elastic-net-solution}

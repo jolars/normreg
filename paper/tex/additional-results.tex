@@ -2,6 +2,9 @@
 
 In this section we present additional and extended results from the main section.
 
+\subsection{Extended Example of Regularization Paths}%
+\label{sec:extended-real-data-paths}
+
 \begin{figure}[hbpt]
   \centering
   \includegraphics[]{plots/realdata_paths.pdf}
@@ -86,20 +89,18 @@ signals.
   \label{fig:bias-var-onedim-ridge-full}
 \end{figure}
 
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_onedim_bias_var_elnet.pdf}
-  \caption{%
-    Bias, variance, and mean-squared error in the case of the one-dimensional weighted elastic
-    net. The measures are shown for different noise levels (\(\sigma_\varepsilon\)), class
-    balances (\(q_j\)), and values of (\(\omega\)), which controls the weights that are set to
-    \(u_j = v_j = 2\times 4^{\omega - 1}(q-q^2)^\omega\) in order for the results to be
-    comparable across different values of \(\omega\). The dotted lines represent the asymptotic
-    bias of the estimator in the case of \(\omega = 1\). In the case of \(\omega > 1\), the
-    limit of the bias is zero.
-  }
-  \label{fig:binary-onedim-bias-var-elnet-full}
-\end{figure}
+The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
+\Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
+particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theory from
+\Cref{sec:theory-binary-features}. At \(q_j=0.99\), for instance, the estimate
+(\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For \(\delta=1\), we see
+that class imbalance increases the variance of the estimates. What is also clear is that
+the variance of the estimates increase with class imbalance and that this effect increases
+together with \(\delta\).
+
+The level of correlation between the features introduces additional variance in the
+estimates but also seems to increase the effect of class imbalance in the cases when
+\(\delta = 0\) or \(1/2\).
 
 \begin{figure}[htpb]
   \centering
@@ -115,15 +116,27 @@ signals.
   \label{fig:binary-decreasing-full}
 \end{figure}
 
-\subsubsection{Predictive Performance}%
-\label{sec:predictive-performance}
+\subsubsection{Predictive Performance for Simulated Data}%
+\label{sec:predictive-performance-simulated}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/hyperopt_surfaces.pdf}
+  \caption{%
+    Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set
+    across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The
+    dotted path shows the smallest NMSE as a function of \(\lambda\). The dot marks the
+    combination with the smallest error.
+  }
+  \label{fig:hyperopt-contours-full}
+\end{figure}
 
 In this experiment, we consider predictive performance in terms of mean-squared error of
-the lasso given different levels of class balance (\(q_j \in \{0.5, 0.9, 0.99\}\)),
-signal-to-noise ratio, and normalization (\(\delta\)). As in the previous section, all of
-the features are binary, but here we have used \(n=300\) and \(p = \num{1000}\). The
-\(k=10\) first features correspond to true signals with \(\beta^*_j = 1\) and all have
-class balance \(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
+the lasso and ridge regression given different levels of class balance (\(q_j \in \{0.5,
+0.9, 0.99\}\)), signal-to-noise ratio, and normalization (\(\delta\)). All of the features
+are binary, but here we have used \(n=300\) and \(p = \num{1000}\). The \(k=10\) first
+features correspond to true signals with \(\beta^*_j = 1\) and all have class balance
+\(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
 \citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6. We use standard
 hold-out validation with equal splits for training, validation, and test sets. And we fit a
 full lasso path, parameterized by a log-spaced grid of 100 values\footnote{This is a
@@ -150,6 +163,8 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
     each of the training, validation, and test sets. The plot shows means and Student's
     \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
 \end{figure}
+
+\
 
 In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation set, also
 plotted the size of the support of the lasso (cardinality of the set of features that have
@@ -204,6 +219,6 @@ at the support size.
     observations. The signal-to-noise ratio is 0.5. In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
     \((q-q^2)^\delta\). The experiment was run for 50 iterations and we aggregate and report
-    means and standard deviations of the estimates. \label{fig:mixed-data-elnet}
+    means and standard deviations of the estimates. \label{fig:mixed-data-elnet-full}
   }
 \end{figure}

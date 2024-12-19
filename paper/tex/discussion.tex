@@ -1,44 +1,31 @@
-\section{Discussion}\label{sec:discussion}
+\section{Discussion}%
+\label{sec:discussion}
 
-We have studied the effects of normalization in ridge regression and the lasso for binary
-features---an issue that has so far been neglected in the literature. We have discovered
-the class balance (proportion of ones and zeros) of these binary features have a pronounced
-effect on both lasso and ridge estimates, and that this effect depends on the type of
-normalization used. For the lasso, for instance, our results show that features with large
-class imbalances stand little chance of being selected even when the their relationships
-with the response are strong.
+We have studied the effects of normalization in lasso, ridge, and elastic net regression
+with binary data---an issue that has so far not been studied. We have discovered the class
+balance (proportion of ones and zeros) of these binary features have a pronounced effect on
+both lasso and ridge estimates and that this effect depends on the type of normalization
+used. For the lasso, for instance, features with large class imbalances stand little chance
+of being selected if the features are standardized, even when their relationships with the
+response are strong.
 
-The primary driver of this is the relationship between the variance of the features in the
-design and the lasso and ridge estimators. Regardless of the distribution of the feature,
-its variance together with the true effect and type of normalization will determine the
-amount of shrinkage applied to that feature's respective coefficient. This works naturally
-in the case of normally distributed features, since for two features with equivalent
-effects but different scales, the true coefficients are also different. But for binary
-features, this means that a one-unit change is treated differently among binary features
-with different class balances, which has consequences that we believe may surprise users of
-these models. It means, for instance, that collecting additional data on a subgroup in the
-data set influences the estimates from the model in a specific direction. We have, however,
-found that scaling binary features with standard deviation in the case of ridge regression
-and variance in the case of the lasso mitigates this effect, but that doing so comes at the
-price of increased variance. This effectively means that the choice of normalization
-constitutes a bias--variance trade-off.
+The driver of this result is the relationship between the variance of the feature and type
+of normalization. This works as expected for normally distributed features. But for binary
+features it means that a one-unit change is treated differently depending on the
+corresponding feature's class balance, which we believe may be surprising to some. We have,
+however, shown that scaling binary features with standard deviation in the case of ridge
+regression and variance in the case of the lasso mitigates this effect, but that doing so
+comes at the price of increased variance. This effectively means that the choice of
+normalization constitutes a bias--variance trade-off.
 
-To study these effects, we have introduced the scaling parameterization $s_j = (q_j -
-  q_j^2)^\delta,$ which includes the cases \(\delta=0\) (no scaling, as in max--abs and
-min--max normalization), \(\delta = 1/2\) (standard deviation scaling, as in
-standardization), and \(\delta=1\) (variance scaling). As far as we know, scaling with
-\(\delta=1\) has not been considered in the literature before. Our results demonstrate that
-the choice of \(\delta\) affects the lasso and ridge estimates in many cases. This is
-especially true with respect to feature selection, in which case \(\delta=0\) will reduce
-the chances of finding the true model via the lasso in class-imbalanced
-settings~(\Cref{sec:experiments-varbias}). But it also biases the regression coefficients
-in both the lasso and ridge, which may lead to suboptimal predictive
-performance~(\Cref{sec:predictive-performance}). Both our theoretical
-results~(\Cref{sec:theory-binary-features}) and
-experiments~(\Cref{sec:experiments-varbias}) show that the optimal choice of \(\delta\) may
-depend on the error in the data-generating process, which is typically unknown. As an
-alternative, we have investigated choosing \(\delta\) in a data-driven manner by optimizing
-over \(\delta\) as if it were a hyperparameter~(\Cref{sec:experiments-hyperparameter}).
+% To study these effects, we have introduced the scaling parameterization $s_j = (q_j -
+%   q_j^2)^\delta$, which includes the cases \(\delta=0\) (no scaling, as in max--abs and
+% min--max normalization), \(\delta = 1/2\) (standard deviation scaling, as in
+% standardization), and \(\delta=1\) (variance scaling). As far as we know, variance scaling
+% has not been considered in the literature before. Our results demonstrate that the choice
+% of \(\delta\) affects the lasso, ridge, and elastic net estimates both with respect to
+% feature selection and predictive performance and suggests that there is benefit to choosing
+% the normalization type via hyper-parameter optimization.
 
 We have also studied the case of mixed data: designs that include both binary and normally
 distributed features~(\Cref{sec:mixed-data}). In this setting, our first finding is that

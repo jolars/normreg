@@ -66,8 +66,9 @@ for (j, dd) in enumerate(df_grouped)
       title = title,
       xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
-      legendposition = j == 2 && i == 2 ? :outertop : :none,
+      legendposition = j == 2 && i == 3 ? :topright : :none,
       legend_columns = 2,
+      legend_background_color = :white,
       labels = labels,
     )
 
@@ -77,13 +78,7 @@ end
 
 l = (n_rows, n_cols)
 
-pl = plot(
-  plots...,
-  layout = l,
-  size = (320, 250),
-  left_margin = [0mm 2mm 2mm],
-  bottom_margin = 1mm,
-)
+pl = plot(plots..., layout = l, size = (320, 220))
 
 file_path = @projectroot("paper", "plots", "mixed_data.pdf");
 

@@ -161,7 +161,7 @@ savefig(lasso_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_lasso
 savefig(ridge_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_ridge.pdf"))
 savefig(elnet_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_elnet.pdf"))
 
-lasso_plot_small = plot_binary_bias_var(df, 0, [0.25, 1.0], 320, 300)
+lasso_plot_small = plot_binary_bias_var(df, 1, [0.25, 1.0], 320, 300)
 savefig(
   lasso_plot_small,
   @projectroot("paper", "plots", "binary_onedim_bias_var_lasso_small.pdf")

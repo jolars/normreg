@@ -218,3 +218,44 @@ functions of the standard normal distribution, respectively. Finally, computing 
   \]
 \end{corollary}
 
+\subsection{The Importance of Centering for Itneractions}%
+\label{sec:centering-interactions}
+
+The main motivation for centering is that it removes correlation between the main features
+and the interaction, which would otherwise affect the estimates due to the regularization.
+Centering normal features is also important because it ensures that their means do not
+factor into the estimation of their effects, which is otherwise the case since the variance
+of \(\bm{x}_3\) would then be \(q_1(\sigma^2 + \mu^2(1 - q_1))\) in the case when
+\(\bm{x}_1\) is centered and \((q_1 - q_1^2)(\sigma^2 + \mu^2)\) otherwise. Centering
+binary features is also important because the variance of the interaction term is otherwise
+\(q_1\sigma^2\) (provided \(\bm{x}_2\) is centered), which would mean that the encoding of
+values of the binary feature (e.g. \(\{0,1\}\) versus \(\{-1, 1\}\)) would affect the
+interaction term.
+
+\subsection{The Weighted Elastic Net}%
+\label{sec:additional-theory-weighted-elnet}
+
+In \Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-theory-weighted-elnet}),
+we show bias, variance, and mean-squared error for the weighted elastic net. We see that
+the behavior of bias as \(q_j \rightarrow 1^+\) depends on noise level and that there is a
+bias--variance trade-off with respect to \(\omega\). As in \Cref{sec:mixed-data}, we modify
+the weighting factor to have comparability under \(\kappa = 2\).
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/binary_onedim_bias_var_elnet.pdf}
+  \caption{%
+    Bias, variance, and mean-squared error in the case of the one-dimensional weighted elastic
+    net. The measures are shown for different noise levels (\(\sigma_\varepsilon\)), class
+    balances (\(q_j\)), and values of (\(\omega\)), which controls the weights that are set to
+    \(u_j = v_j = 2\times 4^{\omega - 1}(q-q^2)^\omega\) in order for the results to be
+    comparable across different values of \(\omega\). The dotted lines represent the asymptotic
+    bias of the estimator in the case of \(\omega = 1\). In the case of \(\omega > 1\), the
+    limit of the bias is zero.
+  }
+  \label{fig:binary-onedim-bias-var-elnet}
+\end{figure}
+
+We see that the behavior of bias as \(q_j \rightarrow 1^+\) depends on noise level and that
+there is a bias--variance trade-off with respect to \(\omega\).
+
