@@ -6,38 +6,30 @@ Now, assume that \(\mat{X}\) is fixed and that \(\vec{y} = \mat{X}\vec{\beta} +
 noise with mean zero and finite variance \(\sigma_\varepsilon^2\). As in
 \Cref{sec:elastic-net-solution}, we will also assume that the features are orthogonal,
 which means that the solution is given directly by
-\Cref{eq:orthogonal-solution-normalized}. Let \({Z_j} = \tilde{\vec{x}}_j^\T \vec{y}\) and
+\Cref{eq:orthogonal-solution-normalized}:
 \[
   \hat{\beta}_j = \frac{\st_{\lambda_1}({Z_j})}{d_j}\quad\text{with}\quad d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2).
 \]
 We can then show that
 \begin{equation}
   \label{eq:z-d}
-  {Z_j} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  \tilde{\vec{x}}_j^\T \vec{y} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
   \quad\text{and}\quad
   d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right),
 \end{equation}
-where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). See
-\Cref{sec:bias-var-deriv} for a derivation of this and the following results.
+where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\).
 The bias and variance of \(\hat{\beta}_j\) are given by
 \begin{align*}
-  \E \hat\beta_j - \beta_j^* & = \frac{1}{d_j}\E \st_\lambda({Z_j}) - \beta^*_j, \\
-  \var \hat\beta_j           & = \frac{1}{d_j^2} \var \st_\lambda({Z_j})
+  % \bias(\hat{\beta}_j; \beta_j^*) & = \frac{1}{d_j}\E \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}) - \beta^*_j, \\
+  \E \hat\beta_j - \beta_j^* & = \frac{1}{d_j}\E \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}) - \beta^*_j, \\
+  \var \hat\beta_j           & = \frac{1}{d_j^2} \var \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}).
 \end{align*}
-where
-\begin{multline*}
-  \E \st_\lambda({Z_j}) = \\
-  \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z
-\end{multline*}
-and
-\begin{multline}
-  \label{eq:st-variance}
-  \var {S_\lambda({Z_j})} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_{Z_j}(z) \du z \\
-  + \int_{\lambda}^\infty (z - \lambda)^2 f_{Z_j}(z) \du z - \left(\E \st_\lambda({Z_j})\right)^2.
-\end{multline}
+See \Cref{sec:bias-var-deriv} for a derivation of the results above
+as well as expressions for \(\E \st_\lambda(x)\) and \(\var S_\lambda(x)\).
 
-Now we also add the additional assumption that \(\vec{\varepsilon}\) is normally
-distributed, under which the bias and variance of \(\hat{\beta}_j\) has an analytical
+Note that these expressions hold for a general distribution on the error term. From now on,
+however, we will assume that \(\vec{\varepsilon}\) is normally distributed, under which the
+bias and variance of \(\hat{\beta}_j\) has an analytical
 expression~(\Cref{sec:normally-distributed-noise}).
 
 \subsection{Binary Features}%
@@ -53,10 +45,10 @@ choice then matters.
 
 In the case of binary features, inserting \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
 variance for a binary feature) into \Cref{eq:z-d} yields
-\[
-  {Z_j} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \quad
-  d_j  = \frac{n(q_j - q_j^2)}{s_j} + s_j\lambda_2,
-\]
+\begin{align*}
+  \tilde{\vec{x}}_j^\T \vec{y} & = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \\
+  d_j                          & = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
+\end{align*}
 % \[
 %   \begin{aligned}
 %     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq_j^2 + nq_j^2) = \frac{nq_j(1-q_j)}{s^2_j}, \\

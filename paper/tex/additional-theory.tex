@@ -110,7 +110,7 @@ is that the scaling factor is strongly dependent on the sample size, which makes
 unsuitable for normally distributed data in several situations, such as on-line learning
 (where sample size changes over time) or model validation with uneven data splits.
 
-\subsection{Derivation of Bias and Variance of the Elastic Net Estimator}
+\subsection{Bias and Variance of the Elastic Net Estimator}
 \label{sec:bias-var-deriv}
 
 Here, we derive the results in \Cref{sec:theory} in more detail. We have
@@ -161,7 +161,18 @@ and that the variance of the elastic net estimator is therefore
   \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda({Z_j}).
 \end{equation*}
 
-\subsection{Normally Distributed Noise}%
+% \begin{multline*}
+%   \E \st_\lambda({Z_j}) = \\
+%   \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z
+% \end{multline*}
+% and
+% \begin{multline}
+%   \label{eq:st-variance}
+%   \var {S_\lambda({Z_j})} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_{Z_j}(z) \du z \\
+%   + \int_{\lambda}^\infty (z - \lambda)^2 f_{Z_j}(z) \du z - \left(\E \st_\lambda({Z_j})\right)^2.
+% \end{multline}
+
+\subsubsection{Normally Distributed Noise}%
 \label{sec:normally-distributed-noise}
 
 Next, we add the additional assumption that \(\vec{\varepsilon}\) is normally distributed.
@@ -195,7 +206,8 @@ functions of the standard normal distribution, respectively. Finally, computing 
 
 \begin{corollary}[Variance in Ridge Regression]
   \label{cor:ridge-variance}
-  Assume the conditions of \Cref{thm:classbalance-bias} hold, except that \(\lambda_1 = 0\). Then
+  Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
+  \(\lambda_1 = 0\). Then
   \[
     \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
     \begin{cases}
