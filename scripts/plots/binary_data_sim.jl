@@ -67,7 +67,7 @@ for (i, dd) in enumerate(groups)
   push!(plots, pl)
 end
 
-plot_output = plot(plots..., layout = (1, n_qtypes), size = (320, 180))
+plot_output = plot(plots..., layout = (1, n_qtypes), size = (0.8 * FULL_WIDTH, 180))
 
 file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)
