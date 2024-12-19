@@ -14,7 +14,7 @@ set_plot_defaults()
 
 json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
 df = DataFrame(json_data);
-df_subset = subset(df, :alpha => a -> a .== 0.25 .|| a .== 0.75);
+df_subset = subset(df, :alpha => a -> a .∈ Ref([0.25, 0.5, 0.75]));
 df_grouped = (groupby(df_subset, [:alpha], sort = true));
 
 n_rows = length(unique(df_subset.alpha))
@@ -64,8 +64,7 @@ for (j, dd) in enumerate(df_grouped)
       title = title,
       xticks = 0.5:0.2:0.9,
       ylim = (-0.1, 1.1),
-      legendposition = j == 2 && i == 2 ? :outertop : :none,
-      legendcolumns = 2,
+      legendposition = j == 2 && i == 3 ? :outerright : :none,
       labels = labels,
     )
 
@@ -80,7 +79,7 @@ l = (n_rows, n_cols)
 pl = plot(
   plots...,
   layout = l,
-  size = (320, 250),
+  size = (0.9 * FULL_WIDTH, 370),
   left_margin = [0mm 2mm 2mm],
   bottom_margin = 1mm,
 )

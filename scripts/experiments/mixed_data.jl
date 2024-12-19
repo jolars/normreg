@@ -30,13 +30,10 @@ function binary_gaussian_simulation(
   for i in 1:n_qs
     beta_hat = zeros(n_it, p)
     for k in 1:n_it
-      # println("Iteration: $k, q: $(qs[i])\r")
       x1 = generate_pseudobernoulli(n, q = qs[i])
       x2 = generate_pseudonormal(n; μ = 0, σ = 0.5)
-      # x3 = generate_pseudonormal(n; μ = 0, σ = 2)
 
       x = [x1 x2]
-      # x = [x1 x2 x3]
 
       σe = √(var(x * beta) / snr)
 
@@ -57,17 +54,6 @@ function binary_gaussian_simulation(
         λ = λmax * 0.5
         beta_hat_it, _, _ = elasticnet(x, y, α = α, λ = [λ], w1 = w, w2 = w)
       end
-
-      # model = Lasso.fit(
-      #   Lasso.LassoPath,
-      #   x_std,
-      #   y,
-      #   Normal(),
-      #   α = α,
-      #   standardize = false,
-      #   λ = [λ/n],
-      #   intercept = true,
-      # )
 
       # Compute the average across the iterations
       beta_hat[k, :] = beta_hat_it
@@ -108,5 +94,3 @@ outfile = @projectroot("data", "mixed_data.json");
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
-
-# include(@projectroot("scripts", "plots", "mixed_data.jl"))

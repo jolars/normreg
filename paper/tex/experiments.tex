@@ -197,21 +197,21 @@ as it converges towards strategy 3.
 
 \subsection{The Weighted Elastic Net}\label{sec:experiments-elasticnet}
 
-In this section, we focus on the weighted elastic net, which, as we showed in
-\Cref{sec:weighted-elasticnet}, can be used as an alternative to normalization to correct
-for class balance bias in the elastic net. To simplify the presentation, we parameterize
-the elastic net as \(\lambda_1 = \alpha \lambda \) and \(\lambda_2 = (1-\alpha) \lambda\),
-so that \(\alpha\) controls the balance between the two penalties. We conduct an experiment
-with the same setup as in \Cref{sec:experiments-mixed-data}, but here we use the weighted
-elastic net instead with \(\alpha \in \{0.25, 0.75\}\). We use \(n=1000\) and run the
-simulations fro 50 iterations for different values of \(\omega\), using the weights \(u_j =
-v_j = (q_j - q_j^2)^{\omega}\), as we suggested in \Cref{sec:binary-weighting}. Our results
+In this section, we focus on the weighted elastic net, which, can be used as an alternative
+to normalization to correct for class balance bias in the elastic net. To simplify the
+presentation, we parameterize the elastic net as \(\lambda_1 = \alpha \lambda \) and
+\(\lambda_2 = (1-\alpha) \lambda\), so that \(\alpha\) controls the balance between the two
+penalties. We conduct an experiment with the same setup as in
+\Cref{sec:experiments-mixed-data}, but here we use the weighted elastic net instead with
+\(\alpha \in \{0.25, 0.75\}\). We use \(n=1000\) and run the simulations fro 50 iterations
+for different values of \(\omega\), using the weights \(u_j = v_j = (q_j -
+q_j^2)^{\omega}\), as we suggested in \Cref{sec:binary-weighting}. Our results
 (\Cref{fig:mixed-data-elnet}) show that \(\omega = 1\) leads to seemingly unbiased
 estimates of the binary feature at the cost of increased variance.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics{plots/mixed_data_elnet.pdf}
+  \includegraphics{plots/mixed_data_elnet_small.pdf}
   \caption{%
     Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
     feature with class balance \(q\) (\(\bernoulli(q)\)), and the other is a quasi-normal
