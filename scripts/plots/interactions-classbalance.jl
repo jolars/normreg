@@ -80,7 +80,7 @@ for (i, df_group) in enumerate(df_grouped)
       y,
       ribbon = (y_err, y_err),
       labels = labels,
-      legendposition = j == n_cols && i == 2 ? :outerright : :none,
+      legendposition = j == n_cols && i == 1 ? :outerright : :none,
       title = title,
       xformatter = xformatter,
       xticks = [0.2, 0.5, 0.8],
