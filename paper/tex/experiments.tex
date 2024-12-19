@@ -64,41 +64,6 @@ imbalance in the cases when \(\delta = 0\) or \(1/2\).
     deviations averaged over 50 iterations.} \label{fig:binary-decreasing}
 \end{figure}
 
-\subsubsection{Predictive Performance}\label{sec:predictive-performance}
-
-In this experiment, we consider predictive performance in terms of mean-squared error of
-the lasso given different levels of class balance (\(q_j \in \{0.5, 0.9, 0.99\}\)),
-signal-to-noise ratio, and normalization (\(\delta\)). As in the previous section, all of
-the features are binary, but here we have used \(n=300\) and \(p = \num{1000}\). The
-\(k=10\) first features correspond to true signals with \(\beta^*_j = 1\) and all have
-class balance \(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
-\citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6. We use standard
-hold-out validation with equal splits for training, validation, and test sets. And we fit a
-full lasso path, parameterized by a log-spaced grid of 100 values\footnote{This is a
-  standard choice of grid, used for instance by \citet{friedman2010}}, from
-\(\lambda_\text{max}\) (the value of \(\lambda\) at which the first feature enters the
-model) to \(10^{-2}\lambda_\text{max}\) on the training set and pick \(\lambda\) based on
-validation set error. Then we compute the hold-out test set error and aggregate the results
-across 100 iterations.
-
-The results~(\Cref{fig:binary-sim}) show that the optimal normalization type in terms of
-prediction power depends on the class balance of the true signals. If the imbalance is
-severe, then we gain by using \(\delta=1/2\) or \(1\), which gives a chance of recovering
-the true signals. If everything is balanced, however, then we do better by not scaling. In
-general, \(\delta=1/2\) works well for these specific combinations of settings.
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_data_sim.pdf}
-  \caption{%
-    Normalized mean-squared prediction error in a lasso model for different types of
-    normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios
-    (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The
-    error is aggregated test-set error from hold-out validation with \(100\) observations in
-    each of the training, validation, and test sets. The plot shows means and Student's
-    \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
-\end{figure}
-
 \subsubsection{Normalization as a Hyperparameter}\label{sec:experiments-hyperparameter}
 
 % TODO: consider reparameterizing with respect to lambda/delta
@@ -145,6 +110,10 @@ We would like to point out that there is a dependency between \(\lambda\) and \(
 that make it difficult to interpret the relationship between them and the error. This comes
 from the fact that scaling with a smaller value (as in \(\delta = 1\)) increases the sizes
 of the vectors, which means that the level of penalization is relaxed, relatively speaking.
+
+In \Cref{sec:predictive-performance}, we consider predictive performance for simulated data
+under various signal-to-noise ratios, again showing that normalization has an impact on
+prediction properties.
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
