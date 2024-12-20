@@ -384,10 +384,10 @@ We consider two cases in which we assume that the features are orthogonal and th
 \(\vec{x}_1\) is binary with class balance \(q_1\). In the first case, we let \(\bm{x}_2\)
 be normal with mean \(\mu\) and variance \(\sigma^2\), and in the second case \(\bm{x}_2\)
 be binary with class balance \(q_2\). To construct the interaction feature, we
-center\footnote{See \Cref{sec:centering-interactions} for motivation for why centering is
-  important.} the main features and then multiply element-wise. The elements of the
-interaction feature are then given by \(x_{3,i} = (x_{1,i} - \bar{\bm{x}}_1)(x_{2,i} -
-\bar{\bm{x}}_2)\).
+center\footnote{See \Cref{sec:centering-interactions} for motivation for why we center the
+  features before computing the interaction.} the main features and then multiply
+element-wise. The elements of the interaction feature are then given by \(x_{3,i} =
+(x_{1,i} - \bar{\bm{x}}_1)(x_{2,i} - \bar{\bm{x}}_2)\).
 
 If \(\bm{x}_2\) is normal and both features are centered before computing the interaction
 term, the variance becomes \(\sigma^2 (q-q^2)\), which suggests using \(s_3 = \sigma (q -
