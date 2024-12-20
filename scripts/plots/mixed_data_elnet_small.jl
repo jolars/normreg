@@ -55,8 +55,9 @@ for (i, d) in enumerate(groups)
     title = title,
     xticks = 0.5:0.2:0.9,
     ylim = (-0.1, 1.1),
-    legendposition = i == 3 ? :bottomright : :none,
-    legend_background_color = :white,
+    legendposition = :none,
+    # legendposition = i == 2 ? :top : :none,
+    # legend_background_color = :white,
     legendcolumns = 1,
     labels = labels,
   )
@@ -66,12 +67,30 @@ end
 
 l = (n_rows, n_cols)
 
+labvals = zeros(1, length(labels))
+legend = plot(
+  labvals,
+  showaxis = false,
+  grid = false,
+  label = labels,
+  ribbon = 1,
+  legend_position = :top,
+  frametitle = :none,
+  # legend_title = L"\delta",
+  background_color_subplot = :transparent,
+  legendcolumns = -1,
+  # color = colors,
+)
+
+l = @layout[a{0.18h}; grid(n_rows, n_cols)]
+
 pl = plot(
+  legend,
   plots...,
   layout = l,
-  size = (320, 150),
-  left_margin = [0mm 0mm 0mm],
-  bottom_margin = 1mm,
+  size = (320, 160),
+  # left_margin = [0mm 0mm 0mm],
+  # bottom_margin = 1mm,
 )
 
 file_path = @projectroot("paper", "plots", "mixed_data_elnet_small.pdf");
