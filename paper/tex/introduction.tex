@@ -32,9 +32,9 @@ These penalties depend on the size of coefficients, which means that they are se
 the scales of the features in \(\mat X\). To avoid this, it is common to \emph{normalize}
 the features before fitting the model by shifting and scaling each feature by measures of
 location and scale respectively. For some problems such measures arise naturally from
-contextual knowledge about the problem, but in most cases they must be estimated from data.
-A popular strategy is to use the mean and standard deviation of each feature as location
-and scale factors respectively, which is called \emph{standardization}.
+contextual knowledge, but in most cases they must be estimated from data. A popular
+strategy is to use the mean and standard deviation of each feature as location and scale
+factors respectively, which is called \emph{standardization}.
 % Most types of normalization are based only on the marginal distributions of the features,
 % but there are exceptions such as the adaptive lasso~\citep{zou2006}. Another reason for
 % normalizing the features is to improve properties of optimization algorithms used to fit
