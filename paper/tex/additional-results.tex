@@ -5,6 +5,9 @@ In this section we present additional and extended results from the main section
 \subsection{Extended Example of Regularization Paths}%
 \label{sec:extended-real-data-paths}
 
+In \Cref{fig:realdata-paths-full} we show an extended example of lasso paths for different
+real data sets and types of normalization.
+
 \begin{figure}[hbpt]
   \centering
   \includegraphics[]{plots/realdata_paths.pdf}
@@ -63,31 +66,6 @@ signals.
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
 \end{figure*}
-
-\subsection{Bias and Variance of Lasso and Ridge Estimators}%
-\label{sec:additional-results-biasvar}
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_onedim_bias_var_lasso.pdf}
-  \caption{%
-    Bias, variance, and mean-squared error for a one-dimensional lasso problem,
-    parameterized by noise level (\(\sigma_\varepsilon\)), class balance (\(q\)), and
-    scaling (\(\delta\)). Dotted lines represent asymptotic bias of the lasso
-    estimator in the case when \(\delta = 1/2\).}
-  \label{fig:bias-var-onedim-lasso-full}
-\end{figure}
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{plots/binary_onedim_bias_var_ridge.pdf}
-  \caption{%
-    Bias, variance, and mean-squared error for one-dimensional ridge regression,
-    parameterized by noise level (\(\sigma_\varepsilon\)), class balance (\(q\)), and
-    scaling (\(\delta\)). Dotted lines represent asymptotic bias of the ridge
-    estimator in the case of \(\delta = 1/4\).}
-  \label{fig:bias-var-onedim-ridge-full}
-\end{figure}
 
 The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
 \Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
@@ -191,6 +169,10 @@ at the support size.
 \subsection{Interactions}%
 \label{sec:additional-experiments-interactions}
 
+In \Cref{fig:interactions-full} we show an version of the result in \Cref{fig:interactions}
+with different types of signals. Irrespective of the signal, strategy 2 still performs
+best.
+
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/interactions-classbalance.pdf}
@@ -209,6 +191,11 @@ at the support size.
 \subsection{The Weighted Elastic Net}%
 \label{sec:additional-experiments-weighted-elnet}
 
+In \Cref{fig:mixed-data-elnet-full}, we show a version of \Cref{fig:mixed-data-elnet} with
+various settings for \(\alpha\) (the balance between the lasso and ridge penalties). Our
+previous conclusions do not seem to be affected by this choice, but as expected the class
+balance bias decreases as \(\alpha\) approaches 0 (ridge regression).
+
 \begin{figure}[htpb]
   \centering
   \includegraphics{plots/mixed_data_elnet.pdf}
@@ -219,6 +206,7 @@ at the support size.
     observations. The signal-to-noise ratio is 0.5. In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
     \((q-q^2)^\delta\). The experiment was run for 50 iterations and we aggregate and report
-    means and standard deviations of the estimates. \label{fig:mixed-data-elnet-full}
+    means and standard deviations of the estimates.
   }
+  \label{fig:mixed-data-elnet-full}
 \end{figure}

@@ -433,7 +433,7 @@ replacing \(\lambda_1\) as in the previous paragraph and \(\lambda_2\) with \(\l
 show.
 
 \begin{theorem}
-  \label{thm:weighted-elasticnet-bias}
+  \label{thm:weighted-elasticnet-bias-variance}
   Let \(\vec{x}_j\) be a binary feature with class balance \(q_j \in (0, 1)\) and take
   \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
   weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
@@ -461,4 +461,4 @@ the result mimics the result for the elastic net with normalization.
 
 The results for bias, variance, and mean-squared error for the weighted elastic net are
 similar to those in \Cref{fig:bias-var-onedim-lasso} and are plotted in
-\Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-theory-weighted-elnet}).
+\Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-results-biasvar}).

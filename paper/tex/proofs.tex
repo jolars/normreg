@@ -290,12 +290,14 @@ We have
 \end{equation*}
 from which the result follows directly.
 
-\subsection{Proof of \Cref{thm:weighted-elasticnet-bias}}
+\subsection{Proof of \Cref{thm:weighted-elasticnet-bias-variance}}
 
-Our proof follows a similar structure as in the proof for \Cref{thm:classbalance-bias}
-(\Cref{sec:classbalance-bias-proof}). We start by noting the values of some of the
-important terms. As before we will drop the subscript \(j\) everywhere to simplify
-notation. We have
+\subsubsection{Expected Value}
+
+Starting with the expected value, our proof follows a similar structure as in the proof for
+\Cref{thm:classbalance-bias} (\Cref{sec:classbalance-bias-proof}). We start by noting the
+values of some of the important terms. As before we will drop the subscript \(j\)
+everywhere to simplify notation. We have
 \begin{align*}
   \mu    & = \beta^*(q -q^2)^\omega,                     & \frac{\theta}{\sigma} & = -a\sqrt{q-q^2} - b(q-q^2)^{\omega - 1/2},                                           \\
   \sigma & = \sigma_\varepsilon \sqrt{n(q-q^2)},         & \frac{\gamma}{\sigma} & = a\sqrt{q-q^2} - b(q-q^2)^{\omega - 1/2},                                            \\
@@ -306,7 +308,7 @@ notation. We have
 
 First note the following limit (which is analogous to that in \Cref{eq:eval-sigma-limits}).
 \begin{equation}
-  \label{eq:eval-sigma-limits-weighted}
+  % \label{eq:eval-sigma-limits-weighted}
   \lim_{q \rightarrow 1^+} \frac{\theta}{\sigma} = \lim_{q \rightarrow 1^+} \frac{\gamma}{\sigma} =
   \begin{cases}
     -\infty & \text{if } 0 \leq \omega < \frac{1}{2}, \\
@@ -406,11 +408,11 @@ and therefore that
 for \(0 \leq \omega \). The limit in \Cref{eq:eval-qlimit-weighted} is given by
 \Cref{eq:eval-qlimit-terms-weighted}.
 
-\subsection{Proof of \Cref{thm:weighted-elasticnet-variance}}
+\subsubsection{Variance}
 
-This proof is in many ways equivalent to that in the case of variance of the normalized
-unweighted elastic net (\Cref{sec:classbalance-variance-proof}) and we therefore omit many
-of the details here.
+The proof for the variance result is in many ways equivalent to that in the case of
+variance of the normalized unweighted elastic net (\Cref{sec:classbalance-variance-proof})
+and we therefore omit many of the details here.
 
 In the case of \(0 \leq \omega < 1/2\), the proof is simplified since the \(d^2\) term
 tends to \(\infty\) whilst the numerator takes the same limit as in the normalized case,
