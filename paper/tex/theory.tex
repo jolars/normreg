@@ -224,15 +224,13 @@ estimator.
   \]
 \end{theorem}
 
-Note that \Cref{thm:classbalance-variance} applies only to the case when \(\lambda_1 > 1\).
-In \Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
+The main take-away of \Cref{thm:classbalance-bias,thm:classbalance-variance} is that there
+is a bias-variance trade-off with respect to the choice of normalization. We can reduce
+class imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do
+so at the price of increase variance. Note that \Cref{thm:classbalance-variance} applies
+only to the case when \(\lambda_1 > 1\). In
+\Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
 for ridge regression.
-
-The main take-away of
-\Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance} is that there is
-a bias-variance trade-off with respect to the choice of normalization. We can reduce class
-imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do so at
-the price of increase variance.
 
 % shows that the
 % bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when
