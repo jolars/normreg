@@ -416,8 +416,10 @@ standard elastic net on normalized data.
 
 This allows us to control class-balance bias by setting our weights according to \(u_j =
 v_j = (q_j - q_j^2)^{\omega}\) and counteract it, at least in the noiseless case, with
-\(\omega = 1\). For the lasso and ridge regression, this is equivalent to using \(\delta =
-1\) and \(\delta = 1/2\) respectively.
+\(\omega = 1\), which, we want to emphasize, is \emph{not} possible using the standard
+elastic net. For the lasso and ridge regression, however, this setting of \(\omega=1\) is
+equivalent to using \(\delta = 1\) and \(\delta = 1/2\), respectively, in the standard
+elastic net with normalized data.
 
 Results analogous to those in \Cref{sec:theory-binary-features} can be attained with a few
 small modifications for the weighted elastic net case. Starting with selection probability,
