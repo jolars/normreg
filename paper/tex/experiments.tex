@@ -163,19 +163,19 @@ interaction feature.
 In the second strategy, \emph{Strategy 2} we center with mean and scale with \(s_1s_2\)
 (the product of the scales of the binary and normal features).
 
-The results for the case when \(\beta_j^* = 1\) for all \(j\)~(\Cref{fig:interactions})
-show that only strategy 2 estimates the effect of the interaction correctly. Strategy 1,
-meanwhile, only selects the correct model if the class balance of the binary feature is
-close to 1/2 and in general shrinks the coefficient too much. See
+The results for the case when \(\bm{\beta}^* = \bm{1}\)~(\Cref{fig:interactions}) show that
+only strategy 2 estimates the effect of the interaction correctly. Strategy 1, meanwhile,
+only selects the correct model if the class balance of the binary feature is close to 1/2
+and in general shrinks the coefficient too much. See
 \Cref{fig:interactions-full}~(\Cref{sec:additional-experiments-interactions}) for results
-on all combinations of true effects.
+on different choices of \(\bm{\beta}^*\).
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/interactions-classbalance-small.pdf}
   \caption{%
     Lasso estimates for a problem with a binary feature, a quasi-normal feature, and
-    an interaction feature. We have set \(\beta^*_j = 1\) and use two different normalization strategies where
+    an interaction feature. We have set \(\bm{\beta}^* = \bm{1}\) and use two different normalization strategies where
     Strategy 1 represents standardization and Strategy 2 is mean-centering
     together with scaling by \(s_1 s_2\).
   }
