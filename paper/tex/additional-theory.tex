@@ -225,8 +225,8 @@ binary features is also important because the variance of the interaction term i
 values of the binary feature (e.g. \(\{0,1\}\) versus \(\{-1, 1\}\)) would affect the
 interaction term.
 
-\subsection{The Weighted Elastic Net}%
-\label{sec:additional-theory-weighted-elnet}
+\subsection{Extended Results on Bias and Variance for Ridge, Lasso, and Elastic Net Regression}%
+\label{sec:additional-results-biasvar}
 
 In \Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-theory-weighted-elnet}),
 we show bias, variance, and mean-squared error for the weighted elastic net. We see that
@@ -247,5 +247,27 @@ the weighting factor to have comparability under \(\kappa = 2\).
     limit of the bias is zero.
   }
   \label{fig:binary-onedim-bias-var-elnet}
+\end{figure}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/binary_onedim_bias_var_lasso.pdf}
+  \caption{%
+    Bias, variance, and mean-squared error for a one-dimensional lasso problem,
+    parameterized by noise level (\(\sigma_\varepsilon\)), class balance (\(q\)), and
+    scaling (\(\delta\)). Dotted lines represent asymptotic bias of the lasso
+    estimator in the case when \(\delta = 1/2\).}
+  \label{fig:bias-var-onedim-lasso-full}
+\end{figure}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{plots/binary_onedim_bias_var_ridge.pdf}
+  \caption{%
+    Bias, variance, and mean-squared error for one-dimensional ridge regression,
+    parameterized by noise level (\(\sigma_\varepsilon\)), class balance (\(q\)), and
+    scaling (\(\delta\)). Dotted lines represent asymptotic bias of the ridge
+    estimator in the case of \(\delta = 1/4\).}
+  \label{fig:bias-var-onedim-ridge-full}
 \end{figure}
 
