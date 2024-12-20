@@ -154,10 +154,10 @@ dependency at the cost of added variance.
 Next, we study the effects of normalization and class balance on interactions in the lasso.
 Our example consists of a two-feature problem with an added interaction term given by
 \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q\) and the
-second quasi-normal with standard deviation 0.5. We set \(n=1000\), specify \(\lambda_1 =
-n/4\). Here, we normalize the binary feature by mean-centering and scaling by \(\kappa (q -
-q^2)\), with \(\kappa = 2\). We consider two different strategies for choosing \(s_3\): in
-the first strategy, which we call \emph{Strategy 1}, we simply standardize the resulting
+second quasi-normal with standard deviation 0.5. We use \(n=1000\), \(\lambda_1 = n/4\),
+and normalize the binary feature by mean-centering and scaling by \(\kappa (q - q^2)\),
+using \(\kappa = 2\). We consider two different strategies for choosing \(s_3\): in the
+first strategy, which we call \emph{Strategy 1}, we simply standardize the resulting
 interaction feature.
 % TODO: make a reference to where this is done
 In the second strategy, \emph{Strategy 2} we center with mean and scale with \(s_1s_2\)
