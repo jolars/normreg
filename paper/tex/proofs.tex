@@ -1,41 +1,7 @@
 \section{Proofs}
 
-\subsection{Proof of \Cref{thm:maxabs-gev}}
-
-% TODO: We need to fix notation here. Either use subscript _j everywhere or abuse notation and define
-% s = s_j etc.
-
-If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the
-Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in
-distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice
-of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the
-Gumbel distribution for a absolutely continuous cumulative distribution
-function~\citep[Theorem 10.5.2]{nagaraja2003} is
-\[
-  \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
-\]
-We have
-\[
-  \begin{aligned}
-    \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
-                              & = \frac{2 - \cdf\left(\frac{x - \mu}{\sigma}\right) - \cdf\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\pdf\left(\frac{x - \mu}{\sigma}\right) + \pdf\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
-                              & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
-  \end{aligned}
-\]
-where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density
-functions of the standard normal distribution respectively. Next, we follow \citet[example
-  10.5.3]{nagaraja2003} and observe that
-\[
-  \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
-\]
-since
-\[
-  \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
-\]
-In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n
-f_Y(b_n)\big)^{-1}\).
-
-\subsection{Proof of \Cref{thm:classbalance-bias}}\label{sec:classbalance-bias-proof}
+\section{Proof of \Cref{thm:classbalance-bias}}%
+\label{sec:classbalance-bias-proof}
 
 To avoid excessive notation, we allow ourselves to abuse notation and will drop the
 subscript \(j\) everywhere in this proof, allowing \(\beta^*\), \(s\), and so on to
@@ -422,4 +388,39 @@ whilst \(\lim_{q\rightarrow 1^+} d^2 = 0\), which means that the limit of the ex
 and hence variance of the estimator, tends to \(\infty\). For \(\omega > 1/2\), an
 identical argument for the expression in \Cref{eq:var-deltagthalf-integral} holds and the
 limit is therefore \(\infty\) in this case as well.
+
+\subsection{Proof of \Cref{thm:maxabs-gev}}
+
+% TODO: We need to fix notation here. Either use subscript _j everywhere or abuse notation and define
+% s = s_j etc.
+
+If \(X_i \sim \normal(\mu, \sigma)\), then \(|X_i| \sim \fnormal(\mu,\sigma)\). By the
+Fisher--Tippett--Gnedenko theorem, we know that \((\max_i |X_i| - b_n) / a_n\) converges in
+distribution to either the Gumbel, Fréchet, or Weibull distribution, given a proper choice
+of \(a_n > 0\) and \(b_n \in \mathbb{R}\). A sufficient condition for convergence to the
+Gumbel distribution for a absolutely continuous cumulative distribution
+function~\citep[Theorem 10.5.2]{nagaraja2003} is
+\[
+  \lim_{x \rightarrow \infty} \frac{d}{dx}\left(\frac{1- F(x)}{f(x)}\right) = 0.
+\]
+We have
+\[
+  \begin{aligned}
+    \frac{1 - F_Y(x)}{f_Y(x)} & = \frac{1 - \frac{1}{2}\erf{\left(\frac{x - \mu}{\sqrt{2\sigma^2}}\right)} - \frac{1}{2}\erf{\left(\frac{x + \mu}{\sqrt{2\sigma^2}}\right)}}{\frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}} + \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x+\mu)^2}{2\sigma^2}}} \\
+                              & = \frac{2 - \cdf\left(\frac{x - \mu}{\sigma}\right) - \cdf\left(\frac{x + \mu}{\sigma}\right)}{\frac{1}{\sigma}\left(\pdf\left(\frac{x - \mu}{\sigma}\right) + \pdf\left(\frac{x + \mu}{\sigma}\right)\right)}                                                              \\
+                              & \rightarrow \frac{\sigma(1 - \cdf(x))}{\pdf(x)} \text{ as } n \rightarrow n,
+  \end{aligned}
+\]
+where \(\pdf\) and \(\cdf\) are the probability distribution and cumulative density
+functions of the standard normal distribution respectively. Next, we follow \citet[example
+  10.5.3]{nagaraja2003} and observe that
+\[
+  \frac{d}{dx} \frac{\sigma(1 - \cdf(x))}{\pdf(x)} = \frac{\sigma x (1 - \cdf(x))}{\pdf(x)} - \sigma \rightarrow 0 \text{ as } x \rightarrow \infty
+\]
+since
+\[
+  \frac{1 - \cdf(x)}{\pdf(x)} \sim \frac{1}{x}.
+\]
+In this case, we may take \(b_n = F_Y^{-1}(1 - 1/n)\) and \(a_n = \big(n
+f_Y(b_n)\big)^{-1}\).
 

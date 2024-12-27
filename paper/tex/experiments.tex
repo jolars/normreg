@@ -1,5 +1,4 @@
-\section{Experiments}%
-\label{sec:experiments}
+\section{Experiments}
 
 In the following sections we present the results of our experiments. For all simulated data
 we generate our response vector according to \(\vec{y} = \mat{X}\vec{\beta}^* +
@@ -28,7 +27,7 @@ we center by mean and scale by \(s_j \propto (q_j-q_j^2)^\delta\).
 % corresponds to no scaling, \(\delta = 1/2\) to standardization, and \(\delta = 1\) to
 % variance scaling.
 
-\subsubsection{Variability and Bias in Estimates}\label{sec:experiments-varbias}
+\subsubsection{Variability and Bias in Estimates}
 
 In our first experiment, we consider fitting the lasso to a simulated data set with
 \(n=500\) observations and \(p = \num{1000}\) features, out of which the first 20 features
@@ -60,8 +59,7 @@ together with \(\delta\).
   \label{fig:binary-decreasing}
 \end{figure}
 
-\subsubsection{Predictive Performance}%
-\label{sec:experiments-hyperparameter}
+\subsubsection{Predictive Performance}
 
 \textcolor{red}{Our previous results indicate that the choice of normalization matters also for predictive
 performance}, in this section we will examine whether that is the case for three
@@ -182,8 +180,7 @@ on different choices of \(\bm{\beta}^*\).
   \label{fig:interactions}
 \end{figure}
 
-\subsection{The Weighted Elastic Net}%
-\label{sec:experiments-elasticnet}
+\subsection{The Weighted Elastic Net}
 
 The weighted elastic net can be used as an alternative to normalization to correct for
 class balance bias when \(\lambda_1 > 0\) and \(\lambda_2 >0\). To simplify the

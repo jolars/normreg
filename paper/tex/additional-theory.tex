@@ -1,5 +1,4 @@
 \section{Additional Theory}
-\label{sec:additional-theory}
 
 \subsection{Maximum--Absolute and Min--Max Normalization for Normally Distributed Data}%
 \label{sec:maxabs-theory}
@@ -159,17 +158,6 @@ and that the variance of the elastic net estimator is therefore
   \var \hat\beta_j = \frac{1}{d_j^2} \var \st_\lambda({Z_j}).
 \end{equation*}
 
-% \begin{multline*}
-%   \E \st_\lambda({Z_j}) = \\
-%   \int_{-\infty}^{-\lambda}(z + \lambda)f_{Z_j}(z) \du z + \int_{\lambda}^\infty (z - \lambda)f_{Z_j}(z) \du z
-% \end{multline*}
-% and
-% \begin{multline}
-%   \label{eq:st-variance}
-%   \var {S_\lambda({Z_j})} = \int_{-\infty}^{-\lambda}(z + \lambda)^2f_{Z_j}(z) \du z \\
-%   + \int_{\lambda}^\infty (z - \lambda)^2 f_{Z_j}(z) \du z - \left(\E \st_\lambda({Z_j})\right)^2.
-% \end{multline}
-
 \subsubsection{Normally Distributed Noise}%
 \label{sec:normally-distributed-noise}
 
@@ -179,20 +167,19 @@ We now assume that \(\vec{\varepsilon}\) is normally distributed. Then
 \]
 Let \(\theta_j = -\mu_j -\lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\). Then the
 expected value of soft-thresholding of \({Z_j}\) is
-\begin{align}
-  \E \st_{\lambda_1}({Z_j}) & = \int_{-\infty}^\frac{\theta_j}{\sigma_j} (\sigma_j u - \theta_j) \pdf(u) \du u + \int_{-\frac{\gamma_j}{\sigma_j}}^\infty (\sigma_j u + \gamma_j) \pdf(u) \du u                                               \nonumber                              \\
-                            & = -\theta_j \cdf\left(\frac{\theta_j}{\sigma_j}\right) - \sigma_j \pdf\left(\frac{\theta_j}{\sigma_j}\right) + \gamma_j \cdf\left(\frac{\gamma_j}{\sigma_j}\right) + \sigma_j \pdf\left(\frac{\gamma_j}{\sigma_j}\right) \label{eq:mean-centered-eval}
-\end{align}
+\begin{align*}
+  \E \st_{\lambda_1}({Z_j}) & = \int_{-\infty}^\frac{\theta_j}{\sigma_j} (\sigma_j u - \theta_j) \pdf(u) \du u + \int_{-\frac{\gamma_j}{\sigma_j}}^\infty (\sigma_j u + \gamma_j) \pdf(u) \du u                                               \nonumber \\
+                            & = -\theta_j \cdf\left(\frac{\theta_j}{\sigma_j}\right) - \sigma_j \pdf\left(\frac{\theta_j}{\sigma_j}\right) + \gamma_j \cdf\left(\frac{\gamma_j}{\sigma_j}\right) + \sigma_j \pdf\left(\frac{\gamma_j}{\sigma_j}\right)
+\end{align*}
 where \(\pdf(u)\) and \(\cdf(u)\) are the probability density and cumulative distribution
 functions of the standard normal distribution, respectively. Computing \Cref{eq:st-variance} gives us
-\begin{align}
-  \label{eq:mean-centered-variance}
+\begin{align*}
   \var{S_\lambda(Z_j)} & = \frac{\sigma_j^2}{2} \left( \erf\left(\frac{\theta_j}{\sigma_j\sqrt{2}}\right) \phantom{-{}} \frac{\theta_j}{\sigma_j}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\theta_j^2}{2\sigma_j^2}\right) + 1 \right)  \nonumber  \\
                        & \phantom{={}} + 2 \theta_j \sigma_j \pdf \left(\frac{\theta_j}{\sigma_j}\right) + \theta_j^2 \cdf\left(\frac{\theta_j}{\sigma_j}\right) \nonumber                                                                     \\
                        & \phantom{={}} + \frac{\sigma_j^2}{2} \left( \erf\left(\frac{\gamma_j}{\sigma_j\sqrt{2}}\right) - \frac{\gamma_j}{\sigma_j}\sqrt{\frac{2}{\pi}} \exp\left(-\frac{\gamma_j^2}{2\sigma_j^2}\right) + 1 \right) \nonumber \\
                        & \phantom{={}} + 2 \gamma_j \sigma_j \pdf \left(\frac{\gamma_j}{\sigma_j}\right) + \gamma_j^2 \cdf\left(\frac{\gamma_j}{\sigma_j}\right) \nonumber                                                                     \\
                        & \phantom{={}} - \big(\E \st_{\lambda_1}({Z_j})\big)^2.
-\end{align}
+\end{align*}
 
 \subsection{Bias and Variance for Ridge Regression}%
 \label{sec:ridge-variance}

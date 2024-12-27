@@ -1,12 +1,10 @@
-\section{Normalization}%
-\label{sec:normalization}
+\section{Normalization}
 
 There is considerable ambiguity regarding key terms in the literature. Here, we define
 \emph{normalization} as the process of centering and scaling the feature matrix, which we
 now formalize.
 
 \begin{definition}[Normalization]
-  \label{def:normalization}
   Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
   \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
   \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
@@ -33,7 +31,6 @@ sparsity.
 % This is not a problem when \(\bm{X}\) is stored as a dense matrix; but when the
 % data is sparse, it may increase memory use and processing time.
 
-% TODO: move to appendix?
 \begin{table}[hbt]
   \centering
   \caption{
@@ -65,7 +62,7 @@ When \(\bm{X}\) is sparse, a common alternative to standardization is min--max o
 (maximum absolute value) normalization, which scale the data to lie in \([0, 1]\) and
 \([-1, 1]\) respectively, and retain sparsity when features are binary. These methods are,
 however, both sensitive to outliers. And since sample extreme values often depend on sample
-size, as in the case of normal data~(\Cref{thm:maxabs-gev}), use of these methods may
+size, as in the case of normal data~(\Cref{sec:maxabs-theory}), use of these methods may
 sometimes be problematic.
 % A special case of normalization is the adaptive
 % lasso~\citep{zou2006}, in which the coefficients from an initial model fit (typically OLS

@@ -18,8 +18,9 @@ net problem is given by
   \hat{\beta}_0^{(n)} = \frac{\vec{y}^\T \ones}{n},
 \end{equation}
 %
-where \(\st_\lambda(z) = \sign(z) \max(|z| - \lambda, 0)\) is the soft-thresholding
-operator. (See \Cref{sec:elastic-net-estimator} for a derivation of this.)
+where \(\st_\lambda(z)\) is the soft-thresholding operator, defined as \(\st_\lambda(z) =
+\sign(z) \max(|z| - \lambda, 0)\). (See \Cref{sec:elastic-net-estimator} for a derivation
+of this.)
 
 Normalization changes the optimization problem and its solution, the coefficients, which
 will now be on the scale of the normalized features. But we are interested in
