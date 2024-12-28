@@ -12,7 +12,7 @@ form:
 % objective:
 \begin{equation}
   \label{eq:general-objective}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \big(g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta)\big),
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta),
 \end{equation}
 %
 where \(g\) is the data-fitting term that attempts to optimize the fit to the data and
@@ -28,7 +28,7 @@ respectively.
 % deviation~(SCAD)~\citep{fan2001}. Many penalities---indeed all of the mentioned
 % ones---shrink coefficients in proportion to their sizes.
 
-These penalties depend on the size of coefficients, which means that they are sensitive to
+These penalties depend on the magnitude of coefficients, which means that they are sensitive to
 the scales of the features in \(\mat X\). To avoid this, it is common to \emph{normalize}
 the features before fitting the model by shifting and scaling each feature by measures of
 location and scale respectively. For some problems such measures arise naturally from
@@ -79,10 +79,10 @@ the previous two, and is represented by the following optimization problem:
 %
 \begin{equation}
   \label{eq:elastic-net}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p}\bigg( \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2\bigg),
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2,
 \end{equation}
 %
-where setting \(\lambda_1 = 0\) results in ridge regression and \(\lambda_2 = 0\) gives us
+where setting \(\lambda_1 = 0\) results in ridge regression and setting \(\lambda_2 = 0\) result in
 the lasso.
 % These methods are staples in the field of statistics and machine
 % learning and are accompanied by a large body of theoretical work and applications for real

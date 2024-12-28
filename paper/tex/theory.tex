@@ -63,16 +63,14 @@ expressions~(\Cref{sec:normally-distributed-noise}) and
 
 \subsection{Binary Features}%
 \label{sec:theory-binary-features}
-
-The main focus in this paper is the case when \(\bm{x}_j\) is a binary feature, such that
-\(x_{ij} \in \{0, 1\}\) for all \(i\). We define the \emph{class balance} of this feature
-as \(q_j = \bar{\bm{x}}_j\): the proportion of ones. For most of our results, it would make
+In case of \(x_{ij} \in \{0, 1\}\) for all \(i\) we denote \(\bm{x}_j\) as a binary feature.
+We define the \emph{class balance} of feature $j$ as \(q_j = \bar{\bm{x}}_j\): the proportion of ones. For most of our results, it would make
 no difference if we were to swap the ones and zeros as long as an intercept is included,
 and ``class balance'' is then equivalent to the proportion of either. But in the case of
-interactions~(\Cref{sec:interactions}), the choice in fact matters.
+interactions~(\Cref{sec:interactions}), the choice matters.
 
-In the case of binary features, inserting \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
-variance for a binary feature) into \Cref{eq:z-d} yields
+If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
+variance for a binary feature) which in \Cref{eq:z-d} yields
 \begin{align*}
   \tilde{\vec{x}}_j^\T \vec{y} & = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \\
   d_j                          & = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),

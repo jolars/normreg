@@ -13,6 +13,13 @@ now formalize.
   \emph{scaling} factors respectively.
 \end{definition}
 
+\begin{definition}[Normalization]
+  \label{def:normalization}
+  Let \(\mat{X} \in \mathbb{R}^{n\times p}\) be the feature matrix and let \(\vec{c} \in \mathbb{R}^p\) and \(\vec{s} \in \mathbb{R}^p_+\) be
+  centering and scaling factors respectively. Then the normalized feature matrix
+  \(\tilde{\mat{X}}\) where each element is given by \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
+\end{definition}
+
 % Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
 % but here we define standardization only as the case when centering with the mean and
 % scaling with the (uncorrected) standard deviation.
