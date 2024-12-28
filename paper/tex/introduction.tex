@@ -22,11 +22,11 @@ the standard ordinary least-squares objective, represent the
 lasso~\citep{tibshirani1996,santosa1986,donoho1994} and ridge (Tikhonov) regression
 respectively.
 % Other common penalties include the sorted \(\ell_1\)-norm used in Sorted
-% L-One Penalized Estimation (SLOPE)~\citep{bogdan2013,zeng2014,bogdan2015}, the
-% minimax-concave penalty (MCP)~\citep{zhang2010}, hinge loss (used in support vector
-% machines~\citep{cortes1995}) and smoothly-clipped absolute
-% deviation~(SCAD)~\citep{fan2001}. Many penalities---indeed all of the mentioned
-% ones---shrink coefficients in proportion to their sizes.
+% L-One Penalized Estimation (SLOPE)~\citep{bogdan2013,zeng2014,bogdan2015},
+% the minimax-concave penalty (MCP)~\citep{zhang2010}, hinge loss (used in
+% support vector machines~\citep{cortes1995}) and smoothly-clipped absolute
+% deviation~(SCAD)~\citep{fan2001}. Many penalities---indeed all of the
+% mentioned ones---shrink coefficients in proportion to their sizes.
 
 These penalties depend on the magnitude of coefficients, which means that they are sensitive to
 the scales of the features in \(\mat X\). To avoid this, it is common to \emph{normalize}
@@ -45,7 +45,6 @@ first example of this, consider \Cref{fig:realdata-paths}, which displays the la
 for two data sets and two types of normalization, which yield different results in terms of
 both estimation and selection of the features.
 
-% TODO: reduce image to one row?
 \begin{figure}[bpt]
   \centering
   \includegraphics[]{plots/realdata_paths_small.pdf}
