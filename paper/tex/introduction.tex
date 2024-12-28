@@ -1,11 +1,11 @@
 \section{Introduction}
 
-When modeling data where the number of features \(p\) exceeds the number of observations
-\(n\), it is impossible to apply classical statistical models such as standard linear
-regression since the design matrix \(\mat X\) is no longer of full rank. A common remedy to
-this problem is to \emph{regularize} the model by adding a penalty term to the objective
-that punishes models with large coefficients. The resulting problem takes the following
-form:
+When modeling data where the number of features~(\(p\)) exceeds the number of
+observations~(\(n\)), it is impossible to apply classical statistical models such as
+standard linear regression since the design matrix \(\mat X\) is no longer of full rank. A
+common remedy to this problem is to \emph{regularize} the model by adding a penalty term to
+the objective that punishes models with large coefficients. The resulting problem takes the
+following form:
 % If we let \(g(\vec\beta; \mat X,
 % \vec y)\) be the original objective function---which when minimized improves the model's
 % fit to the data (\(\mat X, \vec y\))---then we are interested in minimizing the following

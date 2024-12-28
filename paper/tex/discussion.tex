@@ -2,12 +2,12 @@
 \label{sec:discussion}
 
 We have studied the effects of normalization in lasso, ridge, and elastic net regression
-with binary data---an issue that has so far not been studied. We have discovered the class
-balance (proportion of ones and zeros) of these binary features have a pronounced effect on
-both lasso and ridge estimates and that this effect depends on the type of normalization
-used. For the lasso, for instance, features with large class imbalances stand little chance
-of being selected if the features are standardized, even when their relationships with the
-response are strong.
+with binary data---an issue that has so far not been studied. We have discovered that the
+class balance (proportion of ones and zeros) of these binary features have a pronounced
+effect on both lasso and ridge estimates and that this effect depends on the type of
+normalization used. For the lasso, for instance, features with large class imbalances stand
+little chance of being selected if the features are standardized, even when their
+relationships with the response are strong.
 
 The driver of this result is the relationship between the variance of the feature and type
 of normalization. This works as expected for normally distributed features. But for binary
@@ -31,7 +31,7 @@ We have also studied the case of mixed data: designs that include both binary an
 distributed features~(\Cref{sec:mixed-data}). In this setting, our first finding is that
 there is an implicit relationship between the choice of normalization and the manner in
 which regularization affects binary viz-a-viz normally distributed features, even when the
-binary feature is perfectly balances. The choice of max--abs normalization, for instance,
+binary feature is perfectly balanced. The choice of max--abs normalization, for instance,
 leads to a specific weighting of the effects of binary features relative to those of normal
 features.
 

@@ -97,7 +97,7 @@ that includes the lasso as well.
   \includegraphics[]{plots/hyperopt_surfaces_small.pdf}
   \caption{%
     Contour plots of normalized validation set mean-squared error (NMSE)
-    for combinations of \(\delta\) and \(\lambda\) in ridge regression on
+    for \(\delta\) and \(\lambda\) in ridge regression on
     three real data sets. The
     dotted path shows the smallest NMSE as a function of \(\lambda\) and the circles mark
     combinations with the lowest error.
@@ -154,28 +154,28 @@ dependency at the cost of added variance.
 Next, we study the effects of normalization and class balance on interactions in the lasso.
 Our example consists of a two-feature problem with an added interaction term given by
 \(x_{i3} = x_{i1}x_{i2}\). The first feature is binary with class balance \(q\) and the
-second quasi-normal with standard deviation 0.5. We set \(n=1000\), specify \(\lambda_1 =
-n/4\). Here, we normalize the binary feature by mean-centering and scaling by \(\kappa (q -
-q^2)\), with \(\kappa = 2\). We consider two different strategies for choosing \(s_3\): in
-the first strategy, which we call \emph{Strategy 1}, we simply standardize the resulting
+second quasi-normal with standard deviation 0.5. We use \(n=1000\), \(\lambda_1 = n/4\),
+and normalize the binary feature by mean-centering and scaling by \(\kappa (q - q^2)\),
+using \(\kappa = 2\). We consider two different strategies for choosing \(s_3\): in the
+first strategy, which we call \emph{Strategy 1}, we simply standardize the resulting
 interaction feature.
 % TODO: make a reference to where this is done
 In the second strategy, \emph{Strategy 2} we center with mean and scale with \(s_1s_2\)
 (the product of the scales of the binary and normal features).
 
-The results for the case when \(\beta_j^* = 1\) for all \(j\)~(\Cref{fig:interactions})
-show that only strategy 2 estimates the effect of the interaction correctly. Strategy 1,
-meanwhile, only selects the correct model if the class balance of the binary feature is
-close to 1/2 and in general shrinks the coefficient too much. See
+The results for the case when \(\bm{\beta}^* = \bm{1}\)~(\Cref{fig:interactions}) show that
+only strategy 2 estimates the effect of the interaction correctly. Strategy 1, meanwhile,
+only selects the correct model if the class balance of the binary feature is close to 1/2
+and in general shrinks the coefficient too much. See
 \Cref{fig:interactions-full}~(\Cref{sec:additional-experiments-interactions}) for results
-on all combinations of true effects.
+on different choices of \(\bm{\beta}^*\).
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{plots/interactions-classbalance-small.pdf}
   \caption{%
     Lasso estimates for a problem with a binary feature, a quasi-normal feature, and
-    an interaction feature. We have set \(\beta^*_j = 1\) and use two different normalization strategies where
+    an interaction feature. We have set \(\bm{\beta}^* = \bm{1}\) and use two different normalization strategies where
     Strategy 1 represents standardization and Strategy 2 is mean-centering
     together with scaling by \(s_1 s_2\).
   }

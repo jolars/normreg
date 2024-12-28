@@ -86,8 +86,8 @@ and consequently
   \mu_j = \frac{\beta^*_j n(q_j - q_j^2)}{s_j}\quad \text{and} \quad \sigma_j^2 = \frac{\sigma_\varepsilon^2n(q_j- q_j^2)}{s^2_j}.
 \]
 %
-We obtain the bias and variance of the elastic net estimate with respect to \(q_j\) by
-inserting \(\tilde{\vec{x}}_j^\T \vec{y}\) and \(d_j\) into \Cref{eq:bias,eq:variance}.
+We obtain bias and variance of the estimator with respect to \(q_j\) by inserting
+\(\tilde{\vec{x}}_j^\T \vec{y}\) and \(d_j\) into \Cref{eq:bias,eq:variance}.
 
 The presence of the factor \(q_j - q_j^2\) in \(\mu_j\), \(\sigma_j^2\), and \(d_j\)
 indicates a link between class balance and the elastic net estimator and that this
@@ -130,10 +130,10 @@ no such scaling in the class-balanced case. And for \(\delta = 1/2\), the scalin
 case for all types of normalization, under our parameterization, we would need to use \(s_j
 = 4^{\delta - 1} (q_j - q_j^2)^\delta\). But this only resolves the issue for the lasso. To
 achieve a similar effect for ridge regression, we would need another (but similar)
-modification. When all features are binary, we can jsut scale \(\lambda_1\) and
+modification. When all features are binary, we can just scale \(\lambda_1\) and
 \(\lambda_2\) to account for this effect,\footnote{We use this strategy in all of the
   following examples.} which is equivalent to modifying \(s_j\). But when we consider mixes
-of binary and normal features in \Cref{sec:mixed-data}, we need to be more careful.
+of binary and normal features in \Cref{sec:mixed-data}, we need to exert extra care.
 
 We now proceed to consider how class balance affects the bias, variance, and selection
 probability of the elastic net estimator under the presence of noise. A consequence of our
@@ -222,15 +222,13 @@ estimator.
   \]
 \end{theorem}
 
-Note that \Cref{thm:classbalance-variance} applies only to the case when \(\lambda_1 > 1\).
-In \Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
+The main take-away of \Cref{thm:classbalance-bias,thm:classbalance-variance} is that there
+is a bias-variance trade-off with respect to the choice of normalization. We can reduce
+class imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do
+so at the price of increase variance. Note that \Cref{thm:classbalance-variance} applies
+only to the case when \(\lambda_1 > 1\). In
+\Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
 for ridge regression.
-
-The main take-away of
-\Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance} is that there is
-a bias-variance trade-off with respect to the choice of normalization. We can reduce class
-imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do so at
-the price of increase variance.
 
 % shows that the
 % bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when
@@ -382,10 +380,10 @@ We consider two cases in which we assume that the features are orthogonal and th
 \(\vec{x}_1\) is binary with class balance \(q_1\). In the first case, we let \(\bm{x}_2\)
 be normal with mean \(\mu\) and variance \(\sigma^2\), and in the second case \(\bm{x}_2\)
 be binary with class balance \(q_2\). To construct the interaction feature, we
-center\footnote{See \Cref{sec:centering-interactions} for motivation for why centering is
-  important.} the main features and then multiply element-wise. The elements of the
-interaction feature are then given by \(x_{3,i} = (x_{1,i} - \bar{\bm{x}}_1)(x_{2,i} -
-\bar{\bm{x}}_2)\).
+center\footnote{See \Cref{sec:centering-interactions} for motivation for why we center the
+  features before computing the interaction.} the main features and then multiply
+element-wise. The elements of the interaction feature are then given by \(x_{3,i} =
+(x_{1,i} - \bar{\bm{x}}_1)(x_{2,i} - \bar{\bm{x}}_2)\).
 
 If \(\bm{x}_2\) is normal and both features are centered before computing the interaction
 term, the variance becomes \(\sigma^2 (q-q^2)\), which suggests using \(s_3 = \sigma (q -
@@ -414,8 +412,10 @@ standard elastic net on normalized data.
 
 This allows us to control class-balance bias by setting our weights according to \(u_j =
 v_j = (q_j - q_j^2)^{\omega}\) and counteract it, at least in the noiseless case, with
-\(\omega = 1\). For the lasso and ridge regression, this is equivalent to using \(\delta =
-1\) and \(\delta = 1/2\) respectively.
+\(\omega = 1\), which, we want to emphasize, is \emph{not} possible using the standard
+elastic net. For the lasso and ridge regression, however, this setting of \(\omega=1\) is
+equivalent to using \(\delta = 1\) and \(\delta = 1/2\), respectively, in the standard
+elastic net with normalized data.
 
 Results analogous to those in \Cref{sec:theory-binary-features} can be attained with a few
 small modifications for the weighted elastic net case. Starting with selection probability,
@@ -424,14 +424,13 @@ we can set \(s_j = 1\) and replace \(\lambda_1\) with \(\lambda_1 u_j =
 \(\omega\) and \(\delta\) have interchangeable effects for selection probability.
 
 As far as expected value and variance of the weighted elastic net estimator is concerned,
-the quantities in \Cref{eq:mean-centered-eval} and \Cref{eq:mean-centered-variance} apply
-directly in the case of the weighted elastic net given \(s_j = 1\) for all \(j\) and
-replacing \(\lambda_1\) as in the previous paragraph and \(\lambda_2\) with \(\lambda_2
-(q_j - q_j^2)^\omega\). On the other hand, the asymptotic results differ slightly as we now
-show.
+the same expressions apply directly in the case of the weighted elastic net given \(s_j =
+1\) for all \(j\) and replacing \(\lambda_1\) as in the previous paragraph and
+\(\lambda_2\) with \(\lambda_2 (q_j - q_j^2)^\omega\). On the other hand, the asymptotic
+results differ slightly as we now show.
 
 \begin{theorem}
-  \label{thm:weighted-elasticnet-bias}
+  \label{thm:weighted-elasticnet-bias-variance}
   Let \(\vec{x}_j\) be a binary feature with class balance \(q_j \in (0, 1)\) and take
   \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
   weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
@@ -459,4 +458,4 @@ the result mimics the result for the elastic net with normalization.
 
 The results for bias, variance, and mean-squared error for the weighted elastic net are
 similar to those in \Cref{fig:bias-var-onedim-lasso} and are plotted in
-\Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-theory-weighted-elnet}).
+\Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-results-biasvar}).
