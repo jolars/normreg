@@ -77,7 +77,7 @@ lasso or ridge to the training set.
 
 We present the results for ridge regression in \Cref{fig:hyperopt-contours}, which shows
 contour plots of the validation set error. We see that optimal setting of \(\delta\)
-differs between the different data sets, suggesting that it might be useful to choose
+differs between the different data sets, suggesting that it is useful to choose
 \(\delta\) by hyperparameter optimization. See
 \Cref{fig:hyperopt-contours-full}~(\Cref{sec:predictive-performance-simulated}) for a plot
 that includes the lasso as well.
@@ -116,8 +116,8 @@ normalization has an impact on predictive preformance.
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data} we showed that care needs to be taken when normalizing mixed data.
-In our next experiment, we construct a quasi-normal feature with mean zero and standard
+In \Cref{sec:mixed-data} we theoretically showed that care needs to be taken when normalizing mixed data.
+Here we verify the theory through simulations. We construct a quasi-normal feature with mean zero and standard
 deviation 1/2 and a binary feature with varying class balance \(q_j\). We set the
 signal-to-noise ratio to 0.5 and use \(n = \num{1000}\). These features are constructed so
 that their effects are comparable under the notion of comparability that we introduced in
