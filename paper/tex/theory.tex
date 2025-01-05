@@ -118,8 +118,8 @@ Based on the reasoning above, we will consider the scaling parameterization \(s_
 interested in, namely \(\delta = 0\) (no scaling, as in min--max and max--abs
 normalization), \(\delta = 1/2\) (standard-deviation scaling), and \(\delta = 1\) (variance
 scaling). The last of these, variance scaling, is not a standard type of normalization;
-yet, as we have already seen, it has some interesting properties in the context of binary
-features.
+\textcolor{red}{yet, as we have already seen, it has some interesting properties in the context of binary
+features. }
 
 Another consequence of \Cref{eq:noiseless-estimator}, which holds also in the noisy
 situation, is that normalization affects the estimator even when the binary feature is
@@ -291,12 +291,12 @@ problem with multiple features.
 \subsection{Mixed Data}%
 \label{sec:mixed-data}
 
-A fundamental problem with mixes of binary and normal features is deciding how to put these
+A fundamental problem with mixes of binary and continuous features is deciding how to put these
 features on the same scale in order to regularize each type of feature fairly. In
 principle, we need to match a one-unit change in the binary feature with some amount of
 change in the normal feature. This problem has previously been tackled, albeit from a
 different angle, by \citet{gelman2008}, who argued that the common default choice of
-presenting standardized regression coefficients unduly emphasizes coefficients from normal
+presenting standardized regression coefficients unduly emphasizes coefficients from continuous
 features.
 
 To setup this situation formally, we will say that the effects of a binary feature
