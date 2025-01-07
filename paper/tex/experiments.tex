@@ -62,7 +62,7 @@ together with \(\delta\).
 \subsubsection{Predictive Performance}
 
 \textcolor{red}{Our previous results indicate that the choice of normalization matters also for predictive
-performance}, in this section we will examine whether that is the case for three
+  performance}, in this section we will examine whether that is the case for three
 different data sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006}, and
 \data{w1a}~\citep{platt1998}.\footnote{See \Cref{sec:data-summary} for details about these
   data sets.} We consider performance in terms of normalized mean-squared error~(NMSE) for
@@ -75,8 +75,8 @@ lasso or ridge to the training set.
 
 We present the results for ridge regression in \Cref{fig:hyperopt-contours}, which shows
 contour plots of the validation set error. We see that optimal setting of \(\delta\)
-differs between the different data sets, suggesting that it is useful to choose
-\(\delta\) by hyperparameter optimization. See
+differs between the different data sets, suggesting that it is useful to choose \(\delta\)
+by hyperparameter optimization. See
 \Cref{fig:hyperopt-contours-full}~(\Cref{sec:predictive-performance-simulated}) for a plot
 that includes the lasso as well.
 
@@ -114,16 +114,16 @@ normalization has an impact on predictive preformance.
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data} we theoretically showed that care needs to be taken when normalizing mixed data.
-Here we verify the theory through simulations. We construct a quasi-normal feature with mean zero and standard
-deviation 1/2 and a binary feature with varying class balance \(q_j\). We set the
-signal-to-noise ratio to 0.5 and use \(n = \num{1000}\). These features are constructed so
-that their effects are comparable under the notion of comparability that we introduced in
-\Cref{sec:mixed-data} using \(\kappa = 2\). In order to preserve the comparability for the
-baseline case when we have perfect class balance, we scale by \(s_j = 2 \times
-(1/4)^{1-\delta}(q_j-q_j^2)^\delta\). Finally, we set \(\lambda\) to
-\(\lambda_\text{max}/2\) and \(2\lambda_\text{max}\) for lasso and ridge regression
-respectively.
+In \Cref{sec:mixed-data} we showed theoretically that care needs to be taken when
+normalizing mixed data. Here we verify the theory through simulations. We construct a
+quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with
+varying class balance \(q_j\). We set the signal-to-noise ratio to 0.5 and use \(n =
+\num{1000}\). These features are constructed so that their effects are comparable under the
+notion of comparability that we introduced in \Cref{sec:mixed-data} using \(\kappa = 2\).
+In order to preserve the comparability for the baseline case when we have perfect class
+balance, we scale by \(s_j = 2 \times (1/4)^{1-\delta}(q_j-q_j^2)^\delta\). Finally, we set
+\(\lambda\) to \(\lambda_\text{max}/2\) and \(2\lambda_\text{max}\) for lasso and ridge
+regression respectively.
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from
 \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) (variance scaling) to
