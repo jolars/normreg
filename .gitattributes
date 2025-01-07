@@ -3,7 +3,6 @@
 #
 # Use this file on every device where git development is done.
 
-
 ###
 ### Auto detect text files and perform LF normalization
 ###
@@ -51,7 +50,7 @@
 # Executables
 *.exe binary
 *.out binary
-*.app binary      
+*.app binary
 
 # Other
 ##############
@@ -107,7 +106,7 @@ bin/	binary
 # comment-out the following line and uncomment the line after.
 *.svg binary
 #*.svg text
-*.eps binary       
+*.eps binary
 
 ### gitattributes/Java.gitattributes c08b42f on Mar 29, 2017
 # Handle line endings automatically for files detected as text
@@ -150,7 +149,7 @@ bin/	binary
 *.jpeg          binary
 *.png           binary
 *.so            binary
-*.war binary      
+*.war binary
 
 ### gitattributes/Matlab.gitattributes d2539f6 on Dec 3, 2015
 # Basic .gitattributes for a MATLAB repo.
@@ -178,7 +177,7 @@ bin/	binary
 *.mltbx         binary
 *.mlappinstall  binary
 *.mlpkginstall  binary
-*.mn binary      
+*.mn binary
 
 ### gitattributes/Python.gitattributes cbd3af4 on Jun 20, 2018
 # Basic .gitattributes for a python repo.
@@ -203,7 +202,7 @@ bin/	binary
 # Note: .db, .p, and .pkl files are associated
 # with the python modules ``pickle``, ``dbm.*``,
 # ``shelve``, ``marshal``, ``anydbm``, & ``bsddb``
-# (among others).      
+# (among others).
 
 ### gitattributes/R.gitattributes 80aacc1 on Aug 22, 2015
 # Basic .gitattributes for a R repo.
@@ -217,5 +216,5 @@ bin/	binary
 *.Rdx       binary
 *.Rmd		text
 *.R text
-      
 
+paper/.gitignore  export-ignore
