@@ -70,8 +70,8 @@ no difference if we were to swap the ones and zeros as long as an intercept is i
 and ``class balance'' is then equivalent to the proportion of either. But in the case of
 interactions~(\Cref{sec:interactions}), the choice matters.
 
-If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample
-variance for a binary feature) which in \Cref{eq:z-d} yields
+If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample variance
+for a binary feature) which in \Cref{eq:z-d} yields
 \begin{align*}
   \tilde{\vec{x}}_j^\T \vec{y} & = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \\
   d_j                          & = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
@@ -290,13 +290,13 @@ problem with multiple features.
 \subsection{Mixed Data}%
 \label{sec:mixed-data}
 
-A fundamental problem with mixes of binary and continuous features is deciding how to put these
-features on the same scale in order to regularize each type of feature fairly. In
+A fundamental problem with mixes of binary and continuous features is deciding how to put
+these features on the same scale in order to regularize each type of feature fairly. In
 principle, we need to match a one-unit change in the binary feature with some amount of
 change in the normal feature. This problem has previously been tackled, albeit from a
 different angle, by \citet{gelman2008}, who argued that the common default choice of
-presenting standardized regression coefficients unduly emphasizes coefficients from continuous
-features.
+presenting standardized regression coefficients unduly emphasizes coefficients from
+continuous features.
 
 To setup this situation formally, we will say that the effects of a binary feature
 \(\vec{x}_1\) and a normal feature \(\vec{x}_2\) are \emph{comparable} if \(\beta^*_1 =
