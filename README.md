@@ -6,8 +6,8 @@ examples as well as the paper itself.
 
 ## Reproducing the Results
 
-The final results from the experiments are available in [/data/] and
-can be reproduced by calling the scripts in [/scripts/experiments/].
+The final results from the experiments are available in [data/] and
+can be reproduced by calling the scripts in [scripts/experiments/].
 
 ### Nix
 
