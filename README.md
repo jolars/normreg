@@ -16,7 +16,7 @@ can setup all the dependencies of this project using the nix flake
 provided here. You need only to call
 
 ```shell
-nix flake update
+nix develop
 ```
 
 ## Compiling the Paper
