@@ -4,18 +4,21 @@ There is considerable ambiguity regarding key terms in the literature. Here, we 
 \emph{normalization} as the process of centering and scaling the feature matrix, which we
 now formalize.
 
-\begin{definition}[Normalization]
-  Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
-  \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
-  \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
-  \emph{scaling} factors respectively.
-\end{definition}
+% \begin{definition}[Normalization]
+%   Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
+%   \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
+%   \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
+%   \emph{scaling} factors respectively.
+% \end{definition}
 
 \begin{definition}[Normalization]
   \label{def:normalization}
-  Let \(\mat{X} \in \mathbb{R}^{n\times p}\) be the feature matrix and let \(\vec{c} \in \mathbb{R}^p\) and \(\vec{s} \in \mathbb{R}^p_+\) be
-  centering and scaling factors respectively. Then the normalized feature matrix
-  \(\tilde{\mat{X}}\) where each element is given by \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
+  Let \(\mat{X} \in \mathbb{R}^{n\times p}\) be the feature matrix and let
+  \(\vec{c} \in \mathbb{R}^p\) and \(\vec{s} \in \mathbb{R}^p_+\) be centering
+  and scaling factors respectively. Then
+  \(\tilde{\mat{X}}\) is the \emph{normalized} feature matrix with elements
+  given by
+  \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
 \end{definition}
 
 % Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
