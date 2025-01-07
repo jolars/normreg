@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  arxiv:
+    cmds:
+      - git archive --output=arxiv-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
+    vars:
+      DATE:
+        sh: date +%Y%m%d
