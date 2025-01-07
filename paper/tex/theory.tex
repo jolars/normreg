@@ -64,10 +64,12 @@ expressions~(\Cref{sec:normally-distributed-noise}) and
 
 \subsection{Binary Features}%
 \label{sec:theory-binary-features}
-In case of \(x_{ij} \in \{0, 1\}\) for all \(i\) we denote \(\bm{x}_j\) as a binary feature.
-We define the \emph{class balance} of feature $j$ as \(q_j = \bar{\bm{x}}_j\): the proportion of ones. For most of our results, it would make
-no difference if we were to swap the ones and zeros as long as an intercept is included,
-and ``class balance'' is then equivalent to the proportion of either. But in the case of
+
+When \(x_{ij} \in \{0, 1\}\) for all \(i\), we define \(\bm{x}_j\) to be a \emph{binary
+  feature}, and we define the \emph{class balance} of this feature as \(q_j =
+\bar{\bm{x}}_j\): the proportion of ones. For most of our results, it would make no
+difference if we were to swap the ones and zeros as long as an intercept is included, and
+``class balance'' is then equivalent to the proportion of either. But in the case of
 interactions~(\Cref{sec:interactions}), the choice matters.
 
 If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample variance
