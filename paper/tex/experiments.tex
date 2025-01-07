@@ -61,12 +61,11 @@ together with \(\delta\).
 
 \subsubsection{Predictive Performance}
 
-\textcolor{red}{Our previous results indicate that the choice of normalization matters also for predictive
-  performance}, in this section we will examine whether that is the case for three
-different data sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006}, and
-\data{w1a}~\citep{platt1998}.\footnote{See \Cref{sec:data-summary} for details about these
-  data sets.} We consider performance in terms of normalized mean-squared error~(NMSE) for
-lasso and ridge regression across a two-dimensional grid of \(\delta\) and \(\lambda\),
+In this section we examine the influence of normalization on predictive performance for
+three different data sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006},
+and \data{w1a}~\citep{platt1998}.\footnote{See \Cref{sec:data-summary} for details about
+  these data sets.} We evaluate performance in terms of normalized mean-squared error~(NMSE)
+for lasso and ridge regression across a two-dimensional grid of \(\delta\) and \(\lambda\),
 where for \(\delta\) we use a linear sequence from 0 to 1, and for \(\lambda\) a geometric
 sequence from \(\lambda_\text{max}\) (the value of \(\lambda\) at which the first feature
 enters the model) to \(10^{-2}\lambda_\text{max}\). We split the data into equal training
