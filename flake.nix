@@ -17,6 +17,7 @@
       devShells = eachSystem (pkgs: {
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            go-task
             (julia-lts.withPackages [
               "ColorSchemes"
               "CSV"
