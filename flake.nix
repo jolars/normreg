@@ -10,10 +10,6 @@
       eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
     in
     {
-      packages = eachSystem (pkgs: {
-        hello = pkgs.hello;
-      });
-
       devShells = eachSystem (pkgs: {
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
