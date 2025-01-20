@@ -3,23 +3,25 @@ version: "3"
 tasks:
   arxiv:
     cmds:
-      - git archive --output=arxiv-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
+      - git archive --output=_build/arxiv-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
     vars:
       DATE:
         sh: date +%Y%m%d
   package-code:
     cmds:
-      - git archive --output=code-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
+      - mkdir -p _build/
       - |
-        zip -r code-{{.DATE}}.zip \
+        zip -r _build/code-{{.DATE}}.zip \
           scripts \
+          results \
           data \
           src \
           test \
           Project.toml \
           Manifest.toml \
           flake.nix \
-          flake.lock
+          flake.lock \
+          README.md
     vars:
       DATE:
         sh: date +%Y%m%d
