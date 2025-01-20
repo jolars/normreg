@@ -12,7 +12,7 @@ using PythonPlot: matplotlib
 
 set_plot_defaults()
 
-json_data = JSON.parsefile(@projectroot("data", "mixed_data.json"));
+json_data = JSON.parsefile(@projectroot("results", "mixed_data.json"));
 df = DataFrame(json_data);
 df_subset = subset(df, :alpha => a -> a .== 1.0 .|| a .== 0.0);
 
@@ -79,6 +79,6 @@ l = (n_rows, n_cols)
 
 pl = plot(plots..., layout = l, size = (320, 230))
 
-file_path = @projectroot("paper", "plots", "mixed_data.pdf");
+file_path = @projectroot("plots", "mixed_data.pdf");
 
 savefig(pl, file_path)

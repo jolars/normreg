@@ -10,7 +10,7 @@ using StatsPlots
 
 set_plot_defaults();
 
-json_data = JSON.parsefile(@projectroot("data", "interactions.json"));
+json_data = JSON.parsefile(@projectroot("results", "interactions.json"));
 df = DataFrame(json_data);
 
 df_subset = subset(
@@ -100,5 +100,5 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)" "Intera
 
 plots = plot(plots..., layout = layout, size = (FULL_WIDTH, 260))
 
-file_path = @projectroot("paper", "plots", "interactions-classbalance.pdf")
+file_path = @projectroot("plots", "interactions-classbalance.pdf")
 savefig(plots, file_path)

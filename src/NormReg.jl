@@ -36,7 +36,6 @@ export unstandardize_coefficients
 export scaling_factors
 
 include("cv.jl")
-export cross_validate
 export get_error
 export holdout_validation
 export split_data

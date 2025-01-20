@@ -10,7 +10,7 @@ real data sets and types of normalization.
 
 \begin{figure}[hbpt]
   \centering
-  \includegraphics[]{plots/realdata_paths.pdf}
+  \includegraphics[]{realdata_paths.pdf}
   \caption{%
     Lasso paths for real datasets using two types of normalization:
     standardization and maximum absolute value normalization (max--abs). We have fit
@@ -55,12 +55,12 @@ signals.
     The power (probability of detecting all true signals) of the lasso. In our orthogonal
     setting, power is constant over \(p\), which is why we have omitted the parameter in the
     plot. \label{fig:binary-power}
-  ]{\includegraphics[]{plots/power.pdf}}\hfill%
+  ]{\includegraphics[]{power.pdf}}\hfill%
   \subfigure[%
     NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to
     the total number of estimated coefficients that are nonzero (discoveries).
-    \label{fig:binary-fdr-mse}]{\includegraphics[]{plots/fdr_mse.pdf}}%%
-  % \includegraphics[]{plots/beta-bias-multidim.pdf}
+    \label{fig:binary-fdr-mse}]{\includegraphics[]{fdr_mse.pdf}}%%
+  % \includegraphics[]{beta-bias-multidim.pdf}
   \caption{%
     Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
@@ -82,14 +82,14 @@ estimates but also seems to increase the effect of class imbalance in the cases 
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/binary_decreasing.pdf}
+  \includegraphics[]{binary_decreasing.pdf}
   \caption{%
     Estimates of the regression coefficients from the lasso, \(\hat{\vec{\beta}}\), for the
     first 30 coefficients in the experiment. All of the features are binary and the first 20
     features correspond to true signals with \(\beta_j^* = 2\) and geometrically decreasing
     class balance from 0.5 to 0.99. The remaining features have class balance \(q_j \in [0.5,
       0.99]\) distributed linearly among the features. The plot shows means and standard
-    deviations averaged over 50 iterations.
+    deviations averaged over 100 iterations.
   }
   \label{fig:binary-decreasing-full}
 \end{figure}
@@ -99,7 +99,7 @@ estimates but also seems to increase the effect of class imbalance in the cases 
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/hyperopt_surfaces.pdf}
+  \includegraphics[]{hyperopt_surfaces.pdf}
   \caption{%
     Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set
     across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The
@@ -132,7 +132,7 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/binary_data_sim.pdf}
+  \includegraphics[]{binary_data_sim.pdf}
   \caption{%
     Normalized mean-squared prediction error in a lasso model for different types of
     normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios
@@ -156,7 +156,7 @@ at the support size.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/hyperopt_paths.pdf}
+  \includegraphics[]{hyperopt_paths.pdf}
   \caption{%
     Support size and normalized mean-squared error (NMSE) for the validation set for the lasso
     fit to datasets \data{a1a}, \data{w1a}, and \data{rhee2006} across combinations of
@@ -175,13 +175,13 @@ best.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/interactions-classbalance.pdf}
+  \includegraphics[]{interactions-classbalance.pdf}
   \caption{%
     Lasso estimates for a three-feature problem where the third feature is an
     interaction term between the first two features. The first feature is
     binary with class balance \(q\) and the second is quasi-normal with
     standard deviation 0.5. The signal-to-noise ratio is 1. The experiment was
-    run for 50 iterations and we aggregate and report means across all
+    run for 100 iterations and we aggregate and report means across all
     iterations. Please see \Cref{sec:experiments-interactions} for information
     about the different strategies.
   }
@@ -198,14 +198,14 @@ balance bias decreases as \(\alpha\) approaches 0 (ridge regression).
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics{plots/mixed_data_elnet.pdf}
+  \includegraphics{mixed_data_elnet.pdf}
   \caption{%
     Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
     feature with class balance \(q\) (\(\bernoulli(q)\)), and the other is a quasi-normal
     feature with standard deviation 1/2 (\(\normal(0, 0.5)\)). Here, we have \(n = \num{1000}\)
     observations. The signal-to-noise ratio is 0.5. In every case, we standardize the normal
     feature. The binary feature, meanwhile, is centered by its mean and scaled by
-    \((q-q^2)^\delta\). The experiment was run for 50 iterations and we aggregate and report
+    \((q-q^2)^\delta\). The experiment was run for 100 iterations and we aggregate and report
     means and standard deviations of the estimates.
   }
   \label{fig:mixed-data-elnet-full}

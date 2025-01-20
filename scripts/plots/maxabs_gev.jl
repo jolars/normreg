@@ -61,5 +61,5 @@ plot!(n, y, label = "Theoretical")
 xaxis!(L"n")
 yaxis!(L"\max_i |x_i|")
 
-file_path = @projectroot("paper", "plots", "maxabs_gev.pdf")
+file_path = @projectroot("plots", "maxabs_gev.pdf")
 savefig(pl, file_path)

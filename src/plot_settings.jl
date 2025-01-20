@@ -8,7 +8,6 @@ using PythonPlot: matplotlib
 const global FULL_WIDTH = 660
 
 function set_plot_defaults(; backend = "pyplot", target = "icml")
-  # theme(:wong2)
   default(framestyle = :box, label = nothing, tick_direction = :in, palette = :tableau_10)
   if backend == "gr"
     gr()

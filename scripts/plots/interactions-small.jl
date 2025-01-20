@@ -10,7 +10,7 @@ using StatsPlots
 
 set_plot_defaults();
 
-json_data = JSON.parsefile(@projectroot("data", "interactions.json"));
+json_data = JSON.parsefile(@projectroot("results", "interactions.json"));
 df = DataFrame(json_data);
 
 df_subset = subset(
@@ -76,5 +76,5 @@ layout = (1, 2)
 
 plots = plot(plots..., layout = layout, size = (320, 150))
 
-file_path = @projectroot("paper", "plots", "interactions-classbalance-small.pdf")
+file_path = @projectroot("plots", "interactions-classbalance-small.pdf")
 savefig(plots, file_path)

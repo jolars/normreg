@@ -75,7 +75,7 @@ for (i, d) in enumerate(param_expanded)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "binary_onedim_bias_var.json");
+outfile = @projectroot("results", "binary_onedim_bias_var.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

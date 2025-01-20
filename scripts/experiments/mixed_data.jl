@@ -13,7 +13,7 @@ function binary_gaussian_simulation(
   α = 1,
   delta = 0.5,
   snr = 1,
-  n_it = 50,
+  n_it = 100,
   n_qs = 100,
   n = 1000,
   seed = 909,
@@ -89,7 +89,7 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "mixed_data.json");
+outfile = @projectroot("results", "mixed_data.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

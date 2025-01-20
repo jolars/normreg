@@ -12,7 +12,7 @@ set_plot_defaults()
 colors = [:black delta_palette([1, 3, 4])]
 linestyles = [:dash :solid :solid :solid]
 
-file = @projectroot("data", "hyperopt.csv")
+file = @projectroot("results", "hyperopt.csv")
 
 df = CSV.read(file, DataFrame);
 
@@ -105,4 +105,4 @@ plots = permutedims(reshape(plots, n_rows, n_cols), [2, 1])
 
 plot(plots..., layout = l, size = (FULL_WIDTH, 320))
 
-savefig(@projectroot("paper", "plots", "hyperopt_paths.pdf"))
+savefig(@projectroot("plots", "hyperopt_paths.pdf"))

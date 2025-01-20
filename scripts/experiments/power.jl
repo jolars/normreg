@@ -93,4 +93,4 @@ power_plot = @df df_power plot(
   color = colors,
 )
 
-savefig(power_plot, @projectroot("paper", "plots", "power.pdf"))
+savefig(power_plot, @projectroot("plots", "power.pdf"))

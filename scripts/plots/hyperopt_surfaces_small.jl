@@ -10,7 +10,7 @@ using Plots.Measures
 
 set_plot_defaults()
 
-file = @projectroot("data", "hyperopt.csv")
+file = @projectroot("results", "hyperopt.csv")
 
 df = CSV.read(file, DataFrame)
 
@@ -96,4 +96,4 @@ end
 plot_output =
   plot(plots..., layout = (1, 3), right_margin = [-6mm -6mm -5mm], size = (320, 130))
 
-savefig(@projectroot("paper", "plots", "hyperopt_surfaces_small.pdf"))
+savefig(@projectroot("plots", "hyperopt_surfaces_small.pdf"))

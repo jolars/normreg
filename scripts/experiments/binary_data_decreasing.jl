@@ -24,7 +24,7 @@ function binary_decreasingq_simulation(n, p, s, delta, q_type, snr, rho)
 end
 
 param_dict = Dict(
-  "it" => collect(1:50),
+  "it" => collect(1:100),
   "n" => 500,
   "p" => [1000],
   "s" => [20],
@@ -52,7 +52,7 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "binary_data_decreasing.json");
+outfile = @projectroot("results", "binary_data_decreasing.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

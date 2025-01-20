@@ -104,8 +104,6 @@ function generate_binary_data(n, p, k, q_type, beta_type = "constant", snr = 1, 
         n_ones_cur = sum(x[:, i])
         n_rem = Int64(n_ones - n_ones_cur)
 
-        # println("n_rem: $(n_rem), n: $(n)")
-
         inds = sample((n_rho + 1):n, n_rem, replace = false)
 
         x[inds, i] .= 1
@@ -204,8 +202,6 @@ function generate_interaction_data(β, norm_strategy, delta, q, mu, center; snr 
     intersections = [3]
     x_std, centers, scales = normalize_features(x, delta, intersections = intersections)
   end
-
-  # print(scales)
 
   return x_std, y, β, centers, scales
 end

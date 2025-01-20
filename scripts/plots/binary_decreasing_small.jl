@@ -10,11 +10,9 @@ using ProjectRoot
 
 set_plot_defaults();
 
-json_data = JSON.parsefile(@projectroot("data", "binary_data_decreasing.json"));
+json_data = JSON.parsefile(@projectroot("results", "binary_data_decreasing.json"));
 df = DataFrame(json_data);
-
 df_subset = subset(df, :rho => rho -> rho .== 0.5, :delta => d -> d .∈ Ref([0.0, 1.0]))
-
 df_grouped = groupby(df_subset, [:delta], sort = true)
 
 n_rows = 1
@@ -89,5 +87,5 @@ fig_width = 320
 fig_height = 140
 plots = plot(plots..., layout = layout, size = (fig_width, fig_height))
 
-file_path = @projectroot("paper", "plots", "binary_decreasing_small.pdf")
+file_path = @projectroot("plots", "binary_decreasing_small.pdf")
 savefig(plots, file_path)

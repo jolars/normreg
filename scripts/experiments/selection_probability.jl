@@ -103,5 +103,5 @@ end
 
 plot_output = plot(plots..., layout = (1, n_sigma), size = (320, 140))
 
-file_path = @projectroot("paper", "plots", "selection_probability.pdf")
+file_path = @projectroot("plots", "selection_probability.pdf")
 savefig(plot_output, file_path)

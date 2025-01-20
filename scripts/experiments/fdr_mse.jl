@@ -188,4 +188,4 @@ l = @layout[grid(n_rows, n_cols) a{0.15w}]
 
 fdr_mse_plot = plot(plots..., legend, layout = l, size = (FULL_WIDTH * 0.6, 250))
 
-savefig(fdr_mse_plot, @projectroot("paper", "plots", "fdr_mse.pdf"))
+savefig(fdr_mse_plot, @projectroot("plots", "fdr_mse.pdf"))

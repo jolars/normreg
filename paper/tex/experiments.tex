@@ -14,9 +14,9 @@ We use a coordinate descent solver to optimize our models, which we have based o
 algorithm outlined by \citet{friedman2010}. All experiments were coded using the Julia
 programming language~\citep{bezanson2017} and the code is available
 % at \url{https://github.com/jolars/normreg}. 
-in the supplementary material. All simulated experiments were run for 50 iterations and,
-unless stated otherwise, are presented as means $\pm$ one standard deviation (using bars or
-ribbons).
+in the supplementary material. All simulated experiments were run for at least 100
+iterations and, unless stated otherwise, are presented as means $\pm$ one standard
+deviation (using bars or ribbons).
 
 \subsection{Normalization in the Lasso and Ridge Regression}%
 \label{sec:experiments-lassoridge}
@@ -50,7 +50,7 @@ together with \(\delta\).
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/binary_decreasing_small.pdf}
+  \includegraphics[]{binary_decreasing_small.pdf}
   \caption{%
     Regression coefficients for a lasso problem with binary data where \(n = 500\) and
     \(p = \num{1000}\) with 20 true signals. Here we show only the first 30
@@ -92,7 +92,7 @@ that includes the lasso as well.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/hyperopt_surfaces_small.pdf}
+  \includegraphics[]{hyperopt_surfaces_small.pdf}
   \caption{%
     Contour plots of normalized validation set mean-squared error (NMSE)
     for \(\delta\) and \(\lambda\) in ridge regression on
@@ -138,7 +138,7 @@ dependency at the cost of added variance.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics{plots/mixed_data.pdf}
+  \includegraphics{mixed_data.pdf}
   \caption{%
     Lasso and ridge estimates for a two-dimensional problem where one feature is a binary
     feature with class balance \(q_j\) (\(\bernoulli(q_j)\)) and the other is quasi-normal
@@ -170,7 +170,7 @@ on different choices of \(\bm{\beta}^*\).
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{plots/interactions-classbalance-small.pdf}
+  \includegraphics[]{interactions-classbalance-small.pdf}
   \caption{%
     Lasso estimates for a problem with a binary feature, a quasi-normal feature, and
     an interaction feature. We have set \(\bm{\beta}^* = \bm{1}\) and use two different normalization strategies where
@@ -196,7 +196,7 @@ estimates.
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics{plots/mixed_data_elnet_small.pdf}
+  \includegraphics{mixed_data_elnet_small.pdf}
   \caption{%
     Weighted elastic net estimates for \(\alpha = 0.5\) for a problem with a binary
     feature with class balance \(q\) (\(\bernoulli(q)\)) and quasi-normal

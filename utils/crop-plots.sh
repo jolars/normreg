@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory containing the PDF files
-PDF_DIR="paper/plots"
+PDF_DIR="plots"
 
 # Loop through all PDF files in the directory
 for pdf_file in "$PDF_DIR"/*.pdf; do

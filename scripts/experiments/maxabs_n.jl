@@ -24,7 +24,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
   x2 = rand(d_binary, 500)
   x = [x1 x2]
   y = x * beta
-  x_std, _, _ = normalize_features(x, "max_abs")
+  x_std, _, _ = normalize_features(x, 0)
 
   λmax = get_lambdamax(x_std, y)
 
@@ -42,7 +42,7 @@ function maxabs_n_simulation(σ, q; n_min = 10, n_max = 500, n_ns = 100, n_iter 
 
       y = x * beta + rand(Normal(0, 1), n)
 
-      x_std, centers, scales = normalize_features(x, "max_abs")
+      x_std, centers, scales = normalize_features(x, 0)
 
       model =
         Lasso.fit(Lasso.LassoPath, x_std, y, Normal(), standardize = false, λ = [lambda])
@@ -82,7 +82,7 @@ for (i, d) in enumerate(param_expanded)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "maxabs_n.json")
+outfile = @projectroot("results", "maxabs_n.json")
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

@@ -10,9 +10,9 @@ using Distributions
 using ProjectRoot
 using Statistics
 
-set_plot_defaults("pyplot");
+set_plot_defaults();
 
-jsondata = JSON.parsefile(@projectroot("data", "binary_data_sim.json"));
+jsondata = JSON.parsefile(@projectroot("results", "binary_data_sim.json"));
 df = DataFrame(jsondata);
 df_filtered = select(df, [:it, :delta, :q, :snr, :err]);
 df_subset = subset(df_filtered)
@@ -33,8 +33,8 @@ for (i, dd) in enumerate(groups)
 
   title = L"q = %$(q)"
 
-  groups = groupby(dd, [:delta, :snr], sort = true)
-  avg = combine(groups, :err .=> [mean, confidence_error])
+  dd_groups = groupby(dd, [:delta, :snr], sort = true)
+  avg = combine(dd_groups, :err .=> [mean, confidence_error])
 
   legend = i == n_qtypes ? :bottomleft : false
 
@@ -69,5 +69,5 @@ end
 
 plot_output = plot(plots..., layout = (1, n_qtypes), size = (0.8 * FULL_WIDTH, 180))
 
-file_path = @projectroot("paper", "plots", "binary_data_sim.pdf")
+file_path = @projectroot("plots", "binary_data_sim.pdf")
 savefig(plot_output, file_path)

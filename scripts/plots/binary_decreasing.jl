@@ -10,7 +10,7 @@ using ProjectRoot
 
 set_plot_defaults();
 
-json_data = JSON.parsefile(@projectroot("data", "binary_data_decreasing.json"));
+json_data = JSON.parsefile(@projectroot("results", "binary_data_decreasing.json"));
 df = DataFrame(json_data);
 
 function plot_binary_decreasing(
@@ -102,10 +102,10 @@ function plot_binary_decreasing(
 end
 
 plots = plot_binary_decreasing(df)
-file_path = @projectroot("paper", "plots", "binary_decreasing.pdf")
+file_path = @projectroot("plots", "binary_decreasing.pdf")
 savefig(plots, file_path)
 
 plots_small =
   plot_binary_decreasing(df; rho_choice = [0.0, 0.9], fig_width = 320, fig_height = 300)
-file_path_small = @projectroot("paper", "plots", "binary_decreasing_small.pdf")
+file_path_small = @projectroot("plots", "binary_decreasing_small.pdf")
 savefig(plots_small, file_path_small)

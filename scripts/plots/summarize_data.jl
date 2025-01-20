@@ -44,4 +44,4 @@ collect(range(0.5, 1, length = 11))
 
 plot_output = plot(plots..., size = (FULL_WIDTH, 250))
 
-savefig(@projectroot("paper", "plots", "data-hist-q.pdf"))
+savefig(@projectroot("plots", "data-hist-q.pdf"))

@@ -70,7 +70,7 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
 end
 
 param_dict = Dict(
-  "it" => collect(1:50),
+  "it" => collect(1:100),
   "beta" => [[1, 1, 0], [1, 1, 1], [1, 0, 1], [0, 1, 1], [0, 0, 1]],
   "norm_strategy" => [1, 2, 3],
   "delta" => [1],
@@ -97,7 +97,7 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "interactions.json");
+outfile = @projectroot("results", "interactions.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

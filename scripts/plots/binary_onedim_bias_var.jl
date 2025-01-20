@@ -10,7 +10,7 @@ using StatsPlots
 
 set_plot_defaults();
 
-results = JSON.parsefile(@projectroot("data", "binary_onedim_bias_var.json"));
+results = JSON.parsefile(@projectroot("results", "binary_onedim_bias_var.json"));
 
 df = DataFrame(results);
 
@@ -157,18 +157,12 @@ lasso_plot = plot_binary_bias_var(df, 1)
 ridge_plot = plot_binary_bias_var(df, 0)
 elnet_plot = plot_binary_bias_var(df, 0.5)
 
-savefig(lasso_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_lasso.pdf"))
-savefig(ridge_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_ridge.pdf"))
-savefig(elnet_plot, @projectroot("paper", "plots", "binary_onedim_bias_var_elnet.pdf"))
+savefig(lasso_plot, @projectroot("plots", "binary_onedim_bias_var_lasso.pdf"))
+savefig(ridge_plot, @projectroot("plots", "binary_onedim_bias_var_ridge.pdf"))
+savefig(elnet_plot, @projectroot("plots", "binary_onedim_bias_var_elnet.pdf"))
 
 lasso_plot_small = plot_binary_bias_var(df, 1, [0.25, 1.0], 320, 300)
-savefig(
-  lasso_plot_small,
-  @projectroot("paper", "plots", "binary_onedim_bias_var_lasso_small.pdf")
-)
+savefig(lasso_plot_small, @projectroot("plots", "binary_onedim_bias_var_lasso_small.pdf"))
 
 elnet_plot_small = plot_binary_bias_var(df, 0.5, [0.25, 1.0], 320, 300)
-savefig(
-  elnet_plot_small,
-  @projectroot("paper", "plots", "binary_onedim_bias_var_elnet_small.pdf")
-)
+savefig(elnet_plot_small, @projectroot("plots", "binary_onedim_bias_var_elnet_small.pdf"))

@@ -88,13 +88,13 @@ function plot_realpaths(df)
   return plots
 end
 
-json_data = JSON.parsefile(@projectroot("data", "realdata_paths.json"));
+json_data = JSON.parsefile(@projectroot("results", "realdata_paths.json"));
 df = DataFrame(json_data);
 plots = plot_realpaths(df)
 
 plot_output = plot(plots..., layout = (2, 4), size = (FULL_WIDTH, 340))
 
-file_path = @projectroot("paper", "plots", "realdata_paths.pdf")
+file_path = @projectroot("plots", "realdata_paths.pdf")
 
 savefig(plot_output, file_path)
 
@@ -106,6 +106,6 @@ plots_small = plot_realpaths(df_small)
 
 plot_output = plot(plots_small..., layout = (2, 2), size = (320, 280))
 
-file_path_small = @projectroot("paper", "plots", "realdata_paths_small.pdf")
+file_path_small = @projectroot("plots", "realdata_paths_small.pdf")
 
 savefig(plot_output, file_path_small)

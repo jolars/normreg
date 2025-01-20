@@ -44,21 +44,12 @@ lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
   return err, lambda_out, support_size
 end
 
-max_delta = maximum(delta)
-
-param_expanded = dict_list(param_dict);
-
 results = []
-
 grid_size = 100
-
 datasets = ["a1a", "w1a", "rhee2006"]
-
 res =
   DataFrame(alpha = [], dataset = [], delta = [], lambda = [], err = [], support_size = [])
-
 deltas = collect(range(0, 1, length = grid_size));
-
 alphas = [0, 1]
 
 for alpha in alphas
@@ -95,7 +86,7 @@ for alpha in alphas
   end
 end
 
-outfile = @projectroot("data", "hyperopt.csv");
+outfile = @projectroot("results", "hyperopt.csv");
 
 open(outfile, "w") do f
   CSV.write(f, res)

@@ -131,9 +131,6 @@ function elasticnet(
   intercept = mean(y) * fit_intercept
   residual = y .- intercept
 
-  # w1 = w1 * p / sum(w1)
-  # w2 = w2 * p / sum(w2)
-
   # only screen when l1 penalty is involved
   screen = α > 0
 

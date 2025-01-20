@@ -8,7 +8,7 @@ using ProjectRoot
 
 set_plot_defaults()
 
-json_data = JSON.parsefile(@projectroot("data", "maxabs_n.json"));
+json_data = JSON.parsefile(@projectroot("results", "maxabs_n.json"));
 df = DataFrame(json_data);
 df_flat = DataFrames.flatten(df, [:n, :beta, :distribution]);
 
@@ -22,6 +22,6 @@ pl = @df df_flat plot(
 )
 
 file_name = "maxabs_n"
-file_path = @projectroot("paper", "plots", "maxabs_n.pdf")
+file_path = @projectroot("plots", "maxabs_n.pdf")
 
 savefig(pl, file_path)

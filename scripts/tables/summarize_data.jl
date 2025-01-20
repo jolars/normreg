@@ -41,7 +41,7 @@ for dataset in datasets
   res = vcat(res, df)
 end
 
-outfile = @projectroot("data", "data_summary.csv");
+outfile = @projectroot("results", "data_summary.csv");
 
 open(outfile, "w") do f
   CSV.write(f, res)

@@ -3,7 +3,6 @@ using DrWatson
 using ProjectRoot
 using LIBSVMdata
 using JSON
-using Lasso
 using Statistics
 using NormReg
 
@@ -20,7 +19,6 @@ function path_simulation(dataset, normalization, model = "gaussian")
 
   x_norm, centers, scales = normalize_features_unadjusted(Array(x), normalization)
 
-  # res = fit(LassoPath, x_norm, y, dist, standardize = false)
   betas, intercepts, λ = elasticnet(x_norm, y)
 
   _, betas = unstandardize_coefficients(intercepts, betas, centers, scales)
@@ -50,7 +48,7 @@ for (i, d) in enumerate(param_expanded)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "realdata_paths.json")
+outfile = @projectroot("results", "realdata_paths.json")
 
 open(outfile, "w") do f
   write(f, JSON.json(results))

@@ -24,12 +24,12 @@ function binary_simulation_varyq_experiment(n, p, s, delta, q, snr)
 
   x, y, β_true, _ = generate_binary_data(n, p, s, q_type, beta_type, snr)
 
-  err, _, β_est = holdout_validation(x, y, Normal(), delta, "nmse", train_size = 0.5)
+  err, _, β_est = holdout_validation(x, y, Normal(), delta, "nmse", 0.5)
 
   return err, β_est, β_true
 end
 
-snr = collect(logspace(0.05, 6, 10))
+local snr = collect(logspace(0.05, 6, 10))
 
 param_dict = Dict(
   "it" => collect(1:100),
@@ -60,10 +60,8 @@ for (i, d) in enumerate(expanded_params)
   push!(results, d_exp)
 end
 
-outfile = @projectroot("data", "binary_data_sim.json");
+outfile = @projectroot("results", "binary_data_sim.json");
 
 open(outfile, "w") do f
   write(f, JSON.json(results))
 end
-
-# include(@projectroot("scripts", "plots", "binary_data_sim.jl"))

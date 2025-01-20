@@ -26,8 +26,6 @@ function normalize_features2(x::AbstractMatrix, delta::Real = 0, center::Bool = 
 
   for j in 1:p
     if binary[j]
-      # q = mean(x[:, j])
-      # scales[j] = (q - q^2)^delta
       scales[j] = var(x[:, j])^delta
     else
       scales[j] = std(x[:, j])
@@ -82,14 +80,8 @@ function scaling_factors(
 
   binary = find_binary_features(x)
 
-  # if center
-  #   centers = mean(x, dims = 1)
-  # else
-  #   centers = zeros(1, p)
-  # end
-
   # always scale continuos features by standard deviation
-
+  #
   for j in 1:p
     if binary[j]
       mod = 0.5 / (0.25^delta)
