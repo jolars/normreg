@@ -1,12 +1,12 @@
 \section{Discussion}
 
 We have studied the effects of normalization in lasso, ridge, and elastic net regression
-with binary data---an issue that has so far not been studied. We have discovered that the
-class balance (proportion of ones and zeros) of these binary features have a pronounced
-effect on both lasso and ridge estimates and that this effect depends on the type of
-normalization used. For the lasso, for instance, features with large class imbalances stand
-little chance of being selected if the features are standardized, even when their
-relationships with the response are strong.
+with binary data---an issue that has not been studied. We discovered that the class balance
+(proportion of ones) of these binary features has a pronounced effect on both lasso and
+ridge estimates and that this effect depends on the type of normalization used. For the
+lasso, for instance, features with large class imbalances stand little chance of being
+selected if the features are standardized, even when their relationships with the response
+are strong.
 
 The driver of this result is the relationship between the variance of the feature and type
 of normalization. This works as expected for normally distributed features. But for binary
