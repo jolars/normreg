@@ -1,8 +1,8 @@
-# Class-Balance Bias in Regularized Regression
+# The Choice of Normalization Influences Shrinkage in Regularized Regression
 
-This repository hosts the code for the paper _Class-Balance Bias
-in Regularized Regression_, including both the code used for the
-examples as well as the paper itself.
+This repository hosts the code for the paper _The Choice of Normalization
+Influences Shrinkage in Regularized Regression_, including both the code used
+for the examples as well as the paper itself.
 
 ## Reproducing the Results
 
