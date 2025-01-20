@@ -1,9 +1,25 @@
-version: '3'
+version: "3"
 
 tasks:
   arxiv:
     cmds:
       - git archive --output=arxiv-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
+    vars:
+      DATE:
+        sh: date +%Y%m%d
+  package-code:
+    cmds:
+      - git archive --output=code-{{.DATE}}.tar.gz --add-file=paper/main.bbl HEAD:paper/
+      - |
+        zip -r code-{{.DATE}}.zip \
+          scripts \
+          data \
+          src \
+          test \
+          Project.toml \
+          Manifest.toml \
+          flake.nix \
+          flake.lock
     vars:
       DATE:
         sh: date +%Y%m%d
