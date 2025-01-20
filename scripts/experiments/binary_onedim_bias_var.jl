@@ -14,10 +14,8 @@ function onedim_bias_sim(q::Real, σe::Real, δ::Real, n::Int64, λ::Real = 0.5,
   u = v = 1.0
 
   if α == 1
-    # λ = λ / 0.25^δ
     λ = λ * 4^δ
   elseif α == 0
-    # λ = λ / 0.25^(2 * δ)
     λ = λ * 4^(2 * δ)
   else
     # λ = λ * 4^δ
@@ -58,7 +56,6 @@ param_expanded = dict_list(param_dict)
 results = []
 
 for (i, d) in enumerate(param_expanded)
-  # d = param_expanded[1]
   @unpack q, sigma_e, delta, lambda, α = d
 
   n = 100

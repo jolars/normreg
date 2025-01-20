@@ -24,7 +24,6 @@ function fdr_mse_sim(
 
   mse_sum = 0
 
-  # qs = collect(range(0.5, 0.999, length = ceil(Int64, p - k)))
   qs = collect(logspace(0.5, 0.99, ceil(Int64, p - k)))
 
   fdp = 0
@@ -122,7 +121,6 @@ plots = []
 colors = delta_palette([1, 3, 5])
 
 for (i, d) in enumerate(grouped_df)
-  # subgrouped_df = groupby(df_long, [:q])
   subgrouped_df = groupby(d, [:q])
 
   for (j, dd) in enumerate(subgrouped_df)

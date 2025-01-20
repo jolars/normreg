@@ -60,8 +60,6 @@ function interaction_simulation(β, norm_strategy, delta, q, mu, center_before)
 
   lambda = 0.25 * n
 
-  # cor(hcat(x_std, y))
-
   res = elasticnet(x_std, y, λ = [lambda], α = 1)
 
   _, coefs_unstandardized = unstandardize_coefficients(res.β0, res.β, centers, scales)

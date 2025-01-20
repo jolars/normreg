@@ -11,8 +11,6 @@ using Plots.PlotMeasures
 
 set_plot_defaults()
 
-# TODO: Change power-simulation to use a range of q (since it is constant over p)
-
 function power_sim(
   q::Real,
   σe::Real,
