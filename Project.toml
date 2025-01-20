@@ -1,6 +1,5 @@
 name = "NormReg"
 uuid = "14840c9a-f964-41a7-b64a-5f191879b565"
-authors = ["Johan Larsson <johanlarsson@outlook.com>", "Jonas Wallin <jonas.wallin@stat.lu.se"]
 version = "0.1.0"
 
 [deps]
