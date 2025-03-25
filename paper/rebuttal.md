@@ -201,55 +201,64 @@ The code will be made available in the form of a public repository as well. If
 you prefer, we could also upload it to a anonymous repository for the duration
 of the review as well?
 
-> Formula Derivation Confirmation: In Equation 12, how is derived? Should it be instead? A detailed derivation process would be appreciated. Questions For
+> ## Other Comments or Suggestions
+>
+> Formula Derivation Confirmation: In Equation 12, how is $x_j^T \varepsilon$
+> derived? Should it be $x_j^T \varepsilon$ instead? A detailed derivation
+> process would be appreciated. Questions For
 
 ## Reviewer 3
 
+> ## Summary
+>
 > The paper proposed to study the nature and impact of feature normalization
 > schemes with respect to linear models under the L1, L2, and Elastic-Net
 > penalties. This is done only for regression, and is focused particularly on
 > binary features. The results are primarily theoretical in nature, with a
 > limited number of datasets evaluated. Claims And Evidence:
 >
+> ## Claims and Evidence
+>
 > Though the claims do have evidence, the abstract set my expectations
 > considerably beyond what the article contains. I had anticipated
 >
-> Logistic models to be considered as well A larger collection of datasets An
-> empirical evaluation of "our recommendations" vs the readily available tools
+> 1. Logistic models to be considered as well
+> 2. A larger collection of datasets
+> 3. An empirical evaluation of "our recommendations" vs the readily available
+>    tools
 >
-> Methods And Evaluation Criteria:
+> ## Methods And Evaluation Criteria
 >
 > The theoretical approach is sound as far as I can tell. Many figures would be
 > clearer, especially the ones with simulated results, by instead centering the
-> plots to the deviation from the estimated effect from the known true effect
->
-> , as it is otherwise difficult to tell at a glance what the results mean and
+> plots to the deviation from the estimated effect $\hat{\beta}_j$ from the known true effect
+> $\beta_j$, as it is otherwise difficult to tell at a glance what the results mean and
 > how to interpret them. Indeed while well written, every result is presented in
 > a way that presumes the reader is intimately familiar with the larger
 > statistical literature. I think the paper is suffering a bit from "I wrote it
 > and I know it", and could use a friendly pass from a colleague unaware of the
 > work previously. Theoretical Claims:
 >
-> I have not manually checked the proofs. Experimental Designs Or Analyses:
+> I have not manually checked the proofs.
+>
+> ## Experimental Designs Or Analyses
 >
 > I have no issues with the content of what was done, but find the most obvious
 > experiments seem to be missing.
 >
-> Use each of the listed normalization approaches and the current recommendation
-> in a table for each of L1, L2, and Elastic-Net regression. Show the final total
-> difference in predictive performance achieved using the new theoretically
-> derived insights. If a positive improvement is shown, it also validates the
-> acceptability of the theoretical model, assuming Gaussian errors. Consider more
-> datasets, which it is easy to binarize other datasets to match the scope of the
-> model. In this way a statistical test via the Wilcoxon Signed Rank Test can be
-> performed to show conclusively that the approach is an improvement. See, Should
-> We Really Use Post-Hoc Tests Based on Mean-Ranks?
-> <https://jmlr.org/papers/v17/benavoli16a.html>
+> 1. Use each of the listed normalization approaches and the current recommendation
+>    in a table for each of L1, L2, and Elastic-Net regression. Show the final total
+>    difference in predictive performance achieved using the new theoretically
+>    derived insights. If a positive improvement is shown, it also validates the
+>    acceptability of the theoretical model, assuming Gaussian errors.
+> 2. Consider more
+>    datasets, which it is easy to binarize other datasets to match the scope of the
+>    model. In this way a statistical test via the Wilcoxon Signed Rank Test can be
+>    performed to show conclusively that the approach is an improvement. See, Should
+>    We Really Use Post-Hoc Tests Based on Mean-Ranks?
+>    <https://jmlr.org/papers/v17/benavoli16a.html>
 >
-> Supplementary Material:
->
-> I have reviewed the empirical results in the appendix, not the theory. Relation
-> To Broader Scientific Literature:
+> ## Relation To Broader Scientific Literature
 >
 > Linear models make the real world go round, the impact could be massive. Most
 > literature in this space consider the algorithm independent of the data
@@ -272,7 +281,9 @@ of the review as well?
 > The paper's readability would be greatly improved by including an Algorithm
 > block for each of L1, L2, and Elastic-Net of the author's proposed approach to
 > normalization, each is currently buried in the text and hard to separate in the
-> content. Other Comments Or Suggestions:
+> content.
+>
+> ## Other Comments Or Suggestions
 >
 > The article would be improved with some more guidance to the reader of "where
 > we are going and why", each section currently "jumps in" and it is not clear
@@ -282,11 +293,13 @@ of the review as well?
 >
 > Considering or discussion robust standardization methods would also be
 > appreciated, but a weakness I could accept if other items were addressed.
-> Questions For Authors:
+>
+> ## Questions For Authors
 >
 > See above content, if you could provide:
 >
-> Larger experimental evaluations Algorithm blocks for each case
+> 1. Larger experimental evaluations
+> 2. Algorithm blocks for each case
 >
 > I will raise my score to accept and strongly champion the work, though I would
 > still encourage improvements in writing. Code Of Conduct: Affirmed. Overall
