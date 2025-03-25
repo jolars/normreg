@@ -20,18 +20,35 @@ reviewers were unable to find any relevant references either.
 
 ## Reviewer 1
 
+> ## Theoretical Claims
+>
 > there is a problem in the draft, where the authors write $q_j \righarrow^+ 1$
 
 Thank you, we realize that yours is the more standard notation and will
 change this in our paper, along with clearly defining the notation.
 
-> I like the problem considered here, and I agree that this problem is somewhat
-> under-investigated and worth pursuing.
+> ## Strength
+>
+> I like the problem considered here, and I agree that this problem is somewhat under-investigated and worth pursuing.
 
 Thank you for your appreciation. We agree that the problem is
 under-investigated and worth pursuing.
 
-> The assumption on the orthogonality of the normalized design matrix
+> ## Weaknesses
+>
+> 1. This paper is not well-polished. The flow is very monotone, making the
+>    readers have a hard time reading this paper. See below for suggestions.
+> 2. The assumption on the orthogonality of the normalized design matrix is
+>    super strong and rarely holds in practice. This is even more unrealistic
+>    for two cases that this paper considers here: binary features and mixed
+>    features. As a result, it is very hard to tell if the findings in this
+>    paper have an interesting implication in the general cases and in
+>    practice.
+> 3. As a consequence, I expect that it is the technical challenge on the
+>    theoretical side that makes the paper more interesting. However, this is
+>    not the case here.
+>
+> The assumption on the orthogonality of the normalized design matrix $\tilde{\mathbf{X}}$
 > is super strong and rarely holds in practice. This is even more unrealistic for
 > two cases that this paper considers here: binary features and mixed features.
 > As a result, it is very hard to tell if the findings in this paper have an
@@ -56,6 +73,10 @@ We realize that we do a poor job of explaining this in the paper and will
 both add a paragraph to the paper discussing the validity of this assumption.
 We have also added a
 
+> ## Other comments or suggestions
+>
+> ### General Comment
+>
 > Overall, I find the problem being considered interesting. However, I find the
 > presentation of this paper a bit underwhelming, and I feel uncomfortable
 > reading this paper. I believe that the presentation can be greatly improved.
@@ -64,54 +85,63 @@ We have also added a
 > updating my score after the authors make changes to improve the presentation,
 > clarity, and flow of this paper. Here are some suggestions: Minor changes:
 > Potential typos/clarification suggestions
+>
+> ### Minor changes
+>
+> 1. In Equation 2, $\tilde{\boldsymbol{X}}$ is used before defined in
+>    Definition 2.1. Consider adding a small clarification right after Equation
+>    2, even if it is repetitive.
+> 2. In the first paragraph of Section 3, there is no definition for the noise
+>    (it is defined later). Consider adding this clarification right after
+>    using it.
+> 3. In the first paragraph of Section 3, maybe explicitly mentioning that
+>    $\boldsymbol{x}_j$ is the-th column of $\tilde{\boldsymbol{X}}$ could
+>    improve. clarity.
+> 4. The same goes with $\tilde{\boldsymbol{x}}_j$.
+> 5. Please discuss the (strong) assumption on the orthogonality of the
+>    normalized design matrix $\tilde{\boldsymbol{X}}$: (1) how it rarely >
+>    holds in practice, (2) how it is necessary in this framework, (3) if any
+>    prior works also have this assumption (to see that it is not too weird
+>    one).
+> 6. In the first paragraph of Section 3.1., what is
+>    $\overline{\boldsymbol{x}}$? I know that it is defined in Table 1, but
+>    please refer to it once again to help the readers keep track of the
+>    notations. Besides, the wording of this paragraph is not good; consider
+>    rewriting this paragraph.
+> 7. What is in Equation 8? I know this one is the CDF of normal distribution,
+>    but please define it clearly here.
+> 8. In section 4.1.2, the author should at least describe what those datasets
+>    (a1a, rhee2006, and w1a) are about. I know that the statistics of that
+>    dataset is mentioned in Appendix E, Table 2, but at least the author
+>    should refer to that Table in the main body.
+> 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
+>    write the limit ? Do you mean $1^{-1}$ instead?
 
-> In Equation 2, is used before defined in Definition 2.1. Consider adding a small clarification
-> right after Equation 2, even if it is repetitive. In the first paragraph of
-> Section 3, there is no definition for the noise (it is defined later). Consider
-> adding this clarification right after using it. In the first paragraph of
-> Section 3, maybe explicitly mentioning that is the -th column of could improve
-> clarity. The same goes with . Please discuss the (strong) assumption on the
-> orthogonality of the normalized design matrix : (1) how it rarely holds in
-> practice, (2) how it is necessary in this framework, (3) if any prior works
-> also have this assumption (to see that it is not too weird one). In the first
-> paragraph of Section 3.1., what is $\overline{\boldsymbol{x}}? I know that it
-> is defined in Table 1, but please refer to it once again to help the readers
-> keep track of the notations. Besides, the wording of this paragraph is not
-> good; consider rewriting this paragraph. What is in Equation 8? I know this one
-> is the CDF of normal distribution, but please define it clearly here. In
-> section 4.1.2, the author should at least describe what those datasets (a1a,
-> rhee2006, and w1a) are about. I know that the statistics of that dataset is
-> mentioned in Appendix E, Table 2, but at least the author should refer to that
-> Table in the main body. In Theorems 3.1, 3.2, and 3.3, since , why do the
-> authors write the limit ? Do you mean instead?
+> ### Major changes
+>
+> 1. It is better if the authors write the whole paragraph/sections of notations
+>    used in this paper. The way the authors use notations here is not good: it
+>    makes the readers have a hard time finding relevant notions.
+> 2. Consider adding the contributions paragraph at the end of Section 1. List the
+>    main contributions clearly and where they are located in the main body. I know
+>    that the authors discuss those points in Section 5, but I think it is better if
+>    authors have some punch lines right from the start so that the readers can keep
+>    track of the paper more easily. Consider reorganizing Section 5 accordingly,
+>    making it more condensed, and putting the punch lines right at the start.
+> 3. Section 3 is very monotone; please reorganize this section. For example, in
+>    Section 3.1, the authors could make each part of Section 3.1 more
+>    distinguishable, for example, by writing:
+>    (1) "\paragraph{Class blance}", which contains the rigorous definition and its
+>    intuition.
+>    (2) "\paragraph{the effects on the estimators scale ...}" discusses how the
+>    class balance directly affects the estimator. Please make three paragraphs
+>    after Equation 7 stand out more and elaborate on how the finding is interesting
+>    and counterintuitive. (3) and so on.
+>    The above are just some suggestions that I have. I recommend that the authors
+>    do multiple passes to improve the presentation of this draft.
 
-> It is better if the authors write the whole paragraph/sections of notations
-> used in this paper. The way the authors use notations here is not good: it
-> makes the readers have a hard time finding relevant notions.
-
-> Consider adding the contributions paragraph at the end of Section 1. List the
-> main contributions clearly and where they are located in the main body. I know
-> that the authors discuss those points in Section 5, but I think it is better if
-> authors have some punch lines right from the start so that the readers can keep
-> track of the paper more easily. Consider reorganizing Section 5 accordingly,
-> making it more condensed, and putting the punch lines right at the start.
-
-> Section 3 is very monotone; please reorganize this section. For example, in
-> Section 3.1, the authors could make each part of Section 3.1 more
-> distinguishable, for example, by writing:
-
-> (1) "\paragraph{Class blance}", which contains the rigorous definition and its
-> intuition.
-
-> (2) "\paragraph{the effects on the estimators scale ...}" discusses how the
-> class balance directly affects the estimator. Please make three paragraphs
-> after Equation 7 stand out more and elaborate on how the finding is interesting
-> and counterintuitive. (3) and so on.
-
-The above are just some suggestions that I have. I recommend that the authors
-do multiple passes to improve the presentation of this draft. Questions For
-Authors:
-
+> ## Questions For the Authors
+>
 > Is the assumption of the orthogonality of the normalized design matrix too
 > strong and unnatural, especially for the case of binary features and mixed
 > features? Please give me a couple of examples where this assumption holds and a
