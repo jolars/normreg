@@ -127,6 +127,9 @@ Thank you for pointing this out. We will remove the tilde from the equation.
 > 2. In the first paragraph of Section 3, there is no definition for the noise
 >    (it is defined later). Consider adding this clarification right after
 >    using it.
+
+Thanks for noticing this; we will fix it in the final paper.
+
 > 3. In the first paragraph of Section 3, maybe explicitly mentioning that
 >    $\boldsymbol{x}_j$ is the-th column of $\tilde{\boldsymbol{X}}$ could
 >    improve. clarity.
