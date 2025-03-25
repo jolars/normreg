@@ -185,7 +185,9 @@ We agree that the assumption is strong, but want to highlight that it is
 > assumption of feature orthogonality. The theoretical analysis assumes feature
 > orthogonality, which is often not the case in real data. It would be beneficial
 > to include analysis and experimental results for these scenarios.
->
+
+See the general response regarding the assumption of orthogonality.
+
 > ## Experimental Designs Or Analyses
 >
 > The experiments provided metrics for various parameters; it would be helpful to
