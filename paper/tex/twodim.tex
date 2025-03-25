@@ -1,0 +1,151 @@
+\subsection{Two-Dimensional Problem}
+
+The previous section served only to introduce some of the main results. Here, we check if they persist when we mix continuous and binary features.
+
+Let us start by assuming that we have a two-dimensional problem and that \(x_{i1} \sim \bernoulli(p)\) and \(x_{i2} \sim \normal(0, 1)\) with no dependence between either the features or the observations. When \(q = 0.5\), the classes are completely balanced, and the population standard deviations become 0.5 and 1 for \(\vec{x}_2\) and \(\vec{x}_1\) respectively. And if we choose to normalize with mean and standard deviation, then, after standardization, values for \(\vec{x}_2\) will lie between 0 and 2, with a standard deviation of 1. For \(\vec{x}_2\), 69\% of the values will lie between an equally spaced range, -1 to 1, and the standard deviation will of course also be 1. If the true model is \(y = \mat{X}\vec{\beta}\) and \(\beta = [1,1]^\T\), then shrinkage will be applied equally across the coefficients of the two features.
+
+\subsubsection{Lasso}
+Consider the two dimensional problem
+
+\[
+  \frac 1 2 \lVert \vec{y} - \vec{x}_1 \beta_1 -\vec{x}_1 \beta_1 \rVert_2^2 + \lambda \left( | \beta_1 | + |\beta_2| \right).
+\]
+Assume without loss of generality that $|\mv{y}^\T\mv{x}_1|> |\mv{y}^\T\mv{x}_2|$ (what about equal?)
+\begin{proof}
+  Note that the problem can be reformulated as
+  \[ l(\mv{\beta}) =
+    \frac 1 2 \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}^\T \mv{H} \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}  -
+    \mv{b}^\T \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix} + \lambda  \mv{1}^\T \left| \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix}  \right|.
+  \]
+  where
+  $$
+    \mv{b} = \begin{bmatrix}
+      \mv{y}^\T \mv{x}_1 & \mv{y}^\T \mv{x}_2
+    \end{bmatrix} , \mv{H}  =
+    \begin{bmatrix}
+      \mv{x}_1^\T \mv{x}_1 & \mv{x}_1^\T \mv{x}_2 \\
+      \mv{x}_2^\T \mv{x}_1 & \mv{x}_2^\T \mv{x}_2 \\
+    \end{bmatrix} .
+  $$
+  The first we do is standardize the problem by considering the variable
+  $$
+    \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix} =  \begin{bmatrix}
+      \sqrt{H_{11}} & 0             \\
+      0             & \sqrt{H_{22}}
+    \end{bmatrix} \begin{bmatrix}
+      \beta_1 \\ \beta_2
+    \end{bmatrix},
+  $$
+  Now the transformed problem is
+  \[ l( \mv{\tilde \beta }) =
+    \frac 1 2 \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}^\T   \mv{ \tilde H} \begin{bmatrix}
+      \tilde	\beta_1 \\  \tilde\beta_2
+    \end{bmatrix}
+    -  \mv{\tilde b}^\T \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix} + {\tilde \lambda}^\T \left| \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}  \right|.
+  \]
+  where now
+  $$
+    \mv{ \tilde b} = \begin{bmatrix}
+      \frac{\mv{y}^\T \mv{x}_1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{\mv{y}^\T \mv{x}_2}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
+    \end{bmatrix} , \mv{ \tilde H}  =
+    \begin{bmatrix}
+      1    & \rho \\
+      \rho & 1    \\
+    \end{bmatrix}, \tilde \lambda  = \lambda  \begin{bmatrix}
+      \frac{1}{\sqrt{\mv{x}_1^\T \mv{x}_1}} \\ \frac{1}{\sqrt{\mv{x}_2^\T \mv{x}_2}}
+    \end{bmatrix} .
+  $$
+  The sub differential of $ l( \mv{\tilde \beta }) $ is equal to
+  $$
+    \partial l( \mv{\tilde \beta })  = \mv{ \tilde H} \begin{bmatrix}
+      \tilde	\beta_1 \\  \tilde\beta_2
+    \end{bmatrix}  -   \mv{\tilde b}  + {\tilde \lambda} \cdot \partial \left| \begin{bmatrix}
+      \tilde	\beta_1 \\ \tilde \beta_2
+    \end{bmatrix}  \right|.
+  $$
+
+  CASE 0: all zero.
+  CASE 1:
+  First consider the situation where only one $\tilde \beta$ is non-zero. Assume that the first coeffienct is non-zero,then $\hat \beta_1 =  \tilde b_1 -  {\tilde \lambda}_1 sign( \tilde b_1 )$. The gradient of the likelihood of the second component is
+  $$
+    \rho \hat \beta_1  -  \tilde b_2 \in [-\tilde \lambda_2,\tilde \lambda_2 ]
+  $$
+\end{proof}
+
+\subsubsection{Class Imbalances}
+
+As long as the classes are balanced, the procedure we used in the previous section, standardization, will yield unbiased estimates of the two coefficients. But what if the classes of the binary feature are imbalanced? That is, what if \(q\) is larger than \(0.5\)? It turns out that the results vary depending on the type of penalty used.
+
+\subsection{Which Predictor Enters First?}
+
+Given our previous results on shrinkage of coefficients of binary features, a natural follow-up question is: how large does the true regression coefficient of a binary feature need to be in order to still be selected?
+
+To begin to probe this question, we first bring the following standard result to attention.
+
+\begin{proposition}
+  The first predictor to enter the elastic net path is given by
+  \[
+    \argmax_j\left| \tilde{\vec{x}}_j^\T\left(\vec{y} - \frac{1}{n}\sum_i y_i \right)\right|.
+  \]
+\end{proposition}
+\begin{proof}
+  The proof is a simple consequence of the KKT conditions for the elastic net problem. The first predictor to enter the path is the one that has the largest gradient of the objective function at the origin.
+\end{proof}
+
+If we expand the argument inside the absolute value operator, we have
+\[
+  \tilde{\vec{x}}_j^\T\left( \vec{y} - \frac{1}{n}\ones{}^\T \vec{y}\right) = \frac{1}{s_j}\left(\vec{x}_j^\T \vec{y} - \frac{1}{n}\ones^\T \vec{y} \ones^\T \vec{x}_j\right)
+\]
+Assuming that \(\vec{y} = \mat{X}\vec{\beta}^* + \vec{\varepsilon}\) as before, and that the entries of each feature \(\vec{x}_j\) in the design matrix are sampled independently and identically from a corresponding random variable \(X_j\), we can take the expected value of the expression, yielding \textcolor{red}{this is only true if $X_j$ is independent of $s_j$ and also $\E \frac{1}{s_j} \neq \frac{1}{\E s_j}$}
+% FIXME: We're not really allowed to compute the exected value like this. So we need to motivate it somehow. Maybe assume that the scaling and centering factors are fixed or something?
+\[
+  \frac{1}{\E s_j}\left( n \beta^*_j \E X_j^2 - n \beta^*_j (\E X_j)^2 \right) = \frac{n \beta^*_j\var X_j}{\E s_j}.
+\]
+Assuming that we have two features in our design, they enter the model at exactly the same time if
+\[
+  \begin{aligned}
+    \frac{n \beta^*_1\var X_1}{\E s_1} & = \frac{n \beta^*_2\var X_2}{\E s_2} \implies                     \\
+    \beta^*_1                          & = \frac{\beta^*_2\var X_2}{\E s_2} \times \frac{\E s_1}{\var X_1}
+  \end{aligned}
+\]
+
+Next, assume that \(X_1 \sim \bernoulli{(q)}\) and \(X_2 \sim \normal{(0, 0.5)}\) and that \(\beta^*_2 = 1\). In this case, how large does \(\beta^*_1\) be in order for the first feature to enter the model at the same time as the second one?
+
+First, observe that \(\var{X_1} = q(1 - q)\) and \(\var{X_2} = 0.25\). In other words, we have
+\begin{equation}
+  \label{eq:beta1star}
+  \beta^*_1 = \frac{\E s_1}{4q(1-q)\E s_2}
+\end{equation}
+
+\paragraph{Standardization} If the features are standardized, then \Cref{eq:beta1star} is
+\[
+  \beta^*_1 = \frac{1}{2\sqrt{q(1-q)}}
+\]
+
+If the classes are balanced, \(q = 0.5\), then this means that the coefficients are expected to be the same. If, however, for instance \(q = 0.1\), then the coefficient for the binary feature needs to be 5/3 times larger than the continuous one to enter the model at the same time. If \(q=0.01\), the respective figure is roughly five. \textcolor{red}{Is there a difference if one would have a $X_1 \sim \mathcal{N}\left(0,q(1-q) \right)?$ }
+
+\paragraph{Max-Abs Normalization} In this case, we get
+\[
+  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \max | X_{12}, \dots,  X_{n2} |}.
+\]
+
+\paragraph{Min-Max Normalization} In this case, we get
+\[
+  \beta^*_1 = \frac{1}{q(1 - q)} \times \frac{1}{\E \left(\max | X_{12}, \dots,  X_{n2}| - \min | X_{12}, \dots,  X_{n2} |\right)}.
+\]
