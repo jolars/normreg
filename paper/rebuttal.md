@@ -292,7 +292,10 @@ of the review as well?
 > what point is necessarily being made until the end. That isn't to say that the
 > paper isn't good grammar, but it was my excitement that carrier me through - it
 > would have been more pleasant if I had a map!
->
+
+Thank you for raising this issue. We will take a careful look
+at the text and improve the flow and readability of the paper.
+
 > Considering or discussion robust standardization methods would also be
 > appreciated, but a weakness I could accept if other items were addressed.
 >
