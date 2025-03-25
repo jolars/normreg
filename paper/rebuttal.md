@@ -161,8 +161,10 @@ We agree that the assumption is strong, but want to highlight that it is
 > and that different normalization methods may introduce a trade-off between bias
 > and variance. The paper proposes the possibility of replacing feature
 > normalization with a weighted Elastic Net approach. Experimental results are
-> validated using both synthetic and real data. Claims And Evidence:
-
+> validated using both synthetic and real data.
+>
+> ## Claims And Evidence
+>
 > (1)The evaluation is based on synthetic and small-scale data, which is far from
 > the real scenario. I understand that this paper is only for simple (linear)
 > model. However, the sparsity property is also somewhat important for deep
@@ -176,14 +178,16 @@ We agree that the assumption is strong, but want to highlight that it is
 > techniques such as Batch Normalization and Layer Normalization. It would be
 > valuable to provide some discussion and experimental results on the
 > applicability of the conclusions to these models and normalization methods.
-> Theoretical Claims:
-
+>
+> ## Theoretical Claims
+>
 > I do not find remarkable errors in theoretical claims. My main concern is the
 > assumption of feature orthogonality. The theoretical analysis assumes feature
 > orthogonality, which is often not the case in real data. It would be beneficial
-> to include analysis and experimental results for these scenarios. Experimental
-> Designs Or Analyses:
-
+> to include analysis and experimental results for these scenarios.
+>
+> ## Experimental Designs Or Analyses
+>
 > The experiments provided metrics for various parameters; it would be helpful to
 > include accuracy comparison results.
 
