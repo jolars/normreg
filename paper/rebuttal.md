@@ -305,8 +305,3 @@ at the text and improve the flow and readability of the paper.
 >
 > 1. Larger experimental evaluations
 > 2. Algorithm blocks for each case
->
-> I will raise my score to accept and strongly champion the work, though I would
-> still encourage improvements in writing. Code Of Conduct: Affirmed. Overall
-> Recommendation: 3: Weak accept (i.e., leaning towards accept, but could also be
-> rejected)
