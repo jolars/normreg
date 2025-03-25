@@ -12,7 +12,6 @@ They write:
 > whether the proposed method/analyses is enough novel and significant in the
 > lasso problem, since I am not familiar to the topic of Lasso).
 
-We think that it is, to put it mildly, questionable to demand that a paper on
 We think that it is highly questionable to demand that a paper on
 regularized linear regression should be tailored for deep neural networks (and
 that it would hold no value otherwise), especially given that the reviewer
@@ -122,6 +121,9 @@ challenge in the present theoretical analysis.
 > 1. In Equation 2, $\tilde{\boldsymbol{X}}$ is used before defined in
 >    Definition 2.1. Consider adding a small clarification right after Equation
 >    2, even if it is repetitive.
+
+Thank you for pointing this out. We will remove the tilde from the equation.
+
 > 2. In the first paragraph of Section 3, there is no definition for the noise
 >    (it is defined later). Consider adding this clarification right after
 >    using it.
