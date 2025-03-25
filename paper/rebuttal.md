@@ -13,6 +13,7 @@ They write:
 > lasso problem, since I am not familiar to the topic of Lasso).
 
 We think that it is, to put it mildly, questionable to demand that a paper on
+We think that it is highly questionable to demand that a paper on
 regularized linear regression should be tailored for deep neural networks (and
 that it would hold no value otherwise), especially given that the reviewer
 admits to having no familiarity with the topic of the paper. We hope that you
