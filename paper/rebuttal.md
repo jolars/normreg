@@ -1,4 +1,6 @@
-# Comment to editor regarding reviewer YpvQ
+# Rebuttal
+
+## Comment to editor regarding reviewer YpvQ
 
 Dear editor,
 
@@ -10,13 +12,11 @@ They write:
 > whether the proposed method/analyses is enough novel and significant in the
 > lasso problem, since I am not familiar to the topic of Lasso).
 
-We think that it is quite strange to demand that a paper on regularized linear
-regression should be tailored for deep neural networks (and that it would hold
-no value otherwise), especially given that the reviewer admits to having no
-familiarity with the topic of the paper. We hope that you will take this into
-consideration when making your final decision.
-
-# Rebuttal
+We think that it is, to put it mildly, questionable to demand that a paper on
+regularized linear regression should be tailored for deep neural networks (and
+that it would hold no value otherwise), especially given that the reviewer
+admits to having no familiarity with the topic of the paper. We hope that you
+will take this into consideration when making your final decision.
 
 ## General Response
 
@@ -27,6 +27,31 @@ point-by-point in comments to the original remarks. We would, however, like
 to address a few general points here.
 
 ### Assumption of Orthogonality
+
+We agree that the assumption is strong and unrealistic, especially
+given the high-dimensional setting that sparse methods are often
+employed in. Nevertheless, it is
+not uncommon in literature, particularly not in the context of
+research on regularized methods, where the theoretical analysis
+is often difficult. We would like to emphasize that our work is
+the first to investigate this issue and that it is thus
+natural to begin with the simplest setting, for which, we remind,
+no results exist. We have shown that, even in this simple setting,
+normalization has a strong impact on the model
+
+In addition, we believe
+that the orthogonality assumption is, in contrast to many other results, not particularly restrictive for
+our results. Take, for instance, the experiment presented in Figure 15 where we have
+introduced correlation between the features. It is here clear
+that the effect of class-imbalance is _stronger_ when the features
+are correlated. This is actually not surprising since it is well-known
+that regularization means that the model will tend to select, for instance,
+the one of two correlated features that has the strongest main effect
+since the objective can be reduced more by reducing the coefficient
+in this case.
+
+We realize that we do a poor job of explaining this in the paper and will
+both add a paragraph to the paper discussing the validity of this assumption.
 
 ### Originality
 
@@ -49,7 +74,8 @@ change this in our paper, along with clearly defining the notation.
 >
 > ### Strength
 >
-> I like the problem considered here, and I agree that this problem is somewhat under-investigated and worth pursuing.
+> I like the problem considered here, and I agree that this problem is somewhat
+> under-investigated and worth pursuing.
 
 Thank you for your appreciation. We agree that the problem is
 under-investigated and worth pursuing.
@@ -58,40 +84,25 @@ under-investigated and worth pursuing.
 >
 > 1. This paper is not well-polished. The flow is very monotone, making the
 >    readers have a hard time reading this paper. See below for suggestions.
+
+Thank you, we will take your suggestions into account and improve the
+flow of the paper.
+
 > 2. The assumption on the orthogonality of the normalized design matrix is
 >    super strong and rarely holds in practice. This is even more unrealistic
 >    for two cases that this paper considers here: binary features and mixed
 >    features. As a result, it is very hard to tell if the findings in this
 >    paper have an interesting implication in the general cases and in
 >    practice.
+
+Please see the general response regarding the assumption of orthogonality.
+
 > 3. As a consequence, I expect that it is the technical challenge on the
 >    theoretical side that makes the paper more interesting. However, this is
 >    not the case here.
->
-> The assumption on the orthogonality of the normalized design matrix $\tilde{\mathbf{X}}$
-> is super strong and rarely holds in practice. This is even more unrealistic for
-> two cases that this paper considers here: binary features and mixed features.
-> As a result, it is very hard to tell if the findings in this paper have an
-> interesting implication in the general cases and in practice.
 
-We agree that the assumption is strong and unrealistic. Nevertheless, it is
-not uncommon in literature, particularly not in the context of
-research on Lasso, Ridge, and Elastic Net, where the theoretical analysis
-is difficult due to the composite nature of the objective and the
-non-differentiability of the L1 norm. But more importantly, we believe
-that it is not, in contrast to many other results, restrictive in
-relation to our results. As you can see in Figure 15 where we have
-introduced correlation between the features, for instance, it is clear
-that the effect of class-imbalance is _stronger_ when the features
-are correlated. This is actually not surprising since it is well-known
-that regularization means that the model will tend to select, for instance,
-the one of two correlated features that has the strongest main effect
-since the objective can be reduced more by reducing the coefficient
-in this case.
-
-We realize that we do a poor job of explaining this in the paper and will
-both add a paragraph to the paper discussing the validity of this assumption.
-We have also added a
+We would like to make the argument that there is in fact a technical
+challenge in the present theoretical analysis.
 
 > ## Other comments or suggestions
 >
@@ -103,8 +114,7 @@ We have also added a
 > However, in this form, I believe this draft is not ready to be published, and I
 > cannot recommend acceptance for this paper. But don't worry, I will consider
 > updating my score after the authors make changes to improve the presentation,
-> clarity, and flow of this paper. Here are some suggestions: Minor changes:
-> Potential typos/clarification suggestions
+> clarity, and flow of this paper.
 >
 > ### Minor changes
 >
@@ -127,7 +137,7 @@ We have also added a
 Man börjar med det ortogonala fallet och inte ens här är det helt trivialt att...
 
 1. Finns ingen litteratur -> det här är det naturliga första steget -> många tidigare
-  artiklar har börjat så här.
+   artiklar har börjat så här.
 
 Lägg till referenser till tidigare arbeten som använder denna antagande.
 
@@ -144,7 +154,7 @@ Lägg till referenser till tidigare arbeten som använder denna antagande.
 >    should refer to that Table in the main body.
 > 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
 >    write the limit ? Do you mean $1^{-1}$ instead?
-
+>
 > ### Major changes
 >
 > 1. It is better if the authors write the whole paragraph/sections of notations
@@ -170,7 +180,7 @@ OK, en del. (if space permits)
 >    and counterintuitive. (3) and so on.
 >    The above are just some suggestions that I have. I recommend that the authors
 >    do multiple passes to improve the presentation of this draft.
-
+>
 > ## Questions For the Authors
 >
 > Is the assumption of the orthogonality of the normalized design matrix too
@@ -179,7 +189,7 @@ OK, en del. (if space permits)
 > couple of prior works that deal with this assumption. My intuition is that this
 > assumption is extremely weird in the cases that this paper considers.
 
-We agree that the assumption is strong, but want to highlight that it is
+Please see the general response regarding the assumption of orthogonality.
 
 ## Reviewer 2
 
@@ -193,11 +203,24 @@ We agree that the assumption is strong, but want to highlight that it is
 > judge whether the proposed method/analyses is enough novel and significant in
 > the lasso problem, since I am not familiar to the topic of Lasso).
 
+We respectfully disagree that the results need to be tailored to deep
+neural networks. We understand that you are unable to judge the current
+work due to your lack of familiarity with the topic of Lasso, but we
+have trouble understanding why this would warrant a rejection of the
+paper in its current state, nor why the results would need to be
+transposed into the real of neural networks. Could you please clarify?
+
 > (2)The paper analyzes traditional regression models, but current predominant
 > models also include CNNs, Transformers, etc., which use normalization
 > techniques such as Batch Normalization and Layer Normalization. It would be
 > valuable to provide some discussion and experimental results on the
 > applicability of the conclusions to these models and normalization methods.
+
+We agree that it would be interesting to investigate batch and layer normalization
+and its connection with regularization and are happy to add a remark
+regarding this in the paper's discussion. This would, however, require
+a completely different analysis and empirical evaluation, which makes us
+think that this is better suited for future work.
 
 > ## Theoretical Claims
 >
@@ -206,16 +229,18 @@ We agree that the assumption is strong, but want to highlight that it is
 > orthogonality, which is often not the case in real data. It would be beneficial
 > to include analysis and experimental results for these scenarios.
 
-See the general response regarding the assumption of orthogonality.
+Please see the general response regarding the assumption of orthogonality.
 
 > ## Experimental Designs Or Analyses
 >
 > The experiments provided metrics for various parameters; it would be helpful to
 > include accuracy comparison results.
->
+
+Could you please clarify what you mean by "accuracy" here?
+
 > This paper should conduct more experiments on large-scale classification tasks.
 
-We would be happy to include results on additional data sets, which we will present
+We are happy to include results on additional data sets, which we will present
 in the supplementary material. Here is an updated Figure 16, which we will
 include in the new version o the paper as well, featuring several new data sets.
 
@@ -231,8 +256,7 @@ include more features.
 > it.
 
 The code will be made available in the form of a public repository as well. If
-you prefer, we could also upload it to a anonymous repository for the duration
-of the review as well?
+you prefer, we could also upload it to a anonymous repository for the review?
 
 > ## Other Comments or Suggestions
 >
@@ -251,14 +275,16 @@ of the review as well?
 
 OK
 
+<!-- TODO: Add empirical results on logistic regression -->
+
 > 2. A larger collection of datasets
 
-OK.
+<!-- TODO: Add results on additional datasets -->
 
 > 3. An empirical evaluation of "our recommendations" vs the readily available
 >    tools
 
-OK (if time allows)
+<!-- TODO: Add some investigation of our approach -->
 
 > ## Methods And Evaluation Criteria
 >
