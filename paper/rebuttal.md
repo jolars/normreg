@@ -1,3 +1,21 @@
+# Comment to editor regarding reviewer YpvQ
+
+Dear editor,
+
+We are concerned about the comments from reviewer YpvQ (the second reviewer).
+They write:
+
+> I think this paper should tailor the method and analyses for deep neural
+> networks. Otherwise, I cannot find its value in practice. (I cannot judge
+> whether the proposed method/analyses is enough novel and significant in the
+> lasso problem, since I am not familiar to the topic of Lasso).
+
+We think that it is quite strange to demand that a paper on regularized linear
+regression should be tailored for deep neural networks (and that it would hold
+no value otherwise), especially given that the reviewer admits to having no
+familiarity with the topic of the paper. We hope that you will take this into
+consideration when making your final decision.
+
 # Rebuttal
 
 ## General Response
