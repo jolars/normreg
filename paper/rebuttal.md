@@ -132,7 +132,10 @@ Thanks for noticing this; we will fix it in the final paper.
 
 > 3. In the first paragraph of Section 3, maybe explicitly mentioning that
 >    $\boldsymbol{x}_j$ is the-th column of $\tilde{\boldsymbol{X}}$ could
->    improve. clarity.
+>    improve clarity.
+
+Thanks for the suggestion. We will clarify this.
+
 > 4. The same goes with $\tilde{\boldsymbol{x}}_j$.
 > 5. Please discuss the (strong) assumption on the orthogonality of the
 >    normalized design matrix $\tilde{\boldsymbol{X}}$: (1) how it rarely >
