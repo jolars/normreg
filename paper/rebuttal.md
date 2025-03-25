@@ -199,8 +199,12 @@ We would be happy to include results on additional data sets, which we will pres
 in the supplementary material. Here is an updated Figure 16, which we will
 include in the new version o the paper as well, featuring several new data sets.
 
+<!-- TODO: Add results on additional datasets -->
+
 We have also updated the dimensions of the experiments related to Figure 17 to
 include more features.
+
+<!-- TODO: Update experiment of figure 17 -->
 
 > This paper only provides the code in supplementary materials, and I do not check
 > it.
