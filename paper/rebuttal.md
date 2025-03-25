@@ -207,7 +207,7 @@ of the review as well?
 >
 > Formula Derivation Confirmation: In Equation 12, how is $x_j^T \varepsilon$
 > derived? Should it be $x_j^T \varepsilon$ instead? A detailed derivation
-> process would be appreciated. Questions For
+> process would be appreciated.
 
 ## Reviewer 3
 
