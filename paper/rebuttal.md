@@ -167,8 +167,9 @@ include more features.
 > This paper only provides the code in supplementary materials, and I do not check
 > it.
 
-The code will be made publicly available as well. If you prefer we could
-upload it to a anonymous repository as well?
+The code will be made available in the form of a public repository as well. If
+you prefer, we could also upload it to a anonymous repository for the duration
+of the review as well?
 
 > Formula Derivation Confirmation: In Equation 12, how is derived? Should it be instead? A detailed derivation process would be appreciated. Questions For
 
