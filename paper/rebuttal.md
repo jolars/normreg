@@ -40,7 +40,7 @@ reviewers were unable to find any relevant references either.
 
 > ## Theoretical Claims
 >
-> there is a problem in the draft, where the authors write $q_j \righarrow^+ 1$
+> there is a problem in the draft, where the authors write $q_j \rightarrow^+ 1$
 
 Thank you, we realize that yours is the more standard notation and will
 change this in our paper, along with clearly defining the notation.
@@ -123,6 +123,14 @@ We have also added a
 >    holds in practice, (2) how it is necessary in this framework, (3) if any
 >    prior works also have this assumption (to see that it is not too weird
 >    one).
+
+Man börjar med det ortogonala fallet och inte ens här är det helt trivialt att...
+
+1. Finns ingen litteratur -> det här är det naturliga första steget -> många tidigare
+  artiklar har börjat så här.
+
+Lägg till referenser till tidigare arbeten som använder denna antagande.
+
 > 6. In the first paragraph of Section 3.1., what is
 >    $\overline{\boldsymbol{x}}$? I know that it is defined in Table 1, but
 >    please refer to it once again to help the readers keep track of the
@@ -142,6 +150,9 @@ We have also added a
 > 1. It is better if the authors write the whole paragraph/sections of notations
 >    used in this paper. The way the authors use notations here is not good: it
 >    makes the readers have a hard time finding relevant notions.
+
+OK, en del. (if space permits)
+
 > 2. Consider adding the contributions paragraph at the end of Section 1. List the
 >    main contributions clearly and where they are located in the main body. I know
 >    that the authors discuss those points in Section 5, but I think it is better if
@@ -172,15 +183,6 @@ We agree that the assumption is strong, but want to highlight that it is
 
 ## Reviewer 2
 
-> This paper investigates how different normalization strategies affect the
-> shrinkage in regularized regression models such as Lasso, Ridge, and Elastic
-> Net. The authors analyze the impact of normalization on binary and continuous
-> features, noting that class balance directly affects regression coefficients
-> and that different normalization methods may introduce a trade-off between bias
-> and variance. The paper proposes the possibility of replacing feature
-> normalization with a weighted Elastic Net approach. Experimental results are
-> validated using both synthetic and real data.
->
 > ## Claims And Evidence
 >
 > (1)The evaluation is based on synthetic and small-scale data, which is far from
@@ -196,7 +198,7 @@ We agree that the assumption is strong, but want to highlight that it is
 > techniques such as Batch Normalization and Layer Normalization. It would be
 > valuable to provide some discussion and experimental results on the
 > applicability of the conclusions to these models and normalization methods.
->
+
 > ## Theoretical Claims
 >
 > I do not find remarkable errors in theoretical claims. My main concern is the
@@ -210,7 +212,7 @@ See the general response regarding the assumption of orthogonality.
 >
 > The experiments provided metrics for various parameters; it would be helpful to
 > include accuracy comparison results.
-
+>
 > This paper should conduct more experiments on large-scale classification tasks.
 
 We would be happy to include results on additional data sets, which we will present
@@ -218,6 +220,7 @@ in the supplementary material. Here is an updated Figure 16, which we will
 include in the new version o the paper as well, featuring several new data sets.
 
 <!-- TODO: Add results on additional datasets -->
+<!-- TODO: Add results on logistic reg -->
 
 We have also updated the dimensions of the experiments related to Figure 17 to
 include more features.
@@ -239,35 +242,41 @@ of the review as well?
 
 ## Reviewer 3
 
-> ## Summary
->
-> The paper proposed to study the nature and impact of feature normalization
-> schemes with respect to linear models under the L1, L2, and Elastic-Net
-> penalties. This is done only for regression, and is focused particularly on
-> binary features. The results are primarily theoretical in nature, with a
-> limited number of datasets evaluated. Claims And Evidence:
->
 > ## Claims and Evidence
 >
 > Though the claims do have evidence, the abstract set my expectations
 > considerably beyond what the article contains. I had anticipated
 >
 > 1. Logistic models to be considered as well
+
+OK
+
 > 2. A larger collection of datasets
+
+OK.
+
 > 3. An empirical evaluation of "our recommendations" vs the readily available
 >    tools
->
+
+OK (if time allows)
+
 > ## Methods And Evaluation Criteria
 >
 > The theoretical approach is sound as far as I can tell. Many figures would be
 > clearer, especially the ones with simulated results, by instead centering the
 > plots to the deviation from the estimated effect $\hat{\beta}_j$ from the known true effect
 > $\beta_j$, as it is otherwise difficult to tell at a glance what the results mean and
-> how to interpret them. Indeed while well written, every result is presented in
+> how to interpret them.
+
+No. We can do it and show why it's not a good idea.
+
+> Indeed while well written, every result is presented in
 > a way that presumes the reader is intimately familiar with the larger
 > statistical literature. I think the paper is suffering a bit from "I wrote it
 > and I know it", and could use a friendly pass from a colleague unaware of the
-> work previously. Theoretical Claims:
+> work previously.
+>
+> ## Theoretical Claims
 >
 > I have not manually checked the proofs.
 >
@@ -296,11 +305,15 @@ of the review as well?
 > Privacy, it is standard to assume a specific L1 normalization of the data for
 > theoretical reasons, and this work may evidence som understandings of an
 > implicit difference between DP and standard regressions beyond the effect of
-> randomized noise. Essential References Not Discussed:
+> randomized noise.
+>
+> ## Essential References Not Discussed
 >
 > No critical missing references, but it would be nice to give pointers to the
 > many libraries that have these models to highlight impact (Scikit, DLIB, JSAT,
-> Celer, and so many more). Other Strengths And Weaknesses:
+> Celer, and so many more).
+>
+> ## Other Strengths And Weaknesses
 >
 > I was very excited about this paper initially. I've solved many real-world
 > problems with L1 penalized models, followed by Xgboost, and that gets you 90%
