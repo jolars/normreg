@@ -30,7 +30,7 @@ export plot_lasso_path
 include("preprocessing.jl")
 export find_binary_features
 export normalize_features
-export normalize_features2
+export normalize_features_delta
 export normalize_features_unadjusted
 export unstandardize_coefficients
 export scaling_factors
@@ -38,6 +38,7 @@ export scaling_factors
 include("cv.jl")
 export get_error
 export holdout_validation
+export cross_validate
 export split_data
 
 include("utils.jl")

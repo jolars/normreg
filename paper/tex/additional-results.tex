@@ -16,7 +16,7 @@ real data sets and types of normalization.
     standardization and maximum absolute value normalization (max--abs). We have fit
     the lasso path to two different datasets:
     \data{housing}~\citep{harrison1978}, \data{leukemia}~\citep{golub1999},
-    \data{triazines}~\citep{king}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
+    \data{triazines}~\citep{king1995,hirst1994}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
     for more information about these data sets.) For each
     dataset, we have colored the coefficients if they were among the first five
     to become non-zero under either of the two normalization schemes. We see
@@ -49,7 +49,7 @@ results, \(\delta \in \{0, 1/2\}\) appears to work well for balanced features wh
 0.99\), the model under scaling with \(\delta = 0\) does not detect any of the true
 signals.
 
-\begin{figure*}[htpb]
+\begin{figure}[htpb]
   \centering
   \subfigure[%
     The power (probability of detecting all true signals) of the lasso. In our orthogonal
@@ -65,7 +65,7 @@ signals.
     Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
-\end{figure*}
+\end{figure}
 
 The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
 \Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
@@ -92,6 +92,44 @@ estimates but also seems to increase the effect of class imbalance in the cases 
     deviations averaged over 100 iterations.
   }
   \label{fig:binary-decreasing-full}
+\end{figure}
+
+\subsubsection{Orthogonality Assumption}
+\label{sec:orthogonality-assumption}
+
+In this experiment, we investigate the important of the assumption of orthogonal features
+that we make in our theoretical results. To do so, we consider a setting with two binary
+features: the first, \(\bm{x}_1\) with class balance \(q_1 = 0.5\), and the second,
+\(\bm{x}_2\), with varying balance \(q_2 \in [0.5, 0.9]\). We set the true effect to
+\(\beta_1^* = \beta_2^* = 1\) and the level of correlation, \(\rho\) to three different
+levels (0, 0.4, and 0.6). The noise level \(\sigma_\varepsilon\) is set to obtain a
+signal-to-noise ratio of 1. We generate \(n=\num{10000}\) observations and fit the lasso
+with \(\lambda = \lambda_\text{max}/2\).
+
+The results are shown in \Cref{fig:orthogonality} where we see that the effect of
+correlation has no impact on the shrinkage imposed from decreasing class balance of the
+second feature, which indicates that the assumption of orthogonality has little bearing on
+our results. The results in fact seem to suggest that the effect of \(q_2\) is stronger
+when the features are correlated, but this is due to the nature of the lasso, which favors
+one out of the two correlated features because the overall objective can then be reduced.
+We also see that \(\hat{\beta}_1\) increases as \(q_2\) tends to one when there is
+correlation, which is due to the same phenomenon.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{orthogonality.pdf}
+  \caption{%
+    Estimates of the regression coefficients from the lasso,
+    \(\hat{\vec{\beta}}\), for the two features in the experiment in
+    \Cref{sec:orthogonality-assumption}. The first feature is binary with class
+    balance \(q_1 = 0.5\) and the second is binary with class balance \(q_2 \in [0.5, 0.9]\).
+    The features are correlated with correlation \(\rho\). The plot shows means and
+    95\% normal confidence intervals averaged over 100 iterations. Note
+    that it's impossible to achieve high levels of correlation when the second
+    feature is highly imbalanced, which is why the results for \(\rho = 0.4\) and \(0.6\)
+    do not cover the whole range of \(q_2\) values.
+  }
+  \label{fig:orthogonality}
 \end{figure}
 
 \subsubsection{Predictive Performance for Simulated Data}%
@@ -142,8 +180,6 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
     \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
 \end{figure}
 
-\
-
 In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation set, also
 plotted the size of the support of the lasso (cardinality of the set of features that have
 corresponding nonzero coefficients). Here we only show results for \(\delta \in \{0, 1/2,
@@ -165,6 +201,32 @@ at the support size.
   }
   \label{fig:hyperopt-support}
 \end{figure}
+
+\subsection{Benchmark of Normalization Tuning} \label{sec:normalization-tuning}
+
+Several of the previous results from this section indicate that there might be a benefit to
+tuning the normalization strategy. In this section, we present the results of an experiment
+
+where we have done exactly this.
+
+\begin{figure*}[htpb]
+  \centering
+  \subfigure[%
+    Results for the lasso
+    \label{fig:method-comparison-lasso}
+  ]{\includegraphics[]{method_comparison_lasso.pdf} }
+  \subfigure[%
+    Results for ridge regression
+    \label{fig:method-comparison-ridge}
+  ]{\includegraphics[]{method_comparison_ridge.pdf}}
+  \caption{%
+    Cross-validation error from 10-times repeated 10-folds cross validation for the lasso and ridge
+    and various data sets and normalization strategies. The error is normalized mean-squared
+    error (NMSE). In the case of datasets \data{a1a}, \data{w1a}, \data{heart}, \data{w1a},
+    and \data{australian}, we have fit regularized logistic regression and
+    otherwise regularized linear regression. The error bars show 95\% confidence intervals.
+  }
+\end{figure*}
 
 \subsection{Interactions}%
 \label{sec:additional-experiments-interactions}

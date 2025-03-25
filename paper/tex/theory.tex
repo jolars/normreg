@@ -2,14 +2,16 @@
 \label{sec:theory}
 
 Throughout the paper we assume that the response \(\vec{y}\) is generated according to
-\(y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i\) for \(i \in [n]\) where \([n]
-= \{1,2,\dots,n\}\), with \(\mat X\) being the \(n \times p\) design matrix with features
-\(\vec x_j\) and where we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be
-fixed. We will also assume that the features of the normalized design matrix are
-orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} =
-\diag\left(\tilde{\vec{x}}_1^\T \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal
-\tilde{\vec{x}}_p\right)\). In this case, the solution to the coefficients in the elastic
-net problem is given by
+\(\bm{y} = \beta_0^* + \bm{X\beta}^* + \bm{\varepsilon}\), with \(\mat X\) being the \(n
+\times p\) design matrix with features (columns) \(\vec x_j\), \(\bm{\varepsilon}\) the
+vector of noise, with identically and independently distributed entries, and where we
+assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will also assume
+that the features of the normalized design matrix are orthogonal, that is,
+\(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
+\tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right)\). In this
+case, the solution to the elastic net problem is given by
+% TODO: Add discussion about orthogonality assumption and reference new
+% results in appendix.
 %
 \begin{equation}
   \label{eq:orthogonal-solution-normalized}
@@ -26,9 +28,9 @@ Normalization changes the optimization problem and its solution, the coefficient
 will now be on the scale of the normalized features. But we are interested in
 \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain
 these, we transform the coefficients from the normalized problem, \(\hat\beta^{(n)}_j\),
-back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\). There is a similar
-transformation for the intercept but we omit here since we are not interested in
-interpreting it.
+back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\), where \([p] =
+\{1,2,\dots,p\}\). There is a similar transformation for the intercept but we omit here
+since we are not interested in interpreting it.
 
 Now assume that \(\varepsilon_i\) is identically and independently distributed noise with
 mean zero and finite variance \(\sigma_\varepsilon^2\). This means that the solution is
@@ -66,11 +68,11 @@ expressions~(\Cref{sec:normally-distributed-noise}) and
 \label{sec:theory-binary-features}
 
 When \(x_{ij} \in \{0, 1\}\) for all \(i\), we define \(\bm{x}_j\) to be a \emph{binary
-  feature}, and we define the \emph{class balance} of this feature as \(q_j =
-\bar{\bm{x}}_j\): the proportion of ones. For most of our results, it would make no
-difference if we were to swap the ones and zeros as long as an intercept is included, and
-``class balance'' is then equivalent to the proportion of either. But in the case of
-interactions~(\Cref{sec:interactions}), the choice matters.
+  feature}, and the \emph{class balance} of this feature as \(q_j =
+\frac{1}{n}\sum_{i=1}^n{x_{ij}}\): the proportion of ones. It would make no difference to
+the majority of our results if we were to swap the ones and zeros as long as an intercept
+is included, and ``class balance'' is then equivalent to the proportion of either. But in
+the case of interactions~(\Cref{sec:interactions}), the choice does in fact matter.
 
 If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample variance
 for a binary feature) which in \Cref{eq:z-d} yields
@@ -151,11 +153,12 @@ problem is given by
    & \cdf \left( \frac{\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right)                \nonumber     \\
    & + \cdf \left( \frac{-\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
 \end{align}
+where \(\cdf\) is the cumulative distribution function of the standard normal distribution.
 Letting \(\theta_j = -\mu_j - \lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\), we can
-express this probability asymptotically as \(q_j \rightarrow 1^+\) as
+express this probability asymptotically as \(q_j \rightarrow 1^-\) as
 \begin{equation}
   \label{eq:selection-probability-limit}
-  \lim_{q_j \rightarrow 1^+} \Pr(\hat{\beta}_j \neq 0) =
+  \lim_{q_j \rightarrow 1^-} \Pr(\hat{\beta}_j \neq 0) =
   \begin{cases}
     0                                                                & \text{if } 0 \leq \delta < \frac{1}{2}, \\
     2\cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
@@ -189,7 +192,7 @@ altogether. Note, also, that the selection probability is unaffected by \(\lambd
 
 % Now we turn to the impact of class imbalance on bias and variance of the elastic net
 % estimator. We begin, in \Cref{thm:classbalance-bias}, by considering the expected value of
-% the elastic net estimator in the limit as \(q_j \rightarrow 1^+\).
+% the elastic net estimator in the limit as \(q_j \rightarrow 1^-\).
 
 Now we turn to the impact of class balance on bias and variance of the elastic net
 estimator.
@@ -201,7 +204,7 @@ estimator.
   \(\sigma_\varepsilon > 0\), and \(s_j = (q_j - q_j^2)^{\delta}\), \(\delta
   \geq 0\)  then
   \[
-    \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \E \hat{\beta}_j =
     \begin{cases}
       0                                                                                                  & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \frac{2n \beta_j^*}{n + \lambda_2} \cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
@@ -215,7 +218,7 @@ estimator.
   Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
   \(\lambda_1 > 0\). Then
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \infty & \text{if } \delta \geq \frac{1}{2}.
@@ -232,7 +235,7 @@ only to the case when \(\lambda_1 > 1\). In
 for ridge regression.
 
 % shows that the
-% bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when
+% bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when
 % \(0 \leq \delta < 1/2\). When \(\delta = 1/2\) (standardization), the estimate instead
 % approaches the true coefficient scaled by the probability that a standard normal variable
 % is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the
@@ -240,10 +243,10 @@ for ridge regression.
 % component from the error term and is accompanied by exponentially increasing variance,
 % which suggests that variance-scaling may be problematic in the large noise--large imbalance
 % scenario. In \Cref{thm:classbalance-variance}, we continue by studying the variance in the
-% limit as \(q_j \rightarrow 1^+\).
+% limit as \(q_j \rightarrow 1^-\).
 
 % \Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance} shows that the bias of the elastic net estimator approaches
-% \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when \(0 \leq \delta < 1/2\). When \(\delta =
+% \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when \(0 \leq \delta < 1/2\). When \(\delta =
 % 1/2\) (standardization), the estimate instead approaches the true coefficient scaled by the
 % probability that a standard normal variable is smaller than
 % \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the estimate is
@@ -251,7 +254,7 @@ for ridge regression.
 % error term and is accompanied by exponentially increasing variance, which suggests that
 % variance-scaling may be problematic in the large noise--large imbalance scenario. In
 % \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
-% \(q_j \rightarrow 1^+\).
+% \(q_j \rightarrow 1^-\).
 
 % \Cref{thm:classbalance-variance} formally proves the asymptotic variance effects of our
 % scaling parameter \(s_j\) which we have already discussed in the context of selection
@@ -436,7 +439,7 @@ results differ slightly as we now show.
   \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
   weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
   \[
-    \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \E \hat{\beta}_j =
     \begin{cases}
       0                              & \text{if } 0 \leq \omega < 1, \\
       \frac{\beta^*n}{n + \lambda_2} & \text{if } \omega = 1,        \\
@@ -444,7 +447,7 @@ results differ slightly as we now show.
     \end{cases}
   \]
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \infty & \text{if } \delta \geq \frac{1}{2}.

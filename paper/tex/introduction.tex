@@ -49,7 +49,7 @@ both estimation and selection of the features.
   \centering
   \includegraphics[]{realdata_paths_small.pdf}
   \caption{%
-    Lasso paths for data sets \data{triazines}~\citep{king} and
+    Lasso paths for data sets \data{triazines}~\citep{king1995,hirst1994} and
     \data{w1a}~\citep{platt1998} using standardization and maximum absolute
     value normalization. (See \Cref{sec:data-summary} for details
     on these data sets and \Cref{fig:realdata-paths-full} in
@@ -71,14 +71,12 @@ previous research that have studied this problem before.
 % were continuous data---the implications of either of these suggestions (or in deed any
 % other), however, have yet to be investigated.
 
-In this paper we begin to bridge this knowledge gap by studying normalization in the
-context of three particular cases of \Cref{eq:general-objective}: the lasso, ridge, and
-elastic net~\citep{zou2005}. The latter of these, the elastic net, is a generalization of
-the previous two, and is represented by the following optimization problem:
+The latter of these, the elastic net, is a generalization of the previous two, and is
+represented by the following optimization problem:
 %
 \begin{equation}
   \label{eq:elastic-net}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2,
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \frac{1}{2} \lVert \vec y - \beta_0 - \mat{X}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2,
 \end{equation}
 %
 where setting \(\lambda_1 = 0\) results in ridge regression and setting \(\lambda_2 = 0\)
@@ -91,4 +89,14 @@ Our focus in this paper is on binary data and we will pay particular attention t
 when binary features are imbalanced, that is, have relatively many ones or zeroes. In this
 scenario, we will demonstrate that the choice of normalization directly influences the
 regression coefficients and that this effect depends on the particular choice of
-normalization and regularization.
+normalization and regularization. Our key contributions are:
+\begin{enumerate}
+  \item We reveal that class balance in binary features significantly affects lasso and ridge
+        estimates, and show that scaling binary features with standard deviation (ridge) or
+        variance (lasso) mitigates these effects while increasing estimate
+        variance~(\Cref{sec:theory-binary-features}).
+  \item For mixed data designs, we demonstrate that normalization choice implicitly determines how
+        regularization affects binary versus continuous features~(\Cref{sec:mixed-data}).
+  \item For interaction features, we provide guidelines on proper centering and scaling to mitigate
+        class balance bias~(\Cref{sec:interactions}).
+\end{enumerate}

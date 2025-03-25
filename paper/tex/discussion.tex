@@ -1,5 +1,8 @@
 \section{Discussion}
 
+% TODO: Consider reducing the content here now that the introduction contains
+% a summary of our contributions
+
 We have studied the effects of normalization in lasso, ridge, and elastic net regression
 with binary data---an issue that has not been studied. We discovered that the class balance
 (proportion of ones) of these binary features has a pronounced effect on both lasso and
@@ -46,3 +49,13 @@ In future studies, it would be interesting to relax these assumptions and study 
 of normalization in a more general setting. We have also focused on the case of binary and
 continuous features here, but are convinced that categorical features are also of interest
 and might raise additional challenges with respect to normalization.
+
+Regularized regression models are widely used in practice, and are staples of popular
+machine learning and statistical software packages such as
+\pkg{glmnet}~\citep{friedman2010}, \pkg{scikit-learn}~\citep{pedregosa2011},
+\pkg{mlpack}~\citep{curtin2023}, \pkg{skglm}~\citep{bertrand2022},
+\pkg{LIBLINEAR}~\citep{fan2008a}, and \pkg{MATLAB}~\citep{themathworksinc.2022}. Our
+results suggest that the choice of normalization is an important aspect of using these
+models that, in spite of the popularity of these methods, has been overlooked. We hope that
+our results will motivate researchers and practitioners to consider the choice of
+normalization more carefully in the future.
