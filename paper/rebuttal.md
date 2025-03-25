@@ -27,14 +27,16 @@ reviewers were unable to find any relevant references either.
 Thank you, we realize that yours is the more standard notation and will
 change this in our paper, along with clearly defining the notation.
 
-> ## Strength
+> ## Other Strengths and Weaknesses
+>
+> ### Strength
 >
 > I like the problem considered here, and I agree that this problem is somewhat under-investigated and worth pursuing.
 
 Thank you for your appreciation. We agree that the problem is
 under-investigated and worth pursuing.
 
-> ## Weaknesses
+> ### Weaknesses
 >
 > 1. This paper is not well-polished. The flow is very monotone, making the
 >    readers have a hard time reading this paper. See below for suggestions.
