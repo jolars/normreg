@@ -136,8 +136,7 @@ function normalize_features(
         elseif interactionmethod == 3
           sigma = std(x[:, 2], corrected = false)
           q = length(findall(x[:, 1] .== 1)) / n
-          mod = 1
-          scales[j] = q * sigma * mod
+          scales[j] = q * sigma
           scales[j] = 0.25
         elseif interactionmethod == 4
           # do nothing, already scaled
