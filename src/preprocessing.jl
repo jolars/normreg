@@ -81,7 +81,6 @@ function scaling_factors(
   binary = find_binary_features(x)
 
   # always scale continuos features by standard deviation
-  #
   for j in 1:p
     if binary[j]
       mod = 0.5 / (0.25^delta)
@@ -137,10 +136,6 @@ function normalize_features(
         elseif interactionmethod == 3
           sigma = std(x[:, 2], corrected = false)
           q = length(findall(x[:, 1] .== 1)) / n
-          # q = mean(x[:, j])
-          # mod = 0.5 / (0.25^delta)
-          # mod = 1e-5
-          # mod = 0.01
           mod = 1
           scales[j] = q * sigma * mod
           scales[j] = 0.25
