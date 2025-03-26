@@ -168,6 +168,10 @@ to the paragraph.
 >    (a1a, rhee2006, and w1a) are about. I know that the statistics of that
 >    dataset is mentioned in Appendix E, Table 2, but at least the author
 >    should refer to that Table in the main body.
+
+We have added a reference to the appendix and
+detailed descriptions of these data sets in the section in the appendix.
+
 > 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
 >    write the limit ? Do you mean $1^{-1}$ instead?
 >
