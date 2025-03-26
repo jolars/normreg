@@ -188,7 +188,7 @@ change this in our paper, along with clearly defining the notation.
 >    used in this paper. The way the authors use notations here is not good: it
 >    makes the readers have a hard time finding relevant notions.
 
-OK, en del. (if space permits)
+<!-- TODO: Add a notation paragraph -->
 
 > 2. Consider adding the contributions paragraph at the end of Section 1. List the
 >    main contributions clearly and where they are located in the main body. I know
