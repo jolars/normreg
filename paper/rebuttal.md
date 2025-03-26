@@ -196,6 +196,10 @@ change this in our paper, along with clearly defining the notation.
 >    authors have some punch lines right from the start so that the readers can keep
 >    track of the paper more easily. Consider reorganizing Section 5 accordingly,
 >    making it more condensed, and putting the punch lines right at the start.
+
+Thank you, that's a great idea. We have now modified the last paragraph of the
+introduction to include a list of the main contributions of our work.
+
 > 3. Section 3 is very monotone; please reorganize this section. For example, in
 >    Section 3.1, the authors could make each part of Section 3.1 more
 >    distinguishable, for example, by writing:
