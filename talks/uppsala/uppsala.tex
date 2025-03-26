@@ -557,7 +557,7 @@
   \begin{theorem}
     If \(\vec{x}_j\) is a binary feature with class balance \(q \in (0, 1)\) and \(\lambda_1,\lambda_2 \in (0,\infty)\), \(\sigma_\varepsilon > 0\), and \(s_j = (q - q^2)^{\delta}\), \(\delta \geq 0\), then
     \[
-      \lim_{q \rightarrow 1^+} \E \hat{\beta}_j =
+      \lim_{q \rightarrow 1^-} \E \hat{\beta}_j =
       \begin{cases}
         0                                                                                                  & \text{if } 0 \leq \delta < \frac{1}{2}, \\
         \frac{2n \beta_j^*}{n + \lambda_2} \cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
@@ -566,7 +566,7 @@
     \]
     \pause and
     \[
-      \lim_{q \rightarrow 1^+} \var \hat{\beta}_j =
+      \lim_{q \rightarrow 1^-} \var \hat{\beta}_j =
       \begin{cases}
         0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
         \infty & \text{if } \delta \geq \frac{1}{2}.

@@ -153,10 +153,10 @@ problem is given by
 \end{align}
 where \(\cdf\) is the cumulative distribution function of the standard normal distribution.
 Letting \(\theta_j = -\mu_j - \lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\), we can
-express this probability asymptotically as \(q_j \rightarrow 1^+\) as
+express this probability asymptotically as \(q_j \rightarrow 1^-\) as
 \begin{equation}
   \label{eq:selection-probability-limit}
-  \lim_{q_j \rightarrow 1^+} \Pr(\hat{\beta}_j \neq 0) =
+  \lim_{q_j \rightarrow 1^-} \Pr(\hat{\beta}_j \neq 0) =
   \begin{cases}
     0                                                                & \text{if } 0 \leq \delta < \frac{1}{2}, \\
     2\cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
@@ -190,7 +190,7 @@ altogether. Note, also, that the selection probability is unaffected by \(\lambd
 
 % Now we turn to the impact of class imbalance on bias and variance of the elastic net
 % estimator. We begin, in \Cref{thm:classbalance-bias}, by considering the expected value of
-% the elastic net estimator in the limit as \(q_j \rightarrow 1^+\).
+% the elastic net estimator in the limit as \(q_j \rightarrow 1^-\).
 
 Now we turn to the impact of class balance on bias and variance of the elastic net
 estimator.
@@ -202,7 +202,7 @@ estimator.
   \(\sigma_\varepsilon > 0\), and \(s_j = (q_j - q_j^2)^{\delta}\), \(\delta
   \geq 0\)  then
   \[
-    \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \E \hat{\beta}_j =
     \begin{cases}
       0                                                                                                  & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \frac{2n \beta_j^*}{n + \lambda_2} \cdf\left(-\frac{\lambda_1}{\sigma_\varepsilon \sqrt{n}}\right) & \text{if } \delta = \frac{1}{2},        \\
@@ -216,7 +216,7 @@ estimator.
   Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
   \(\lambda_1 > 0\). Then
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \infty & \text{if } \delta \geq \frac{1}{2}.
@@ -233,7 +233,7 @@ only to the case when \(\lambda_1 > 1\). In
 for ridge regression.
 
 % shows that the
-% bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when
+% bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when
 % \(0 \leq \delta < 1/2\). When \(\delta = 1/2\) (standardization), the estimate instead
 % approaches the true coefficient scaled by the probability that a standard normal variable
 % is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the
@@ -241,10 +241,10 @@ for ridge regression.
 % component from the error term and is accompanied by exponentially increasing variance,
 % which suggests that variance-scaling may be problematic in the large noise--large imbalance
 % scenario. In \Cref{thm:classbalance-variance}, we continue by studying the variance in the
-% limit as \(q_j \rightarrow 1^+\).
+% limit as \(q_j \rightarrow 1^-\).
 
 % \Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance} shows that the bias of the elastic net estimator approaches
-% \(-\beta_j^*\) as \(q_j \rightarrow 1^+\) when \(0 \leq \delta < 1/2\). When \(\delta =
+% \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when \(0 \leq \delta < 1/2\). When \(\delta =
 % 1/2\) (standardization), the estimate instead approaches the true coefficient scaled by the
 % probability that a standard normal variable is smaller than
 % \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the estimate is
@@ -252,7 +252,7 @@ for ridge regression.
 % error term and is accompanied by exponentially increasing variance, which suggests that
 % variance-scaling may be problematic in the large noise--large imbalance scenario. In
 % \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
-% \(q_j \rightarrow 1^+\).
+% \(q_j \rightarrow 1^-\).
 
 % \Cref{thm:classbalance-variance} formally proves the asymptotic variance effects of our
 % scaling parameter \(s_j\) which we have already discussed in the context of selection
@@ -437,7 +437,7 @@ results differ slightly as we now show.
   \(\lambda_1 > 0\), \(\lambda_2 > 0\), and \(\sigma_\varepsilon > 0\). For the
   weighted elastic net with weights \(u_j = v_j = (q_j-q_j^2)^\omega\) and \(\omega \geq 0\), it holds that
   \[
-    \lim_{q_j \rightarrow 1^+} \E \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \E \hat{\beta}_j =
     \begin{cases}
       0                              & \text{if } 0 \leq \omega < 1, \\
       \frac{\beta^*n}{n + \lambda_2} & \text{if } \omega = 1,        \\
@@ -445,7 +445,7 @@ results differ slightly as we now show.
     \end{cases}
   \]
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
       \infty & \text{if } \delta \geq \frac{1}{2}.

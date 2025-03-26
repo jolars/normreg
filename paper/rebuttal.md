@@ -61,6 +61,10 @@ any relevant work that have addressed the problem of feature normalization
 before and note that this seems to be confirmed by the fact that the
 reviewers were unable to find any relevant references either.
 
+## Small Changes
+
+- We have updated the citation to the triazines data set.
+
 ## Reviewer 1
 
 > ## Theoretical Claims
@@ -173,8 +177,11 @@ We have added a reference to the appendix and
 detailed descriptions of these data sets in the section in the appendix.
 
 > 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
->    write the limit ? Do you mean $1^{-1}$ instead?
->
+>    write the limit $q_j \rightarrow 1^+$? Do you mean $1^{-1}$ instead?
+
+Thank you, yes we realize that yours is the standard notation and will
+change this in our paper, along with clearly defining the notation.
+
 > ### Major changes
 >
 > 1. It is better if the authors write the whole paragraph/sections of notations

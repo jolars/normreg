@@ -189,7 +189,7 @@ functions of the standard normal distribution, respectively. Computing \Cref{eq:
   Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
   \(\lambda_1 = 0\). Then
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0                                          & \text{if } 0 \leq \delta < 1/4, \\
       \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} & \text{if } \delta = 1/4,        \\
@@ -216,7 +216,7 @@ interaction term.
 \label{sec:additional-results-biasvar}
 
 In \Cref{fig:binary-onedim-bias-var-elnet}, we show bias, variance, and mean-squared error
-for the weighted elastic net. We see that the behavior of bias as \(q_j \rightarrow 1^+\)
+for the weighted elastic net. We see that the behavior of bias as \(q_j \rightarrow 1^-\)
 depends on noise level and that there is a bias--variance trade-off with respect to
 \(\omega\). As in \Cref{sec:mixed-data}, we modify the weighting factor to have
 comparability under \(\kappa = 2\).
