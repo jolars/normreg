@@ -149,13 +149,15 @@ $\tilde{\boldsymbol{x}}_j$.
 
 Please see the general response regarding the assumption of orthogonality.
 
-Lägg till referenser till tidigare arbeten som använder denna antagande.
-
 > 6. In the first paragraph of Section 3.1., what is
 >    $\overline{\boldsymbol{x}}$? I know that it is defined in Table 1, but
 >    please refer to it once again to help the readers keep track of the
 >    notations. Besides, the wording of this paragraph is not good; consider
 >    rewriting this paragraph.
+
+Thank you. We have replaced the notation with the exact definition of the
+mean instead and have reworded the paragraph.
+
 > 7. What is in Equation 8? I know this one is the CDF of normal distribution,
 >    but please define it clearly here.
 > 8. In section 4.1.2, the author should at least describe what those datasets
