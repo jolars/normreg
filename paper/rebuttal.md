@@ -158,8 +158,12 @@ Please see the general response regarding the assumption of orthogonality.
 Thank you. We have replaced the notation with the exact definition of the
 mean instead and have reworded the paragraph.
 
-> 7. What is in Equation 8? I know this one is the CDF of normal distribution,
+> 7. What is $\Phi(\cdot)$ in Equation 8? I know this one is the CDF of normal distribution,
 >    but please define it clearly here.
+
+Thanks for pointing out our omission. We have added a definition of $\Phi$
+to the paragraph.
+
 > 8. In section 4.1.2, the author should at least describe what those datasets
 >    (a1a, rhee2006, and w1a) are about. I know that the statistics of that
 >    dataset is mentioned in Appendix E, Table 2, but at least the author
