@@ -122,7 +122,7 @@ function elasticnet(
   path_length::Int = 100,
   devmax::Number = 0.999,
   fdev::Number = 1e-5,
-  dfmax = size(x, 2) + 1,
+  dfmax = size(x, 1) + 1,
   verbose = false,
   kwargs...,
 )
@@ -208,7 +208,7 @@ function elasticnet(
           if !screened[j]
             c_j = dot(x[:, j], residual) - lambda2[j] * beta[j]
             if abs(c_j) >= w1[j] .* α * λ[i]
-              println("Violation: Adding $j to the working set")
+              # println("Violation: Adding $j to the working set")
               screened[j] = true
               any_violations = true
             end

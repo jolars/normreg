@@ -90,3 +90,117 @@ function holdout_validation(
 
   return test_error, beta0_unstandardized, coefs_unstandardized
 end
+
+function cross_validate(
+  x::AbstractMatrix,
+  y::AbstractVector,
+  dist = Normal(),
+  normalization::String = "mean_std",
+  alpha::Real = 1.0,
+  delta = [0.0, 0.5, 1.0],
+  k::Int = 10,
+  target::String = "nmse";
+  seed::Int = nothing,
+  repeats::Int = 1,
+)
+  n, p = size(x)
+
+  n_delta = if normalization == "ours"
+    length(delta)
+  else
+    1
+  end
+
+  delta = if normalization == "ours"
+    delta
+  else
+    [NaN]
+  end
+
+  # Set random seed if provided
+  if !isnothing(seed)
+    Random.seed!(seed)
+  end
+
+  x_train, y_train = x, y
+
+  lambda_max = 0
+
+  for d in delta
+    x_train_norm, _, _ = normalize_features_unadjusted(x_train, normalization, d)
+    n = size(x_train, 1)
+    tmp = maximum(abs.(x_train_norm' * (y_train .- mean(y_train)))) / n
+
+    lambda_max = max(lambda_max, tmp)
+  end
+
+  lambda_min_ratio = if n > p
+    1e-4
+  else
+    1e-2
+  end
+
+  n_lambda = 100
+  lambda = collect(logspace(lambda_max, lambda_max * lambda_min_ratio, n_lambda))
+  n_lambda = length(lambda)
+
+  # Initialize error array with an additional dimension for repeats
+  err = zeros(n_lambda, k, n_delta, repeats)
+
+  # Repeated k-fold cross-validation
+  for r in 1:repeats
+    # Generate a new random permutation for each repeat
+    perm_r = randperm(size(x_train, 1))
+    x_train = x_train[perm_r, :]
+    y_train = y_train[perm_r]
+
+    folds = Kfold(size(x_train, 1), k)
+
+    for (i, fold) in enumerate(folds)
+      x_train_fold = x_train[fold, :]
+      y_train_fold = y_train[fold]
+      x_val = x_train[setdiff(1:size(x_train, 1), fold), :]
+      y_val = y_train[setdiff(1:size(y_train, 1), fold)]
+
+      for d in 1:n_delta
+        x_train_fold_norm, _, _ =
+          normalize_features_unadjusted(x_train_fold, normalization, delta[d])
+
+        res = fit(
+          LassoPath,
+          x_train_fold_norm,
+          y_train_fold,
+          dist,
+          standardize = false,
+          λ = lambda,
+          stopearly = false,
+          α = alpha,
+          maxncoef = p,
+        )
+
+        x_val_norm, _, _ = normalize_features_unadjusted(x_val, normalization, delta[d])
+
+        pred_array = predict(res, x_val_norm; select = AllSeg())
+
+        for j in 1:n_lambda
+          err[j, i, d, r] = get_error(pred_array[:, j], y_val, target)
+        end
+      end
+    end
+  end
+
+  # Average error across folds and repeats
+  avg_error = dropdims(mean(err, dims = (2, 4)), dims = (2, 4))
+
+  std_error = dropdims(std(err, dims = (2, 4)), dims = (2, 4))
+
+  best_cv_error = minimum(avg_error)
+  best_ind = argmin(avg_error)
+  best_lambda = lambda[best_ind[1]]
+  best_delta = delta[best_ind[2]]
+
+  ci_low = best_cv_error - 1.96 * std_error[best_ind] / sqrt(k * repeats)
+  ci_high = best_cv_error + 1.96 * std_error[best_ind] / sqrt(k * repeats)
+
+  return best_cv_error, ci_low, ci_high, best_delta, best_lambda, avg_error
+end

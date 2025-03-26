@@ -49,7 +49,7 @@ results, \(\delta \in \{0, 1/2\}\) appears to work well for balanced features wh
 0.99\), the model under scaling with \(\delta = 0\) does not detect any of the true
 signals.
 
-\begin{figure*}[htpb]
+\begin{figure}[htpb]
   \centering
   \subfigure[%
     The power (probability of detecting all true signals) of the lasso. In our orthogonal
@@ -65,7 +65,7 @@ signals.
     Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
     \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
-\end{figure*}
+\end{figure}
 
 The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
 \Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
@@ -163,6 +163,29 @@ at the support size.
   }
   \label{fig:hyperopt-support}
 \end{figure}
+
+\subsection{Benchmark of Normalization Tuning} \label{sec:normalization-tuning}
+
+Several of the previous results from this section indicate that there might be a benefit to
+tuning the normalization strategy. In this section, we present the results of an experiment
+
+where we have done exactly this.
+
+\begin{figure*}[htpb]
+  \centering
+  \subfigure[%
+    Results for the lasso.
+    \label{fig:method-comparison-lasso}
+  ]{\includegraphics[]{method_comparison_lasso.pdf} }
+  \subfigure[%
+    Results for ridge regression.
+    \label{fig:method-comparison-ridge}
+  ]{\includegraphics[]{method_comparison_ridge.pdf}}
+  \caption{%
+    Cross-validation error from repeated $k$-folds cross validation for the lasso and ridge
+    and various data sets and normalization strategies.
+  }
+\end{figure*}
 
 \subsection{Interactions}%
 \label{sec:additional-experiments-interactions}
