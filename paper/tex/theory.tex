@@ -2,14 +2,14 @@
 \label{sec:theory}
 
 Throughout the paper we assume that the response \(\vec{y}\) is generated according to
-\(y_i = \beta_0^* + \vec x_i^\T \vec\beta^* + \varepsilon_i\) for \(i \in [n]\) where \([n]
-= \{1,2,\dots,n\}\), with \(\mat X\) being the \(n \times p\) design matrix with features
-(columns) \(\vec x_j\), \(\varepsilon_i\) identically and independently distributed noise,
-and where we assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will
-also assume that the features of the normalized design matrix are orthogonal, that is,
+\(\bm{y} = \beta_0^* + \bm{X\beta}^* + \bm{\varepsilon}\), with \(\mat X\) being the \(n
+\times p\) design matrix with features (columns) \(\vec x_j\), \(\bm{\varepsilon}\) the
+vector of noise, with identically and independently distributed entries, and where we
+assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will also assume
+that the features of the normalized design matrix are orthogonal, that is,
 \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
 \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right)\). In this
-case, the solution to the coefficients in the elastic net problem is given by
+case, the solution to the elastic net problem is given by
 %
 \begin{equation}
   \label{eq:orthogonal-solution-normalized}
@@ -26,9 +26,9 @@ Normalization changes the optimization problem and its solution, the coefficient
 will now be on the scale of the normalized features. But we are interested in
 \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain
 these, we transform the coefficients from the normalized problem, \(\hat\beta^{(n)}_j\),
-back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\). There is a similar
-transformation for the intercept but we omit here since we are not interested in
-interpreting it.
+back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\), where \([p] =
+\{1,2,\dots,p\}\). There is a similar transformation for the intercept but we omit here
+since we are not interested in interpreting it.
 
 Now assume that \(\varepsilon_i\) is identically and independently distributed noise with
 mean zero and finite variance \(\sigma_\varepsilon^2\). This means that the solution is

@@ -137,6 +137,10 @@ Thanks for noticing this; we will fix it in the final paper.
 Thanks for the suggestion. We will clarify this.
 
 > 4. The same goes with $\tilde{\boldsymbol{x}}_j$.
+
+We believe the clarification of $\boldsymbol{x}_j$ will also suffice for
+$\tilde{\boldsymbol{x}}_j$.
+
 > 5. Please discuss the (strong) assumption on the orthogonality of the
 >    normalized design matrix $\tilde{\boldsymbol{X}}$: (1) how it rarely >
 >    holds in practice, (2) how it is necessary in this framework, (3) if any
