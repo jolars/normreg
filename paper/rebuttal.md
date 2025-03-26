@@ -147,10 +147,7 @@ $\tilde{\boldsymbol{x}}_j$.
 >    prior works also have this assumption (to see that it is not too weird
 >    one).
 
-Man börjar med det ortogonala fallet och inte ens här är det helt trivialt att...
-
-1. Finns ingen litteratur -> det här är det naturliga första steget -> många tidigare
-   artiklar har börjat så här.
+Please see the general response regarding the assumption of orthogonality.
 
 Lägg till referenser till tidigare arbeten som använder denna antagande.
 
