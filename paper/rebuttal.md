@@ -418,6 +418,9 @@ Thank you for recognizing the potential impact of our work!
 > many libraries that have these models to highlight impact (Scikit, DLIB, JSAT,
 > Celer, and so many more).
 
+Thanks for the idea. We have added a new paragraph to the discussion with
+several references to popular libraries along the lines you suggest.
+
 > ## Other Strengths And Weaknesses
 >
 > I was very excited about this paper initially. I've solved many real-world
@@ -430,7 +433,7 @@ Thank you for recognizing the potential impact of our work!
 > block for each of L1, L2, and Elastic-Net of the author's proposed approach to
 > normalization, each is currently buried in the text and hard to separate in the
 > content.
->
+
 > ## Other Comments Or Suggestions
 >
 > The article would be improved with some more guidance to the reader of "where
