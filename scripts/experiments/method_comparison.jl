@@ -6,11 +6,22 @@ using ProjectRoot
 using Distributions
 
 grid_size = 100
-datasets = ["housing", "rhee2006", "a1a", "w1a", "triazines"]
+datasets = [
+  "housing",
+  "rhee2006",
+  "a1a",
+  "w1a",
+  "triazines",
+  "eunite2001",
+  "heart",
+  "australian",
+  "a7a",
+]
 norm_methods = ["ours", "std", "max_abs", "min_max", "l1"]
 res = DataFrame(
   alpha = Real[],
   dataset = String[],
+  response = String[],
   method = String[],
   delta = Real[],
   lambda = Real[],
@@ -20,7 +31,7 @@ res = DataFrame(
 )
 
 # deltas = collect(range(0, 1, length = grid_size));
-deltas = collect(range(0, 1, length = 21));
+deltas = collect(range(0, 1, length = 51));
 alphas = [0, 1]
 
 target = "nmse"
@@ -29,6 +40,24 @@ for alpha in alphas
   for (seed, dataset) in enumerate(datasets)
     for norm_method in norm_methods
       x, y = datagrabber(dataset)
+
+      binary_response = dataset in ["mushrooms", "heart", "australian", "a1a", "w1a", "a7a"]
+
+      dist = if binary_response
+        Binomial()
+      else
+        Normal()
+      end
+
+      # target = if binary_response
+      #   "accuracy"
+      # else
+      #   target
+      # end
+
+      if binary_response
+        y .= Int.(y .> 0.5)
+      end
 
       test_error, ci_low, ci_high, best_delta, best_lambda, avg_error = cross_validate(
         x,
@@ -46,6 +75,7 @@ for alpha in alphas
       df = DataFrame(
         alpha = alpha,
         dataset = dataset,
+        response = binary_response ? "binary" : "continuous",
         method = norm_method,
         delta = best_delta,
         lambda = best_lambda,

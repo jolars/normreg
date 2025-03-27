@@ -46,10 +46,22 @@ end
 function normalize_features_unadjusted(
   x::AbstractMatrix,
   method::String = "std",
-  delta::Real = 0,
+  delta::Real = 0;
+  binarize = false,
+  adjust = false,
 )
   p = size(x, 2)
   scales = ones(1, p)
+
+  if binarize
+    binary = find_binary_features(x)
+
+    for j in 1:p
+      if !binary[j]
+        x[:, j] .= Int.(x[:, j] .> mean(x[:, j]))
+      end
+    end
+  end
 
   if method == "std"
     centers = mean(x, dims = 1)
@@ -67,7 +79,7 @@ function normalize_features_unadjusted(
     centers = mean(x, dims = 1)
     scales = sum(abs.(x), dims = 1)
   elseif method == "ours"
-    return normalize_features(x, delta)
+    return normalize_features(x, delta, adjust = adjust)
   else
     error("Invalid normalization method. See source for options")
   end
@@ -83,6 +95,7 @@ function scaling_factors(
   x::AbstractMatrix,
   delta::Real = 0;
   intersections::Vector{Int} = Int[],
+  adjust = true,
 )
   p = size(x, 2)
   scales = ones(1, p)
@@ -92,7 +105,7 @@ function scaling_factors(
   # always scale continuos features by standard deviation
   for j in 1:p
     if binary[j]
-      mod = 0.5 / (0.25^delta)
+      mod = adjust ? 0.5 / (0.25^delta) : 1
       scales[j] = mod * var(x[:, j], corrected = false)^delta
     else
       # conditionally scale interaction effects
@@ -110,7 +123,12 @@ function scaling_factors(
   return scales
 end
 
-function normalize_features(x::AbstractMatrix, delta::Real = 0; center::Bool = true)
+function normalize_features(
+  x::AbstractMatrix,
+  delta::Real = 0;
+  center::Bool = true,
+  adjust = true,
+)
   _, p = size(x)
   scales = ones(1, p)
 
@@ -120,7 +138,7 @@ function normalize_features(x::AbstractMatrix, delta::Real = 0; center::Bool = t
     centers = zeros(1, p)
   end
 
-  scales = scaling_factors(x, delta)
+  scales = scaling_factors(x, delta, adjust = adjust)
 
   x_normalized = (Matrix(x) .- centers) ./ scales
 

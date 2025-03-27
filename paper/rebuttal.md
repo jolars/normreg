@@ -372,7 +372,34 @@ No. We can do it and show why it's not a good idea.
 >    performed to show conclusively that the approach is an improvement. See, Should
 >    We Really Use Post-Hoc Tests Based on Mean-Ranks?
 >    <https://jmlr.org/papers/v17/benavoli16a.html>
->
+
+If we understand correctly, then these points both ask for a new experiment
+where we compare the different normalization methods on an extended suite of
+real data sets. We have run such an experiment and will present initial results
+here, but please be aware of the following caveats:
+
+- Our paper's results are not primarily focused on predictive performance, but
+  rather on the shrinkage induced by different types of normalization on the
+  estimated coefficients. As we have already shown in the paper, this choice may
+  also impact predictive performance, the main impact is with respect
+  to selective inference---i.e., the ability to correctly identify the
+  non-zero coefficients.
+- It is not straightforward to binarize a data set without knowledge about what
+  each feature represents, because we'd have to for each feature decide on a
+  threshold for the binarization. This is highly non-trivial without domain
+  knowledge and hence we have instead relied on data sets that are already binary
+  or mixed.
+- As we state in our paper, the elastic net is special and would
+  necessitate an altogether different approach. While not
+  impossible, we would be happy to do so but will not have time
+  to finish this for the review.
+- We are not sure that the Wilcoxon Signed Rank Test is the best
+  choice for this kind of comparison. The symmetricity
+  assumption will not be met in our case. And in addition, this test
+  would ignore any larger effect sizes that might be present.
+
+<!-- TODO: Insert plot/table of new results -->
+
 > ## Relation To Broader Scientific Literature
 >
 > Linear models make the real world go round, the impact could be massive. Most
@@ -382,13 +409,15 @@ No. We can do it and show why it's not a good idea.
 > theoretical reasons, and this work may evidence som understandings of an
 > implicit difference between DP and standard regressions beyond the effect of
 > randomized noise.
->
+
+Thank you for recognizing the potential impact of our work!
+
 > ## Essential References Not Discussed
 >
 > No critical missing references, but it would be nice to give pointers to the
 > many libraries that have these models to highlight impact (Scikit, DLIB, JSAT,
 > Celer, and so many more).
->
+
 > ## Other Strengths And Weaknesses
 >
 > I was very excited about this paper initially. I've solved many real-world

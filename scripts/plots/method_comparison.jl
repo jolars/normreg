@@ -20,8 +20,11 @@ function plot_comparison(df)
   xval = string.(df.dataset)
   groups = string.(df.method)
 
-  yval = float.(reshape(df.err, length(unique(xval)), length(unique(groups))))
-  yerr = float.(reshape(df.hi - df.lo, length(unique(xval)), length(unique(groups))))
+  n_xval = length(unique(xval))
+  n_groups = length(unique(groups))
+
+  yval = float.(reshape(df.err, n_groups, n_xval))
+  yerr = float.(reshape(df.hi - df.err, n_groups, n_xval))
 
   groupedbar(xval, yval, group = groups, yerr = yerr, size = (500, 240))
 end

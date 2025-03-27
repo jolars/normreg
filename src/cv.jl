@@ -27,6 +27,9 @@ function get_error(y_pred, y_true, target = "mse")
     return mean((y_pred .- y_true) .^ 2) / var(y_true)
   elseif target == "mae"
     return mean(abs.(y_pred .- y_true))
+  elseif target == "accuracy"
+    class_pred = y_pred .> 0.5
+    return mean(class_pred .== y_true)
   else
     error("Target not supported")
   end
@@ -102,6 +105,7 @@ function cross_validate(
   target::String = "nmse";
   seed::Int = nothing,
   repeats::Int = 1,
+  binarize::Bool = false,
 )
   n, p = size(x)
 
@@ -124,14 +128,21 @@ function cross_validate(
 
   x_train, y_train = x, y
 
-  lambda_max = 0
+  lambda_max = []
 
   for d in delta
-    x_train_norm, _, _ = normalize_features_unadjusted(x_train, normalization, d)
+    x_train_norm, _, _ = normalize_features_unadjusted(
+      x_train,
+      normalization,
+      d,
+      binarize = binarize,
+      adjust = false,
+    )
     n = size(x_train, 1)
     tmp = maximum(abs.(x_train_norm' * (y_train .- mean(y_train)))) / n
 
-    lambda_max = max(lambda_max, tmp)
+    # lambda_max = max(lambda_max, tmp)
+    push!(lambda_max, tmp)
   end
 
   lambda_min_ratio = if n > p
@@ -141,8 +152,6 @@ function cross_validate(
   end
 
   n_lambda = 100
-  lambda = collect(logspace(lambda_max, lambda_max * lambda_min_ratio, n_lambda))
-  n_lambda = length(lambda)
 
   # Initialize error array with an additional dimension for repeats
   err = zeros(n_lambda, k, n_delta, repeats)
@@ -163,8 +172,15 @@ function cross_validate(
       y_val = y_train[setdiff(1:size(y_train, 1), fold)]
 
       for d in 1:n_delta
-        x_train_fold_norm, _, _ =
-          normalize_features_unadjusted(x_train_fold, normalization, delta[d])
+        lambda =
+          collect(logspace(lambda_max[d], lambda_max[d] * lambda_min_ratio, n_lambda))
+
+        x_train_fold_norm, _, _ = normalize_features_unadjusted(
+          x_train_fold,
+          normalization,
+          delta[d],
+          adjust = false,
+        )
 
         res = fit(
           LassoPath,
@@ -178,7 +194,8 @@ function cross_validate(
           maxncoef = p,
         )
 
-        x_val_norm, _, _ = normalize_features_unadjusted(x_val, normalization, delta[d])
+        x_val_norm, _, _ =
+          normalize_features_unadjusted(x_val, normalization, delta[d], adjust = false)
 
         pred_array = predict(res, x_val_norm; select = AllSeg())
 
@@ -196,8 +213,13 @@ function cross_validate(
 
   best_cv_error = minimum(avg_error)
   best_ind = argmin(avg_error)
-  best_lambda = lambda[best_ind[1]]
+
   best_delta = delta[best_ind[2]]
+
+  lambda = collect(
+    logspace(lambda_max[best_ind[2]], lambda_max[best_ind[2]] * lambda_min_ratio, n_lambda),
+  )
+  best_lambda = lambda[best_ind[1]]
 
   ci_low = best_cv_error - 1.96 * std_error[best_ind] / sqrt(k * repeats)
   ci_high = best_cv_error + 1.96 * std_error[best_ind] / sqrt(k * repeats)
