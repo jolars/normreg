@@ -80,7 +80,7 @@ any relevant work that have addressed the problem of feature normalization
 before and note that this seems to be confirmed by the fact that the
 reviewers were unable to find any relevant references either.
 
-## Small Changes
+## Other Changes to the Paper
 
 - We have updated the citation to the triazines data set.
 
