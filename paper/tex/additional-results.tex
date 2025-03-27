@@ -212,16 +212,19 @@ where we have done exactly this.
 \begin{figure*}[htpb]
   \centering
   \subfigure[%
-    Results for the lasso.
+    Results for the lasso
     \label{fig:method-comparison-lasso}
   ]{\includegraphics[]{method_comparison_lasso.pdf} }
   \subfigure[%
-    Results for ridge regression.
+    Results for ridge regression
     \label{fig:method-comparison-ridge}
   ]{\includegraphics[]{method_comparison_ridge.pdf}}
   \caption{%
-    Cross-validation error from repeated $k$-folds cross validation for the lasso and ridge
-    and various data sets and normalization strategies.
+    Cross-validation error from 10-times repeated 10-folds cross validation for the lasso and ridge
+    and various data sets and normalization strategies. The error is normalized mean-squared
+    error (NMSE). In the case of datasets \data{a1a}, \data{w1a}, \data{heart}, \data{w1a},
+    and \data{australian}, we have fit regularized logistic regression and
+    otherwise regularized linear regression. The error bars show 95\% confidence intervals.
   }
 \end{figure*}
 

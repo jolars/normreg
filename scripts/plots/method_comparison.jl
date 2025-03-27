@@ -16,7 +16,10 @@ df_raw = CSV.read(file, DataFrame)
 df_lasso = subset(df_raw, :alpha => a -> a .== 1.0)
 df_ridge = subset(df_raw, :alpha => a -> a .== 0.0)
 
-function plot_comparison(df)
+function plot_comparison(df, type)
+  # Sort by dataset, then method
+  sort!(df, [:dataset, :method])
+
   xval = string.(df.dataset)
   groups = string.(df.method)
 
@@ -26,11 +29,22 @@ function plot_comparison(df)
   yval = float.(reshape(df.err, n_groups, n_xval))
   yerr = float.(reshape(df.hi - df.err, n_groups, n_xval))
 
-  groupedbar(xval, yval, group = groups, yerr = yerr, size = (500, 240))
+  ylims = type == "lasso" ? (0.0, 1.1) : (0.0, 1.7)
+
+  groupedbar(
+    xval,
+    yval,
+    group = groups,
+    yerr = yerr,
+    ylims = ylims,
+    size = (660, 300),
+    legend = :outerright,
+    ylab = "NMSE",
+  )
 end
 
-plot_comparison(df_lasso)
+plot_comparison(df_lasso, "lasso")
 savefig(@projectroot("plots", "method_comparison_lasso.pdf"))
 
-plot_comparison(df_ridge)
+plot_comparison(df_ridge, "ridge")
 savefig(@projectroot("plots", "method_comparison_ridge.pdf"))

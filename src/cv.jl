@@ -131,13 +131,8 @@ function cross_validate(
   lambda_max = []
 
   for d in delta
-    x_train_norm, _, _ = normalize_features_unadjusted(
-      x_train,
-      normalization,
-      d,
-      binarize = binarize,
-      adjust = false,
-    )
+    x_train_norm, _, _ =
+      normalize_features_unadjusted(x_train, normalization, d, binarize = binarize)
     n = size(x_train, 1)
     tmp = maximum(abs.(x_train_norm' * (y_train .- mean(y_train)))) / n
 
@@ -175,12 +170,8 @@ function cross_validate(
         lambda =
           collect(logspace(lambda_max[d], lambda_max[d] * lambda_min_ratio, n_lambda))
 
-        x_train_fold_norm, _, _ = normalize_features_unadjusted(
-          x_train_fold,
-          normalization,
-          delta[d],
-          adjust = false,
-        )
+        x_train_fold_norm, _, _ =
+          normalize_features_unadjusted(x_train_fold, normalization, delta[d])
 
         res = fit(
           LassoPath,
@@ -194,8 +185,7 @@ function cross_validate(
           maxncoef = p,
         )
 
-        x_val_norm, _, _ =
-          normalize_features_unadjusted(x_val, normalization, delta[d], adjust = false)
+        x_val_norm, _, _ = normalize_features_unadjusted(x_val, normalization, delta[d])
 
         pred_array = predict(res, x_val_norm; select = AllSeg())
 

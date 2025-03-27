@@ -304,16 +304,13 @@ different normalization approaches in the updated manuscript and supplementary m
 
 > This paper should conduct more experiments on large-scale classification tasks.
 
-We have included results on additional data sets, which we have added to the
-the supplementary material.
+We have included results on additional data sets and also included results on
+classification, which we have added to the supplementary material. See the
+response to reviewer 3 for details and a plot of the new results. We have also
+updated the dimensions of the experiments related to Figure 18 to include more
+features as well as observations but this makes no difference.
 
-<!-- TODO: Add results on additional datasets -->
-<!-- TODO: Add results on logistic reg -->
-
-We have also updated the dimensions of the experiments related to Figure 17 to
-include more features.
-
-<!-- TODO: Update experiment of figure 17 -->
+<!-- TODO: Update dimensions of some experiments -->
 
 > This paper only provides the code in supplementary materials, and I do not check
 > it.
@@ -438,7 +435,7 @@ here, but please be aware of the following caveats:
   assumption will not be met in our case. And in addition, this test
   would ignore any larger effect sizes that might be present.
 
-<!-- TODO: Insert plot/table of new results -->
+![New results](rebuttal/new-benchmarks.png)
 
 > ## Relation To Broader Scientific Literature
 >
@@ -481,6 +478,8 @@ readers. We have added a new section to the discussion that presents clear,
 actionable guidelines for practitioners on how to think about normalization in
 the context of regularized linear models and under what circumstances different
 normalization methods might be appropriate.
+
+<!-- TODO: Add this type of paragraph -->
 
 > ## Other Comments Or Suggestions
 >

@@ -15,7 +15,7 @@ datasets = [
   "eunite2001",
   "heart",
   "australian",
-  "a7a",
+  "leukemia",
 ]
 norm_methods = ["ours", "std", "max_abs", "min_max", "l1"]
 res = DataFrame(
@@ -31,7 +31,7 @@ res = DataFrame(
 )
 
 # deltas = collect(range(0, 1, length = grid_size));
-deltas = collect(range(0, 1, length = 51));
+deltas = collect(range(0, 1, length = 21));
 alphas = [0, 1]
 
 target = "nmse"
@@ -41,7 +41,8 @@ for alpha in alphas
     for norm_method in norm_methods
       x, y = datagrabber(dataset)
 
-      binary_response = dataset in ["mushrooms", "heart", "australian", "a1a", "w1a", "a7a"]
+      binary_response =
+        dataset in ["mushrooms", "heart", "australian", "a1a", "w1a", "leukemia"]
 
       dist = if binary_response
         Binomial()
@@ -66,7 +67,7 @@ for alpha in alphas
         norm_method,
         alpha,
         deltas,
-        5,
+        10,
         target,
         seed = seed,
         repeats = 10,

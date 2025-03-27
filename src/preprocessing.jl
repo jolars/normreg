@@ -77,7 +77,7 @@ function normalize_features_unadjusted(
     scales = ones(1, p)
   elseif method == "l1"
     centers = mean(x, dims = 1)
-    scales = sum(abs.(x), dims = 1)
+    scales = sum(abs.(Matrix(x) .- centers), dims = 1)
   elseif method == "ours"
     return normalize_features(x, delta, adjust = adjust)
   else
