@@ -211,7 +211,8 @@ change this in our paper, along with clearly defining the notation.
 >    used in this paper. The way the authors use notations here is not good: it
 >    makes the readers have a hard time finding relevant notions.
 
-<!-- TODO: Add a notation paragraph -->
+Thank you for the suggestion. We have added a section after the introduction
+covering the notation used in the paper.
 
 > 2. Consider adding the contributions paragraph at the end of Section 1. List the
 >    main contributions clearly and where they are located in the main body. I know
