@@ -12,11 +12,14 @@ They write:
 > whether the proposed method/analyses is enough novel and significant in the
 > lasso problem, since I am not familiar to the topic of Lasso).
 
-We think that it is highly questionable to demand that a paper on
-regularized linear regression should be tailored for deep neural networks (and
-that it would hold no value otherwise), especially given that the reviewer
-admits to having no familiarity with the topic of the paper. We hope that you
-will take this into consideration when making your final decision.
+The reviewer acknowledges they are not familiar with Lasso regression, which is
+the central topic of our paper, yet suggests our work has no value unless
+reoriented toward deep neural networks. This appears to be evaluating our work
+outside its intended scope and field.
+
+We hope you'll consider this when weighing the reviewer's comments in your
+final decision, as we believe our contribution should be evaluated within its
+proper context of regularized linear modeling.
 
 ## General Response
 
@@ -259,10 +262,14 @@ Please see the general response regarding the assumption of orthogonality.
 > the lasso problem, since I am not familiar to the topic of Lasso).
 
 We respectfully disagree that the results need to be tailored to deep neural
-networks. We do not understand how you have come to the conclusion that our
-work does not hold merit and should be reconfigured into a paper about neural
-networks when you yourself state that you are not familiar with the topic of the
-paper. Could you please clarify?
+networks. While we appreciate the suggestion to explore connections to deep learning,
+our focus on regularized linear models addresses an important and foundational issue
+in statistical learning that has been overlooked in the literature. As we demonstrate
+throughout the paper, feature normalization has significant impacts on parameter
+estimates and model selection even in these simpler settings, which are still widely
+used in many practical applications including interpretable AI, biostatistics, and
+economics. Furthermore, understanding these fundamental behaviors in linear models provides
+essential groundwork for extending similar analyses to more complex models in the future.
 
 > (2)The paper analyzes traditional regression models, but current predominant
 > models also include CNNs, Transformers, etc., which use normalization
@@ -291,7 +298,9 @@ Please see the general response regarding the assumption of orthogonality.
 > The experiments provided metrics for various parameters; it would be helpful to
 > include accuracy comparison results.
 
-Could you please clarify what you mean by "accuracy" here?
+Thank you for this suggestion. By "accuracy," we assume you mean predictive performance.
+We have included additional experiments comparing the prediction error of models using
+different normalization approaches in the updated manuscript and supplementary materials.
 
 > This paper should conduct more experiments on large-scale classification tasks.
 
@@ -324,6 +333,12 @@ here since $s_j$ is present in the denominator. There is, however, a mistake in
 that the term $c_j \mathbf{1}^\intercal \boldsymbol{\varepsilon}$ should
 be present in the numerator as well, which we have no corrected. It
 does not affect the result, however, since the expectation of this term is 0.
+
+Thank you for pointing this out. There is indeed a mistake in the equation, although
+it should not in fact be $\tilde{\boldsymbol{x}}_j$. Instead, the term
+$c_j \mathbf{1}^\intercal \boldsymbol{\varepsilon}$ should be present in the numerator
+as well, which we have now corrected. This correction doesn't affect the result since
+the expectation of this term is 0.
 
 ## Reviewer 3
 
@@ -459,11 +474,13 @@ several references to popular libraries along the lines you suggest.
 > normalization, each is currently buried in the text and hard to separate in the
 > content.
 
-We are not completely sure what you mean by an algorithm block. Please
-note that we have not suggested any particular new algorithm in this paper,
-but have merely investigated the effect of normalization and shown
-that it is important to consider when using regularized linear models.
-Could you please clarify?
+Thank you for this suggestion. While our paper does not introduce new
+algorithms per se, but rather provides insights into normalization effects on
+regularized linear models, we agree that a structured approach would benefit
+readers. We have added a new section to the discussion that presents clear,
+actionable guidelines for practitioners on how to think about normalization in
+the context of regularized linear models and under what circumstances different
+normalization methods might be appropriate.
 
 > ## Other Comments Or Suggestions
 >
