@@ -434,6 +434,12 @@ several references to popular libraries along the lines you suggest.
 > normalization, each is currently buried in the text and hard to separate in the
 > content.
 
+We are not completely sure what you mean by an algorithm block. Please
+note that we have not suggested any particular new algorithm in this paper,
+but have merely investigated the effect of normalization and shown
+that it is important to consider when using regularized linear models.
+Could you please clarify?
+
 > ## Other Comments Or Suggestions
 >
 > The article would be improved with some more guidance to the reader of "where
