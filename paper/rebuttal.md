@@ -124,8 +124,9 @@ Please see the general response regarding the assumption of orthogonality.
 >    theoretical side that makes the paper more interesting. However, this is
 >    not the case here.
 
-We would like to make the argument that there is in fact a technical
-challenge in the present theoretical analysis.
+Again, we would like to direct the reader to the general response regarding
+orthogonality as well as the references we have provided
+there, where similar assumptions are made.
 
 > ## Other comments or suggestions
 >
@@ -138,7 +139,10 @@ challenge in the present theoretical analysis.
 > cannot recommend acceptance for this paper. But don't worry, I will consider
 > updating my score after the authors make changes to improve the presentation,
 > clarity, and flow of this paper.
->
+
+Thank you for your feedback. We have looked over the paper and made
+several improvements to the presentation and clarity of the paper.
+
 > ### Minor changes
 >
 > 1. In Equation 2, $\tilde{\boldsymbol{X}}$ is used before defined in
@@ -192,8 +196,8 @@ to the paragraph.
 >    dataset is mentioned in Appendix E, Table 2, but at least the author
 >    should refer to that Table in the main body.
 
-We have added a reference to the appendix and
-detailed descriptions of these data sets in the section in the appendix.
+We have added a reference to the appendix and detailed descriptions of these
+data sets in the section in the appendix.
 
 > 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
 >    write the limit $q_j \rightarrow 1^+$? Do you mean $1^{-1}$ instead?
