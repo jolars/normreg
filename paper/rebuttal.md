@@ -20,38 +20,57 @@ will take this into consideration when making your final decision.
 
 ## General Response
 
-We would like to thank the reviewers for their valuable feedback
-and are grateful for the time and effort they have put into reviewing our work.
-We have carefully read all the comments and suggestions and will address them
-point-by-point in comments to the original remarks. We would, however, like
-to address a few general points here.
+We would like to thank the reviewers for their valuable feedback and are
+grateful for the time and effort they have put into reviewing our work. We have
+carefully read all the comments and suggestions and will address them
+point-by-point in comments to the original remarks. We would, however, like to
+address a few general points here.
 
 ### Assumption of Orthogonality
 
-We agree that the assumption is strong and unrealistic, especially
-given the high-dimensional setting that sparse methods are often
-employed in. Nevertheless, it is
-not uncommon in literature, particularly not in the context of
-research on regularized methods, where the theoretical analysis
-is often difficult. We would like to emphasize that our work is
-the first to investigate this issue and that it is thus
-natural to begin with the simplest setting, for which, we remind,
-no results exist. We have shown that, even in this simple setting,
-normalization has a strong impact on the model
+We agree that the assumption is strong and unrealistic. Nevertheless, it is not
+uncommon in literature, particularly not in the context of research on
+regularized methods, where the theoretical analysis is often difficult.
+Please see the following references for examples where the authors
+make similar (and sometimes even stronger) assumptions:
 
-In addition, we believe
-that the orthogonality assumption is, in contrast to many other results, not particularly restrictive for
-our results. Take, for instance, the experiment presented in Figure 15 where we have
-introduced correlation between the features. It is here clear
-that the effect of class-imbalance is _stronger_ when the features
-are correlated. This is actually not surprising since it is well-known
-that regularization means that the model will tend to select, for instance,
-the one of two correlated features that has the strongest main effect
-since the objective can be reduced more by reducing the coefficient
-in this case.
+- Efron, B., Hastie, T., Johnstone, I. M., & Tibshirani, R. (2004). Least angle
+  regression. Annals of Statistics, 32(2), 407–499.
+  <https://doi.org/10.1214/009053604000000067>
+- Fan, J., & Li, R. (2001). Variable selection via nonconcave penalized likelihood and
+  its oracle properties. Journal of the American Statistical Association, 96(456),
+  1348-1360. <https://doi.org/10.1198/016214501753382273>
+- Bogdan, M., Berg, E. van den, Sabatti, C., Su, W., & Candès, E. J. (2015).
+  SLOPE – adaptive variable selection via convex optimization. The Annals of
+  Applied Statistics, 9(3), 1103–1140. <https://doi.org/10.1214/15-AOAS842>
+- Yuan, M., & Lin, Y. (2005). Model selection and estimation in regression with
+  grouped variables. The Journal of the Royal Statistical Society, Series B
+  (Statistical Methodology), 68(1), 49–67.
+  <https://doi.org/10.1111/j.1467-9868.2005.00532.x>
 
-We realize that we do a poor job of explaining this in the paper and will
-both add a paragraph to the paper discussing the validity of this assumption.
+We would also like to argue that it is not unreasonable to begin with
+a simple setting, especially given that this is the first work to investigate
+this issue and that, even in this simple setting, the effect of normalization
+is strong.
+
+Finally, we believe that it is reasonable
+to assume that the assumption of orthogonality is not in fact
+restrictive for our results. See, for instance, the experiment presented in
+Figure 15, where we have introduced correlation between the features and
+where the effect of class-imbalance is _stronger_ when the features are
+correlated. We have also for this review conducted a new
+experiment to investigate this assumption further, which we
+present in the figure below. Here, we have study the case
+of two binary features with varying levels of correlation
+and let the class balance of the second feature
+tend to 1. The results show that the effect of class imbalance
+is unimpaired by the correlation between the features.
+
+![Effect of class imbalance with correlated features](normreg-new-orthogonality.png)
+
+We realize, however, that the paper would benefit from a more thorough
+discussion of this assumption, and we will include this experiment along with a
+detailed discussion of the assumption in the final version of the paper.
 
 ### Originality
 

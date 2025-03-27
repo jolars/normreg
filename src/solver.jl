@@ -18,6 +18,7 @@ function cdsolver(
   tol::Real = 1e-5,
   fit_intercept::Bool = true,
   verbose = false,
+  cyclic = true,
 )
   n, p = size(x)
 
@@ -86,6 +87,10 @@ function cdsolver(
     # beta_prev = copy(beta)
     diffs = zeros(p)
 
+    if !cyclic
+      shuffle!(working_set)
+    end
+
     for j in working_set
       if L[j] == 0.0
         continue
@@ -124,6 +129,7 @@ function elasticnet(
   fdev::Number = 1e-5,
   dfmax = size(x, 1) + 1,
   verbose = false,
+  screen = true,
   kwargs...,
 )
   n, p = size(x)
@@ -132,7 +138,7 @@ function elasticnet(
   residual = y .- intercept
 
   # only screen when l1 penalty is involved
-  screen = α > 0
+  screen = α > 0 && screen
 
   screened = screen ? zeros(Bool, p) : ones(Bool, p)
 
