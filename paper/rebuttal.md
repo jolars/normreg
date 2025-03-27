@@ -253,12 +253,10 @@ Please see the general response regarding the assumption of orthogonality.
 > judge whether the proposed method/analyses is enough novel and significant in
 > the lasso problem, since I am not familiar to the topic of Lasso).
 
-We respectfully disagree that the results need to be tailored to deep
-neural networks. We understand that you are unable to judge the current
-work due to your lack of familiarity with the topic of Lasso, but we
-have trouble understanding why this would warrant a rejection of the
-paper in its current state, nor why the results would need to be
-transposed into the real of neural networks. Could you please clarify?
+We respectfully disagree that the results need to be tailored to deep neural
+networks. We understand that you are not familiar with the Lasso, so
+we have trouble understanding how you are able to deduce that the
+work holds no value. Could you please clarify?
 
 > (2)The paper analyzes traditional regression models, but current predominant
 > models also include CNNs, Transformers, etc., which use normalization
@@ -266,11 +264,12 @@ transposed into the real of neural networks. Could you please clarify?
 > valuable to provide some discussion and experimental results on the
 > applicability of the conclusions to these models and normalization methods.
 
-We agree that it would be interesting to investigate batch and layer normalization
-and its connection with regularization and are happy to add a remark
-regarding this in the paper's discussion. This would, however, require
-a completely different analysis and empirical evaluation, which makes us
-think that this is better suited for future work.
+We agree that it would be interesting to investigate batch and layer
+normalization for neural networks and the connection to regularization and are
+happy to add a remark regarding this in the paper's discussion. Tackling this
+issue directly in the paper, however, would require a completely different
+analysis and empirical evaluation, which makes us think that this is better
+suited for future work.
 
 > ## Theoretical Claims
 >
@@ -290,9 +289,8 @@ Could you please clarify what you mean by "accuracy" here?
 
 > This paper should conduct more experiments on large-scale classification tasks.
 
-We are happy to include results on additional data sets, which we will present
-in the supplementary material. Here is an updated Figure 16, which we will
-include in the new version o the paper as well, featuring several new data sets.
+We have included results on additional data sets, which we have added to the
+the supplementary material.
 
 <!-- TODO: Add results on additional datasets -->
 <!-- TODO: Add results on logistic reg -->
@@ -305,14 +303,21 @@ include more features.
 > This paper only provides the code in supplementary materials, and I do not check
 > it.
 
-The code will be made available in the form of a public repository as well. If
-you prefer, we could also upload it to a anonymous repository for the review?
+The code will be made available in the form of a public repository upon
+acceptance as well. If you prefer, we could also upload it to a anonymous
+repository for the duration of the review?
 
 > ## Other Comments or Suggestions
 >
 > Formula Derivation Confirmation: In Equation 12, how is $x_j^T \varepsilon$
 > derived? Should it be $x_j^T \varepsilon$ instead? A detailed derivation
 > process would be appreciated.
+
+Thank you for pointing this out. No, it should not be $\tilde{\boldsymbol{x}}_j$
+here since $s_j$ is present in the denominator. There is, however, a mistake in
+that the term $c_j \mathbf{1}^\intercal \boldsymbol{\varepsilon}$ should
+be present in the numerator as well, which we have no corrected. It
+does not affect the result, however, since the expectation of this term is 0.
 
 ## Reviewer 3
 
@@ -323,18 +328,20 @@ you prefer, we could also upload it to a anonymous repository for the review?
 >
 > 1. Logistic models to be considered as well
 
-OK
-
-<!-- TODO: Add empirical results on logistic regression -->
+We have now included logistic regression in the paper together
+with the results of the new experiments you requested. See the comments
+below.
 
 > 2. A larger collection of datasets
 
-<!-- TODO: Add results on additional datasets -->
+We have expanded the collection of data sets and have included the results
+in the appendix of the paper. See the comments below as well.
 
 > 3. An empirical evaluation of "our recommendations" vs the readily available
 >    tools
 
-<!-- TODO: Add some investigation of our approach -->
+We have added one such evaluation, but see our comments below for
+some caveats regarding this.
 
 > ## Methods And Evaluation Criteria
 >
@@ -344,14 +351,18 @@ OK
 > $\beta_j$, as it is otherwise difficult to tell at a glance what the results mean and
 > how to interpret them.
 
-No. We can do it and show why it's not a good idea.
+Thank you for the suggestion. We are not certain that this wouild imporve
 
 > Indeed while well written, every result is presented in
 > a way that presumes the reader is intimately familiar with the larger
 > statistical literature. I think the paper is suffering a bit from "I wrote it
 > and I know it", and could use a friendly pass from a colleague unaware of the
 > work previously.
->
+
+We have taken your comments to heart and have made several changes to the
+paper to make it more accessible to a wider audience. We appreciate the
+idea and will certainly do so for the final version.
+
 > ## Theoretical Claims
 >
 > I have not manually checked the proofs.

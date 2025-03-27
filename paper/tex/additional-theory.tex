@@ -128,7 +128,7 @@ assumptions, we focus on \(S_{\lambda_1}({Z_j})\). First observe that since \(c_
 \]
 where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). This means that
 \begin{equation}
-  {Z_j} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  {Z_j} = \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j^* + \boldsymbol{\varepsilon}) = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon} + c_j \ones^\intercal \bm{\varepsilon}}{s_j}
   \qquad\text{and}\qquad
   d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right).
 \end{equation}
