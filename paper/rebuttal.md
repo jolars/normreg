@@ -448,8 +448,8 @@ Could you please clarify?
 > paper isn't good grammar, but it was my excitement that carrier me through - it
 > would have been more pleasant if I had a map!
 
-Thank you for raising this issue. We will take a careful look
-at the text and improve the flow and readability of the paper.
+Thank you for raising this issue. We have looked over the text and
+improved the flow of the paper by adding more guidance to the reader.
 
 > Considering or discussion robust standardization methods would also be
 > appreciated, but a weakness I could accept if other items were addressed.
@@ -460,3 +460,5 @@ at the text and improve the flow and readability of the paper.
 >
 > 1. Larger experimental evaluations
 > 2. Algorithm blocks for each case
+
+See above for our response to these points.
