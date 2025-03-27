@@ -254,9 +254,10 @@ Please see the general response regarding the assumption of orthogonality.
 > the lasso problem, since I am not familiar to the topic of Lasso).
 
 We respectfully disagree that the results need to be tailored to deep neural
-networks. We understand that you are not familiar with the Lasso, so
-we have trouble understanding how you are able to deduce that the
-work holds no value. Could you please clarify?
+networks. We do not understand how you have come to the conclusion that our
+work does not hold merit and should be reconfigured into a paper about neural
+networks when you yourself state that you are not familiar with the topic of the
+paper. Could you please clarify?
 
 > (2)The paper analyzes traditional regression models, but current predominant
 > models also include CNNs, Transformers, etc., which use normalization
@@ -351,7 +352,15 @@ some caveats regarding this.
 > $\beta_j$, as it is otherwise difficult to tell at a glance what the results mean and
 > how to interpret them.
 
-Thank you for the suggestion. We are not certain that this wouild imporve
+Thank you for the suggestion, but we are not certain that this would improve the
+plots. We remind you that the true coefficients are one in the experiment,
+which means that the resulting plot would be centered somewhere around -0.5.
+It is also not as obvious what it means when the estimated value is shrunk
+to 0, since it will now say -1 for the plot and the reader would have to
+know that the true value is 1 to interpret this. We have however experimented
+with your suggestion and here is the result:
+
+![Alternative mixed data plot](rebuttal/mixed_data_alt.png)
 
 > Indeed while well written, every result is presented in
 > a way that presumes the reader is intimately familiar with the larger
