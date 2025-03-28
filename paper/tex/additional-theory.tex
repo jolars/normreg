@@ -128,7 +128,7 @@ assumptions, we focus on \(S_{\lambda_1}({Z_j})\). First observe that since \(c_
 \]
 where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\). This means that
 \begin{equation}
-  {Z_j} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
+  {Z_j} = \tilde{\vec{x}}_j^\T (\vec{x}_j\beta_j^* + \boldsymbol{\varepsilon}) = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon} + c_j \ones^\intercal \bm{\varepsilon}}{s_j}
   \qquad\text{and}\qquad
   d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right).
 \end{equation}
@@ -189,7 +189,7 @@ functions of the standard normal distribution, respectively. Computing \Cref{eq:
   Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
   \(\lambda_1 = 0\). Then
   \[
-    \lim_{q_j \rightarrow 1^+} \var \hat{\beta}_j =
+    \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0                                          & \text{if } 0 \leq \delta < 1/4, \\
       \frac{\sigma_\varepsilon^2 n}{\lambda_2^2} & \text{if } \delta = 1/4,        \\
@@ -216,7 +216,7 @@ interaction term.
 \label{sec:additional-results-biasvar}
 
 In \Cref{fig:binary-onedim-bias-var-elnet}, we show bias, variance, and mean-squared error
-for the weighted elastic net. We see that the behavior of bias as \(q_j \rightarrow 1^+\)
+for the weighted elastic net. We see that the behavior of bias as \(q_j \rightarrow 1^-\)
 depends on noise level and that there is a bias--variance trade-off with respect to
 \(\omega\). As in \Cref{sec:mixed-data}, we modify the weighting factor to have
 comparability under \(\kappa = 2\).
@@ -258,3 +258,29 @@ comparability under \(\kappa = 2\).
   \label{fig:bias-var-onedim-ridge-full}
 \end{figure}
 
+\subsection{Binarization and Corrolation}
+
+\begin{theorem}[Correlation for Dichotomized Normal Variables]
+  Let \(X\) and \(Y\) be two standard normal random variables with correlation \(\rho\).
+  Define \(Z = \bm{1}[Y > \alpha]\) where \(\alpha = \cdf^{-1}(q)\) is the
+  quantile at which \(Y\) is dichotomized.
+  Then
+  \[
+    \cor(X,Z)
+    = \frac{\rho\pdf(\alpha)}{\sqrt{q \bigl(1 - q\bigr)}} \rightarrow 0 \quad\text{as}\quad q \rightarrow 1
+  \]
+\end{theorem}
+\begin{proof}
+  Let \(Z = \mathbf{1}[Y > \alpha]\) with \(\alpha = \cdf^{-1}(q)\). Then,
+  using the law of total expectation, we have
+  \[
+    \E(XZ) = \E\bigl(\E(XZ \mid Y)\bigr) = \E\bigl(\rho Y \bm{1}[Y > \alpha]\bigr)
+    = \rho \int_{\alpha}^{\infty} y \pdf(y)\,\du y = \rho \pdf(\alpha).
+  \]
+  Since \(\var(X) = 1\) and \(\var(Z) = q (1 - q)\), it follows that
+  \[
+    \cor(X,Z) = \frac{\E(XZ)}{\sqrt{\var(X)\,\var(Z)}} = \frac{\rho \pdf(\alpha)}{\sqrt{q \bigl(1 - q\bigr)}}.
+  \]
+  And since \(\pdf(\alpha) \to 0\) exponentially fast as \(q \to 1\), it follows that
+  \(\cor(X,Z) \to 0\) as \(q \to 1\).
+\end{proof}

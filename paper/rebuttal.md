@@ -1,0 +1,505 @@
+# Rebuttal
+
+## Comment to editor regarding reviewer YpvQ
+
+Dear editor,
+
+We are concerned about the comments from reviewer YpvQ (the second reviewer).
+They write:
+
+> I think this paper should tailor the method and analyses for deep neural
+> networks. Otherwise, I cannot find its value in practice. (I cannot judge
+> whether the proposed method/analyses is enough novel and significant in the
+> lasso problem, since I am not familiar to the topic of Lasso).
+
+The reviewer acknowledges they are not familiar with Lasso regression, which is
+the central topic of our paper, yet suggests our work has no value unless
+reoriented toward deep neural networks. This appears to be evaluating our work
+outside its intended scope and field.
+
+We hope you'll consider this when weighing the reviewer's comments in your
+final decision, as we believe our contribution should be evaluated within its
+proper context of regularized linear modeling.
+
+## General Response
+
+We would like to thank the reviewers for their valuable feedback and are
+grateful for the time and effort they have put into reviewing our work. We have
+carefully read all the comments and suggestions and will address them
+point-by-point in comments to the original remarks. We would, however, like to
+address a few general points here.
+
+### Assumption of Orthogonality
+
+We agree that the assumption is strong and unrealistic. Nevertheless, it is not
+uncommon in literature, particularly not in the context of research on
+regularized methods, where the theoretical analysis is often difficult.
+Please see the following references for examples where the authors
+make similar (and sometimes even stronger) assumptions:
+
+- Efron, B., Hastie, T., Johnstone, I. M., & Tibshirani, R. (2004). Least angle
+  regression. Annals of Statistics, 32(2), 407–499.
+  <https://doi.org/10.1214/009053604000000067>
+- Fan, J., & Li, R. (2001). Variable selection via nonconcave penalized likelihood and
+  its oracle properties. Journal of the American Statistical Association, 96(456),
+  1348-1360. <https://doi.org/10.1198/016214501753382273>
+- Bogdan, M., Berg, E. van den, Sabatti, C., Su, W., & Candès, E. J. (2015).
+  SLOPE – adaptive variable selection via convex optimization. The Annals of
+  Applied Statistics, 9(3), 1103–1140. <https://doi.org/10.1214/15-AOAS842>
+- Yuan, M., & Lin, Y. (2005). Model selection and estimation in regression with
+  grouped variables. The Journal of the Royal Statistical Society, Series B
+  (Statistical Methodology), 68(1), 49–67.
+  <https://doi.org/10.1111/j.1467-9868.2005.00532.x>
+
+We would also like to argue that it is not unreasonable to begin with
+a simple setting, especially given that this is the first work to investigate
+this issue and that, even in this simple setting, the effect of normalization
+is strong.
+
+Finally, we believe that it is reasonable
+to assume that the assumption of orthogonality is not in fact
+restrictive for our results. See, for instance, the experiment presented in
+Figure 15, where we have introduced correlation between the features and
+where the effect of class-imbalance is _stronger_ when the features are
+correlated. We have also for this review conducted a new
+experiment to investigate this assumption further, which we
+present in the figure below. Here, we have study the case
+of two binary features with varying levels of correlation
+and let the class balance of the second feature
+tend to 1. The results show that the effect of class imbalance
+is unimpaired by the correlation between the features.
+
+![Effect of class imbalance with correlated features](normreg-new-orthogonality.png)
+
+We realize, however, that the paper would benefit from a more thorough
+discussion of this assumption, and we will include this experiment along with a
+detailed discussion of the assumption in the final version of the paper.
+
+### Originality
+
+We would like to highlight that our work is the first to investigate this issue.
+As the reviewers are aware, we could not in our literature review find
+any relevant work that have addressed the problem of feature normalization
+before and note that this seems to be confirmed by the fact that the
+reviewers were unable to find any relevant references either.
+
+## Other Changes to the Paper
+
+- We have updated the citation to the triazines data set.
+
+## Reviewer 1
+
+> ## Theoretical Claims
+>
+> there is a problem in the draft, where the authors write $q_j \rightarrow^+ 1$
+
+Thank you, we realize that yours is the more standard notation and will
+change this in our paper, along with clearly defining the notation.
+
+> ## Other Strengths and Weaknesses
+>
+> ### Strength
+>
+> I like the problem considered here, and I agree that this problem is somewhat
+> under-investigated and worth pursuing.
+
+Thank you for your appreciation. We agree that the problem is
+under-investigated and worth pursuing.
+
+> ### Weaknesses
+>
+> 1. This paper is not well-polished. The flow is very monotone, making the
+>    readers have a hard time reading this paper. See below for suggestions.
+
+Thank you, we will take your suggestions into account and improve the
+flow of the paper.
+
+> 2. The assumption on the orthogonality of the normalized design matrix is
+>    super strong and rarely holds in practice. This is even more unrealistic
+>    for two cases that this paper considers here: binary features and mixed
+>    features. As a result, it is very hard to tell if the findings in this
+>    paper have an interesting implication in the general cases and in
+>    practice.
+
+Please see the general response regarding the assumption of orthogonality.
+
+> 3. As a consequence, I expect that it is the technical challenge on the
+>    theoretical side that makes the paper more interesting. However, this is
+>    not the case here.
+
+Again, we would like to direct the reader to the general response regarding
+orthogonality as well as the references we have provided
+there, where similar assumptions are made.
+
+> ## Other comments or suggestions
+>
+> ### General Comment
+>
+> Overall, I find the problem being considered interesting. However, I find the
+> presentation of this paper a bit underwhelming, and I feel uncomfortable
+> reading this paper. I believe that the presentation can be greatly improved.
+> However, in this form, I believe this draft is not ready to be published, and I
+> cannot recommend acceptance for this paper. But don't worry, I will consider
+> updating my score after the authors make changes to improve the presentation,
+> clarity, and flow of this paper.
+
+Thank you for your feedback. We have looked over the paper and made
+several improvements to the presentation and clarity of the paper.
+
+> ### Minor changes
+>
+> 1. In Equation 2, $\tilde{\boldsymbol{X}}$ is used before defined in
+>    Definition 2.1. Consider adding a small clarification right after Equation
+>    2, even if it is repetitive.
+
+Thank you for pointing this out. We will remove the tilde from the equation.
+
+> 2. In the first paragraph of Section 3, there is no definition for the noise
+>    (it is defined later). Consider adding this clarification right after
+>    using it.
+
+Thanks for noticing this; we will fix it in the final paper.
+
+> 3. In the first paragraph of Section 3, maybe explicitly mentioning that
+>    $\boldsymbol{x}_j$ is the-th column of $\tilde{\boldsymbol{X}}$ could
+>    improve clarity.
+
+Thanks for the suggestion. We will clarify this.
+
+> 4. The same goes with $\tilde{\boldsymbol{x}}_j$.
+
+We believe the clarification of $\boldsymbol{x}_j$ will also suffice for
+$\tilde{\boldsymbol{x}}_j$.
+
+> 5. Please discuss the (strong) assumption on the orthogonality of the
+>    normalized design matrix $\tilde{\boldsymbol{X}}$: (1) how it rarely >
+>    holds in practice, (2) how it is necessary in this framework, (3) if any
+>    prior works also have this assumption (to see that it is not too weird
+>    one).
+
+Please see the general response regarding the assumption of orthogonality.
+
+> 6. In the first paragraph of Section 3.1., what is
+>    $\overline{\boldsymbol{x}}$? I know that it is defined in Table 1, but
+>    please refer to it once again to help the readers keep track of the
+>    notations. Besides, the wording of this paragraph is not good; consider
+>    rewriting this paragraph.
+
+Thank you. We have replaced the notation with the exact definition of the
+mean instead and have reworded the paragraph.
+
+> 7. What is $\Phi(\cdot)$ in Equation 8? I know this one is the CDF of normal distribution,
+>    but please define it clearly here.
+
+Thanks for pointing out our omission. We have added a definition of $\Phi$
+to the paragraph.
+
+> 8. In section 4.1.2, the author should at least describe what those datasets
+>    (a1a, rhee2006, and w1a) are about. I know that the statistics of that
+>    dataset is mentioned in Appendix E, Table 2, but at least the author
+>    should refer to that Table in the main body.
+
+We have added a reference to the appendix and detailed descriptions of these
+data sets in the section in the appendix.
+
+> 9. In Theorems 3.1, 3.2, and 3.3, since $q_j \in [0,1]$, why do the authors
+>    write the limit $q_j \rightarrow 1^+$? Do you mean $1^{-1}$ instead?
+
+Thank you, yes we realize that yours is the standard notation and will
+change this in our paper, along with clearly defining the notation.
+
+> ### Major changes
+>
+> 1. It is better if the authors write the whole paragraph/sections of notations
+>    used in this paper. The way the authors use notations here is not good: it
+>    makes the readers have a hard time finding relevant notions.
+
+Thank you for the suggestion. We have added a section after the introduction
+covering the notation used in the paper.
+
+> 2. Consider adding the contributions paragraph at the end of Section 1. List the
+>    main contributions clearly and where they are located in the main body. I know
+>    that the authors discuss those points in Section 5, but I think it is better if
+>    authors have some punch lines right from the start so that the readers can keep
+>    track of the paper more easily. Consider reorganizing Section 5 accordingly,
+>    making it more condensed, and putting the punch lines right at the start.
+
+Thank you, that's a great idea. We have now modified the last paragraph of the
+introduction to include a list of the main contributions of our work.
+
+> 3. Section 3 is very monotone; please reorganize this section. For example, in
+>    Section 3.1, the authors could make each part of Section 3.1 more
+>    distinguishable, for example, by writing:
+>    (1) "\paragraph{Class blance}", which contains the rigorous definition and its
+>    intuition.
+>    (2) "\paragraph{the effects on the estimators scale ...}" discusses how the
+>    class balance directly affects the estimator. Please make three paragraphs
+>    after Equation 7 stand out more and elaborate on how the finding is interesting
+>    and counterintuitive. (3) and so on.
+>    The above are just some suggestions that I have. I recommend that the authors
+>    do multiple passes to improve the presentation of this draft.
+>
+> ## Questions For the Authors
+>
+> Is the assumption of the orthogonality of the normalized design matrix too
+> strong and unnatural, especially for the case of binary features and mixed
+> features? Please give me a couple of examples where this assumption holds and a
+> couple of prior works that deal with this assumption. My intuition is that this
+> assumption is extremely weird in the cases that this paper considers.
+
+Please see the general response regarding the assumption of orthogonality.
+
+## Reviewer 2
+
+> ## Claims And Evidence
+>
+> (1)The evaluation is based on synthetic and small-scale data, which is far from
+> the real scenario. I understand that this paper is only for simple (linear)
+> model. However, the sparsity property is also somewhat important for deep
+> neural network. I think this paper should tailor the method and analyses for
+> deep neural networks. Otherwise, I cannot find its value in practice. (I cannot
+> judge whether the proposed method/analyses is enough novel and significant in
+> the lasso problem, since I am not familiar to the topic of Lasso).
+
+We respectfully disagree that the results need to be tailored to deep neural
+networks. While we appreciate the suggestion to explore connections to deep learning,
+our focus on regularized linear models addresses an important and foundational issue
+in statistical learning that has been overlooked in the literature. As we demonstrate
+throughout the paper, feature normalization has significant impacts on parameter
+estimates and model selection even in these simpler settings, which are still widely
+used in many practical applications including interpretable AI, biostatistics, and
+economics. Furthermore, understanding these fundamental behaviors in linear models provides
+essential groundwork for extending similar analyses to more complex models in the future.
+
+> (2)The paper analyzes traditional regression models, but current predominant
+> models also include CNNs, Transformers, etc., which use normalization
+> techniques such as Batch Normalization and Layer Normalization. It would be
+> valuable to provide some discussion and experimental results on the
+> applicability of the conclusions to these models and normalization methods.
+
+We agree that it would be interesting to investigate batch and layer
+normalization for neural networks and the connection to regularization and are
+happy to add a remark regarding this in the paper's discussion. Tackling this
+issue directly in the paper, however, would require a completely different
+analysis and empirical evaluation, which makes us think that this is better
+suited for future work.
+
+> ## Theoretical Claims
+>
+> I do not find remarkable errors in theoretical claims. My main concern is the
+> assumption of feature orthogonality. The theoretical analysis assumes feature
+> orthogonality, which is often not the case in real data. It would be beneficial
+> to include analysis and experimental results for these scenarios.
+
+Please see the general response regarding the assumption of orthogonality.
+
+> ## Experimental Designs Or Analyses
+>
+> The experiments provided metrics for various parameters; it would be helpful to
+> include accuracy comparison results.
+
+Thank you for this suggestion. By "accuracy," we assume you mean predictive performance.
+We have included additional experiments comparing the prediction error of models using
+different normalization approaches in the updated manuscript and supplementary materials.
+
+> This paper should conduct more experiments on large-scale classification tasks.
+
+We have included results on additional data sets and also included results on
+classification, which we have added to the supplementary material. See the
+response to reviewer 3 for details and a plot of the new results. We have also
+updated the dimensions of the experiments related to Figure 18 to include more
+features as well as observations but this makes no difference.
+
+<!-- TODO: Update dimensions of some experiments -->
+
+> This paper only provides the code in supplementary materials, and I do not check
+> it.
+
+The code will be made available in the form of a public repository upon
+acceptance as well. If you prefer, we could also upload it to a anonymous
+repository for the duration of the review?
+
+> ## Other Comments or Suggestions
+>
+> Formula Derivation Confirmation: In Equation 12, how is $x_j^T \varepsilon$
+> derived? Should it be $x_j^T \varepsilon$ instead? A detailed derivation
+> process would be appreciated.
+
+Thank you for pointing this out. No, it should not be $\tilde{\boldsymbol{x}}_j$
+here since $s_j$ is present in the denominator. There is, however, a mistake in
+that the term $c_j \mathbf{1}^\intercal \boldsymbol{\varepsilon}$ should
+be present in the numerator as well, which we have no corrected. It
+does not affect the result, however, since the expectation of this term is 0.
+
+Thank you for pointing this out. There is indeed a mistake in the equation, although
+it should not in fact be $\tilde{\boldsymbol{x}}_j$. Instead, the term
+$c_j \mathbf{1}^\intercal \boldsymbol{\varepsilon}$ should be present in the numerator
+as well, which we have now corrected. This correction doesn't affect the result since
+the expectation of this term is 0.
+
+## Reviewer 3
+
+> ## Claims and Evidence
+>
+> Though the claims do have evidence, the abstract set my expectations
+> considerably beyond what the article contains. I had anticipated
+>
+> 1. Logistic models to be considered as well
+
+We have now included logistic regression in the paper together
+with the results of the new experiments you requested. See the comments
+below.
+
+> 2. A larger collection of datasets
+
+We have expanded the collection of data sets and have included the results
+in the appendix of the paper. See the comments below as well.
+
+> 3. An empirical evaluation of "our recommendations" vs the readily available
+>    tools
+
+We have added one such evaluation, but see our comments below for
+some caveats regarding this.
+
+> ## Methods And Evaluation Criteria
+>
+> The theoretical approach is sound as far as I can tell. Many figures would be
+> clearer, especially the ones with simulated results, by instead centering the
+> plots to the deviation from the estimated effect $\hat{\beta}_j$ from the known true effect
+> $\beta_j$, as it is otherwise difficult to tell at a glance what the results mean and
+> how to interpret them.
+
+Thank you for the suggestion, but we are not certain that this would improve the
+plots. We remind you that the true coefficients are one in the experiment,
+which means that the resulting plot would be centered somewhere around -0.5.
+It is also not as obvious what it means when the estimated value is shrunk
+to 0, since it will now say -1 for the plot and the reader would have to
+know that the true value is 1 to interpret this. We have however experimented
+with your suggestion and here is the result:
+
+![Alternative mixed data plot](rebuttal/mixed_data_alt.png)
+
+> Indeed while well written, every result is presented in
+> a way that presumes the reader is intimately familiar with the larger
+> statistical literature. I think the paper is suffering a bit from "I wrote it
+> and I know it", and could use a friendly pass from a colleague unaware of the
+> work previously.
+
+We have taken your comments to heart and have made several changes to the
+paper to make it more accessible to a wider audience. We appreciate the
+idea and will certainly do so for the final version.
+
+> ## Theoretical Claims
+>
+> I have not manually checked the proofs.
+>
+> ## Experimental Designs Or Analyses
+>
+> I have no issues with the content of what was done, but find the most obvious
+> experiments seem to be missing.
+>
+> 1. Use each of the listed normalization approaches and the current recommendation
+>    in a table for each of L1, L2, and Elastic-Net regression. Show the final total
+>    difference in predictive performance achieved using the new theoretically
+>    derived insights. If a positive improvement is shown, it also validates the
+>    acceptability of the theoretical model, assuming Gaussian errors.
+> 2. Consider more
+>    datasets, which it is easy to binarize other datasets to match the scope of the
+>    model. In this way a statistical test via the Wilcoxon Signed Rank Test can be
+>    performed to show conclusively that the approach is an improvement. See, Should
+>    We Really Use Post-Hoc Tests Based on Mean-Ranks?
+>    <https://jmlr.org/papers/v17/benavoli16a.html>
+
+If we understand correctly, then these points both ask for a new experiment
+where we compare the different normalization methods on an extended suite of
+real data sets. We have run such an experiment and will present initial results
+here, but please be aware of the following caveats:
+
+- Our paper's results are not primarily focused on predictive performance, but
+  rather on the shrinkage induced by different types of normalization on the
+  estimated coefficients. As we have already shown in the paper, this choice may
+  also impact predictive performance, the main impact is with respect
+  to selective inference---i.e., the ability to correctly identify the
+  non-zero coefficients.
+- It is not straightforward to binarize a data set without knowledge about what
+  each feature represents, because we'd have to for each feature decide on a
+  threshold for the binarization. This is highly non-trivial without domain
+  knowledge and hence we have instead relied on data sets that are already binary
+  or mixed.
+- As we state in our paper, the elastic net is special and would
+  necessitate an altogether different approach. While not
+  impossible, we would be happy to do so but will not have time
+  to finish this for the review.
+- We are not sure that the Wilcoxon Signed Rank Test is the best
+  choice for this kind of comparison. The symmetricity
+  assumption will not be met in our case. And in addition, this test
+  would ignore any larger effect sizes that might be present.
+
+![New results](rebuttal/new-benchmarks.png)
+
+> ## Relation To Broader Scientific Literature
+>
+> Linear models make the real world go round, the impact could be massive. Most
+> literature in this space consider the algorithm independent of the data
+> normalization (or just pick something). Even in other areas like Differential
+> Privacy, it is standard to assume a specific L1 normalization of the data for
+> theoretical reasons, and this work may evidence som understandings of an
+> implicit difference between DP and standard regressions beyond the effect of
+> randomized noise.
+
+Thank you for recognizing the potential impact of our work!
+
+> ## Essential References Not Discussed
+>
+> No critical missing references, but it would be nice to give pointers to the
+> many libraries that have these models to highlight impact (Scikit, DLIB, JSAT,
+> Celer, and so many more).
+
+Thanks for the idea. We have added a new paragraph to the discussion with
+several references to popular libraries along the lines you suggest.
+
+> ## Other Strengths And Weaknesses
+>
+> I was very excited about this paper initially. I've solved many real-world
+> problems with L1 penalized models, followed by Xgboost, and that gets you 90%
+> of the world. Briding the empirical gap to show that the results are practical
+> in a straight up, "what is the Accuracy /AUC", as mentioned in the above
+> sections, would massively elevate the quality and impact of the paper.
+>
+> The paper's readability would be greatly improved by including an Algorithm
+> block for each of L1, L2, and Elastic-Net of the author's proposed approach to
+> normalization, each is currently buried in the text and hard to separate in the
+> content.
+
+Thank you for this suggestion. While our paper does not introduce new
+algorithms per se, but rather provides insights into normalization effects on
+regularized linear models, we agree that a structured approach would benefit
+readers. We have added a new section to the discussion that presents clear,
+actionable guidelines for practitioners on how to think about normalization in
+the context of regularized linear models and under what circumstances different
+normalization methods might be appropriate.
+
+<!-- TODO: Add this type of paragraph -->
+
+> ## Other Comments Or Suggestions
+>
+> The article would be improved with some more guidance to the reader of "where
+> we are going and why", each section currently "jumps in" and it is not clear
+> what point is necessarily being made until the end. That isn't to say that the
+> paper isn't good grammar, but it was my excitement that carrier me through - it
+> would have been more pleasant if I had a map!
+
+Thank you for raising this issue. We have looked over the text and
+improved the flow of the paper by adding more guidance to the reader.
+
+> Considering or discussion robust standardization methods would also be
+> appreciated, but a weakness I could accept if other items were addressed.
+>
+> ## Questions For Authors
+>
+> See above content, if you could provide:
+>
+> 1. Larger experimental evaluations
+> 2. Algorithm blocks for each case
+
+See above for our response to these points.

@@ -43,9 +43,25 @@ function normalize_features2(x::AbstractMatrix, delta::Real = 0, center::Bool = 
   return x_normalized, centers, scales
 end
 
-function normalize_features_unadjusted(x::AbstractMatrix, method::String = "std")
+function normalize_features_unadjusted(
+  x::AbstractMatrix,
+  method::String = "std",
+  delta::Real = 0;
+  binarize = false,
+  adjust = false,
+)
   p = size(x, 2)
   scales = ones(1, p)
+
+  if binarize
+    binary = find_binary_features(x)
+
+    for j in 1:p
+      if !binary[j]
+        x[:, j] .= Int.(x[:, j] .> mean(x[:, j]))
+      end
+    end
+  end
 
   if method == "std"
     centers = mean(x, dims = 1)
@@ -59,6 +75,11 @@ function normalize_features_unadjusted(x::AbstractMatrix, method::String = "std"
   elseif method == "none"
     centers = zeros(1, p)
     scales = ones(1, p)
+  elseif method == "l1"
+    centers = mean(x, dims = 1)
+    scales = sum(abs.(Matrix(x) .- centers), dims = 1)
+  elseif method == "ours"
+    return normalize_features(x, delta, adjust = adjust)
   else
     error("Invalid normalization method. See source for options")
   end
@@ -74,6 +95,7 @@ function scaling_factors(
   x::AbstractMatrix,
   delta::Real = 0;
   intersections::Vector{Int} = Int[],
+  adjust = true,
 )
   p = size(x, 2)
   scales = ones(1, p)
@@ -81,10 +103,9 @@ function scaling_factors(
   binary = find_binary_features(x)
 
   # always scale continuos features by standard deviation
-  #
   for j in 1:p
     if binary[j]
-      mod = 0.5 / (0.25^delta)
+      mod = adjust ? 0.5 / (0.25^delta) : 1
       scales[j] = mod * var(x[:, j], corrected = false)^delta
     else
       # conditionally scale interaction effects
@@ -106,13 +127,10 @@ function normalize_features(
   x::AbstractMatrix,
   delta::Real = 0;
   center::Bool = true,
-  interactions::Vector{Int} = Int[],
-  interactionmethod = 1,
+  adjust = true,
 )
-  n, p = size(x)
+  _, p = size(x)
   scales = ones(1, p)
-
-  binary = find_binary_features(x)
 
   if center
     centers = mean(x, dims = 1)
@@ -120,41 +138,7 @@ function normalize_features(
     centers = zeros(1, p)
   end
 
-  # always scale continuous features by standard deviation
-
-  for j in 1:p
-    if binary[j]
-      mod = 0.5 / (0.25^delta)
-      scales[j] = mod * var(x[:, j], corrected = false)^delta
-    else
-      # conditionally scale interaction effects
-      if j in interactions
-        if interactionmethod == 1
-          scales[j] = std(x[:, j], corrected = false)
-        elseif interactionmethod == 2
-          nz = findall(x[:, j] .!= 0)
-          scales[j] = std(x[nz, j], corrected = false)
-        elseif interactionmethod == 3
-          sigma = std(x[:, 2], corrected = false)
-          q = length(findall(x[:, 1] .== 1)) / n
-          # q = mean(x[:, j])
-          # mod = 0.5 / (0.25^delta)
-          # mod = 1e-5
-          # mod = 0.01
-          mod = 1
-          scales[j] = q * sigma * mod
-          scales[j] = 0.25
-        elseif interactionmethod == 4
-          # do nothing, already scaled
-        end
-      else
-        # Continuous: scale with standard deviation
-        scales[j] = std(x[:, j], corrected = false)
-      end
-    end
-  end
-
-  scales[scales .== 0] .= 1
+  scales = scaling_factors(x, delta, adjust = adjust)
 
   x_normalized = (Matrix(x) .- centers) ./ scales
 
