@@ -258,3 +258,29 @@ comparability under \(\kappa = 2\).
   \label{fig:bias-var-onedim-ridge-full}
 \end{figure}
 
+\subsection{Binarization and Corrolation}
+
+\begin{theorem}[Correlation for Dichotomized Normal Variables]
+  Let \(X\) and \(Y\) be two standard normal random variables with correlation \(\rho\).
+  Define \(Z = \bm{1}[Y > \alpha]\) where \(\alpha = \cdf^{-1}(q)\) is the
+  quantile at which \(Y\) is dichotomized.
+  Then
+  \[
+    \cor(X,Z)
+    = \frac{\rho\pdf(\alpha)}{\sqrt{q \bigl(1 - q\bigr)}} \rightarrow 0 \quad\text{as}\quad q \rightarrow 1
+  \]
+\end{theorem}
+\begin{proof}
+  Let \(Z = \mathbf{1}[Y > \alpha]\) with \(\alpha = \cdf^{-1}(q)\). Then,
+  using the law of total expectation, we have
+  \[
+    \E(XZ) = \E\bigl(\E(XZ \mid Y)\bigr) = \E\bigl(\rho Y \bm{1}[Y > \alpha]\bigr)
+    = \rho \int_{\alpha}^{\infty} y \pdf(y)\,\du y = \rho \pdf(\alpha).
+  \]
+  Since \(\var(X) = 1\) and \(\var(Z) = q (1 - q)\), it follows that
+  \[
+    \cor(X,Z) = \frac{\E(XZ)}{\sqrt{\var(X)\,\var(Z)}} = \frac{\rho \pdf(\alpha)}{\sqrt{q \bigl(1 - q\bigr)}}.
+  \]
+  And since \(\pdf(\alpha) \to 0\) exponentially fast as \(q \to 1\), it follows that
+  \(\cor(X,Z) \to 0\) as \(q \to 1\).
+\end{proof}
