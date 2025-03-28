@@ -10,7 +10,7 @@ using JSON
 using ProjectRoot
 using NormReg
 
-function generate_two_binary_features(n::Int, q::Float64; rho::Float64=0.0)
+function generate_two_binary_features(n::Int, q::Float64; rho::Float64 = 0.0)
   p1 = 0.5
   p2 = q
 
@@ -36,27 +36,27 @@ function generate_two_binary_features(n::Int, q::Float64; rho::Float64=0.0)
   idx = 1
   # Fill (0,0)
   for _ in 1:c00
-      x1[idx] = false
-      x2[idx] = false
-      idx += 1
+    x1[idx] = false
+    x2[idx] = false
+    idx += 1
   end
   # Fill (0,1)
   for _ in 1:c01
-      x1[idx] = false
-      x2[idx] = true
-      idx += 1
+    x1[idx] = false
+    x2[idx] = true
+    idx += 1
   end
   # Fill (1,0)
   for _ in 1:c10
-      x1[idx] = true
-      x2[idx] = false
-      idx += 1
+    x1[idx] = true
+    x2[idx] = false
+    idx += 1
   end
   # Fill (1,1)
   for _ in 1:c11
-      x1[idx] = true
-      x2[idx] = true
-      idx += 1
+    x1[idx] = true
+    x2[idx] = true
+    idx += 1
   end
 
   return hcat(x1, x2), true
@@ -69,7 +69,7 @@ function orthogonality_simulation(q, rho)
   alpha = 1.0
 
   x, ok = generate_two_binary_features(n, q, rho = rho)
-  
+
   if !ok
     return [NaN, NaN]
   end
@@ -128,5 +128,3 @@ end
 # x = hcat(x1, x2)
 # mean(x, dims=1)
 # cor(x)
-
-
