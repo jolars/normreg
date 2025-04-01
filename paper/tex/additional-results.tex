@@ -272,3 +272,28 @@ balance bias decreases as \(\alpha\) approaches 0 (ridge regression).
   }
   \label{fig:mixed-data-elnet-full}
 \end{figure}
+
+\subsection{f}
+
+\newrobustcmd{\best}{\bfseries}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison between ranks of ordinary least-squares coefficients and
+    ranks given by the order of model entry along the lasso path for the Boston housing
+    data set. NDCG is normalized discounted cumulative gain. Best values are marked in blod face.
+    For all measures except the mean absolute difference, higher values are better.
+  }%
+  \label{tab:method_comparison}
+  \vskip 0.15in
+  \begin{tabular}{l S[table-format=1.4,detect-weight] S[table-format=1.4] S[table-format=1.4]}
+    \toprule
+    Metric                   & {$\delta=1$} & {Standardization} & {Min--Max} \\
+    \midrule
+    Spearman                 & \best 0.7308 & 0.5714            & 0.5        \\
+    Kendall                  & \best 0.5128 & 0.4359            & 0.3846     \\
+    Mean Absolute Difference & \best 2.0    & 2.7692            & 3.0769     \\
+    NDCG                     & \best 0.9515 & 0.9351            & 0.9186     \\
+    \bottomrule
+  \end{tabular}
+\end{table}
