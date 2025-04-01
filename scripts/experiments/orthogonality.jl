@@ -94,8 +94,6 @@ function orthogonality_simulation(q, rho)
   return beta_hat_it
 end
 
-# cor(x)
-
 qs = collect(range(0.5, 0.9, length = 10))
 rhos = [0.0, 0.4, 0.6]
 
