@@ -15,7 +15,7 @@ lambda_sim = function (alpha, dataset, delta, lambda_max, n_lambda)
 
   x_train_std, centers, scales = normalize_features(x_train, delta)
 
-  lambda = collect(logspace(lambda_max, lambda_max * 1e-5, n_lambda))
+  lambda = collect(logspace(lambda_max, lambda_max * 1e-2, n_lambda))
 
   model = fit(
     LassoPath,
@@ -46,7 +46,7 @@ end
 
 results = []
 grid_size = 100
-datasets = ["a1a", "w1a", "rhee2006"]
+datasets = ["E2006.train", "rcv1_train.binary"]
 res =
   DataFrame(alpha = [], dataset = [], delta = [], lambda = [], err = [], support_size = [])
 deltas = collect(range(0, 1, length = grid_size));
@@ -86,7 +86,7 @@ for alpha in alphas
   end
 end
 
-outfile = @projectroot("results", "hyperopt.csv");
+outfile = @projectroot("results", "hyperopt-extended.csv");
 
 open(outfile, "w") do f
   CSV.write(f, res)

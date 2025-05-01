@@ -30,6 +30,7 @@ export plot_lasso_path
 include("preprocessing.jl")
 export find_binary_features
 export normalize_features
+export normalize_features2
 export normalize_features_delta
 export normalize_features_unadjusted
 export unstandardize_coefficients
@@ -57,5 +58,9 @@ export binary_variance
 include("solver.jl")
 export elasticnet
 export cdsolver
+
+include("datasets.jl")
+include("libsvmdata.jl")
+export get_dataset_home, get_datasets, print_datasets, load_dataset
 
 end

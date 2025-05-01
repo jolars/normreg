@@ -1,7 +1,6 @@
 using GLM
 using LaTeXStrings
 using ProjectRoot
-using LIBSVMdata
 using Lasso
 using Plots
 using NormReg

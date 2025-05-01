@@ -2,7 +2,6 @@ using NormReg
 using JSON
 using DataFrames
 using Random
-using LIBSVMdata
 using ProjectRoot
 using Lasso
 using Statistics

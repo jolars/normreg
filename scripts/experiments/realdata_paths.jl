@@ -1,7 +1,6 @@
 using GLM
 using DrWatson
 using ProjectRoot
-using LIBSVMdata
 using JSON
 using Statistics
 using NormReg
