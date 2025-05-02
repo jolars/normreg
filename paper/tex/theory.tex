@@ -143,11 +143,11 @@ probability of the elastic net estimator under the presence of noise. A conseque
 assumption of a normal error distribution and consequent normal distribution of
 \(\tilde{\vec{x}}_j^\T \vec{y}\) is that the probability of selection in the elastic net
 problem is given by
-\begin{multline}
+\begin{align}
   \label{eq:selection-probability}
-  \Pr\left(\hat{\beta}_j \neq 0\right) =  \cdf \left( \frac{\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right) \\
-  + \cdf \left( \frac{-\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
-\end{multline}
+  \Pr\left(\hat{\beta}_j \neq 0\right)  ={} & \cdf \left( \frac{\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right)\nonumber \\
+                                            & + \cdf \left( \frac{-\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
+\end{align}
 where \(\cdf\) is the cumulative distribution function of the standard normal distribution.
 Letting \(\theta_j = -\mu_j - \lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\), we can
 express this probability asymptotically as \(q_j \rightarrow 1^-\) as
