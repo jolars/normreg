@@ -1,15 +1,15 @@
 \section{Normalization}
 
-There is considerable ambiguity regarding key terms in the literature. Here, we define
-\emph{normalization} as the process of centering and scaling the feature matrix, which we
-now formalize.
-
 % \begin{definition}[Normalization]
 %   Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
 %   \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
 %   \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
 %   \emph{scaling} factors respectively.
 % \end{definition}
+
+To avoid possible confusion regarding the ambiguous use of terminology in the literature,
+we will begin by clarifying what we mean by \emph{normalization}, which we define as the
+process of centering and scaling the feature matrix.
 
 \begin{definition}[Normalization]
   \label{def:normalization}
@@ -20,9 +20,9 @@ now formalize.
   \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
 \end{definition}
 
-% Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
-% but here we define standardization only as the case when centering with the mean and
-% scaling with the (uncorrected) standard deviation.
+Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
+but here we define standardization only as the case when centering with the mean and
+scaling with the (uncorrected) standard deviation.
 
 There are many different normalization strategies and we have listed a few common choices
 in \Cref{tab:normalization-types}. Standardization is perhaps the most popular type of
@@ -30,8 +30,6 @@ normalization, at least in the field of statistics. One of its benefits is that 
 simplifies certain aspects of fitting the model, such as fitting the intercept. The
 downside of standardization is that it involves centering by the mean, which destroys
 sparsity.
-% This is not a problem when \(\bm{X}\) is stored as a dense matrix; but when the
-% data is sparse, it may increase memory use and processing time.
 
 \begin{table}[hbtp]
   \centering
@@ -58,12 +56,12 @@ sparsity.
   \end{tabular}
 \end{table}
 
-When \(\bm{X}\) is sparse, a common alternative to standardization is min--max or max--abs
-(maximum absolute value) normalization, which scale the data to lie in \([0, 1]\) and
-\([-1, 1]\) respectively, and retain sparsity when features are binary. These methods are,
-however, both sensitive to outliers. And since sample extreme values often depend on sample
-size, as in the case of normal data~(\Cref{sec:maxabs-theory}), use of these methods may
-sometimes be problematic.
+When \(\bm{X}\) is sparse, two common alternatives to standardization are min--max and
+max--abs (maximum absolute value) normalization, which scale the data to lie in \([0, 1]\)
+and \([-1, 1]\) respectively, and therefore retain sparsity when features are binary. These
+methods are, however, both sensitive to outliers. And since sample extreme values often
+depend on sample size, as in the case of normal data~(\Cref{sec:maxabs-theory}), use of
+these methods may sometimes be problematic.
 % A special case of normalization is the adaptive
 % lasso~\citep{zou2006}, in which the coefficients from an initial model fit (typically OLS
 % or ridge regression) are used as scaling factors.

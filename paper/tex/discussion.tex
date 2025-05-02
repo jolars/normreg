@@ -3,13 +3,12 @@
 % TODO: Consider reducing the content here now that the introduction contains
 % a summary of our contributions
 
-We have studied the effects of normalization in lasso, ridge, and elastic net regression
-with binary data---an issue that has not been studied. We discovered that the class balance
-(proportion of ones) of these binary features has a pronounced effect on both lasso and
-ridge estimates and that this effect depends on the type of normalization used. For the
-lasso, for instance, features with large class imbalances stand little chance of being
-selected if the features are standardized, even when their relationships with the response
-are strong.
+This is the first paper to study the effects of normalization in lasso, ridge, and elastic
+net regression with binary data. We have discovered that the class balance (proportion of
+ones) of these binary features has a pronounced effect on both lasso and ridge estimates
+and that this effect depends on the type of normalization used. For the lasso, for
+instance, features with large class imbalances stand little chance of being selected if the
+features are standardized, even when their relationships with the response are strong.
 
 The driver of this result is the relationship between the variance of the feature and type
 of normalization. This works as expected for normally distributed features. But for binary
@@ -19,15 +18,6 @@ however, shown that scaling binary features with standard deviation in the case 
 regression and variance in the case of the lasso mitigates this effect, but that doing so
 comes at the price of increased variance. This effectively means that the choice of
 normalization constitutes a bias--variance trade-off.
-
-% To study these effects, we have introduced the scaling parameterization $s_j = (q_j -
-%   q_j^2)^\delta$, which includes the cases \(\delta=0\) (no scaling, as in max--abs and
-% min--max normalization), \(\delta = 1/2\) (standard deviation scaling, as in
-% standardization), and \(\delta=1\) (variance scaling). As far as we know, variance scaling
-% has not been considered in the literature before. Our results demonstrate that the choice
-% of \(\delta\) affects the lasso, ridge, and elastic net estimates both with respect to
-% feature selection and predictive performance and suggests that there is benefit to choosing
-% the normalization type via hyper-parameter optimization.
 
 We have also studied the case of mixed data: designs that include both binary and normally
 distributed features~(\Cref{sec:mixed-data}). In this setting, our first finding is that
@@ -56,6 +46,6 @@ machine learning and statistical software packages such as
 \pkg{mlpack}~\citep{curtin2023}, \pkg{skglm}~\citep{bertrand2022},
 \pkg{LIBLINEAR}~\citep{fan2008a}, and \pkg{MATLAB}~\citep{themathworksinc.2022}. Our
 results suggest that the choice of normalization is an important aspect of using these
-models that, in spite of the popularity of these methods, has been overlooked. We hope that
-our results will motivate researchers and practitioners to consider the choice of
+models that, in spite of the popularity of these methods, has so far been overlooked. We
+hope that our results will motivate researchers and practitioners to consider the choice of
 normalization more carefully in the future.

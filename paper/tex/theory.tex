@@ -1,12 +1,12 @@
-\section{Ridge, lasso, and elastic net regression}%
+\section{Ridge, Lasso, and Elastic Net Regression}%
 \label{sec:theory}
 
 Throughout the paper we assume that the response \(\vec{y}\) is generated according to
 \(\bm{y} = \beta_0^* + \bm{X\beta}^* + \bm{\varepsilon}\), with \(\mat X\) being the \(n
 \times p\) design matrix with features (columns) \(\vec x_j\), \(\bm{\varepsilon}\) the
 vector of noise, with identically and independently distributed entries, and where we
-assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will also assume
-that the features of the normalized design matrix are orthogonal, that is,
+assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will also begin by
+assuming that the features of the normalized design matrix are orthogonal, that is,
 \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
 \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right)\). In this
 case, the solution to the elastic net problem is given by
@@ -24,12 +24,16 @@ where \(\st_\lambda(z)\) is the soft-thresholding operator, defined as \(\st_\la
 \sign(z) \max(|z| - \lambda, 0)\). (See \Cref{sec:elastic-net-estimator} for a derivation
 of this.)
 
+The assumption of orthogonal features may seem strong and is indeed almost never realistic.
+For our results, however, the assumption has little influence of the results, which we
+discuss in \Cref{sec:orthogonality-assumption}.
+
 Normalization changes the optimization problem and its solution, the coefficients, which
 will now be on the scale of the normalized features. But we are interested in
 \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain
 these, we transform the coefficients from the normalized problem, \(\hat\beta^{(n)}_j\),
 back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\), where \([p] =
-\{1,2,\dots,p\}\). There is a similar transformation for the intercept but we omit here
+\{1,2,\dots,p\}\). There is a similar transformation for the intercept, but we omit it here
 since we are not interested in interpreting it.
 
 Now assume that \(\varepsilon_i\) is identically and independently distributed noise with
@@ -325,13 +329,10 @@ noiseless situation (\(\sigma_\varepsilon = 0\)), are standardizing the normal f
 that, without loss of generality, \(\bar{x}_1 = 0\), then we need the following equality to
 hold:
 %
-\begin{align}
+\begin{equation}
   \label{eq:comparable-effects}
-  \hat{\beta}_1                                                                                                                          & = \kappa\sigma \hat{\beta}_2                                                                                                                         & \implies \nonumber \\
-  \frac{\st_{\lambda_1}(\tilde{\vec{x}}_1^\intercal \vec{y})}{s_1\left(\tilde{\vec{x}}_1^\intercal \tilde{\vec{x}}_1 + \lambda_2\right)} & =\frac{\kappa\sigma \st_{\lambda_1}(\tilde{\vec{x}}_2^\intercal \vec{y})}{s_2\left(\tilde{\vec{x}}_2^\intercal \tilde{\vec{x}}_2 + \lambda_2\right)} & \implies \nonumber \\
-  \frac{\st_{\lambda_1}\left(\frac{n\beta_1^* (q - q^2)}{s_1}\right)}{s_1\left(\frac{n(q - q^2)}{s_1^2} + \lambda_2\right)}              & =  \frac{\kappa \st_{\lambda_1}\left(\frac{n\beta_1^*}{\kappa} \right)}{n + \lambda_2}.                                                              &
-\end{align}
-
+  \hat{\beta}_1 = \kappa\sigma \hat{\beta}_2 \implies \frac{\st_{\lambda_1}(\tilde{\vec{x}}_1^\intercal \vec{y})}{s_1\left(\tilde{\vec{x}}_1^\intercal \tilde{\vec{x}}_1 + \lambda_2\right)}  =\frac{\kappa\sigma \st_{\lambda_1}(\tilde{\vec{x}}_2^\intercal \vec{y})}{s_2\left(\tilde{\vec{x}}_2^\intercal \tilde{\vec{x}}_2 + \lambda_2\right)}  \implies \frac{\st_{\lambda_1}\left(\frac{n\beta_1^* (q - q^2)}{s_1}\right)}{s_1\left(\frac{n(q - q^2)}{s_1^2} + \lambda_2\right)} = \frac{\kappa \st_{\lambda_1}\left(\frac{n\beta_1^*}{\kappa} \right)}{n + \lambda_2}.
+\end{equation}
 For the lasso (\(\lambda_2 = 0\)) and ridge regression (\(\lambda_1=0\)), we see that the
 equation holds for \(s_1 = \kappa (q - q^2)\) and \(s_1 = (q - q^2)^{1/2}\), respectively.
 In other words, we achieve comparability in the lasso by scaling each binary feature with
@@ -391,7 +392,7 @@ instead, then similar reasoning suggests using \(s_3 = ((q_1-q_1^2)(q_2-q_2^2))^
 In \Cref{sec:experiments-interactions}, we study the effects of these choices in simulated
 experiments.
 
-\subsection{The weighted elastic net}\label{sec:binary-weighting}
+\subsection{The Weighted Elastic Net}\label{sec:binary-weighting}
 
 We have so far shown that certain choices of normalization can mitigate the class-balance
 bias imposed by the lasso and ridge regularization. But we have also

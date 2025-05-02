@@ -3,6 +3,7 @@
 % \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\cov}{Cov}
 \DeclareMathOperator{\cor}{Corr}
 \DeclareMathOperator{\bias}{Bias}
@@ -12,7 +13,7 @@
 \DeclareMathOperator{\nullspace}{null}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\card}{card}
-% \DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\sign}{sign}
 \DeclareMathOperator{\st}{S}
 \DeclareMathOperator{\normal}{Normal}
 \DeclareMathOperator{\fnormal}{FoldedNormal}
@@ -30,32 +31,32 @@
 % commands
 % \newcommand{\vec}{\vectorsym}
 % \newcommand{\mat}{\matrixsym}
-\renewcommand{\vec}{\boldsymbol}
-\newcommand{\mat}{\boldsymbol}
+\renewcommand{\vec}{\bm}
+\newcommand{\mat}{\bm}
 \newcommand*\du{\mathop{}\!\mathrm{d}}
+\def\ceil#1{\lceil #1 \rceil}
 % \newcommand{\T}{\mathsf{T}}
 \newcommand{\T}{\intercal}
-\newcommand{\ones}{\boldsymbol{1}}
+\newcommand{\ones}{\bm{1}}
 % \newcommand{\T}{\intercal}
 % \newcommand{\T}[1]{{1}^{\mathsf{T}}}
 \newcommand{\ind}[1]{\operatorname{I}_{#1}}
 
-% ICML Theorem Styles
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
 
 \newcommand{\todojl}[1]{\todo[color=green!40]{#1}}
 
-\newcommand{\mv}[1]{{\boldsymbol{\mathrm{#1}}}}
+\newcommand{\mv}[1]{{\bm{\mathrm{#1}}}}
 
 \newcommand{\pkg}[1]{#1}
 \newcommand{\data}[1]{\texttt{#1}}

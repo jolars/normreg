@@ -13,12 +13,13 @@ remaining ones to zero. To generate quasi-normal features, we generate a linear 
 We use a coordinate descent solver to optimize our models, which we have based on the
 algorithm outlined by \citet{friedman2010}. All experiments were coded using the Julia
 programming language~\citep{bezanson2017} and the code is available at
-\url{https://github.com/jolars/normreg}.
-% in the supplementary material. 
+% \url{https://github.com/jolars/normreg}.
+in the supplementary material and will be published online upon acceptance.
+%
 All simulated experiments were run for at least 100 iterations and, unless stated
 otherwise, are presented as means $\pm$ one standard deviation (using bars or ribbons).
 
-\subsection{Normalization in the lasso and ridge regression}%
+\subsection{Normalization in Lasso and Ridge Regression}%
 \label{sec:experiments-lassoridge}
 
 In this section we consider fitting the lasso and ridge regression to normalized data sets.
@@ -28,7 +29,7 @@ we center by mean and scale by \(s_j \propto (q_j-q_j^2)^\delta\).
 % corresponds to no scaling, \(\delta = 1/2\) to standardization, and \(\delta = 1\) to
 % variance scaling.
 
-\subsubsection{Variability and bias in estimates}
+\subsubsection{Variability and Bias in Estimates}
 
 In our first experiment, we consider fitting the lasso to a simulated data set with
 \(n=500\) observations and \(p = \num{1000}\) features, out of which the first 20 features
@@ -60,7 +61,7 @@ together with \(\delta\).
   \label{fig:binary-decreasing}
 \end{figure}
 
-\subsubsection{Predictive performance}
+\subsubsection{Predictive Performance}
 
 In this section we examine the influence of normalization on predictive performance for
 three different data sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006},
@@ -110,9 +111,9 @@ that includes the lasso as well.
 
 In \Cref{sec:predictive-performance-simulated}, we extend these results with experiments on
 simulated data under various class balances and signal-to-noise ratios, again showing that
-normalization has an impact on predictive preformance.
+normalization has an impact on predictive performance.s
 
-\subsubsection{Mixed data}\label{sec:experiments-mixed-data}
+\subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
 In \Cref{sec:mixed-data} we showed theoretically that care needs to be taken when
 normalizing mixed data. Here we verify the theory through simulations. We construct a
@@ -180,7 +181,7 @@ on different choices of \(\bm{\beta}^*\).
   \label{fig:interactions}
 \end{figure}
 
-\subsection{The weighted elastic net}
+\subsection{The Weighted Elastic Net}
 
 The weighted elastic net can be used as an alternative to normalization to correct for
 class balance bias when \(\lambda_1 > 0\) and \(\lambda_2 >0\). To simplify the

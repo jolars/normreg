@@ -60,7 +60,7 @@ function plot_orthogonality(df, rho, i)
 
   # Create the plot
   title = L"\rho = %$(rho)"
-  ylabel = i == 1 ? L"\hat{\boldsymbol{\beta}}" : ""
+  ylabel = i == 1 ? L"\hat{\bm{\beta}}" : ""
   yformatter = i == 1 ? :auto : _ -> ""
   legend = i == 3 ? :topright : nothing
   xlabel = i == 2 ? L"q_2" : ""

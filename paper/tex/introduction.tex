@@ -6,10 +6,6 @@ standard linear regression since the design matrix \(\mat X\) is no longer of fu
 common remedy to this problem is to \emph{regularize} the model by adding a penalty term to
 the objective that punishes models with large coefficients. The resulting problem takes the
 following form:
-% If we let \(g(\vec\beta; \mat X,
-% \vec y)\) be the original objective function---which when minimized improves the model's
-% fit to the data (\(\mat X, \vec y\))---then we are interested in minimizing the following
-% objective:
 \begin{equation}
   \label{eq:general-objective}
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta),
@@ -21,12 +17,6 @@ where \(g\) is a data-fitting function that attempts to optimize the fit to the 
 ordinary least-squares objective, represent the
 lasso~\citep{tibshirani1996,santosa1986,donoho1994} and ridge (Tikhonov) regression
 respectively.
-% Other common penalties include the sorted \(\ell_1\)-norm used in Sorted
-% L-One Penalized Estimation (SLOPE)~\citep{bogdan2013,zeng2014,bogdan2015},
-% the minimax-concave penalty (MCP)~\citep{zhang2010}, hinge loss (used in
-% support vector machines~\citep{cortes1995}) and smoothly-clipped absolute
-% deviation~(SCAD)~\citep{fan2001}. Many penalities---indeed all of the
-% mentioned ones---shrink coefficients in proportion to their sizes.
 
 These penalties depend on the magnitudes of the coefficients, which means that they are
 sensitive to the scales of the features in \(\mat X\). To avoid this, it is common to
@@ -59,36 +49,31 @@ estimates.
 \end{figure}
 
 In spite of this apparent connection between normalization and regularization, there has so
-far been no research on the topic. Instead, the choice of normalization is typically
-motivated by computational concerns or by being ``standard''. This is problematic because
-there exists no natural choice of normalization beyond normally distributed data (in which
-case standardization is a natural choice). In particular, there is no obvious choice for
-binary features (where the each observations takes either of two values) and no research
-upon which to make an informed decision on the matter.
-
-% The latter of these, the elastic net, is a generalization of the previous two, and is
-% represented by the following optimization problem:
-% %
-% \begin{equation}
-%   \label{eq:elastic-net}
-%   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \frac{1}{2} \lVert \vec y - \beta_0 - \mat{X}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2,
-% \end{equation}
-% %
-% where setting \(\lambda_1 = 0\) results in ridge regression and setting \(\lambda_2 = 0\)
-% results in the lasso.
-% These methods are staples in the field of statistics and machine
-% learning and are accompanied by a large body of theoretical work and applications for real
-% data.
-
-Our focus in this paper is on binary data and we will pay particular attention to the case
-when binary features are imbalanced, that is, have relatively many ones or zeroes. In this
-scenario, we will demonstrate that the choice of normalization directly influences the
-regression coefficients and that this effect depends on the particular choice of
-normalization and regularization. Our key contributions are:
+far been no research on the topic. And in its absence, the choice of normalization is
+typically motivated by computational concerns or by being ``standard''. This is problematic
+since the effects of normalization are unknown and because there exists no natural choice
+for many types of data. In particular, there is no obvious choice for binary features
+(where the each observations takes either of two values). In this paper we begin to bridge
+this knowledge gap by studying normalization in the context of three particular cases of
+\Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The latter
+of these, the elastic net, is a generalization of the previous two, and is represented by
+the following optimization problem:
+%
+\begin{equation}
+  \label{eq:elastic-net}
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} \frac{1}{2} \lVert \vec y - \beta_0 - \tilde{\mat{X}}\vec{\beta} \rVert^2_2  + \lambda_1 \lVert \vec\beta \rVert_1 + \frac{\lambda_2}{2}\lVert \vec \beta \rVert_2^2,
+\end{equation}
+%
+where setting \(\lambda_1 = 0\) results in ridge regression and setting \(\lambda_2 = 0\)
+results in the lasso. Our focus in this paper is on binary data and we pay particular
+attention to the case when they are imbalanced, that is, have relatively many ones or
+zeroes. In this scenario, we demonstrate that the choice of normalization directly
+influences the regression coefficients and that this effect depends on the particular
+combination of normalization and regularization. Our key contributions are:
 \begin{enumerate}
-  \item We reveal that class balance in binary features significantly affects lasso and ridge
-        estimates, and show that scaling binary features with standard deviation (ridge) or
-        variance (lasso) mitigates these effects while increasing estimate
+  \item We reveal that class balance in binary features significantly affects lasso, ridge, and
+        elastic net estimates, and show that scaling binary features with standard deviation
+        (ridge) or variance (lasso) mitigates these effects at the cost of increased
         variance~(\Cref{sec:theory-binary-features}).
   \item For mixed data designs, we demonstrate that normalization choice implicitly determines how
         regularization affects binary versus continuous features~(\Cref{sec:mixed-data}).

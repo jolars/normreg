@@ -37,19 +37,21 @@
   urlcolor=mydarkblue,
 }
 
+
 \usepackage[capitalize,noabbrev]{cleveref}
+
 \usepackage{crossreftools}
 \pdfstringdefDisableCommands{%
   \let\Cref\crtCref
   \let\cref\crtcref
 }
 
+\input{tex/macros.tex}
+
 \usepackage{todonotes}
 
 \graphicspath{{../plots/}}
 
-\input{math_commands.tex}
-\input{tex/macros.tex}
 
 \title{The Choice of Normalization Influences Shrinkage in Regularized Regression}
 
@@ -83,15 +85,12 @@
 \input{tex/experiments.tex}
 \input{tex/discussion.tex}
 
-% \begin{ack}
-%
-% \end{ack}
-
 \bibliography{main}
 \bibliographystyle{tmlr}
 
 \appendix
 
+\input{tex/orthogonality-assumption.tex}
 \input{tex/additional-theory.tex}
 \input{tex/proofs.tex}
 \input{tex/additional-results.tex}
