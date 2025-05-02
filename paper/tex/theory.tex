@@ -1,4 +1,4 @@
-\section{Ridge, Lasso, and Elastic Net Regression}%
+\section{Ridge, lasso, and elastic net regression}%
 \label{sec:theory}
 
 Throughout the paper we assume that the response \(\vec{y}\) is generated according to
@@ -64,7 +64,7 @@ expressions~(\Cref{sec:normally-distributed-noise}) and
   \tilde{\vec{x}}_j^\T \vec{y} \sim \normal\left(\mu_j = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j^*, \sigma_j^2 = \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j \sigma_\varepsilon^2 \right).
 \]
 
-\subsection{Binary Features}%
+\subsection{Binary features}%
 \label{sec:theory-binary-features}
 
 When \(x_{ij} \in \{0, 1\}\) for all \(i\), we define \(\bm{x}_j\) to be a \emph{binary
@@ -76,10 +76,10 @@ the case of interactions~(\Cref{sec:interactions}), the choice does in fact matt
 
 If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample variance
 for a binary feature) which in \Cref{eq:z-d} yields
-\begin{align*}
-  \tilde{\vec{x}}_j^\T \vec{y} & = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \\
-  d_j                          & = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
-\end{align*}
+\begin{equation*}
+  \tilde{\vec{x}}_j^\T \vec{y} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \qquad
+  d_j                          = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
+\end{equation*}
 % \[
 %   \begin{aligned}
 %     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq_j^2 + nq_j^2) = \frac{nq_j(1-q_j)}{s^2_j}, \\
@@ -143,16 +143,11 @@ probability of the elastic net estimator under the presence of noise. A conseque
 assumption of a normal error distribution and consequent normal distribution of
 \(\tilde{\vec{x}}_j^\T \vec{y}\) is that the probability of selection in the elastic net
 problem is given by
-\begin{align}
+\begin{multline}
   \label{eq:selection-probability}
-   & \Pr\left(\hat{\beta}_j \neq 0\right) =                                                                                                       \nonumber
-  \\
-  % & = \Pr\left(\st_{\lambda_1}({Z_j}) \neq 0\right)                                                                                                                                                                                                                           \nonumber \\
-  %                                      & = \Pr\left({Z_j} > \lambda_1\right) + \Pr\left({Z_j} < -\lambda_1\right)                                                                                                                                                                                                  \nonumber \\
-  %                                      & = \cdf\left(\frac{\mu_j - \lambda_1}{\sigma_j}\right) + \cdf\left(\frac{- \mu_j -\lambda_1}{\sigma_j}\right)                                                                                                                                                              \nonumber \\
-   & \cdf \left( \frac{\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right)                \nonumber     \\
-   & + \cdf \left( \frac{-\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
-\end{align}
+  \Pr\left(\hat{\beta}_j \neq 0\right) =  \cdf \left( \frac{\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right) \\
+  + \cdf \left( \frac{-\beta_j^*n (q_j-q_j^2)^{1/2} - \lambda_1(q_j-q_j^2)^{\delta - 1/2}}{\sigma_\varepsilon \sqrt{n}}\right).
+\end{multline}
 where \(\cdf\) is the cumulative distribution function of the standard normal distribution.
 Letting \(\theta_j = -\mu_j - \lambda_1 \) and \(\gamma_j = \mu_j - \lambda_1\), we can
 express this probability asymptotically as \(q_j \rightarrow 1^-\) as
@@ -279,7 +274,7 @@ results on the lasso.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[]{binary_onedim_bias_var_lasso_small.pdf}
+  \includegraphics[]{binary_onedim_bias_var_lasso.pdf}
   \caption{%
     Bias, variance, and mean-squared error for a one-dimensional lasso problem,
     parameterized by noise level (\(\sigma_\varepsilon\)), class balance (\(q\)), and
@@ -292,7 +287,7 @@ So far, we have only considered a single binary feature, but in
 \Cref{sec:power-fdr-multiple} we present results on power and false discovery rates for a
 problem with multiple features.
 
-\subsection{Mixed Data}%
+\subsection{Mixed data}%
 \label{sec:mixed-data}
 
 A fundamental problem with mixes of binary and continuous features is deciding how to put
@@ -396,7 +391,7 @@ instead, then similar reasoning suggests using \(s_3 = ((q_1-q_1^2)(q_2-q_2^2))^
 In \Cref{sec:experiments-interactions}, we study the effects of these choices in simulated
 experiments.
 
-\subsection{The Weighted Elastic Net}\label{sec:binary-weighting}
+\subsection{The weighted elastic net}\label{sec:binary-weighting}
 
 We have so far shown that certain choices of normalization can mitigate the class-balance
 bias imposed by the lasso and ridge regularization. But we have also
@@ -419,13 +414,12 @@ v_j = (q_j - q_j^2)^{\omega}\) and counteract it, at least in the noiseless case
 \(\omega = 1\), which, we want to emphasize, is \emph{not} possible using the standard
 elastic net. For the lasso and ridge regression, however, this setting of \(\omega=1\) is
 equivalent to using \(\delta = 1\) and \(\delta = 1/2\), respectively, in the standard
-elastic net with normalized data.
-
-Results analogous to those in \Cref{sec:theory-binary-features} can be attained with a few
-small modifications for the weighted elastic net case. Starting with selection probability,
-we can set \(s_j = 1\) and replace \(\lambda_1\) with \(\lambda_1 u_j =
-\lambda_1(q_j-q_j^2)^\omega\) in \Cref{eq:selection-probability}, which shows that
-\(\omega\) and \(\delta\) have interchangeable effects for selection probability.
+elastic net with normalized data. Results analogous to those in
+\Cref{sec:theory-binary-features} can be attained with a few small modifications for the
+weighted elastic net case. Starting with selection probability, we can set \(s_j = 1\) and
+replace \(\lambda_1\) with \(\lambda_1 u_j = \lambda_1(q_j-q_j^2)^\omega\) in
+\Cref{eq:selection-probability}, which shows that \(\omega\) and \(\delta\) have
+interchangeable effects for selection probability.
 
 As far as expected value and variance of the weighted elastic net estimator is concerned,
 the same expressions apply directly in the case of the weighted elastic net given \(s_j =
@@ -445,8 +439,7 @@ results differ slightly as we now show.
       \frac{\beta^*n}{n + \lambda_2} & \text{if } \omega = 1,        \\
       \beta^*                        & \text{if } \omega > 1,
     \end{cases}
-  \]
-  \[
+    \qquad
     \lim_{q_j \rightarrow 1^-} \var \hat{\beta}_j =
     \begin{cases}
       0      & \text{if } 0 \leq \delta < \frac{1}{2}, \\
@@ -458,8 +451,7 @@ results differ slightly as we now show.
 This result for expected value is similar to the one for the unweighted but normalized
 elastic net. The only difference arises in the case when \(\omega = 1\), in which case the
 limit is unaffected by \(\lambda_1\) in the case of the weighted elastic net. For variance,
-the result mimics the result for the elastic net with normalization.
-
-The results for bias, variance, and mean-squared error for the weighted elastic net are
-similar to those in \Cref{fig:bias-var-onedim-lasso} and are plotted in
+the result mimics the result for the elastic net with normalization. The results for bias,
+variance, and mean-squared error for the weighted elastic net are similar to those in
+\Cref{fig:bias-var-onedim-lasso} and are plotted in
 \Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-results-biasvar}).

@@ -6,8 +6,6 @@ using NormReg
 using DrWatson
 using Plots
 
-pythonplot()
-
 set_plot_defaults()
 
 rho = 0.7

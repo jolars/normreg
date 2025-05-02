@@ -8,8 +8,6 @@ using Plots
 using ProjectRoot
 using Plots.PlotMeasures
 
-using PythonPlot: matplotlib
-
 set_plot_defaults()
 
 json_data = JSON.parsefile(@projectroot("results", "mixed_data.json"));

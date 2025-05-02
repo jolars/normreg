@@ -18,8 +18,8 @@ function plot_binary_bias_var(
   df,
   α = 0,
   sigma_e = [0.25, 0.5, 1.0, 2.0],
-  fig_width = NormReg.FULL_WIDTH,
-  fig_height = 400,
+  fig_width = NormReg.FULL_WIDTH * 0.9,
+  fig_height = 350,
 )
   df_subset = subset(df, :α => a -> a .== α, :sigma_e => s -> s .∈ Ref(sigma_e))
   df_long = stack(df_subset, Not([:q, :sigma_e, :delta, :lambda, :α]))

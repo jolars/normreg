@@ -5,9 +5,9 @@ using PlotThemes
 
 using PythonPlot: matplotlib
 
-const global FULL_WIDTH = 660
+const global FULL_WIDTH = 630
 
-function set_plot_defaults(; backend = "pyplot", target = "icml")
+function set_plot_defaults(; backend = "pyplot", target = "tmlr")
   default(framestyle = :box, label = nothing, tick_direction = :in, palette = :tableau_10)
   if backend == "gr"
     gr()

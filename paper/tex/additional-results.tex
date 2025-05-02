@@ -1,8 +1,8 @@
-\section{Additional Experiments}
+\section{Additional experiments}
 
 In this section we present additional and extended results from the main section.
 
-\subsection{Extended Example of Regularization Paths}%
+\subsection{Extended example of regularization paths}%
 \label{sec:extended-real-data-paths}
 
 In \Cref{fig:realdata-paths-full} we show an extended example of lasso paths for different
@@ -27,7 +27,7 @@ real data sets and types of normalization.
   \label{fig:realdata-paths-full}
 \end{figure}
 
-\subsection{Power and False Discoveries for Multiple Features}%
+\subsection{Power and false discoveries for multiple features}%
 \label{sec:power-fdr-multiple}
 
 Here, we study how the power of correctly detecting \(k=10\) signals under \(q_j\) linearly
@@ -94,7 +94,7 @@ estimates but also seems to increase the effect of class imbalance in the cases 
   \label{fig:binary-decreasing-full}
 \end{figure}
 
-\subsubsection{Orthogonality Assumption}
+\subsubsection{Orthogonality assumption}
 \label{sec:orthogonality-assumption}
 
 In this experiment, we investigate the important of the assumption of orthogonal features
@@ -132,7 +132,7 @@ correlation, which is due to the same phenomenon.
   \label{fig:orthogonality}
 \end{figure}
 
-\subsubsection{Predictive Performance for Simulated Data}%
+\subsubsection{Predictive performance for simulated data}%
 \label{sec:predictive-performance-simulated}
 
 \begin{figure}[htpb]
@@ -153,10 +153,10 @@ the lasso and ridge regression given different levels of class balance (\(q_j \i
 are binary, but here we have used \(n=300\) and \(p = \num{1000}\). The \(k=10\) first
 features correspond to true signals with \(\beta^*_j = 1\) and all have class balance
 \(q\). To set signal-to-noise ratio levels, we rely on the same choice as in
-\citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6. We use standard
-hold-out validation with equal splits for training, validation, and test sets. And we fit a
-full lasso path, parameterized by a log-spaced grid of 100 values\footnote{This is a
-  standard choice of grid, used for instance by \citet{friedman2010}}, from
+\citet{hastie2020} and use a log-spaced sequence of values from 0.05 to 6. We use
+standard hold-out validation with equal splits for training, validation, and test sets. And
+we fit a full lasso path, parameterized by a log-spaced grid of 100 values\footnote{This is
+  a standard choice of grid, used for instance by \citet{friedman2010}}, from
 \(\lambda_\text{max}\) (the value of \(\lambda\) at which the first feature enters the
 model) to \(10^{-2}\lambda_\text{max}\) on the training set and pick \(\lambda\) based on
 validation set error. Then we compute the hold-out test set error and aggregate the results
@@ -202,7 +202,7 @@ at the support size.
   \label{fig:hyperopt-support}
 \end{figure}
 
-\subsection{Benchmark of Normalization Tuning} \label{sec:normalization-tuning}
+\subsection{Benchmark of normalization tuning} \label{sec:normalization-tuning}
 
 Several of the previous results from this section indicate that there might be a benefit to
 tuning the normalization strategy. In this section, we present the results of an experiment
@@ -213,11 +213,11 @@ where we have done exactly this.
   \centering
   \subfigure[%
     Results for the lasso
-    \label{fig:method-comparison-lasso}
+    % \label{fig:method-comparison-lasso}
   ]{\includegraphics[]{method_comparison_lasso.pdf} }
   \subfigure[%
     Results for ridge regression
-    \label{fig:method-comparison-ridge}
+    % \label{fig:method-comparison-ridge}
   ]{\includegraphics[]{method_comparison_ridge.pdf}}
   \caption{%
     Cross-validation error from 10-times repeated 10-folds cross validation for the lasso and ridge
@@ -250,7 +250,7 @@ best.
   \label{fig:interactions-full}
 \end{figure}
 
-\subsection{The Weighted Elastic Net}%
+\subsection{The weighted elastic net}%
 \label{sec:additional-experiments-weighted-elnet}
 
 In \Cref{fig:mixed-data-elnet-full}, we show a version of \Cref{fig:mixed-data-elnet} with
@@ -285,7 +285,6 @@ balance bias decreases as \(\alpha\) approaches 0 (ridge regression).
     For all measures except the mean absolute difference, higher values are better.
   }%
   \label{tab:method_comparison}
-  \vskip 0.15in
   \begin{tabular}{l S[table-format=1.4,detect-weight] S[table-format=1.4] S[table-format=1.4]}
     \toprule
     Metric                   & {$\delta=1$} & {Standardization} & {Min--Max} \\

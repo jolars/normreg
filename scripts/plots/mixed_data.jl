@@ -8,8 +8,6 @@ using Plots
 using ProjectRoot
 using Plots.PlotMeasures
 
-using PythonPlot: matplotlib
-
 set_plot_defaults()
 
 json_data = JSON.parsefile(@projectroot("results", "mixed_data.json"));
@@ -77,7 +75,7 @@ end
 
 l = (n_rows, n_cols)
 
-pl = plot(plots..., layout = l, size = (320, 230))
+pl = plot(plots..., layout = l, size = (400, 270))
 
 file_path = @projectroot("plots", "mixed_data.pdf");
 

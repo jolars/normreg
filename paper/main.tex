@@ -1,10 +1,24 @@
+\PassOptionsToPackage{unicode,colorlinks}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames}{xcolor}
 
 \documentclass{article} % For LaTeX2e
 
-\usepackage{icml2025}
+% \usepackage{icml2025}
+% \usepackage[nonatbib,preprint]{neurips_2025}
+\usepackage[preprint]{tmlr}
 % \usepackage[preprint]{icml2025}
 % \usepackage[accepted]{icml2025}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
 
 \usepackage{graphicx}
 
@@ -12,14 +26,13 @@
 \usepackage{upquote}
 \usepackage{booktabs}
 
-\usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 
+\usepackage{caption}
 \usepackage{subfigure}
+\usepackage{wrapfig}
 
 \usepackage{siunitx}
-
-\usepackage{hyperref}
 
 \definecolor{mydarkblue}{rgb}{0,0.08,0.45}
 \hypersetup{ %
@@ -41,79 +54,30 @@
 
 \graphicspath{{../plots/}}
 
-% Optional math commands from https://github.com/goodfeli/dlbook_notation.
 \input{math_commands.tex}
 \input{tex/macros.tex}
 
-\icmltitlerunning{The Choice of Normalization Influences Shrinkage in Regularized Regression}
+\title{The Choice of Normalization Influences Shrinkage in Regularized Regression}
 
-% Authors must not appear in the submitted version. They should be hidden
-% as long as the tmlr package is used without the [accepted] or [preprint] options.
-% Non-anonymous submissions will be rejected without review.
+\author{%
+  \name Johan Larsson \email jola@math.ku.dk\\
+  \addr Department of Mathematical Sciences, University of Copenhagen\\
+  \addr Department of Statistics, Lund University
+  \AND
+  \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
+  Department of Statistics, Lund University
+}
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+\def\month{MM}  % Insert correct month for camera-ready version
+\def\year{YYYY} % Insert correct year for camera-ready version
+\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % Insert correct link to OpenReview for camera-ready version
 
 \begin{document}
 
-\twocolumn[
-  \icmltitle{The Choice of Normalization Influences Shrinkage in Regularized Regression}
-
-  % It is OKAY to include author information, even for blind
-  % submissions: the style file will automatically remove it for you
-  % unless you've provided the [accepted] option to the icml2025
-  % package.
-
-  % List of affiliations: The first argument should be a (short)
-  % identifier you will use later to specify author affiliations
-  % Academic affiliations should list Department, University, City, Region, Country
-  % Industry affiliations should list Company, City, Region, Country
-
-  % You can specify symbols, otherwise they are numbered in order.
-  % Ideally, you should not use this facility. Affiliations will be numbered
-  % in order of appearance and this is the preferred way.
-  \icmlsetsymbol{equal}{*}
-
-  %
-  % \author{%
-  %   \name Johan Larsson \email jola@math.ku.dk\\
-  %   \addr Department of Mathematical Sciences\\University of Copenhagen
-  %   \AND
-  %   \name Jonas Wallin \email jonas.wallin@stat.lu.se\\
-  %   \addr Department of Statistics\\Lund University
-  % }
-
-  \begin{icmlauthorlist}
-    \icmlauthor{Johan Larsson}{ucph,lu}
-    \icmlauthor{Jonas Wallin}{lu}
-  \end{icmlauthorlist}
-
-  \icmlaffiliation{ucph}{Department of Mathematical Sciences, University of Copenhagen}
-  \icmlaffiliation{lu}{Department of Statistics, Lund University}
-
-  \icmlcorrespondingauthor{Johan Larsson}{jola@math.ku.dk}
-
-  % You may provide any keywords that you
-  % find helpful for describing your paper; these are used to populate
-  % the "keywords" metadata in the PDF but will not be shown in the document
-  \icmlkeywords{
-    Normalization,
-    Standardization,
-    Regularization,
-    Feature Engineering,
-    ICML
-  }
-
-  \vskip 0.3in
-]
-
-% this must go after the closing bracket ] following \twocolumn[ ...
-
-% This command actually creates the footnote in the first column
-% listing the affiliations and the copyright notice.
-% The command takes one argument, which is text to display at the start of the footnote.
-% The \icmlEqualContribution command is standard text for equal contribution.
-% Remove it (just {}) if you do not need this facility.
-
-\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
-% \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+\maketitle
 
 \begin{abstract}
   \input{tex/abstract.tex}
@@ -124,20 +88,15 @@
 \input{tex/theory.tex}
 \input{tex/experiments.tex}
 \input{tex/discussion.tex}
-\input{tex/impact_statement.tex}
 
-% \subsubsection*{Acknowledgments}
+% \begin{ack}
 %
-% Use unnumbered third level headings for the acknowledgments. All
-% acknowledgments, including those to funding agencies, go at the end of the paper.
-% Only add this information once your submission is accepted and deanonymized.
+% \end{ack}
 
 \bibliography{main}
-\bibliographystyle{icml2025}
+\bibliographystyle{tmlr}
 
-\newpage
 \appendix
-\onecolumn
 
 \input{tex/additional-theory.tex}
 \input{tex/proofs.tex}

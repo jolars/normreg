@@ -5,7 +5,7 @@ using NormReg
 using JSON
 using ProjectRoot
 
-set_plot_defaults(target = "icml");
+set_plot_defaults();
 
 function plot_realpaths(df)
   plots = []
@@ -98,7 +98,7 @@ file_path = @projectroot("plots", "realdata_paths.pdf")
 
 savefig(plot_output, file_path)
 
-# for one-column (ICML)
+# for main paper
 df = DataFrame(json_data);
 df_small = DataFrames.subset(df, :dataset => d -> d .== "triazines" .|| d .== "w1a")
 
