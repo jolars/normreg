@@ -29,9 +29,10 @@ deviation of each feature as location and scale factors respectively, which is c
 
 The choice of normalization may, however, have consequences for the estimated model. As a
 first example of this, consider \Cref{fig:realdata-paths}, which displays the lasso paths
-for two data sets and two types of normalization. Note that the choice of normalization
-result in different sets of features being selected as well as different coefficient
-estimates.
+for four data sets and two types of normalization. In the figure, we have colored the lines
+corresponding to features that were among the first five to enter the model in either of
+the two type of normalization schemes. Note that the choice of normalization result in
+different sets of features being selected as well as different coefficient estimates.
 
 \begin{figure}[bpt]
   \centering
@@ -49,15 +50,15 @@ estimates.
 \end{figure}
 
 In spite of this apparent connection between normalization and regularization, there has so
-far been no research on the topic. And in its absence, the choice of normalization is
-typically motivated by computational concerns or by being ``standard''. This is problematic
-since the effects of normalization are unknown and because there exists no natural choice
-for many types of data. In particular, there is no obvious choice for binary features
-(where each observation takes either of two values). In this paper we begin to bridge this
-knowledge gap by studying normalization in the context of three particular cases of
-\Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The latter
-of these, the elastic net, is a generalization of the previous two, and is represented by
-the following optimization problem:
+far been almost no research on the topic. And in its absence, the choice of normalization
+is typically motivated by computational concerns or by being ``standard''. This is
+problematic since the effects of normalization are unknown and because there exists no
+natural choice for many types of data. In particular, there is no obvious choice for binary
+features (where each observation takes either of two values). In this paper we begin to
+bridge this knowledge gap by studying normalization in the context of three particular
+cases of the regularized problem in \Cref{eq:general-objective}: the lasso, ridge, and
+elastic net~\citep{zou2005}. The latter of these, the elastic net, is a generalization of
+the previous two, and is represented by the following optimization problem:
 %
 \begin{equation}
   \label{eq:elastic-net}
@@ -68,7 +69,7 @@ where setting \(\lambda_1 = 0\) results in ridge regression and setting \(\lambd
 results in the lasso. Our focus in this paper is on binary data and we pay particular
 attention to the case when they are imbalanced, that is, have relatively many ones or
 zeroes. In this scenario, we demonstrate that the choice of normalization directly
-influences the regression coefficients and that this effect depends on the particular
+influences the estimated coefficients and that this effect depends on the particular
 combination of normalization and regularization. Our key contributions are:
 \begin{enumerate}
   \item We reveal that class balance in binary features significantly affects lasso, ridge, and
@@ -77,6 +78,11 @@ combination of normalization and regularization. Our key contributions are:
         variance~(\Cref{sec:theory-binary-features}).
   \item For mixed data designs, we demonstrate that normalization choice implicitly determines how
         regularization affects binary versus continuous features~(\Cref{sec:mixed-data}).
-  \item For interaction features, we provide guidelines on proper centering and scaling to mitigate
-        class balance bias~(\Cref{sec:interactions}).
+  \item For interaction features, we show that a common alternative to normalizing the interaction
+        feature leads to biased estimates and provide an alternative that mitigates this
+        problem~(\Cref{sec:interactions}).
 \end{enumerate}
+Collectively, our results demonstrate that normalization is not merely a
+preprocessing step but an integral component of the modeling process that
+requires careful consideration based on data characteristics and the chosen
+regularization approach.
