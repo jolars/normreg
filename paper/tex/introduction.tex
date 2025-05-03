@@ -22,7 +22,7 @@ These penalties depend on the magnitudes of the coefficients, which means that t
 sensitive to the scales of the features in \(\mat X\). To avoid this, it is common to
 \emph{normalize} the features before fitting the model by shifting and scaling each feature
 by some measures of their locations and scales, respectively. For some problems it is
-possible to arrive at these measure by contextual knowledge of the data at hand. In most
+possible to arrive at these measures by contextual knowledge of the data at hand. In most
 cases, however, they must be estimated. A popular strategy is to use the mean and standard
 deviation of each feature as location and scale factors respectively, which is called
 \emph{standardization}.
@@ -39,7 +39,7 @@ estimates.
   \caption{%
     Lasso paths for real datasets using two types of normalization:
     standardization and maximum absolute value normalization (max--abs). We have fit
-    the lasso path to two four different datasets:
+    the lasso path to four different datasets:
     \data{housing}~\citep{harrison1978}, \data{leukemia}~\citep{golub1999},
     \data{triazines}~\citep{king1995,hirst1994}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
     for more information about these data sets.) For each
@@ -53,8 +53,8 @@ far been no research on the topic. And in its absence, the choice of normalizati
 typically motivated by computational concerns or by being ``standard''. This is problematic
 since the effects of normalization are unknown and because there exists no natural choice
 for many types of data. In particular, there is no obvious choice for binary features
-(where the each observations takes either of two values). In this paper we begin to bridge
-this knowledge gap by studying normalization in the context of three particular cases of
+(where each observation takes either of two values). In this paper we begin to bridge this
+knowledge gap by studying normalization in the context of three particular cases of
 \Cref{eq:general-objective}: the lasso, ridge, and elastic net~\citep{zou2005}. The latter
 of these, the elastic net, is a generalization of the previous two, and is represented by
 the following optimization problem:
