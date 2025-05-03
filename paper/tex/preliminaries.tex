@@ -1,21 +1,13 @@
 \section{Normalization}
-
-% \begin{definition}[Normalization]
-%   Let \(\tilde{\mat X}\) be the normalized feature matrix with elements
-%   \(\tilde{x}_{ij} = (x_{ij} - c_{j})/s_j\), where \(x_{ij}\) is an element of
-%   \(\mat{X}\) and \(c_j\) and \(s_j\) are the \emph{centering} and
-%   \emph{scaling} factors respectively.
-% \end{definition}
-
 To avoid possible confusion regarding the ambiguous use of terminology in the literature,
 we will begin by clarifying what we mean by \emph{normalization}, which we define as the
 process of centering and scaling the feature matrix.
 
 \begin{definition}[Normalization]
   \label{def:normalization}
-  Let \(\mat{X} \in \mathbb{R}^{n\times p}\) be the feature matrix and let
+  Let \(\bm{X} \in \mathbb{R}^{n\times p}\) be the feature matrix and let
   \(\vec{c} \in \mathbb{R}^p\) and \(\vec{s} \in \mathbb{R}^p_+\) be centering
-  and scaling factors respectively. Then \(\tilde{\mat{X}}\) is the
+  and scaling factors respectively. Then \(\tilde{\bm{X}}\) is the
   \emph{normalized} feature matrix with elements given by
   \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
 \end{definition}
@@ -29,7 +21,7 @@ in \Cref{tab:normalization-types}. Standardization is perhaps the most popular t
 normalization, at least in the field of statistics. One of its benefits is that it
 simplifies certain aspects of fitting the model, such as fitting the intercept. The
 downside of standardization is that it involves centering by the mean, which destroys
-sparsity.
+sparsity since centering shifts zero values to non-zero.
 
 \begin{table}[hbtp]
   \centering
@@ -50,8 +42,6 @@ sparsity.
     Min--Max                 & \(\min_i(x_{ij})\) & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
     \addlinespace
     \(\ell_1\)-Normalization & 0 or \(\bar{x}_j\) & \(\lVert \vec{x}_j\rVert_1\)                              \\
-    % \addlinespace
-    % Adaptive Lasso           & 0                  & \(\hat{\beta}_j^\text{OLS}\)                              \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -61,8 +51,7 @@ max--abs (maximum absolute value) normalization, which scale the data to lie in 
 and \([-1, 1]\) respectively, and therefore retain sparsity when features are binary. These
 methods are, however, both sensitive to outliers. And since sample extreme values often
 depend on sample size, as in the case of normal data~(\Cref{sec:maxabs-theory}), use of
-these methods may sometimes be problematic.
-% A special case of normalization is the adaptive
-% lasso~\citep{zou2006}, in which the coefficients from an initial model fit (typically OLS
-% or ridge regression) are used as scaling factors.
+these methods may sometimes be problematic. In the next section, we will examine how the
+choice of normalization affects the estimates for the lasso, ridge, and elastic net
+regression.
 

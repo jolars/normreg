@@ -1,17 +1,22 @@
 \section{Ridge, Lasso, and Elastic Net Regression}%
 \label{sec:theory}
 
+In this section we introduce the problem setting, the elastic net, and the connection
+between normalization and the elastic net estimator. We start by showing how the scaling
+and centering parameters of the normalization method factors into the elastic net estimator
+in a general case. We then narrow our focus to the case of binary features and present our
+main results on bias, variance, and selection probability when the features are unbalanced.
+
 Throughout the paper we assume that the response \(\vec{y}\) is generated according to
 \(\bm{y} = \beta_0^* + \bm{X\beta}^* + \bm{\varepsilon}\), with \(\mat X\) being the \(n
 \times p\) design matrix with features (columns) \(\vec x_j\), \(\bm{\varepsilon}\) the
-vector of noise, with identically and independently distributed entries, and where we
-assume \(\mat{X}\), \(\beta_0^*\), and \(\vec{\beta}^*\) to be fixed. We will also begin by
-assuming that the features of the normalized design matrix are orthogonal, that is,
-\(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} = \diag\left(\tilde{\vec{x}}_1^\T
-\tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal \tilde{\vec{x}}_p\right)\). In this
-case, the solution to the elastic net problem is given by
-% TODO: Add discussion about orthogonality assumption and reference new
-% results in appendix.
+vector of noise, with mean zero, finite variance \(\sigma_\varepsilon^2\), and identically
+and independently distributed entries. We also assume \(\mat{X}\), \(\beta_0^*\), and
+\(\vec{\beta}^*\) to be fixed and that the features of the normalized design matrix to be
+orthogonal, that is, \(\tilde{\mat{X}}^\intercal \tilde{\mat{X}} =
+\diag\left(\tilde{\vec{x}}_1^\T \tilde{\vec{x}}_1, \dots, \tilde{\vec{x}}_p^\intercal
+\tilde{\vec{x}}_p\right)\). In this case, it is a well-known fact~\citep{tibshirani1996}
+that the solution to the elastic net problem is given by
 %
 \begin{equation}
   \label{eq:orthogonal-solution-normalized}
@@ -21,52 +26,50 @@ case, the solution to the elastic net problem is given by
 \end{equation}
 %
 where \(\st_\lambda(z)\) is the soft-thresholding operator, defined as \(\st_\lambda(z) =
-\sign(z) \max(|z| - \lambda, 0)\). (See \Cref{sec:elastic-net-estimator} for a derivation
-of this.)
+\sign(z) \max(|z| - \lambda, 0)\), which is the proximal operator of the \(\ell_1\) norm.
+(See \Cref{sec:elastic-net-estimator} for a derivation of this.) The assumption of
+orthogonal features may seem strong and is indeed almost never realised in practice.
+Interestingly, however, the assumption turns out to have little bearing on our results. We
+refer the reader to \Cref{sec:orthogonality-assumption}, where we discuss this in detail.
 
-The assumption of orthogonal features may seem strong and is indeed almost never realistic.
-For our results, however, the assumption has little influence of the results, which we
-discuss in \Cref{sec:orthogonality-assumption}.
-
-Normalization changes the optimization problem and its solution, the coefficients, which
-will now be on the scale of the normalized features. But we are interested in
+Normalization changes the optimization problem and the estimated coefficients, which will
+now be on the scale of the normalized features. But here we are interested in
 \(\hat{\vec{\beta}}\): the coefficients on the scale of the original problem. To obtain
 these, we transform the coefficients from the normalized problem, \(\hat\beta^{(n)}_j\),
 back via \(\hat\beta_j = \hat\beta^{(n)}_j/s_j\) for \(j \in [p]\), where \([p] =
 \{1,2,\dots,p\}\). There is a similar transformation for the intercept, but we omit it here
 since we are not interested in interpreting it.
 
-Now assume that \(\varepsilon_i\) is identically and independently distributed noise with
-mean zero and finite variance \(\sigma_\varepsilon^2\). This means that the solution is
-given directly by \Cref{eq:orthogonal-solution-normalized}:
+Taken together, this means that the solution for \(\hat{\vec{\beta}}\) can be expressed as
 \[
-  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\T \vec{y})}{d_j}\quad\text{with}\quad d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2).
+  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\T \vec{y})}{d_j}\quad\text{with}\quad d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2),
 \]
-We can then show that
+where
 \begin{equation}
   \label{eq:z-d}
   \tilde{\vec{x}}_j^\T \vec{y} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
   \quad\text{and}\quad
   d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right),
 \end{equation}
-where \(\nu_j\) is the uncorrected sample variance of \(\vec{x}_j\).
+with \(\nu_j\) being the uncorrected sample variance of \(\vec{x}_j\).
 The bias and variance of \(\hat{\beta}_j\) are then given by
 \begin{align}
-  % \bias(\hat{\beta}_j; \beta_j^*) & = \frac{1}{d_j}\E \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}) - \beta^*_j, \\
   \E \hat\beta_j - \beta_j^* & = \frac{1}{d_j}\E \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}) - \beta^*_j,\label{eq:bias} \\
   \var \hat\beta_j           & = \frac{1}{d_j^2} \var \st_\lambda(\tilde{\vec{x}}_j^\T \vec{y}).\label{eq:variance}
 \end{align}
 See \Cref{sec:bias-var-deriv} for a derivation of the results above
 as well as expressions for \(\E \st_\lambda(x)\) and \(\var S_\lambda(x)\).
 
-These expressions hold for a general distribution on the error term, provided that its
-elements are independent and identically distributed. From now on, however, we will add the
-assumption that \(\vec{\varepsilon}\) is normally distributed, under which both the bias
+These results hold for a general distribution on the error term, provided that its elements
+are independent and identically distributed. From now on, however, we will narrow our scope
+and assume that \(\vec{\varepsilon}\) is normally distributed, under which both the bias
 and variance of \(\hat{\beta}_j\) have analytical
 expressions~(\Cref{sec:normally-distributed-noise}) and
 \[
   \tilde{\vec{x}}_j^\T \vec{y} \sim \normal\left(\mu_j = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j^*, \sigma_j^2 = \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j \sigma_\varepsilon^2 \right).
 \]
+So far, we have assumed nothing about the features themselves. The main focus of our paper,
+however, is binary features, which we will now turn to.
 
 \subsection{Binary features}%
 \label{sec:theory-binary-features}
@@ -79,17 +82,11 @@ is included, and ``class balance'' is then equivalent to the proportion of eithe
 the case of interactions~(\Cref{sec:interactions}), the choice does in fact matter.
 
 If feature $j$ is binary then \(\nu_j = (q_j - q_j^2)\) (the uncorrected sample variance
-for a binary feature) which in \Cref{eq:z-d} yields
+for a binary feature), which in \Cref{eq:z-d} yields
 \begin{equation*}
   \tilde{\vec{x}}_j^\T \vec{y} = \frac{\beta_j^* n(q_j - q_j^2) - \vec{x}_j^\T \vec{\varepsilon}}{s_j}, \qquad
   d_j                          = s_j \left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right),
 \end{equation*}
-% \[
-%   \begin{aligned}
-%     \tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j & = \frac{1}{s_j^2}(\vec{x}_j - \ones c_j)^\T (\vec{x}_j - \ones c_j) = \frac{1}{s^2_j}(nq - 2nq_j^2 + nq_j^2) = \frac{nq_j(1-q_j)}{s^2_j}, \\
-%     \tilde{\vec{x}}_j^\T \vec{x}_j         & = \frac{1}{s_j}(\vec{x}_j^\T \vec{x}_j - \vec{x}_j^\T \ones c_j) = \frac{nq_j(1 - q_j)}{s_j}.
-%   \end{aligned}
-% \]
 and consequently
 \[
   \mu_j = \frac{\beta^*_j n(q_j - q_j^2)}{s_j}\quad \text{and} \quad \sigma_j^2 = \frac{\sigma_\varepsilon^2n(q_j- q_j^2)}{s^2_j}.
@@ -99,10 +96,10 @@ We obtain bias and variance of the estimator with respect to \(q_j\) by insertin
 \(\tilde{\vec{x}}_j^\T \vec{y}\) and \(d_j\) into \Cref{eq:bias,eq:variance}.
 
 The presence of the factor \(q_j - q_j^2\) in \(\mu_j\), \(\sigma_j^2\), and \(d_j\)
-indicates a link between class balance and the elastic net estimator and that this
-relationship is mediated by the scaling factor \(s_j\). To achieve some initial intuition
-for this relationship, consider the noiseless case (\(\sigma_\varepsilon = 0\)) in which we
-have
+indicates a link between class balance and the elastic net estimator and, moreover, that
+this relationship is mediated by the scaling factor \(s_j\). To achieve some initial
+intuition for this relationship, consider the noiseless case (\(\sigma_\varepsilon = 0\))
+in which we have
 \begin{equation}
   \label{eq:noiseless-estimator}
   \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\intercal \vec{y})}{s_j\left(\tilde{\vec{x}}_j^\intercal \tilde{\vec{x}}_j + \lambda_2\right)}
@@ -181,7 +178,6 @@ altogether. Note, also, that the selection probability is unaffected by \(\lambd
   \includegraphics[]{selection_probability.pdf}
   \caption{%
     Probability of selection in the lasso given measurement noise
-    % TODO: what is \lambda1 set to here?
     \(\sigma_\varepsilon\), regularization level \(\lambda_1\), and class
     balance \(q\). The scaling factor is set to \(s_j = (q - q^2)^\delta\),
     \(\delta \geq 0\). The dotted line represents the asymptotic limit for
@@ -189,12 +185,9 @@ altogether. Note, also, that the selection probability is unaffected by \(\lambd
     \label{fig:selection-probability}}
 \end{figure}
 
-% Now we turn to the impact of class imbalance on bias and variance of the elastic net
-% estimator. We begin, in \Cref{thm:classbalance-bias}, by considering the expected value of
-% the elastic net estimator in the limit as \(q_j \rightarrow 1^-\).
-
-Now we turn to the impact of class balance on bias and variance of the elastic net
-estimator.
+Now we turn to the impact of class imbalance on bias and variance of the elastic net
+estimator. We begin, in \Cref{thm:classbalance-bias}, by considering the expected value of
+the elastic net estimator in the limit as \(q_j \rightarrow 1^-\).
 
 \begin{theorem}
   \label{thm:classbalance-bias}
@@ -212,6 +205,17 @@ estimator.
   \]
 \end{theorem}
 
+\Cref{thm:classbalance-bias} shows that bias of the elastic net estimator approaches
+\(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when \(0 \leq \delta < 1/2\). When \(\delta =
+1/2\) (standardization), the estimate instead approaches the true coefficient scaled by the
+probability that a standard normal variable is smaller than
+\(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the estimate is
+asymptotically unbiased. This comes as a result of scaling the variance component from the
+error term and is accompanied by exponentially increasing variance, which suggests that
+variance-scaling may be problematic in the large noise--large imbalance scenario. In
+\Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
+\(q_j \rightarrow 1^-\).
+
 \begin{theorem}
   \label{thm:classbalance-variance}
   Assume the conditions of \Cref{thm:classbalance-bias} hold, except that
@@ -228,40 +232,11 @@ estimator.
 The main take-away of \Cref{thm:classbalance-bias,thm:classbalance-variance} is that there
 is a bias-variance trade-off with respect to the choice of normalization. We can reduce
 class imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do
-so at the price of increase variance. Note that \Cref{thm:classbalance-variance} applies
-only to the case when \(\lambda_1 > 1\). In
-\Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
+so at the price of increase variance.
+
+Note that \Cref{thm:classbalance-variance} applies only to the case when \(\lambda_1 > 1\).
+In \Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
 for ridge regression.
-
-% shows that the
-% bias of the elastic net estimator approaches \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when
-% \(0 \leq \delta < 1/2\). When \(\delta = 1/2\) (standardization), the estimate instead
-% approaches the true coefficient scaled by the probability that a standard normal variable
-% is smaller than \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the
-% estimate is asymptotically unbiased. This comes as a result of scaling the variance
-% component from the error term and is accompanied by exponentially increasing variance,
-% which suggests that variance-scaling may be problematic in the large noise--large imbalance
-% scenario. In \Cref{thm:classbalance-variance}, we continue by studying the variance in the
-% limit as \(q_j \rightarrow 1^-\).
-
-% \Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance} shows that the bias of the elastic net estimator approaches
-% \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when \(0 \leq \delta < 1/2\). When \(\delta =
-% 1/2\) (standardization), the estimate instead approaches the true coefficient scaled by the
-% probability that a standard normal variable is smaller than
-% \(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the estimate is
-% asymptotically unbiased. This comes as a result of scaling the variance component from the
-% error term and is accompanied by exponentially increasing variance, which suggests that
-% variance-scaling may be problematic in the large noise--large imbalance scenario. In
-% \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
-% \(q_j \rightarrow 1^-\).
-
-% \Cref{thm:classbalance-variance} formally proves the asymptotic variance effects of our
-% scaling parameter \(s_j\) which we have already discussed in the context of selection
-% probability and bias. Taken together with the results from \Cref{thm:classbalance-bias},
-% this suggests that the choice of scaling parameter, at least in the case of our specific
-% parameterization, introduces a bias--variance trade-off with respect to \(\delta\): we can
-% reduce class imbalance-induced bias by increasing \(\delta\) but do so at the price of
-% increase variance.
 
 In \Cref{fig:bias-var-onedim-lasso}, we now visualize bias, variance, and mean-squared
 error for ranges of class balance and various noise-level settings for a lasso problem. The
@@ -310,19 +285,6 @@ feature. As an example, assume \(\kappa = 2\). Then, if \(\vec{x}_2\) is sampled
 \(\normal\left(\mu_j, \sigma^2 = (1/2)^2\right)\), the effects of \(\vec{x}_1\) and
 \(\vec{x}_2\) are comparable if \(\beta_1^* = 2\sigma \beta_2^* = \beta_2^*\).
 
-% We illustrate this notion of comparability by the following examples.
-% TODO: illustrate this with a figure
-% \begin{example}
-%   Assume \(\kappa = 2\). If \(\vec{x}_2\) is sampled from
-%   \(\normal\left(\mu_j, \sigma^2 = (1/2)^2\right)\), then the effects of \(\vec{x}_1\) and
-%   \(\vec{x}_2\) are comparable if \(\beta_1^* = 2\sigma \beta_2^* = \beta_2^*\).
-% \end{example}
-% \begin{example}
-%   Assume \(\kappa = 1\). If \(\vec{x}_2\) is sampled from \(\normal(\mu,
-%   \sigma^2 = 2^2)\), then the effects of \(\vec{x}_1\) and \(\vec{x}_2\) are comparable if
-%   \(\beta_1^* = \sigma\beta_2^* = 2\beta_2^*\).
-% \end{example}
-
 The definition above refers to \(\bm{\beta}^*\), but for our regularized estimates we need
 \(\hat{\beta}_1 = \kappa\sigma\hat{\beta}_2\) to hold. If we assume that we are in a
 noiseless situation (\(\sigma_\varepsilon = 0\)), are standardizing the normal feature, and
@@ -359,13 +321,6 @@ two-standard deviation change in the normal feature. We motivate this by an argu
 \citet{gelman2008}, but want to stress that the choice of \(\kappa\) should, if possible,
 be based on contextual knowledge of the data and that our results depend only superficially
 on this particular setting.
-% We do, however, want to emphasize that this choice should be made
-% \emph{actively} and not be allowed to implicitly depend on the type of normalization used.
-
-% Finally, note that we assumed a noiseless case above. In the presence of noise, the bias
-% induced by the combination of noise level and normalization choice will affect these
-% results (see \Cref{fig:bias-var-onedim-lasso}), which means that normally distributed and
-% binary features will not be comparable in this case.
 
 \subsection{Interactions}\label{sec:interactions}
 
