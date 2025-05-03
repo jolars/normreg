@@ -32,12 +32,12 @@
         };
       in
       {
-        # packages.default = pkgs.mkShell {
+        # devShells.default = pkgs.mkShell {
         #   packages = [
         #     pkgs.bashInteractive
         #   ];
         # };
-        #
+
         devShells.default = buildEnv.env;
       }
     );
