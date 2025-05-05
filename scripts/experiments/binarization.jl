@@ -80,6 +80,8 @@ x[:, 13] = Int.(x[:, 13] .> 15)
 beta_ols = hcat(ones(size(x, 1)), x) \ y
 beta_ols = beta_ols[2:end]
 
+qs = mean(x, dims = 1)'
+
 methods = ["ours", "std", "min_max"]
 
 param_dict = Dict("method" => methods, "beta" => [zeros(p, 100)])
