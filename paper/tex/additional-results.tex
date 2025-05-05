@@ -1,4 +1,5 @@
 \section{Additional Experiments}
+\label{sec:additional-experiments}
 
 In this section we present additional and extended results from the main section.
 
@@ -27,62 +28,46 @@ signals.
 \begin{figure}[htpb]
   \centering
   \subfigure[%
-    The power (probability of detecting all true signals) of the lasso. In our orthogonal
-    setting, power is constant over \(p\), which is why we have omitted the parameter in the
-    plot. \label{fig:binary-power}
+    The power (probability of detecting all true signals) of the lasso. In our
+    orthogonal setting, power is constant over \(p\), which is why we have
+    omitted the parameter in the plot. \label{fig:binary-power}
   ]{\includegraphics[]{power.pdf}}\hfill%
   \subfigure[%
-    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false discoveries) to
-    the total number of estimated coefficients that are nonzero (discoveries).
+    NMSE and FDR: the rate of coefficients incorrectly set to non-zero (false
+    discoveries) to the total number of estimated coefficients that are nonzero
+    (discoveries).
     \label{fig:binary-fdr-mse}]{\includegraphics[]{fdr_mse.pdf}}%%
-  % \includegraphics[]{beta-bias-multidim.pdf}
   \caption{%
-    Normalized mean-squared error (NMSE), false discovery rate (FDR), and power for a lasso problem with
-    \(k = 10\) true signals (nonzero \(\beta_j^*\)), varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
+    Normalized mean-squared error (NMSE), false discovery rate (FDR), and power
+    for a lasso problem with \(k = 10\) true signals (nonzero \(\beta_j^*\)),
+    varying \(p\), and \(q_j \in [0.5, 0.99]\). The noise level is set at
+    \(\sigma_\varepsilon = 1\) and \(\lambda_1 = 0.02\).
   }
 \end{figure}
 
-The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
-\Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
-particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theory from
-\Cref{sec:theory-binary-features}. At \(q_j=0.99\), for instance, the estimate
-(\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For \(\delta=1\), we see
-that class imbalance increases the variance of the estimates. What is also clear is that
-the variance of the estimates increase with class imbalance and that this effect increases
-together with \(\delta\).
+\subsection{Support Size and Predictive Performance}
+\label{sec:predictive-performance-support}
 
-The level of correlation between the features introduces additional variance in the
-estimates but also seems to increase the effect of class imbalance in the cases when
-\(\delta = 0\) or \(1/2\).
+In this section we analyze the support size of the lasso estimates for the experiment in
+\Cref{sec:experiments-predictive-performance}. In \Cref{fig:hyperopt-support}, we have, in
+addition to NMSE on the validation set, also plotted the size of the support of the lasso
+(cardinality of the set of features that have corresponding nonzero coefficients). Here we
+only show results for \(\delta \in \{0, 1/2, 1\}\).
 
 \begin{figure}[htpb]
   \centering
-  \includegraphics[]{binary_decreasing.pdf}
+  \includegraphics[]{hyperopt_paths.pdf}
   \caption{%
-    Estimates of the regression coefficients from the lasso, \(\hat{\vec{\beta}}\), for the
-    first 30 coefficients in the experiment. All of the features are binary and the first 20
-    features correspond to true signals with \(\beta_j^* = 2\) and geometrically decreasing
-    class balance from 0.5 to 0.99. The remaining features have class balance \(q_j \in [0.5,
-      0.99]\) distributed linearly among the features. The plot shows means and standard
-    deviations averaged over 100 iterations.
+    Support size and normalized mean-squared error (NMSE) for the validation set for the lasso
+    fit to datasets \data{rhee2006}, \data{eunite2001}, and \data{triazines} across combinations of
+    \(\delta\) and \(\lambda\). The optimal \(\delta\) is marked with dashed black lines and
+    the best combination of \(\delta\) (among 0, 1/2, and 1) and \(\lambda\) is shown as a dot.
   }
-  \label{fig:binary-decreasing-full}
+  \label{fig:hyperopt-support}
 \end{figure}
 
-\subsubsection{Predictive Performance for Simulated Data}%
+\subsection{Predictive Performance for Simulated Data}%
 \label{sec:predictive-performance-simulated}
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{hyperopt_surfaces.pdf}
-  \caption{%
-    Contour plots of normalized mean-squared error (NMSE) for the hold-out validation set
-    across a grid of \(\delta\) and \(\lambda\) values for ridge regression and the lasso. The
-    dotted path shows the smallest NMSE as a function of \(\lambda\). The dot marks the
-    combination with the smallest error.
-  }
-  \label{fig:hyperopt-contours-full}
-\end{figure}
 
 In this experiment, we consider predictive performance in terms of mean-squared error of
 the lasso and ridge regression given different levels of class balance (\(q_j \in \{0.5,
@@ -117,33 +102,26 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
     \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
 \end{figure}
 
-In \Cref{fig:hyperopt-support}, we have, in addition to NMSE on the validation set, also
-plotted the size of the support of the lasso (cardinality of the set of features that have
-corresponding nonzero coefficients). Here we only show results for \(\delta \in \{0, 1/2,
-1\}\). It is clear that \(\delta = 1/2\) works quite well for all of these three data sets,
-being able to attain a value close to the mininum for each of the three data sets. This is
-not the case for \(\delta \in \{0, 1\}\), for which the best possible prediction error is
-considerably worse. This is particularly the case with \(\delta =0\) and the \data{w1a}
-data set. The dependency between \(\lambda\) and \(\delta\) is also visible here by looking
-at the support size.
+\subsection{Comparisons of Normalization Methods on Real Data}
+\label{sec:normalization-tuning}
 
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{hyperopt_paths.pdf}
-  \caption{%
-    Support size and normalized mean-squared error (NMSE) for the validation set for the lasso
-    fit to datasets \data{a1a}, \data{w1a}, and \data{rhee2006} across combinations of
-    \(\delta\) and \(\lambda\). The optimal \(\delta\) is marked with dashed black lines and
-    the best combination of \(\delta\) (among 0, 1/2, and 1) and \(\lambda\) is shown as a dot.
-  }
-  \label{fig:hyperopt-support}
-\end{figure}
+In this section we present an extended and modified version of the experiment in
+\Cref{sec:experiments-predictive-performance}, by considering several additional data sets,
+including data sets with binary responses to which we have fit \(\ell_1\) and
+\(\ell_2\)-regularized logistic regression. Instead of only considering parameterization
+over \(\delta\), we also extend the benchmarks to cover additional normalization types. For
+each of the data sets, we have fit the lasso and ridge for 10-times repeated 10-folds
+cross-validation over a grid of \(\lambda\) and normalization method. In the case of the
+method we call ``ours'', we have extended the grid over \(\delta\) as well, and return the
+results for the \(\delta\) with lowest error.
 
-\subsection{Benchmark of Normalization Tuning} \label{sec:normalization-tuning}
-
-Several of the previous results from this section indicate that there might be a benefit to
-tuning the normalization strategy. In this section, we present the results of an experiment
-where we have done exactly this.
+The results are shown in \Cref{fig:method-comparison} and show that the optimal choice of
+normalization depends on the data set and type of model. Using our strategy, which
+corresponds to standardization for continuous data and hyper-tuning over \(\delta\) attains
+best results for most of the data sets, only ever slightly worse than the best performing
+method. Among the methods, \(\ell_1\) normalization seems to perform poorly in general.
+Given the fact that that it corresponds to variance-scaling for binary data, which we have
+shown results in considerable variance, this is not particularly surprising.
 
 \begin{figure*}[htpb]
   \centering
@@ -162,73 +140,87 @@ where we have done exactly this.
     and \data{australian}, we have fit regularized logistic regression and
     otherwise regularized linear regression. The error bars show 95\% confidence intervals.
   }
+  \label{fig:method-comparison}
 \end{figure*}
 
-\subsection{Interactions}%
-\label{sec:additional-experiments-interactions}
+\subsection{Dichotomization and Feature Selection}
+\label{sec:dichotomization}
 
-In \Cref{fig:interactions-full} we show an version of the result in \Cref{fig:interactions}
-with different types of signals. Irrespective of the signal, strategy 2 still performs
-best.
+In this experiment, we attempt to study the effect of normalization choice in feature
+selection on data sets with dichotomized features and the following dichotomization scheme
+to convert the continuous features to binary.
 
-\begin{figure}[htpb]
-  \centering
-  \includegraphics[]{interactions-classbalance.pdf}
-  \caption{%
-    Lasso estimates for a three-feature problem where the third feature is an
-    interaction term between the first two features. The first feature is
-    binary with class balance \(q\) and the second is quasi-normal with
-    standard deviation 0.5. The signal-to-noise ratio is 1. The experiment was
-    run for 100 iterations and we aggregate and report means across all
-    iterations. Please see \Cref{sec:experiments-interactions} for information
-    about the different strategies.
-  }
-  \label{fig:interactions-full}
-\end{figure}
-
-\subsection{The Weighted Elastic Net}%
-\label{sec:additional-experiments-weighted-elnet}
-
-In \Cref{fig:mixed-data-elnet-full}, we show a version of \Cref{fig:mixed-data-elnet} with
-various settings for \(\alpha\) (the balance between the lasso and ridge penalties). Our
-previous conclusions do not seem to be affected by this choice, but as expected the class
-balance bias decreases as \(\alpha\) approaches 0 (ridge regression).
-
-\begin{figure}[htpb]
-  \centering
-  \includegraphics{mixed_data_elnet.pdf}
-  \caption{%
-    Weighted elastic net estimates for a two-dimensional problem where one feature is a binary
-    feature with class balance \(q\) (\(\bernoulli(q)\)), and the other is a quasi-normal
-    feature with standard deviation 1/2 (\(\normal(0, 0.5)\)). Here, we have \(n = \num{1000}\)
-    observations. The signal-to-noise ratio is 0.5. In every case, we standardize the normal
-    feature. The binary feature, meanwhile, is centered by its mean and scaled by
-    \((q-q^2)^\delta\). The experiment was run for 100 iterations and we aggregate and report
-    means and standard deviations of the estimates.
-  }
-  \label{fig:mixed-data-elnet-full}
-\end{figure}
-
-\subsection{f}
-
-\newrobustcmd{\best}{\bfseries}
+Each variable was converted to a binary feature by comparing against threshold based on
+either historical standards, regulatory guidelines, or domain-specific knowledge of urban
+housing factors in the 1970s~(\Cref{tab:dichotomization}).
 
 \begin{table}[htbp]
   \centering
-  \caption{Comparison between ranks of ordinary least-squares coefficients and
-    ranks given by the order of model entry along the lasso path for the Boston housing
-    data set. NDCG is normalized discounted cumulative gain. Best values are marked in blod face.
-    For all measures except the mean absolute difference, higher values are better.
+  \caption{
+    Dichotomization procedure and linear regression coefficients for the
+    features of the Boston housing data set used in the experiment in
+    \Cref{sec:dichotomization}.
+  }
+  \label{tab:dichotomization}
+  \begin{tabular}{
+      l
+      p{9.5cm}
+      S[table-format=-1.2,round-mode=places,round-precision=2]
+      S[table-format=0.2,round-mode=places,round-precision=2]
+    }
+    \toprule
+    Feature             & Dichotomization Rule                                                                         & $\hat{\bm{\beta}}_j^\text{OLS}$ & $q_j$     \\
+    \midrule
+    Crime Rate          & Above/below national U.S. average crime rate (1970--1971)                                    & -1.872296271668692              & 0.8992094 \\
+    Zoning              & Presence/absence of large lot zoning (residential lots over 25,000 sq.ft)                    & 1.956883402813590               & 0.2648221 \\
+    Business            & Residential vs industrial areas (below/above 10\% non-retail business acres)                 & -2.41422163254033               & 0.4664031 \\
+    Charles River       & Original binary feature (borders river or not)                                               & 5.118087353331369               & 0.0691699 \\
+    NOx Concentration   & Above/below EPA air quality standard for NOx (53 parts per billion)                          & -2.607920261778666              & 0.5177865 \\
+    Rooms               & Above/below typical family dwelling size (more/less than 6 rooms)                            & 3.486474827676998               & 0.6581027 \\
+    Age                 & Newer vs historic housing (less/more than 50\% built before 1940)                            & -1.101306211297333              & 0.7094861 \\
+    Distance            & Close vs far from employment centers (less/more than 5 miles)                                & -4.762540742210745              & 0.2667984 \\
+    Highway Access      & Limited vs good highway access (accessibility index below/above 20)                          & 1.250197827256583               & 0.2608695 \\
+    Property Tax        & Below/above Massachusetts average property tax rate (approximately \$12 per \$1000 in 1970s) & -7.347485535327863              & 0.9664031 \\
+    Pupil-Teacher Ratio & Below/above recommended educational value (16 students per teacher)                          & -6.567220592441502              & 0.8320158 \\
+    Demographics        & More/less diverse population (above/below 85\% white)                                        & 3.245798334030099               & 0.9486166 \\
+    Lower Status        & Middle-class vs lower-income areas (below/above 15\% lower status population)                & -7.240796759180348              & 0.3201581 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Having dichotomized the data, we then first fit a standard linear regression model to the
+data, and use this as a proxy for feature importance. Then, for three types of
+normalization: \(\ell_1\)-normalization (\(\delta=1\)), standardization, and min--max
+normalization, we fit a lasso model to the data and compute ranks of the features by
+checking at which point they enter the model.
+
+Finally, we compare the ranks of the features in the lasso model to the ranks of the
+coefficients from the standard linear regression model, using the latter as the reference.
+We use four different metrics to compare the ranks: Spearman's rank correlation, Kendall's
+\(\tau\), mean absolute difference, and normalized discounted cumulative gain (NDCG). The
+results are presented in \Cref{tab:method_comparison}. The results show that the
+normalization method using \(\ell_1\)-normalization (\(\delta = 1\)) best corresponds to
+the ranks of the linear regression coefficients.
+
+\begin{table}[htbp]
+  \centering
+  \caption{
+    Comparison between ranks of ordinary least-squares coefficients and ranks
+    given by the order of model entry along the lasso path for the Boston
+    housing data set. The metrics used are Spearman's and Kendall's rank
+    correlations, normalized discounted cumulative gain (NDCG), and mean
+    absolute difference (MAD). Best values are marked in blod face. For all
+    measures except MAD, higher values are better.
   }%
   \label{tab:method_comparison}
   \begin{tabular}{l S[table-format=1.4,detect-weight] S[table-format=1.4] S[table-format=1.4]}
     \toprule
-    Metric                   & {$\delta=1$} & {Standardization} & {Min--Max} \\
+    Metric   & {\(\ell_1\)-Normalization} & {Standardization} & {Min--Max/Max--Abs} \\
     \midrule
-    Spearman                 & \best 0.7308 & 0.5714            & 0.5        \\
-    Kendall                  & \best 0.5128 & 0.4359            & 0.3846     \\
-    Mean Absolute Difference & \best 2.0    & 2.7692            & 3.0769     \\
-    NDCG                     & \best 0.9515 & 0.9351            & 0.9186     \\
+    Spearman & \best 0.7308               & 0.5714            & 0.5                 \\
+    Kendall  & \best 0.5128               & 0.4359            & 0.3846              \\
+    MAD      & \best 2.0                  & 2.7692            & 3.0769              \\
+    NDCG     & \best 0.9515               & 0.9351            & 0.9186              \\
     \bottomrule
   \end{tabular}
 \end{table}

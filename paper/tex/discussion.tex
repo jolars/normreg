@@ -8,10 +8,18 @@ net regression with binary data. We have discovered that the class balance (prop
 ones) of these binary features has a pronounced effect on both lasso and ridge estimates
 and that this effect depends on the type of normalization used. For the lasso, for
 instance, features with large class imbalances stand little chance of being selected if the
-features are standardized, even when their relationships with the response are strong.
+binary features are standardized or, to an even greater extent, if they are not scaled at
+all---even if their relationships with the response are strong. Not scaling binary features
+is a common approach in practice, for instance recommended in the \pkg{scikit-learn}
+documentation when the data is sparse~\citep{scikit-learndevelopers2025}. As is
+standardization, which is the default in many software packages for the lasso, such as
+\pkg{glmnet}~\citep{friedman2010}, as well as the practice taken by countless applications
+in research. All in all, this means that this this class-balance bias effect is likely
+pervasive in practice and risks having already influenced the conclusions drawn in analyses
+of many datasets.
 
-The driver of this result is the relationship between the variance of the feature and type
-of normalization. This works as expected for normally distributed features. But for binary
+The driver of this bias is the relationship between the variance of the feature and type of
+normalization. This works as expected for normally distributed features. But for binary
 features it means that a one-unit change is treated differently depending on the
 corresponding feature's class balance, which we believe may surprise some. We have,
 however, shown that scaling binary features with standard deviation in the case of ridge
@@ -28,17 +36,28 @@ leads to a specific weighting of the effects of binary features relative to thos
 features.
 
 For interactions between binary and normal features
-features~(\Cref{sec:experiments-interactions}), our conclusions are that the interaction
-feature should be computed after centering both the binary and normal feature and that
-scaling with the product of the standard deviation of the normal feature and variance of
-the binary features mitigates the class balance bias in this case.
+features~(\Cref{sec:experiments-interactions}), our conclusion is that the interaction
+feature---contrary to what recent literature on interactions in the lasso
+recommends---should be scaled with the \emph{product} of the standard deviation of the
+normal feature and variance of the binary feature to avoid this effect of class imbalance.
+We have not seen this recommendation in the literature before, but it is a natural
+extension of our other results.
 
-Finally, note that our theoretical results are limited by several assumptions: 1) a fixed
-feature matrix \(\mat{X}\), 2) orthogonal features, and 3) normal and independent errors.
-In future studies, it would be interesting to relax these assumptions and study the effects
-of normalization in a more general setting. We have also focused on the case of binary and
-continuous features here, but are convinced that categorical features are also of interest
-and might raise additional challenges with respect to normalization.
+We note that our theoretical results are limited by a few assumptions: 1) a fixed feature
+matrix \(\bm{X}\), 2) normal and independent errors, and 3) orthogonal features. The first
+and second of these assumptions are standard in the literature. The third assumption on
+orthogonality, however, is strong and rarely satisfied in practice. Yet, as we show in
+\Cref{sec:orthogonality-assumption} and many of our experiments, the assumption does not in
+fact appear to be restrictive for our results. In future studies, it would nevertheless be
+interesting to relax these assumptions and study the effects of normalization in a more
+general setting. We have also focused on the case of binary and continuous features here,
+but are convinced that categorical features are also of interest and might raise additional
+challenges with respect to normalization. Finally, most of our results are restricted to
+least-squares loss, but since all generalized linear models (GLMs) are parameterized by the
+linear predictor, which we have shown to depend directly on class balance, we believe that
+our results are also relevant for other loss functions. Our initial results in
+\Cref{sec:normalization-tuning} seem to support this claim, but we defer further
+investigation of this to future work.
 
 Regularized regression models are widely used in practice, and are staples of popular
 machine learning and statistical software packages such as

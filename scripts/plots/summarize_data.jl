@@ -16,7 +16,8 @@ function propones(a)
   sum(a .== mode(a)) / length(a)
 end
 
-datasets = ["a1a", "w1a", "rhee2006", "leukemia", "triazines"]
+datasets =
+  ["a1a", "w1a", "rhee2006", "leukemia", "triazines", "eunite2001", "australian", "heart"]
 
 plots = []
 
@@ -39,8 +40,6 @@ for dataset in datasets
 
   push!(plots, pl)
 end
-
-collect(range(0.5, 1, length = 11))
 
 plot_output = plot(plots..., size = (FULL_WIDTH, 250))
 

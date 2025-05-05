@@ -104,6 +104,7 @@ end
 
 l = (n_rows, n_cols)
 
-plot_output = plot(plots..., layout = l, size = (FULL_WIDTH, 300))
+plot_output =
+  plot(plots..., layout = l, size = (FULL_WIDTH, 300), left_margin = [3mm -10mm -10mm])
 
 savefig(@projectroot("plots", "hyperopt_surfaces.pdf"))

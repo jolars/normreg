@@ -28,11 +28,14 @@ deviation of each feature as location and scale factors respectively, which is c
 \emph{standardization}.
 
 The choice of normalization may, however, have consequences for the estimated model. As a
-first example of this, consider \Cref{fig:realdata-paths}, which displays the lasso paths
-for four data sets and two types of normalization. In the figure, we have colored the lines
-corresponding to features that were among the first five to enter the model in either of
-the two type of normalization schemes. Note that the choice of normalization result in
-different sets of features being selected as well as different coefficient estimates.
+first example of this, consider \Cref{fig:realdata-paths}, which displays the
+regularization paths for the lasso\footnote{The estimated coefficients of the lasso as the
+  penalty strength is varied from a large-enough value for all coefficients to be zero to a
+  low value.} for four data sets and two types of normalization. In the figure, we have
+colored the lines corresponding to features that were among the first five to enter the
+model in either of the two type of normalization schemes. Note that the choice of
+normalization result in different sets of features being selected as well as different
+coefficient estimates.
 
 \begin{figure}[bpt]
   \centering
@@ -70,7 +73,11 @@ results in the lasso. Our focus in this paper is on binary data and we pay parti
 attention to the case when they are imbalanced, that is, have relatively many ones or
 zeroes. In this scenario, we demonstrate that the choice of normalization directly
 influences the estimated coefficients and that this effect depends on the particular
-combination of normalization and regularization. Our key contributions are:
+combination of normalization and regularization. Importantly, we identify a fundamental
+bias-variance trade-off in the choice of normalization: methods that reduce bias from class
+imbalance in binary features do so at the cost of increased variance in the estimator.
+
+Our key contributions are:
 \begin{enumerate}
   \item We reveal that class balance in binary features significantly affects lasso, ridge, and
         elastic net estimates, and show that scaling binary features with standard deviation

@@ -76,23 +76,9 @@ x[:, 12] = Int.(x[:, 12] .> 85)
 # Middle-class vs lower-income areas
 x[:, 13] = Int.(x[:, 13] .> 15)
 
-# function dichotomization_experiment(x_in)
-#   x = Matrix(x_in)
-#
-#   for j in 1:p
-#     if length(unique(x[:, j])) != 2
-#       x[:, j] = Int.(x[:, j] .> quantile(x[:, j], q))
-#     end
-#   end
-#
-#   res = elasticnet(x, y, α = 1.0)
-# end
-
 # OLS solution
 beta_ols = hcat(ones(size(x, 1)), x) \ y
 beta_ols = beta_ols[2:end]
-
-# qs = collect(range(0.5, 0.9, length = 3))
 
 methods = ["ours", "std", "min_max"]
 
@@ -148,18 +134,6 @@ end
 plot(plots..., layout = (1, 3), size = (FULL_WIDTH, 300))
 
 true_order = sortperm(abs.(beta_ols), rev = true)
-hcat(true_order, results[1]["order"], results[2]["order"], results[3]["order"])
-
-results[1]["order"]
-
-# plot_lasso_path(abs.(results[1]["beta"]), 1:p)
-# scatter!(repeat([60.0], p), abs.(beta_ols_std))
-#
-# plot_lasso_path(abs.(results[2]["beta"]), 1:p)
-# scatter!(repeat([60.0], p), abs.(beta_ols_std))
-#
-# plot_lasso_path(abs.(results[3]["beta"]), 1:p)
-# scatter!(repeat([60.0], p), abs.(beta_ols_std))
 
 # Compare estimated orders against true order
 function compare_rankings(true_order, estimated_orders)

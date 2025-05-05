@@ -17,7 +17,7 @@ function plot_binary_decreasing(
   df;
   rho_choice = [0.0, 0.5, 0.9],
   fig_width = NormReg.FULL_WIDTH,
-  fig_height = 350,
+  fig_height = 300,
 )
   df_subset = subset(df, :rho => rho -> rho .∈ Ref(rho_choice))
   df_grouped = groupby(df_subset, [:delta], sort = true)
@@ -104,8 +104,3 @@ end
 plots = plot_binary_decreasing(df)
 file_path = @projectroot("plots", "binary_decreasing.pdf")
 savefig(plots, file_path)
-
-plots_small =
-  plot_binary_decreasing(df; rho_choice = [0.0, 0.9], fig_width = 320, fig_height = 300)
-file_path_small = @projectroot("plots", "binary_decreasing_small.pdf")
-savefig(plots_small, file_path_small)

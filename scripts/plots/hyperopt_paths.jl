@@ -9,8 +9,8 @@ using NormReg
 
 set_plot_defaults()
 
-colors = [:black delta_palette([1, 3, 4])]
-linestyles = [:dash :solid :solid :solid]
+colors = [delta_palette([1, 3, 4]) :black]
+linestyles = [:solid :solid :solid :dot]
 
 file = @projectroot("results", "hyperopt.csv")
 
@@ -57,7 +57,7 @@ for (i, d) in enumerate(df_grouped)
 
   pl = plot(
     result.lambda,
-    [result.support_size result_0.support_size result_05.support_size result_1.support_size],
+    [result_0.support_size result_05.support_size result_1.support_size result.support_size],
     xscale = :log10,
     ylab = ylab,
     linetype = :steppre,
@@ -80,7 +80,7 @@ for (i, d) in enumerate(df_grouped)
 
   pl2 = plot(
     result.lambda,
-    [result.err result_0.err result_05.err result_1.err],
+    [result_0.err result_05.err result_1.err result.err],
     xscale = :log10,
     ylab = ylab,
     xlab = xlab,

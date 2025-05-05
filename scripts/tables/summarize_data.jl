@@ -11,7 +11,17 @@ function propones(a)
   sum(a .== mode(a)) / length(a)
 end
 
-datasets = ["a1a", "w1a", "rhee2006", "housing", "leukemia", "triazines"]
+datasets = [
+  "a1a",
+  "w1a",
+  "rhee2006",
+  "housing",
+  "leukemia",
+  "triazines",
+  "eunite2001",
+  "australian",
+  "heart",
+]
 
 res = DataFrame(dataset = [], n = [], p = [], response = [], design = [], q = [])
 

@@ -1,4 +1,5 @@
 \section{Experiments}
+\label{sec:experiments}
 
 In the following sections we present the results of our experiments. For all simulated data
 we generate our response vector according to \(\vec{y} = \mat{X}\vec{\beta}^* +
@@ -23,80 +24,73 @@ otherwise, are presented as means $\pm$ one standard deviation (using bars or ri
 \label{sec:experiments-lassoridge}
 
 In this section we consider fitting the lasso and ridge regression to normalized data sets.
-To normalize the data, we use standardize all quasi-normal features. For binary features,
-we center by mean and scale by \(s_j \propto (q_j-q_j^2)^\delta\).
+To normalize the data, we standardize all quasi-normal features. For binary features, we
+center by mean and scale by \(s_j \propto (q_j-q_j^2)^\delta\).
 % where \(\delta = 0\)
 % corresponds to no scaling, \(\delta = 1/2\) to standardization, and \(\delta = 1\) to
 % variance scaling.
 
 \subsubsection{Variability and Bias in Estimates}
 
+% TODO: Where does this lambda setting come from? Is it the optimal setting?
 In our first experiment, we consider fitting the lasso to a simulated data set with
-\(n=500\) observations and \(p = \num{1000}\) features, out of which the first 20 features
-correspond to signals, with \(\beta_j^*\) decreasing linearly from 1 to 0.1. We introduce
-dependence between the features by copying the first \(\ceil{\rho n/2}\) values from the
-first feature to each of the following features. In addition, we set the class balance of
-the first 20 features so that it decreases linearly on a log-scale from 0.5 to 0.99. We
+\(n=500\) observations and \(p = \num{1000}\) features. The first 20 features correspond to
+signals, with \(\beta_j^* = 1\), and otherwise we set \(\beta_j^*\) to 0. Furthermore, we
+set the class balance of the first 20 features so that it increases geometrically from 0.5
+to 0.99. For all other features we pick \(q_j\) uniformly at random in \([0.5,0.99]\). We
 estimate the regression coefficients using the lasso, setting \(\lambda_1 = 2
-\sigma_\varepsilon \sqrt{2 \log p }\).
+\sigma_\varepsilon \sqrt{2 \log p }\), with \(\sigma_e\) set to achieve a signal-to-noise
+ratio (SNR) of 2. In addition, we introduce correlation between the features by copying the
+first \(\ceil{\rho n/2}\) values from the first feature to each of the following features.
 
-The results~(\Cref{fig:binary-decreasing}, and \Cref{fig:binary-decreasing-full} in
-\Cref{sec:additional-results-biasvar}) show that class balance has considerable effect,
+The results~(\Cref{fig:binary-decreasing}) show that class balance has considerable effect,
 particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theory from
 \Cref{sec:theory-binary-features}. At \(q_j=0.99\), for instance, the estimate
-(\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For \(\delta=1\), we see
-that class imbalance increases the variance of the estimates. What is also clear is that
-the variance of the estimates increase with class imbalance and that this effect increases
-together with \(\delta\).
+(\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For larger values of
+\(\delta\), we see that class imbalance leads to increased estimation variance in
+accordance with our theory for the orthogonal case. The effect of correlation appears to
+have no effect on this class-balance bias, which indicates that the assumption of
+orthogonality might not be necessary for our theory to hold.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{binary_decreasing.pdf}
   \caption{%
-    Regression coefficients for a lasso problem with binary data where \(n = 500\) and
-    \(p = \num{1000}\) with 20 true signals. Here we show only the first 30
-    coefficients. See \Cref{sec:experiments-lassoridge} for more information
-    on the setup of this experiment.
+    Regression coefficients for a lasso problem with binary data with \(n = 500\) and \(p =
+    \num{1000}\). For \(j \in \{1,2,\dots,p\}\), we set \(\beta_j^* = 1\) and
+    let \(q_j\) increase geometrically from 0.5 to 0.99. For the remaining features,
+    we pick \(q_j\) uniformly at random from \([0.5, 0.99]\) and
+    set \(\beta_j^* = 0\). We show only the first 30 coefficients.
   }
   \label{fig:binary-decreasing}
 \end{figure}
 
 \subsubsection{Predictive Performance}
+\label{sec:experiments-predictive-performance}
 
 In this section we examine the influence of normalization on predictive performance for
-three different data sets: \data{a1a}~\citep{becker1996}, \data{rhee2006}~\citep{rhee2006},
-and \data{w1a}~\citep{platt1998}.\footnote{See \Cref{sec:data-summary} for details about
-  these data sets.} We evaluate performance in terms of normalized mean-squared error~(NMSE)
-for lasso and ridge regression across a two-dimensional grid of \(\delta\) and \(\lambda\),
-where for \(\delta\) we use a linear sequence from 0 to 1, and for \(\lambda\) a geometric
-sequence from \(\lambda_\text{max}\) (the value of \(\lambda\) at which the first feature
-enters the model) to \(10^{-2}\lambda_\text{max}\). We split the data into equal training
-and validation set splits and for each combination of \(\lambda\) and \(\delta\) fit the
-lasso or ridge to the training set.
-
-We present the results for ridge regression in \Cref{fig:hyperopt-contours}, which shows
-contour plots of the validation set error. We see that optimal setting of \(\delta\)
-differs between the different data sets, suggesting that it is useful to choose \(\delta\)
-by hyperparameter optimization. See
-\Cref{fig:hyperopt-contours-full}~(\Cref{sec:predictive-performance-simulated}) for a plot
-that includes the lasso as well.
-
-% For
-% \data{a1a}, the lasso is generally quite insensitive to the type of normalization, even if
-% the optimal value is around 0.2. For ridge regression, lower values of \(\delta\) clearly
-% work better. With the \data{w1a} data set, however, the relationship is flipped in the case
-% of ridge regression and the optimal value is approximately 0.8. In the case of the lasso
-% (for \(\data{w1a}\)), a value around 0.5 is optimal and low values (little scaling) yield
-% worse prediction errors. Finally, for \data{rhee2006}, the lasso is again insensitive to
-% normalization type. This is not the case for ridge, however, where a value around 0.2 is
-% optimal and high values of \(\delta\) yield worse prediction errors.
+three different data sets: \data{rhee2006}~\citep{rhee2006}, and
+\data{eunite2001}~\citep{chen2004}, and
+\data{triazines}~\citep{hirst1994,king1995}.\footnote{See \Cref{sec:data-summary} for
+  details about these data sets.} We present the results for lasso and ridge regression in
+\Cref{fig:hyperopt-contours}, which shows contour plots of the validation set error in
+terms of normalized mean-squared error~(NMSE). We see that optimal setting of \(\delta\)
+differs between the different data sets: for \data{a1a}, the lasso is generally quite
+insensitive to the type of normalization, even if the optimal value is around 0.2. For
+ridge regression, lower values of \(\delta\) clearly work better. With the \data{w1a} data
+set, however, the relationship is flipped in the case of ridge regression and the optimal
+value is approximately 0.8. In the case of the lasso (for \(\data{w1a}\)), a value around
+0.5 is optimal and low values (little scaling) yield worse prediction errors. Finally, for
+\data{rhee2006}, the lasso is again insensitive to normalization type. This is not the case
+for ridge, however, where a value around 0.2 is optimal and high values of \(\delta\) yield
+worse prediction errors.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{hyperopt_surfaces.pdf}
   \caption{%
     Contour plots of normalized validation set mean-squared error (NMSE)
-    for \(\delta\) and \(\lambda\) in ridge regression on
+    for \(\delta\) and \(\lambda\) in lasso and ridge regression on
     three real data sets. The
     dotted path shows the smallest NMSE as a function of \(\lambda\) and the circles mark
     combinations with the lowest error.
@@ -104,38 +98,30 @@ that includes the lasso as well.
   \label{fig:hyperopt-contours}
 \end{figure}
 
-% We would like to point out that there is a dependency between \(\lambda\) and \(\delta\)
-% that make it difficult to interpret the relationship between them and the error. This comes
-% from the fact that scaling with a smaller value (as in \(\delta = 1\)) increases the sizes
-% of the vectors, which means that the level of penalization is relaxed, relatively speaking.
-
-In \Cref{sec:predictive-performance-simulated}, we extend these results with experiments on
-simulated data under various class balances and signal-to-noise ratios, again showing that
-normalization has an impact on predictive performance.s
+Also see \Cref{sec:predictive-performance-support}, where we show how the support size of
+the lasso solutions vary with \(\delta\) and \(\lambda\). Finally,
+\Cref{sec:predictive-performance-simulated}, we complement these results with experiments
+on simulated data under various class balances and signal-to-noise ratios, again showing
+that normalization has a strong impact on predictive performance.
 
 \subsubsection{Mixed Data}\label{sec:experiments-mixed-data}
 
-In \Cref{sec:mixed-data} we showed theoretically that care needs to be taken when
-normalizing mixed data. Here we verify the theory through simulations. We construct a
-quasi-normal feature with mean zero and standard deviation 1/2 and a binary feature with
-varying class balance \(q_j\). We set the signal-to-noise ratio to 0.5 and use \(n =
-\num{1000}\). These features are constructed so that their effects are comparable under the
-notion of comparability that we introduced in \Cref{sec:mixed-data} using \(\kappa = 2\).
-In order to preserve the comparability for the baseline case when we have perfect class
-balance, we scale by \(s_j = 2 \times (1/4)^{1-\delta}(q_j-q_j^2)^\delta\). Finally, we set
-\(\lambda\) to \(\lambda_\text{max}/2\) and \(2\lambda_\text{max}\) for lasso and ridge
-regression respectively.
+In \Cref{sec:mixed-data} we discussed the issue of normalizing mixed data. Here, we examine
+this issue empirically. We construct a quasi-normal feature with mean zero and standard
+deviation 1/2 and a binary feature with varying class balance \(q_j\). We set the
+signal-to-noise ratio to 0.5 and use \(n = \num{1000}\). These features are constructed so
+that their effects are comparable under the notion of comparability that we introduced in
+\Cref{sec:mixed-data} using \(\kappa = 2\). In order to preserve the comparability for the
+baseline case when we have perfect class balance, we scale by \(s_j = 2 \times
+(1/4)^{1-\delta}(q_j-q_j^2)^\delta\). Finally, we set \(\lambda\) to
+\(\lambda_\text{max}/2\) and \(2\lambda_\text{max}\) for lasso and ridge regression
+respectively.
 
 The results~(\Cref{fig:lasso-ridge-comparison}) reflect our theoretical results from
 \Cref{sec:theory}. In the case of the lasso, we need \(\delta =1\) (variance scaling) to
 avoid the effect of class imbalance, whereas for ridge we instead need \(\delta =1/2\)
 (standardization). As our theory suggests, this extra scaling mitigates this class-balance
-dependency at the cost of added variance.
-% Note that we do not see the bias reduction that
-% we observed in our theoretical results for high \(q_j\) values and \(\delta \geq 1/2\) in
-% \Cref{fig:lasso-ridge-comparison}. This is related to the error term (signal-to-noise
-% ratio) and level of \(q_j\). We would need stronger class imbalance and larger error for
-% the effect to show up here.
+bias at the cost of added variance.
 
 \begin{figure}[htpb]
   \centering
@@ -157,24 +143,23 @@ second quasi-normal with standard deviation 0.5. We use \(n=1000\), \(\lambda_1 
 and normalize the binary feature by mean-centering and scaling by \(\kappa (q - q^2)\),
 using \(\kappa = 2\). We consider two different strategies for choosing \(s_3\): in the
 first strategy, which we call \emph{Strategy 1}, we simply standardize the resulting
-interaction feature.
-% TODO: make a reference to where this is done
-In the second strategy, \emph{Strategy 2} we center with mean and scale with \(s_1s_2\)
-(the product of the scales of the binary and normal features).
+interaction feature. This is a common strategy used, for instance in
+\citet{bien2013,lim2015}. In the second strategy, \emph{Strategy 2}, we center with mean
+and scale with \(s_1s_2\) (the product of the scales of the binary and normal features).
 
-The results for \(\bm{\beta}^* = \bm{1}\)~(\Cref{fig:interactions}) show that only strategy
-2 estimates the effect of the interaction correctly. Strategy 1, meanwhile, only selects
-the correct model if the class balance of the binary feature is close to 1/2 and in general
-shrinks the coefficient too much. See
-\Cref{fig:interactions-full}~(\Cref{sec:additional-experiments-interactions}) for results
-on different choices of \(\bm{\beta}^*\).
+The results~(\Cref{fig:interactions}) show that only Strategy 2 estimates the effect of the
+interaction correctly. Strategy 1, meanwhile, only selects the correct model if the class
+balance of the binary feature is close to 1/2 and in general shrinks the coefficient too
+much.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{interactions-classbalance.pdf}
   \caption{%
-    Lasso estimates for a problem with a binary feature, a quasi-normal feature, and
-    an interaction feature. We have set \(\bm{\beta}^* = \bm{1}\) and use two different normalization strategies where
+    Lasso estimates for a problem with a binary feature, a quasi-normal
+    feature, and an interaction feature. We have varied the true signal
+    \(\bm{\beta}^*\) and use two different normalization strategies for the
+    interaction, where
     Strategy 1 represents standardization and Strategy 2 is mean-centering
     together with scaling by \(s_1 s_2\).
   }
@@ -189,10 +174,9 @@ presentation, we parameterize the elastic net as \(\lambda_1 = \alpha \lambda \)
 \(\lambda_2 = (1-\alpha) \lambda\), so that \(\alpha\) controls the balance between the
 ridge and lasso. We conduct an experiment with the same setup as in
 \Cref{sec:experiments-mixed-data}, but here we use the weighted elastic net instead with
-\(\alpha = 0.5\) (See \Cref{sec:additional-experiments-weighted-elnet} for results using
-other setting for \(\alpha\)). We use \(n=1000\) and vary \(\omega\), using the weights
-\(u_j = v_j = (q_j - q_j^2)^{\omega}\) as we suggested in \Cref{sec:binary-weighting}. Our
-results (\Cref{fig:mixed-data-elnet}) show that \(\omega = 1\) leads to seemingly unbiased
+\(\alpha = 0.5\). We use \(n=1000\) and vary \(\omega\), using the weights \(u_j = v_j =
+(q_j - q_j^2)^{\omega}\) as we suggested in \Cref{sec:binary-weighting}. Our results
+(\Cref{fig:mixed-data-elnet}) show that \(\omega = 1\) leads to seemingly unbiased
 estimates.
 
 \begin{figure}[htpb]
@@ -207,3 +191,12 @@ estimates.
   \label{fig:mixed-data-elnet}
 \end{figure}
 
+\subsection{Additional Results}
+
+In \Cref{sec:additional-experiments} we present extended results of our experiments as well
+as several additional experiments. For instance, we consider tuning the \(\delta\)
+parameter in \Cref{sec:normalization-tuning}, and show that this leads to a method that
+overall outperforms standard normalization techniques. We also consider an experiment on
+the Boston housing data set in \Cref{sec:dichotomization}, where we try to estimate the
+effect of normalization on dichotomized versions of the features and find that \(\delta =
+1\) leads to feature ranks that best correspond to the linear regression solution.

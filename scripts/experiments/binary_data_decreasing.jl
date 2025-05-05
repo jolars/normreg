@@ -14,7 +14,7 @@ function binary_decreasingq_simulation(n, p, s, delta, q_type, snr, rho)
 
   σ = √(var(x * β_true) / snr)
 
-  λ = 2 * σ * sqrt(2 * log(p))
+  λ = σ * sqrt(2 * log(p))
 
   res = elasticnet(x, y, λ = [λ])
 

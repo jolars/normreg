@@ -28,9 +28,9 @@ that the solution to the elastic net problem is given by
 where \(\st_\lambda(z)\) is the soft-thresholding operator, defined as \(\st_\lambda(z) =
 \sign(z) \max(|z| - \lambda, 0)\), which is the proximal operator of the \(\ell_1\) norm.
 (See \Cref{sec:elastic-net-estimator} for a derivation of this.) The assumption of
-orthogonal features may seem strong and is indeed almost never realised in practice.
-Interestingly, however, the assumption turns out to have little bearing on our results. We
-refer the reader to \Cref{sec:orthogonality-assumption}, where we discuss this in detail.
+orthogonal features may seem strong and is indeed almost never realised in practice. For
+our results, however, the assumption turns out to have little impact. We refer the reader
+to \Cref{sec:orthogonality-assumption}, where we discuss this in detail.
 
 Normalization changes the optimization problem and the estimated coefficients, which will
 now be on the scale of the normalized features. But here we are interested in
@@ -71,7 +71,7 @@ expressions~(\Cref{sec:normally-distributed-noise}) and
 So far, we have assumed nothing about the features themselves. The main focus of our paper,
 however, is binary features, which we will now turn to.
 
-\subsection{Binary features}%
+\subsection{Binary Features}%
 \label{sec:theory-binary-features}
 
 When \(x_{ij} \in \{0, 1\}\) for all \(i\), we define \(\bm{x}_j\) to be a \emph{binary
@@ -123,13 +123,14 @@ Based on the reasoning above, we will consider the scaling parameterization \(s_
 (q_j-q_j^2)^\delta\), \(\delta \geq 0\), which includes the cases that we are primarily
 interested in, namely \(\delta = 0\) (no scaling, as in min--max and max--abs
 normalization), \(\delta = 1/2\) (standard-deviation scaling), and \(\delta = 1\) (variance
-scaling). The last of these, variance scaling, is not a standard type of normalization.
+scaling). The last of these, variance scaling, is in fact equivalent to scaling with the
+mean-centered \(\ell_1\)-norm in this particular case of binary features.
 
 Another consequence of \Cref{eq:noiseless-estimator}, which holds also in the noisy
 situation, is that normalization affects the estimator even when the binary feature is
-balanced (\(q_j = 1/2\)). Using \(\delta = 0\), for instance, scales \(\beta_j^*\) in the
-input to \(\st_\lambda\) by \(n (q_j - q_j^2) = n/4\). \(\delta = 1\), in contrast, imposes
-no such scaling in the class-balanced case. And for \(\delta = 1/2\), the scaling factor is
+balanced (\(q_j = 1/2\)). \(\delta = 0\), for instance, scales \(\beta_j^*\) in the input
+to \(\st_\lambda\) by \(n (q_j - q_j^2) = n/4\). \(\delta = 1\), in contrast, imposes no
+such scaling in the class-balanced case. And for \(\delta = 1/2\), the scaling factor is
 \(n/2\). Generalizing this, we see that to achieve equivalent scaling in the class-balanced
 case for all types of normalization, under our parameterization, we would need to use \(s_j
 = 4^{\delta - 1} (q_j - q_j^2)^\delta\). But this only resolves the issue for the lasso. To
@@ -207,14 +208,16 @@ the elastic net estimator in the limit as \(q_j \rightarrow 1^-\).
 
 \Cref{thm:classbalance-bias} shows that bias of the elastic net estimator approaches
 \(-\beta_j^*\) as \(q_j \rightarrow 1^-\) when \(0 \leq \delta < 1/2\). When \(\delta =
-1/2\) (standardization), the estimate instead approaches the true coefficient scaled by the
-probability that a standard normal variable is smaller than
-\(\beta_j^*\sqrt{n}\sigma_\varepsilon^{-1}\). For \(\delta > 1/2\), the estimate is
-asymptotically unbiased. This comes as a result of scaling the variance component from the
-error term and is accompanied by exponentially increasing variance, which suggests that
-variance-scaling may be problematic in the large noise--large imbalance scenario. In
-\Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
-\(q_j \rightarrow 1^-\).
+1/2\) (standardization), the estimate approaches a constant that depends on regularization
+strength, noise level, and the true strength of the coefficient. For \(\delta > 1/2\), the
+estimate is asymptotically unbiased as a by-product of variance dominating in the limit as
+\(q_j \rightarrow 1^{-1}\), which suggests that variance-scaling (\(\ell_1\)-norm
+normalization) could be problematic in a scenario with much noise and highly imbalanced
+features.
+
+In \Cref{thm:classbalance-variance}, we continue by studying the variance in the limit as
+\(q_j \rightarrow 1^-\), which shows that the variance of the elastic net estimator tends
+to \(\infty\) in the limit unless the scaling parameter \(s_j < 1/2\).
 
 \begin{theorem}
   \label{thm:classbalance-variance}
@@ -229,14 +232,14 @@ variance-scaling may be problematic in the large noise--large imbalance scenario
   \]
 \end{theorem}
 
-The main take-away of \Cref{thm:classbalance-bias,thm:classbalance-variance} is that there
-is a bias-variance trade-off with respect to the choice of normalization. We can reduce
-class imbalance-induced bias by increasing \(\delta\) towards 1 (variance scaling) but do
-so at the price of increase variance.
-
 Note that \Cref{thm:classbalance-variance} applies only to the case when \(\lambda_1 > 1\).
 In \Cref{cor:ridge-variance}~(\Cref{sec:ridge-variance}), we state the corresponding result
 for ridge regression.
+
+Taken together, \Cref{thm:classbalance-bias,thm:classbalance-variance,cor:ridge-variance},
+indicate that the choice of scaling parameter constitutes a bias--variance trade-off with
+respect to \(\delta\): increasing \(\delta\) reduces class-balance bias, but does so at the
+cost of increased variance.
 
 In \Cref{fig:bias-var-onedim-lasso}, we now visualize bias, variance, and mean-squared
 error for ranges of class balance and various noise-level settings for a lasso problem. The
@@ -244,12 +247,11 @@ figure demonstrates the bias--variance trade-off that our asymptotic results sug
 indicates that the optimal choice of \(\delta\) is related to the noise level in the data.
 Since this level is typically unknown and can only be reliably estimated in the
 low-dimensional setting, it suggests there might be value in selecting \(\delta\) through
-hyper-optimization. In
+hyper-parameter optimization.\footnote{In \Cref{sec:normalization-tuning} we demonstrate
+  the utility of doing so.} In
 \Cref{fig:bias-var-onedim-ridge-full}~(\Cref{sec:additional-results-biasvar}) we show
 results for ridge regression as well. As expected, it is then \(\delta = 1/2\) that leads
-to unbiased estimates in this case. Also see
-\Cref{fig:bias-var-onedim-lasso-full}~(\Cref{sec:additional-results-biasvar}) for extended
-results on the lasso.
+to unbiased estimates.
 
 \begin{figure}[htb]
   \centering
@@ -263,10 +265,11 @@ results on the lasso.
 \end{figure}
 
 So far, we have only considered a single binary feature, but in
-\Cref{sec:power-fdr-multiple} we present results on power and false discovery rates for a
-problem with multiple features.
+\Cref{sec:power-fdr-multiple} we present results on power and false discovery rates for
+problems with multiple features. In the next section we will also step beyond the
+all-binary context and consider mixes of binary and continuous features.
 
-\subsection{Mixed data}%
+\subsection{Mixed Data}%
 \label{sec:mixed-data}
 
 A fundamental problem with mixes of binary and continuous features is deciding how to put
@@ -307,8 +310,8 @@ q_0^2)^{1 - 2\delta} (q - q^2)^\delta\). In the sequel, we will assume that \(q_
 to have effects be equivalent for the class-balanced case.
 
 Note that this means that the choice of normalization has an implicit effect on the
-relative penalization of binary and normal features, even in the class-balanced case (\(q_1
-= 1/2\)). If we for instance use \(\delta=0\) and fit the lasso, then
+relative penalization of binary and normal features---even in the class-balanced case
+(\(q_1 = 1/2\)). If we for instance use \(\delta=0\) and fit the lasso, then
 \Cref{eq:comparable-effects} for a binary feature with \(q_1=1/2\) becomes
 \(4\st_{\lambda_1}\left(n\beta_1^*/4\right) = \kappa \st_{\lambda_1}(n\beta_1^*/\kappa ),\)
 which implies \(\kappa = 4\). In other words, the choice of normalization equips our model
@@ -325,7 +328,7 @@ on this particular setting.
 \subsection{Interactions}\label{sec:interactions}
 
 The elastic net can be extended to include interactions. There is previous literature on
-this topic~\citep{bien2013,zemlianskaia2022,lim2015}, but it has not considered the
+this topic~\citep{bien2013,lim2015,zemlianskaia2022}, but it has not considered the
 possible influence of normalization. Here, we will consider simple pairwise interactions
 with no restriction on the presence of main effects. For our analysis, we let \(\vec{x}_1\)
 and \(\vec{x}_2\) be two features of the data and \(\bm{x}_3\) their interaction, so that
@@ -411,3 +414,7 @@ the result mimics the result for the elastic net with normalization. The results
 variance, and mean-squared error for the weighted elastic net are similar to those in
 \Cref{fig:bias-var-onedim-lasso} and are plotted in
 \Cref{fig:binary-onedim-bias-var-elnet}~(\Cref{sec:additional-results-biasvar}).
+
+This wraps up our theoretical contributions in our paper. In the coming section, we will
+turn to empirical experiments and demonstrate that our theoretical results both hold in
+practice and, at least empirically, extend beyond our current assumptions.

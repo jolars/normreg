@@ -28,20 +28,25 @@ sparsity since centering shifts zero values to non-zero.
   \caption{
     Common ways to normalize a matrix of features using centering and scaling
     factors \(c_j\) and \(s_j\), respectively. Note that \(\bar{x}_j\) is
-    the arithmetic mean of feature \(j\).
+    the arithmetic mean of feature \(j\) and that \(Q_a(\bm{x}_j)\) is the
+    \(a\)th quantile of feature \(j\).
   }
   \label{tab:normalization-types}
   \begin{tabular}{lll}
     \toprule
-    Normalization            & \(c_{j}\)          & \(s_j\)                                                   \\
+    Normalization            & \(c_{j}\)          & \(s_j\)                                                     \\
     \midrule
-    Standardization          & \(\bar{x}_j\)      & \(\sqrt{\frac{1}{n}\sum_{i=1}^n (x_{ij} - \bar{x}_j)^2}\) \\
+    Standardization          & \(\bar{x}_j\)      & \(\frac{1}{\sqrt{n}} \lVert \vec{x}_j - \bar{x}_j\rVert_2\) \\
     \addlinespace
-    Max--Abs                 & 0                  & \(\max_i|x_{ij}|\)                                        \\
+    \(\ell_1\)-Normalization & \(\bar{x}_j\)      & \(\frac{1}{\sqrt{n}} \lVert \vec{x}_j - \bar{x}_j\rVert_1\) \\
     \addlinespace
-    Min--Max                 & \(\min_i(x_{ij})\) & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                       \\
+    Max--Abs                 & 0                  & \(\max_i|x_{ij}|\)                                          \\
     \addlinespace
-    \(\ell_1\)-Normalization & 0 or \(\bar{x}_j\) & \(\lVert \vec{x}_j\rVert_1\)                              \\
+    Min--Max                 & \(\min_i(x_{ij})\) & \(\max_i(x_{ij}) - \min_i(x_{ij})\)                         \\
+    \addlinespace
+    Robust Normalization     & \(Q_2(\bm{x}_j)\)  & \(Q_3(\bm{x}_j) - Q_1(\bm{x}_j)\)                           \\
+    \addlinespace
+    Adaptive Lasso           & 0                  & \(\hat{\beta}_j^\text{OLS}\)                                \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -51,7 +56,21 @@ max--abs (maximum absolute value) normalization, which scale the data to lie in 
 and \([-1, 1]\) respectively, and therefore retain sparsity when features are binary. These
 methods are, however, both sensitive to outliers. And since sample extreme values often
 depend on sample size, as in the case of normal data~(\Cref{sec:maxabs-theory}), use of
-these methods may sometimes be problematic. In the next section, we will examine how the
-choice of normalization affects the estimates for the lasso, ridge, and elastic net
-regression.
+these methods may sometimes be problematic. Another alternative is to replace the
+\(\ell_2\)-norm in the standardization method with the \(\ell_1\)-norm, which leads to
+\(\ell_1\)-normalization. We note here that this method is often used without centering,
+but this would make the method depend on the mean of the feature, as in the case of
+max--abs normalization, and we therefore prefer the centered version here.
+
+We have also included robust normalization in \Cref{tab:normalization-types}, which is a
+version of normalization that uses the median and interquartile range (IQR) as centering
+and scaling factors. Finally, we have also included the adaptive lasso~\citep{zou2006a},
+which is a special case of normalization that fits a standard ordinary least-squares
+regression (OLS) model to the data and uses the OLS estimates as scaling
+factors.\footnote{In the case when \(p \gg n\), a ridge estimator is typically used
+  instead.} We have both of these methods in \Cref{tab:normalization-types} for completeness,
+but we will not study it further in this paper.
+
+In the next section, we will examine how the choice of normalization affects the estimates
+for the lasso, ridge, and elastic net regression.
 

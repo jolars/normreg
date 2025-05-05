@@ -41,8 +41,7 @@ for alpha in alphas
     for norm_method in norm_methods
       x, y = datagrabber(dataset)
 
-      binary_response =
-        dataset in ["mushrooms", "heart", "australian", "a1a", "w1a", "leukemia"]
+      binary_response = dataset in ["heart", "australian", "a1a", "w1a", "leukemia"]
 
       dist = if binary_response
         Binomial()
