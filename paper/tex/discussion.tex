@@ -30,18 +30,17 @@ normalization constitutes a bias--variance trade-off.
 We have also studied the case of mixed data: designs that include both binary and normally
 distributed features~(\Cref{sec:mixed-data}). In this setting, our first finding is that
 there is an implicit relationship between the choice of normalization and the manner in
-which regularization affects binary viz-a-viz normally distributed features, even when the
+which regularization affects binary vis-à-vis normally distributed features, even when the
 binary feature is perfectly balanced. The choice of max--abs normalization, for instance,
 leads to a specific weighting of the effects of binary features relative to those of normal
 features.
 
-For interactions between binary and normal features
-features~(\Cref{sec:experiments-interactions}), our conclusion is that the interaction
-feature---contrary to what recent literature on interactions in the lasso
-recommends---should be scaled with the \emph{product} of the standard deviation of the
-normal feature and variance of the binary feature to avoid this effect of class imbalance.
-We have not seen this recommendation in the literature before, but it is a natural
-extension of our other results.
+For interactions between binary and normal features~(\Cref{sec:experiments-interactions}),
+our conclusion is that the interaction feature---contrary to what recent literature on
+interactions in the lasso recommends---should be scaled with the \emph{product} of the
+standard deviation of the normal feature and variance of the binary feature to avoid this
+effect of class imbalance. We have not seen this recommendation in the literature before,
+but it is a natural extension of our other results.
 
 We note that our theoretical results are limited by a few assumptions: 1) a fixed feature
 matrix \(\bm{X}\), 2) normal and independent errors, and 3) orthogonal features. The first
