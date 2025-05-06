@@ -11,10 +11,11 @@ remaining ones to zero. To generate quasi-normal features, we generate a linear 
 \(\vec{w}\) with \(n\) values from \(10^{-4}\) to \(1 - 10^{-4}\), set \(x_{ij} =
 \cdf^{-1}(w_i)\), and then shuffle the elements of \(\vec{x}_j\) uniformly at random.
 
-We use a coordinate descent solver to optimize our models, which we have based on the
-algorithm outlined by \citet{friedman2010}. All experiments were coded using the Julia
-programming language~\citep{bezanson2017} and the code is available at
-% \url{https://github.com/jolars/normreg}.
+We use a coordinate solver from \pkg{Lasso.jl}~\citep{kornblith2024} to optimize our
+models, which we have based on the algorithm outlined by \citet{friedman2010}. All
+experiments were coded using the Julia programming language~\citep{bezanson2017} and the
+code is available
+% at \url{https://github.com/jolars/normreg}.
 in the supplementary material and will be published online upon acceptance.
 %
 All simulated experiments were run for at least 100 iterations and, unless stated
@@ -46,8 +47,7 @@ particularly in the case of no scaling (\(\delta = 0\)), which corroborates our 
 (\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For larger values of
 \(\delta\), we see that class imbalance leads to increased estimation variance in
 accordance with our theory for the orthogonal case. The effect of correlation appears to
-have no effect on this class-balance bias, which indicates that the assumption of
-orthogonality might not be necessary for our theory to hold.
+have no effect on this class-balance bias.
 
 \begin{figure}[htpb]
   \centering
@@ -72,10 +72,10 @@ three different datasets: \data{rhee2006}~\citep{rhee2006},
   details about these datasets.} We present the results for lasso and ridge regression in
 \Cref{fig:hyperopt-contours}, which shows contour plots of the validation set error in
 terms of normalized mean-squared error~(NMSE). We see that optimal setting of \(\delta\)
-differs between the different datasets: for \data{eunite2001}, both the lasso and ridge
-are quite insensitive to the type of normalization, and low error is attainable for the
-full range of \(\delta\). For \data{rhee2006}, this holds for the lasso too, but not for
-ridge regression, where a value in approximately \([0,3]\) is optimal. Finally, for
+differs between the different datasets: for \data{eunite2001}, both the lasso and ridge are
+quite insensitive to the type of normalization, and low error is attainable for the full
+range of \(\delta\). For \data{rhee2006}, this holds for the lasso too, but not for ridge
+regression, where a value in approximately \([0,3]\) is optimal. Finally, for
 \data{triazines}, the problem is quite sensitive to the choice of \(\delta\) as well as the
 type of model used.
 
