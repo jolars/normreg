@@ -23,13 +23,13 @@ otherwise, are presented as means $\pm$ one standard deviation (using bars or ri
 \subsection{Normalization in Lasso and Ridge Regression}%
 \label{sec:experiments-lassoridge}
 
-In this section we consider fitting the lasso and ridge regression to normalized data sets.
+In this section we consider fitting the lasso and ridge regression to normalized datasets.
 To normalize the data, we standardize all quasi-normal features. For binary features, we
 center by mean and scale by \(s_j \propto (q_j-q_j^2)^\delta\).
 
 \subsubsection{Variability and Bias in Estimates}
 
-In our first experiment, we consider fitting the lasso to a simulated data set with
+In our first experiment, we consider fitting the lasso to a simulated dataset with
 \(n=500\) observations and \(p = \num{1000}\) features. The first 20 features correspond to
 signals, with \(\beta_j^* = 1\), and otherwise we set \(\beta_j^*\) to 0. Furthermore, we
 set the class balance of the first 20 features so that it increases geometrically from 0.5
@@ -41,7 +41,7 @@ features by copying the first \(\ceil{\rho n/2}\) values from the first feature 
 the following features.
 
 The results~(\Cref{fig:binary-decreasing}) show that class balance has considerable effect,
-particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theory from
+particularly in the case of no scaling (\(\delta = 0\)), which corroborates our results in
 \Cref{sec:theory-binary-features}. At \(q_j=0.99\), for instance, the estimate
 (\(\hat{\beta}_{20}\)) is consistently zero when \(\delta = 0\). For larger values of
 \(\delta\), we see that class imbalance leads to increased estimation variance in
@@ -66,13 +66,13 @@ orthogonality might not be necessary for our theory to hold.
 \label{sec:experiments-predictive-performance}
 
 In this section we examine the influence of normalization on predictive performance for
-three different data sets: \data{rhee2006}~\citep{rhee2006},
+three different datasets: \data{rhee2006}~\citep{rhee2006},
 \data{eunite2001}~\citep{chen2004}, and
 \data{triazines}~\citep{hirst1994,king1995}.\footnote{See \Cref{sec:data-summary} for
-  details about these data sets.} We present the results for lasso and ridge regression in
+  details about these datasets.} We present the results for lasso and ridge regression in
 \Cref{fig:hyperopt-contours}, which shows contour plots of the validation set error in
 terms of normalized mean-squared error~(NMSE). We see that optimal setting of \(\delta\)
-differs between the different data sets: for \data{eunite2001}, both the lasso and ridge
+differs between the different datasets: for \data{eunite2001}, both the lasso and ridge
 are quite insensitive to the type of normalization, and low error is attainable for the
 full range of \(\delta\). For \data{rhee2006}, this holds for the lasso too, but not for
 ridge regression, where a value in approximately \([0,3]\) is optimal. Finally, for
@@ -189,6 +189,6 @@ estimates.
 
 In \Cref{sec:additional-experiments} we present extended results of our experiments as well
 as several additional experiments. For instance, we also consider an experiment on the
-Boston housing data set in \Cref{sec:dichotomization}, where we try to estimate the effect
+Boston housing dataset in \Cref{sec:dichotomization}, where we try to estimate the effect
 of normalization on dichotomized versions of the features and find that \(\delta = 1\)
 leads to feature ranks that best correspond to the linear regression solution.

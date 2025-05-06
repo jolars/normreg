@@ -8,7 +8,7 @@ the objective that punishes models with large coefficients. The resulting proble
 following form:
 \begin{equation}
   \label{eq:general-objective}
-  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} g(\beta_0, \vec\beta; \mat X, \vec y) + h(\vec\beta),
+  \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} g(\beta_0, \vec{\beta}; \mat X, \vec y) + h(\vec\beta),
 \end{equation}
 %
 where \(g\) is a data-fitting function that attempts to optimize the fit to the data and
@@ -31,7 +31,7 @@ The choice of normalization may, however, have consequences for the estimated mo
 first example of this, consider \Cref{fig:realdata-paths}, which displays the
 regularization paths for the lasso\footnote{The estimated coefficients of the lasso as the
   penalty strength is varied from a large-enough value for all coefficients to be zero to a
-  low value.} for four data sets and two types of normalization. In the figure, we have
+  low value.} for four datasets and two types of normalization. In the figure, we have
 colored the lines corresponding to features that were among the first five to enter the
 model in either of the two type of normalization schemes. Note that the choice of
 normalization result in different sets of features being selected as well as different
@@ -46,7 +46,7 @@ coefficient estimates.
     the lasso path to four different datasets:
     \data{housing}~\citep{harrison1978}, \data{leukemia}~\citep{golub1999},
     \data{triazines}~\citep{king1995,hirst1994}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
-    for more information about these data sets.) For each
+    for more information about these datasets.) For each
     dataset, we have colored the coefficients if they were among the first five
     to become non-zero under either of the two normalization schemes.   }
   \label{fig:realdata-paths}

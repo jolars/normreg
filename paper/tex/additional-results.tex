@@ -96,7 +96,7 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
   \caption{%
     Normalized mean-squared prediction error in a lasso model for different types of
     normalization (\(\delta\)), types of class imbalances (\(q_j\)), and signal-to-noise ratios
-    (0.05 to 6) in a data set with \(n=300\) observations and \(p = \num{1000}\) features. The
+    (0.05 to 6) in a dataset with \(n=300\) observations and \(p = \num{1000}\) features. The
     error is aggregated test-set error from hold-out validation with \(100\) observations in
     each of the training, validation, and test sets. The plot shows means and Student's
     \(t\)-based 95\% confidence intervals. } \label{fig:binary-sim}
@@ -106,19 +106,19 @@ general, \(\delta=1/2\) works well for these specific combinations of settings.
 \label{sec:normalization-tuning}
 
 In this section we present an extended and modified version of the experiment in
-\Cref{sec:experiments-predictive-performance}, by considering several additional data sets,
-including data sets with binary responses to which we have fit \(\ell_1\) and
+\Cref{sec:experiments-predictive-performance}, by considering several additional datasets,
+including datasets with binary responses to which we have fit \(\ell_1\) and
 \(\ell_2\)-regularized logistic regression. Instead of only considering parameterization
 over \(\delta\), we also extend the benchmarks to cover additional normalization types. For
-each of the data sets, we have fit the lasso and ridge for 10-times repeated 10-folds
+each of the datasets, we have fit the lasso and ridge for 10-times repeated 10-folds
 cross-validation over a grid of \(\lambda\) and normalization method. In the case of the
 method we call ``ours'', we have extended the grid over \(\delta\) as well, and return the
 results for the \(\delta\) with lowest error.
 
 The results are shown in \Cref{fig:method-comparison} and show that the optimal choice of
-normalization depends on the data set and type of model. Using our strategy, which
+normalization depends on the dataset and type of model. Using our strategy, which
 corresponds to standardization for continuous data and hyper-tuning over \(\delta\) attains
-best results for most of the data sets, only ever slightly worse than the best performing
+best results for most of the datasets, only ever slightly worse than the best performing
 method. Among the methods, \(\ell_1\) normalization seems to perform poorly in general.
 Given the fact that that it corresponds to variance-scaling for binary data, which we have
 shown results in considerable variance, this is not particularly surprising.
@@ -135,7 +135,7 @@ shown results in considerable variance, this is not particularly surprising.
   ]{\includegraphics[]{method_comparison_ridge.pdf}}
   \caption{%
     Cross-validation error from 10-times repeated 10-folds cross validation for the lasso and ridge
-    and various data sets and normalization strategies. The error is normalized mean-squared
+    and various datasets and normalization strategies. The error is normalized mean-squared
     error (NMSE). In the case of datasets \data{a1a}, \data{w1a}, \data{heart}, \data{w1a},
     and \data{australian}, we have fit regularized logistic regression and
     otherwise regularized linear regression. The error bars show 95\% confidence intervals.
@@ -147,7 +147,7 @@ shown results in considerable variance, this is not particularly surprising.
 \label{sec:dichotomization}
 
 In this experiment, we attempt to study the effect of normalization choice in feature
-selection on data sets with dichotomized features and the following dichotomization scheme
+selection on datasets with dichotomized features and the following dichotomization scheme
 to convert the continuous features to binary.
 
 Each variable was converted to a binary feature by comparing against threshold based on
@@ -158,7 +158,7 @@ housing factors in the 1970s~(\Cref{tab:dichotomization}).
   \centering
   \caption{
     Dichotomization procedure and linear regression coefficients for the
-    features of the Boston housing data set used in the experiment in
+    features of the Boston housing dataset used in the experiment in
     \Cref{sec:dichotomization}.
   }
   \label{tab:dichotomization}
@@ -207,7 +207,7 @@ the ranks of the linear regression coefficients.
   \caption{
     Comparison between ranks of ordinary least-squares coefficients and ranks
     given by the order of model entry along the lasso path for the Boston
-    housing data set. The metrics used are Spearman's and Kendall's rank
+    housing dataset. The metrics used are Spearman's and Kendall's rank
     correlations, normalized discounted cumulative gain (NDCG), and mean
     absolute difference (MAD). Best values are marked in blod face. For all
     measures except MAD, higher values are better.
