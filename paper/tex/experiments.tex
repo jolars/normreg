@@ -75,25 +75,22 @@ three different data sets: \data{rhee2006}~\citep{rhee2006}, and
   details about these data sets.} We present the results for lasso and ridge regression in
 \Cref{fig:hyperopt-contours}, which shows contour plots of the validation set error in
 terms of normalized mean-squared error~(NMSE). We see that optimal setting of \(\delta\)
-differs between the different data sets: for \data{a1a}, the lasso is generally quite
-insensitive to the type of normalization, even if the optimal value is around 0.2. For
-ridge regression, lower values of \(\delta\) clearly work better. With the \data{w1a} data
-set, however, the relationship is flipped in the case of ridge regression and the optimal
-value is approximately 0.8. In the case of the lasso (for \(\data{w1a}\)), a value around
-0.5 is optimal and low values (little scaling) yield worse prediction errors. Finally, for
-\data{rhee2006}, the lasso is again insensitive to normalization type. This is not the case
-for ridge, however, where a value around 0.2 is optimal and high values of \(\delta\) yield
-worse prediction errors.
+differs between the different data sets: for \data{eunite2001}, both the lasso and ridge
+are quite insensitive to the type of normalization, and low error is attainable for the
+full range of \(\delta\). For \data{rhee2006}, this holds for the lasso too, but not for
+ridge regression, where a value in approximately \([0,3]\) is optimal. Finally, for
+\data{triazines}, the problem is quite sensitive to the choice of \(\delta\) as well as the
+type of model used.
 
 \begin{figure}[htpb]
   \centering
   \includegraphics[]{hyperopt_surfaces.pdf}
   \caption{%
-    Contour plots of normalized validation set mean-squared error (NMSE)
-    for \(\delta\) and \(\lambda\) in lasso and ridge regression on
-    three real data sets. The
-    dotted path shows the smallest NMSE as a function of \(\lambda\) and the circles mark
-    combinations with the lowest error.
+    Contour plots of normalized validation set mean-squared error (NMSE) for
+    \(\delta\) and \(\lambda\) in lasso and ridge regression on three real data
+    sets: \data{rhee2006}, \data{eunite2001}, and \data{triazines}. The dotted
+    path shows the smallest NMSE as a function of \(\lambda\) and the circles
+    mark combinations with the lowest error.
   }
   \label{fig:hyperopt-contours}
 \end{figure}
