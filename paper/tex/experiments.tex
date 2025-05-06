@@ -36,9 +36,10 @@ signals, with \(\beta_j^* = 1\), and otherwise we set \(\beta_j^*\) to 0. Furthe
 set the class balance of the first 20 features so that it increases geometrically from 0.5
 to 0.99. For all other features we pick \(q_j\) uniformly at random in \([0.5,0.99]\). We
 estimate the regression coefficients using the lasso, setting \(\lambda_1 = 2
-\sigma_\varepsilon \sqrt{2 \log p }\), with \(\sigma_e\) set to achieve a signal-to-noise
-ratio (SNR) of 2. In addition, we introduce correlation between the features by copying the
-first \(\ceil{\rho n/2}\) values from the first feature to each of the following features.
+\sigma_\varepsilon \sqrt{2 \log p }\), with \(\sigma_\varepsilon\) set to achieve a
+signal-to-noise ratio (SNR) of 2. In addition, we introduce correlation between the
+features by copying the first \(\ceil{\rho n/2}\) values from the first feature to each of
+the following features.
 
 The results~(\Cref{fig:binary-decreasing}) show that class balance has considerable effect,
 particularly in the case of no scaling (\(\delta = 0\)), which corroborates our theory from
