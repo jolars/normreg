@@ -17,7 +17,7 @@ function orthogonal_solution(x, y, λ, centers, scales)
   out
 end
 
-function get_lambdamax(x, y, normalization = "mean_std"; intercept = true)
+function get_lambdamax(x, y)
   n = size(x, 1)
   λmax = maximum(abs.(x' * (y .- mean(y) * Int(intercept)))) / n
 
