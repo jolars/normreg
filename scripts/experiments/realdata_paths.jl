@@ -4,31 +4,55 @@ using ProjectRoot
 using JSON
 using Statistics
 using NormReg
+using Lasso
 
-function path_simulation(dataset, normalization, model = "gaussian")
-  if model == "gaussian"
-    dist = Normal()
-  elseif model == "binomial"
-    dist = Binomial()
-  else
-    error("Model not supported")
-  end
-
-  x, y = load_dataset(dataset, dense = true, replace = false, verbose = false)
+function path_simulation(dataset, normalization)
+  x, y = datagrabber(dataset)
 
   x_norm, centers, scales = normalize_features_unadjusted(Array(x), normalization)
 
-  betas, intercepts, λ = elasticnet(x_norm, y)
+  res_full = fit(LassoPath, x_norm, y, dist, standardize = false)
 
-  _, betas = unstandardize_coefficients(intercepts, betas, centers, scales)
+  _, betas = unstandardize_coefficients(res_full.b0, res_full.coefs, centers, scales)
 
-  return betas
+  seed = 1234
+
+  deltas = [1]
+
+  x_train, y_train, x_test, y_test = split_data(x, y, 0.5)
+
+  _, _, _, _, best_lambda, _ = cross_validate(
+    x_train,
+    y_train,
+    Normal(),
+    normalization,
+    1,
+    deltas,
+    5,
+    "nmse",
+    seed = seed,
+    repeats = 5,
+  )
+
+  x_norm_test, centers, scales = normalize_features_unadjusted(Array(x_test), normalization)
+
+  res_test =
+    fit(LassoPath, x_norm_test, y_test, Normal(), standardize = false, λ = [best_lambda])
+
+  beta_unstd = res_test.coefs[:, 1]
+  ind = sortperm(abs.(beta_unstd), rev = true)[1:5]
+
+  _, beta_cv = unstandardize_coefficients(res_test.b0, res_test.coefs, centers, scales)
+
+  # betas, intercepts, _ = elasticnet(x_norm_test, y_test, λ = [best_lambda])
+  # _, beta_cv = unstandardize_coefficients(intercepts, betas, centers, scales)
+
+  return betas, beta_cv, ind
 end
 
 param_dict = Dict{String,Any}(
-  "dataset" => ["housing", "leukemia", "triazines", "w1a"],
+  "dataset" => ["housing", "a1a", "triazines", "w1a"],
   "normalization" => ["std", "max_abs"],
-  "model" => ["gaussian"],
   "alpha" => 1.0,
 )
 
@@ -37,12 +61,14 @@ param_expanded = dict_list(param_dict)
 results = []
 
 for (i, d) in enumerate(param_expanded)
-  @unpack dataset, normalization, model, alpha = d
+  @unpack dataset, normalization, alpha = d
 
-  betas = path_simulation(dataset, normalization, model)
+  betas, beta_cv, ind = path_simulation(dataset, normalization)
 
   d_exp = copy(d)
   d_exp["betas"] = betas
+  d_exp["beta_cv"] = beta_cv
+  d_exp["ind"] = ind
 
   push!(results, d_exp)
 end

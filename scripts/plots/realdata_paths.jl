@@ -97,15 +97,3 @@ plot_output = plot(plots..., layout = (2, 4), size = (FULL_WIDTH, 340))
 file_path = @projectroot("plots", "realdata_paths.pdf")
 
 savefig(plot_output, file_path)
-
-# for main paper
-df = DataFrame(json_data);
-df_small = DataFrames.subset(df, :dataset => d -> d .== "triazines" .|| d .== "w1a")
-
-plots_small = plot_realpaths(df_small)
-
-plot_output = plot(plots_small..., layout = (2, 2), size = (320, 280))
-
-file_path_small = @projectroot("plots", "realdata_paths_small.pdf")
-
-savefig(plot_output, file_path_small)

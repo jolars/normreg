@@ -31,26 +31,78 @@ The choice of normalization may, however, have consequences for the estimated mo
 first example of this, consider \Cref{fig:realdata-paths}, which displays the
 regularization paths for the lasso\footnote{The estimated coefficients of the lasso as the
   penalty strength is varied from a large-enough value for all coefficients to be zero to a
-  low value.} for four datasets and two types of normalization. In the figure, we have
-colored the lines corresponding to features that were among the first five to enter the
-model in either of the two type of normalization schemes. Note that the choice of
-normalization result in different sets of features being selected as well as different
-coefficient estimates.
+  low value at which the model is almost saturated.} for four datasets:
+\data{housing}~\citep{harrison1978}, \data{a1a}~\citep{becker1996,platt1998},
+\data{triazines}~\citep{king1995,hirst1994}, and \data{w1a}~\citep{platt1998}, and two
+types of normalization.
+
+In the figure, we have colored the lines corresponding to features that were among the
+first five to enter the model in either of the two type of normalization schemes. Note that
+the choice of normalization result in different sets of features being selected as well as
+different coefficient estimates. This is especially striking in the case of
+\data{triazines} and \data{w1a}.
 
 \begin{figure}[bpt]
   \centering
   \includegraphics[]{realdata_paths.pdf}
   \caption{%
     Lasso paths for real datasets using two types of normalization:
-    standardization and maximum absolute value normalization (max--abs). We have fit
-    the lasso path to four different datasets:
-    \data{housing}~\citep{harrison1978}, \data{leukemia}~\citep{golub1999},
-    \data{triazines}~\citep{king1995,hirst1994}, and \data{w1a}~\citep{platt1998}. (See \Cref{sec:data-summary}
-    for more information about these datasets.) For each
-    dataset, we have colored the coefficients if they were among the first five
-    to become non-zero under either of the two normalization schemes.   }
+    standardization and maximum absolute value normalization (max--abs). For
+    each dataset, we have colored the coefficients if they were among the first
+    five to become non-zero under either of the two normalization schemes. See
+    \Cref{sec:data-summary} for more information about these datasets.
+  }
   \label{fig:realdata-paths}
 \end{figure}
+
+To illustrate this further, we show the estimated coefficients for the same datasets after
+having fitted the lasso with a penalty strength (\(\lambda\)) set from 5-fold
+cross-validation repeated 5 times on a 50\% train set split. The results are shown in
+\Cref{tab:realdata-cv-coefs}. We see that the estimated coefficients on the test set are
+different between the two cases. This is especially noticeable for the \data{triazines}
+datasets, where the two normalization schemes disagree completely.
+
+\begin{table}[htpb]
+  \centering
+  \caption{
+    Estimated lasso coefficients on test sets, with \(\lambda\) set from 5-fold
+    cross-validation repeated 5 times. \(\hat{\bm{\beta}}_\text{std}\) and
+    \(\hat{\bm{\beta}}_\text{max--abs}\) show the
+    coefficients based on normalizing the design matrix with standardization and
+    maximum absolute value (max--abs) normalization respectively. We show the five largest
+    coefficients (in magnitude) for the standardization case and the respective
+    coefficients for the max--abs case. In each case, we present the coefficients
+    on the original scale of the features.
+    See \Cref{sec:data-summary} for more
+    information about these datasets.
+  }
+  \label{tab:realdata-cv-coefs}
+  \begin{tabular}{
+      S[table-format=-1.2,round-mode=figures,round-precision=2]
+      S[table-format=-1.2,round-mode=figures,round-precision=2]
+      S[table-format=-1.2,round-mode=figures,round-precision=2]
+      S[table-format=-1.4,round-mode=figures,round-precision=2]
+      S[table-format=1.3,round-mode=figures,round-precision=2]
+      S[table-format=1.1,round-mode=figures,round-precision=2]
+      S[table-format=1.1,round-mode=figures,round-precision=2]
+      S[table-format=1.2,round-mode=figures,round-precision=2]
+    }
+    \toprule
+    \multicolumn{2}{c}{\data{housing}} & \multicolumn{2}{c}{\data{a1a}}         & \multicolumn{2}{c}{\data{triazines}} & \multicolumn{2}{c}{\data{w1a}}                                                                                                                                                                   \\
+    \cmidrule(rl){1-2}
+    \cmidrule(rl){3-4}
+    \cmidrule(rl){5-6}
+    \cmidrule(rl){7-8}
+    {\(\hat{\bm{\beta}}_\text{std}\)}  & {\(\hat{\bm{\beta}}_\text{max--abs}\)} & {\(\hat{\bm{\beta}}_\text{std}\)}    & {\(\hat{\bm{\beta}}_\text{max--abs}\)} & {\(\hat{\bm{\beta}}_\text{std}\)} & {\(\hat{\bm{\beta}}_\text{max--abs}\)} & {\(\hat{\bm{\beta}}_\text{std}\)} & {\(\hat{\bm{\beta}}_\text{max--abs}\)} \\
+    \midrule
+    -0.6309                            & -0.675004                              & 0.542532                             & 0.536762                               & 0.17369                           & 0.0                                    & 1.80033                           & 0.0                                    \\
+    -1.38393                           & -0.779929                              & 0.327537                             & 0.523057                               & 0.0691224                         & 0.0                                    & 1.78789                           & 0.78455                                \\
+    0.265659                           & 0.0                                    & -0.388699                            & -0.514664                              & 0.0284156                         & 0.0                                    & 1.78348                           & 0.630671                               \\
+    -0.987113                          & -0.335828                              & 0.308715                             & 0.320916                               & 0.0706408                         & 0.0                                    & 1.44741                           & 0.07977                                \\
+    2.77031                            & 3.06118                                & 0.175958                             & 0.23103                                & 0.0293775                         & 0.0                                    & 1.65553                           & 0.0                                    \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 In spite of this apparent connection between normalization and regularization, there has so
 far been almost no research on the topic. And in its absence, the choice of normalization
