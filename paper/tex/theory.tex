@@ -132,7 +132,11 @@ Based on the reasoning above, we will consider the scaling parameterization \(s_
 interested in, namely \(\delta = 0\) (no scaling, as in min--max and max--abs
 normalization), \(\delta = 1/2\) (standard-deviation scaling), and \(\delta = 1\) (variance
 scaling). The last of these, variance scaling, is in fact equivalent to scaling with the
-mean-centered \(\ell_1\)-norm in this particular case of binary features.
+mean-centered \(\ell_1\)-norm in this particular case of binary features. In
+\Cref{sec:noiseless-estimator}, we expand \Cref{eq:noiseless-estimator} under this
+parameterization to clarify how the choice of \(\delta\) affects class-balance bias in the
+lasso and ridge cases and why it is impossible (under our parameterization) to remove this
+bias in the case of the elastic net.
 
 Another consequence of \Cref{eq:noiseless-estimator}, which holds also in the noisy
 situation, is that normalization affects the estimator even when the binary feature is

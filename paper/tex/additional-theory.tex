@@ -181,6 +181,32 @@ functions of the standard normal distribution, respectively. Computing \Cref{eq:
                        & \phantom{={}} - \big(\E \st_{\lambda_1}({Z_j})\big)^2.
 \end{align*}
 
+\subsection{Derivation of Estimate in the Noiseless Case}%
+\label{sec:noiseless-estimator}
+
+If we assume \(s_j = (q_j - q_j^2)^\delta\), then \Cref{eq:noiseless-estimator} becomes
+\begin{equation*}
+  \label{eq:noiseless-estimator-2}
+  \hat{\beta}_j = \frac{\st_{\lambda_1}\left(\beta_j^* n (q_j - q_j^2)^{1 - \delta}\right)}{n(q_j - q_j^2)^{1 - \delta} + (q_j - q_j^2)^\delta \lambda_2  }.
+\end{equation*}
+
+If we are in the lasso case, then \(\lambda_2 = 0\) and
+\[
+  \hat{\beta}_j = \frac{\st_{\lambda_1}\left(\beta_j^* n (q_j - q_j^2)^{1 - \delta}\right)}{n(q_j - q_j^2)^{1 - \delta}},
+\]
+so we need to choose \(\delta = 1\), and hence \(s_j = q_j - q_j^2\), to get rid of the
+dependency on \(q_j\). For the ridge case, we instead have \(\lambda_1 = 0\) and hence
+\[
+  \hat{\beta}_j
+  = \frac{\beta_j^* n (q_j - q_j^2)^{1 - \delta}}{n(q_j - q_j^2)^{1 - \delta} + (q_j - q_j^2)^\delta \lambda_2  }
+  = \frac{\beta_j^* n}{n + (q_j - q_j^2)^{2\delta - 1} \lambda_2},
+\]
+which shows that we need to choose \(\delta = 1/2\) and hence \(s_j = \sqrt{q_j - q_j^2}\),
+to get rid of the dependency on \(q_j\) in this case.
+
+Note that if \(\lambda_1,\lambda_2 > 0\) (the elastic net case), then there is no choice of
+\(\delta\) that will make the estimator independent of \(q_j\).
+
 \subsection{Bias and Variance for Ridge Regression}%
 \label{sec:ridge-variance}
 
