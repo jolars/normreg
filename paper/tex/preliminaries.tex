@@ -14,7 +14,9 @@ process of centering and scaling the feature matrix.
 
 Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
 but here we define standardization only as the case when centering with the mean and
-scaling with the (uncorrected) standard deviation.
+scaling with the (uncorrected\footnote{Standard deviation computed without Bessel's
+  correction (use of \(n-1\) instead of \(n\) in the standard deviation formula).}) standard
+deviation.
 
 There are many different normalization strategies and we have listed a few common choices
 in \Cref{tab:normalization-types}. Standardization is perhaps the most popular type of
