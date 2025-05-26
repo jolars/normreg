@@ -42,14 +42,16 @@ since we are not interested in interpreting it.
 
 Taken together, this means that the solution for \(\hat{\vec{\beta}}\) can be expressed as
 \[
-  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\T \vec{y})}{d_j}\quad\text{with}\quad d_j = s_j(\tilde{\vec{x}}_j^\T \tilde{\vec{x}}_j + \lambda_2),
+  \hat{\beta}_j = \frac{\st_{\lambda_1}(\tilde{\vec{x}}_j^\T \vec{y})}{d_j}
 \]
 where
 \begin{equation}
   \label{eq:z-d}
-  \tilde{\vec{x}}_j^\T \vec{y} = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}
-  \quad\text{and}\quad
-  d_j = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right),
+  \begin{aligned}
+    \tilde{\vec{x}}_j^\T \vec{y} & = \frac{\beta_j^* n \nu_j- \vec{x}_j^\T \vec{\varepsilon}}{s_j}                \\
+    d_j                          & = s_j\left(\frac{n \nu_j}{s_j^2} + \lambda_2\right) = s_j(\tilde{\vec{x}}_j^\T
+    \tilde{\vec{x}}_j + \lambda_2),
+  \end{aligned}
 \end{equation}
 with \(\nu_j\) being the uncorrected sample variance of \(\vec{x}_j\).
 The bias and variance of \(\hat{\beta}_j\) are then given by
