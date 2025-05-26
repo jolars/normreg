@@ -11,11 +11,12 @@ following form:
   \operatorname*{minimize}_{\beta_0 \in \mathbb{R},\vec{\beta} \in \mathbb{R}^p} g(\beta_0, \vec{\beta}; \mat X, \vec y) + h(\vec\beta),
 \end{equation}
 %
-where \(g\) is a data-fitting function that attempts to optimize the fit to the data and
-\(h\) is a penalty that depends only on \(\bm{\beta}\). Two common penalties are the
-\(\ell_1\) norm and squared \(\ell_2\) norm penalties, which if \(g\) is the standard
-ordinary least-squares objective, represent the
-lasso~\citep{tibshirani1996,santosa1986,donoho1994} and ridge (Tikhonov) regression
+where \(\vec y\) is the response vector, \(\mat X\) the design matrix, \(\beta_0\) the
+intercept, and \(\bm{\beta}\) the coefficients. Furthermore, \(g\) is a data-fitting
+function that attempts to optimize the fit to the data and \(h\) is a penalty that depends
+only on \(\bm{\beta}\). Two common penalties are the \(\ell_1\) norm and squared \(\ell_2\)
+norm penalties, which if \(g\) is the standard ordinary least-squares objective, represent
+the lasso~\citep{tibshirani1996,santosa1986,donoho1994} and ridge (Tikhonov) regression
 respectively.
 
 These penalties depend on the magnitudes of the coefficients, which means that they are
@@ -49,8 +50,11 @@ different coefficient estimates. This is especially striking in the case of
     Lasso paths for real datasets using two types of normalization:
     standardization and maximum absolute value normalization (max--abs). For
     each dataset, we have colored the coefficients if they were among the first
-    five to become non-zero under either of the two normalization schemes. See
-    \Cref{sec:data-summary} for more information about these datasets.
+    five to become non-zero under either of the two normalization schemes.
+    The \(x\)-axis shows the steps along the regularization path and
+    the \(y\)-axis the estimated coefficients normalized by the
+    maximum magnitude of the coefficients in each case. See
+    \Cref{sec:data-summary} for more information about datasets used here.
   }
   \label{fig:realdata-paths}
 \end{figure}
