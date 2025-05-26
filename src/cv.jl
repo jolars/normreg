@@ -98,7 +98,7 @@ function cross_validate(
   x::AbstractMatrix,
   y::AbstractVector,
   dist = Normal(),
-  normalization::String = "mean_std",
+  normalization::String = "std",
   alpha::Real = 1.0,
   delta = [0.0, 0.5, 1.0],
   k::Int = 10,
