@@ -68,16 +68,16 @@ The bias and variance of \(\hat{\beta}_j\) are then given by
 See \Cref{sec:bias-var-deriv} for a derivation of the results above
 as well as expressions for \(\E \st_\lambda(x)\) and \(\var S_\lambda(x)\).
 
-These results hold for a general distribution on the error term, provided that its elements
-are independent and identically distributed. From now on, however, we will narrow our scope
-and assume that \(\vec{\varepsilon}\) is normally distributed, under which both the bias
-and variance of \(\hat{\beta}_j\) have analytical
-expressions~(\Cref{sec:normally-distributed-noise}) and
+These results hold in a general case. From now on, however, we will narrow our scope and
+assume that the entries of \(\vec{\varepsilon}\) are identically, independently, and
+normally distributed, in which case both the bias and variance of \(\hat{\beta}_j\) have
+analytical expressions~(\Cref{sec:normally-distributed-noise}) and
 \[
   \tilde{\vec{x}}_j^\T \vec{y} \sim \normal\left(\mu_j = \tilde{\vec{x}}_j^\T\vec{x}_j \beta_j^*, \sigma_j^2 = \tilde{\vec{x}}_j^\T\tilde{\vec{x}}_j \sigma_\varepsilon^2 \right).
 \]
-So far, we have assumed nothing about the features themselves. The main focus of our paper,
-however, is binary features, which we will now turn to.
+So far, we have assumed nothing about the features themselves, apart from being orthogonal
+to each other. The main focus of our paper, however, is binary features, which we will now
+turn to.
 
 \subsection{Binary Features}%
 \label{sec:theory-binary-features}
