@@ -125,16 +125,16 @@ results in the lasso. Our focus in this paper is on binary data and we pay parti
 attention to the case when they are imbalanced, that is, have relatively many ones or
 zeroes. In this scenario, we demonstrate that the choice of normalization directly
 influences the estimated coefficients and that this effect depends on the particular
-combination of normalization and regularization. Importantly, we identify a fundamental
-bias-variance trade-off in the choice of normalization: methods that reduce bias from class
-imbalance in binary features do so at the cost of increased variance in the estimator.
+combination of normalization and regularization.
 
 Our key contributions are:
 \begin{enumerate}
-  \item We reveal that class balance in binary features significantly affects lasso, ridge, and
-        elastic net estimates, and show that scaling binary features with standard deviation
-        (ridge) or variance (lasso) mitigates these effects at the cost of increased
-        variance~(\Cref{sec:theory-binary-features}).
+  \item We reveal that class balance in binary features directly affects lasso, ridge, and elastic
+        net estimates, and show that scaling binary features with standard deviation (ridge) or
+        variance (lasso) mitigates these effects at the cost of increased variance. In our
+        theoretical work~(\Cref{sec:theory-binary-features}), we show that this relationship holds
+        even in the simple case of orthogonal features, and also provide empirical evidence that
+        these findings extend to much more general settings~(\Cref{sec:experiments}).
   \item For mixed data designs, we demonstrate that normalization choice implicitly determines how
         regularization affects binary versus continuous features~(\Cref{sec:mixed-data}).
   \item For interaction features, we show that a common alternative to normalizing the interaction
