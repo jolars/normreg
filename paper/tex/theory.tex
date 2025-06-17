@@ -115,16 +115,38 @@ in which we have
   \frac{\st_{\lambda_1}\left(\frac{\beta_j^* n (q_j - q_j^2)}{s_j}\right)}{s_j\left(\frac{n(q_j - q_j^2)}{s_j^2} + \lambda_2\right)}.
 \end{equation}
 %
-This expression shows that class balance directly affects the estimator. For values of
-\(q_j\) close to \(0\) or \(1\), the input into the soft-thresholding part of the estimator
-diminishes and consequently forces the estimate to zero, that is, unless we use the scaling
-factor \(s_j = q_j - q_j^2\), in which case the soft-thresholding part will be unaffected
-by class imbalance. This choice will not, however, mitigate the impact of class imbalance
-on the ridge part of the estimator, for which we would instead need \(s_j = (q_j -
-q_j^2)^{1/2}\). For any other choices, \(q_j\) will affect the estimator through both the
-ridge and lasso parts, which means that there exists no scaling \(s_j\) that will mitigate
-this class balance bias in this case. In \Cref{sec:binary-weighting} we will show how to
-tackle this issue for the elastic net by scaling the penalty weights. But for now we
+This expression shows that class balance (\(q_j\)) directly affects the estimator through
+the factor \(q_j - q_j^2\) (the variance of the binary feature). Starting with the lasso
+(\(\lambda_2 = 0\)), observe that the soft-thresholding part of the estimator (numerator)
+diminishes for values of \(q_j\) close to \(0\) or \(1\) unless we use the scaling factor
+\(s_j = q_j - q_j^2\), in which case \Cref{eq:noiseless-estimator} simplifies to
+\[
+  \hat{\beta}_j
+  = \frac{\st_{\lambda_1}\left(\frac{\beta_j^* n (q_j - q_j^2)}{q_j - q_j^2}\right)}{(q_j - q_j^2)\left(\frac{n(q_j - q_j^2)}{(q_j - q_j^2)^2} + \lambda_2\right)}
+  = \frac{\st_{\lambda_1}(\beta_j^* n)}{n},
+\]
+which is independent of \(q_j\). For other choices of \(s_j\), the soft-thresholding part
+of the estimator will be affected by class balance and also depend on the size of
+\(\lambda_1\), with larger values of \(\lambda_1\) leading to a larger effect of class
+balance.
+
+Turning to the ridge case (\(\lambda_1 = 0\)), the soft-thresholding part simplifies to the
+identity function and the shrinkage instead comes from the presence of \(\lambda_2\) in the
+denominator, which will scale the estimator towards zero as \(q_j\) approaches 0 or 1.
+Contrary to the lasso case, when then instead need to take \(s_j = (q_j - q_j^2)^{1/2}\),
+in which case the expression becomes
+\[
+  \hat{\beta}_j
+  = \frac{\st_{\lambda_1}\left(\frac{\beta_j^* n (q_j - q_j^2)}{(q_j - q_j^2)^{1/2}}\right)}{(q_j - q_j^2)^{1/2}\left(\frac{n(q_j - q_j^2)}{(q_j - q_j^2)} + \lambda_2\right)}
+  = \frac{\beta_j^* n}{n + \lambda_2},
+\]
+which is again independent of \(q_j\).
+
+Observe, however, that for the elastic net (\(\lambda_1 > 0, \lambda_2 > 0\)), there exists
+no \(s_j\) that can make the estimator independent of \(q_j\). In other words, there is no
+type of normalization, at least under our parameterization, that is able to mitigate the
+class balance bias in this case. In \Cref{sec:binary-weighting}, however, we will show how
+to tackle this issue for the elastic net by scaling the penalty weights. But for now we
 continue to study the case of normalization.
 
 Based on the reasoning above, we will consider the scaling parameterization \(s_j =
