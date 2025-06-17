@@ -28,6 +28,7 @@
             pkgs.cmake
             pkgs.pkg-config
             pkgs.julia-bin
+            pkgs.go-task
           ];
         };
       in
