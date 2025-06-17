@@ -136,14 +136,22 @@ Our key contributions are:
 \begin{enumerate}
   \item We reveal that class balance in binary features directly affects lasso, ridge, and elastic
         net estimates, and show that scaling binary features with standard deviation (ridge) or
-        variance (lasso) mitigates these effects at the cost of increased variance. In our
-        theoretical work~(\Cref{sec:theory-binary-features}), we show that this relationship holds
-        even in the simple case of orthogonal features, and also provide empirical evidence that
-        these findings extend to much more general settings~(\Cref{sec:experiments}).
-  \item For mixed data designs, we demonstrate that normalization choice implicitly determines how
-        regularization affects binary versus continuous features~(\Cref{sec:mixed-data}).
-  \item For interaction features, we show that a common alternative to normalizing the interaction
-        feature leads to biased estimates and provide an alternative that mitigates this
+        variance (lasso) mitigates these effects at the cost of increased variance. Through
+        extensive empirical analysis, we show that this finding extends to a wide range of
+        settings~(\Cref{sec:experiments}).
+
+  \item In our theoretical work, we examine this relationship in detail, showing that this bias
+        from class imbalance holds even in the case of orthogonal
+        features~(\Cref{sec:theory-binary-features}). For the elastic net, however, we show that
+        this effect \emph{cannot} be mitigated by normalization and instead must be dealt with by
+        scaling the penalty weights rather than the features~(\Cref{sec:binary-weighting}).
+
+  \item For mixed data designs, we demonstrate how normalization choices implicitly determine the
+        relative regularization effects on binary versus continuous
+        features~(\Cref{sec:mixed-data}).
+
+  \item For interaction features, we show that a common alternative to normalizing interaction
+        features leads to biased estimates and provide an alternative approach that mitigates this
         problem~(\Cref{sec:interactions}).
 \end{enumerate}
 
