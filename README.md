@@ -22,19 +22,7 @@ nix develop
 ### Julia
 
 This project is based on Julia, and dependencies are declared in
-[`Project.toml`](/Project.toml). (We have omitted `Manifest.toml` since
-everything is reproducible through the nix flake already.)
-
-Before proceeding, make sure that the folders
-<results/> and <plots/> are present in the working
-directory (project root). If they are not, then run
-
-```sh
-mkdir plots
-mkdir results
-```
-
-or perform the equivalent options through some graphical user interface.
+[`Project.toml`](/Project.toml) and [`Manifest.toml`](/Manifest.toml).
 
 To activate the project, first start Julia in the project directory (by
 just running `julia` in the terminal.
@@ -55,4 +43,6 @@ or run them from the console by calling the following line, replacing
 julia --project scripts/experiments/<experiment>.jl
 ```
 
-The same applies to all the scripts for plotting, which are stored in
+The same applies to all the scripts for plots and tables, which are stored in
+[scripts/plots/](scripts/plots/) and
+[scripts/tables/](scripts/tables/)
