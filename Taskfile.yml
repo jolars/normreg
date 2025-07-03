@@ -7,7 +7,7 @@ tasks:
       - git archive HEAD:paper/ | tar -x -C _build/arxiv-temp
       - cp paper/main.bbl _build/arxiv-temp/
       - cp plots/* _build/arxiv-temp/
-      - rm _build/arxiv-{{.DATE}}.tar.gz
+      - rm -f _build/arxiv-{{.DATE}}.tar.gz
       - cd _build/arxiv-temp && tar -czf ../arxiv-{{.DATE}}.tar.gz .
       - rm -rf _build/arxiv-temp
     vars:
