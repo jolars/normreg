@@ -1,4 +1,5 @@
 \section{Normalization}
+
 To avoid possible confusion regarding the ambiguous use of terminology in the literature,
 we will begin by clarifying what we mean by \emph{normalization}, which we define as the
 process of centering and scaling the feature matrix.
@@ -9,7 +10,8 @@ process of centering and scaling the feature matrix.
   \(\vec{c} \in \mathbb{R}^p\) and \(\vec{s} \in \mathbb{R}^p_+\) be centering
   and scaling factors respectively. Then \(\tilde{\bm{X}}\) is the
   \emph{normalized} feature matrix with elements given by
-  \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\).
+  \(\tilde{x}_{ij} = (x_{ij} - c_j)/s_j\), where $i$ and $j$ index rows and
+  columns, respectively.
 \end{definition}
 
 Some authors refer to the procedure in \Cref{def:normalization} as \emph{standardization},
