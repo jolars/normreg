@@ -91,15 +91,6 @@ TO DO
 
 ## Reviewer 3
 
-### Summary Of Contributions:
-
-> The main weakness is the lack of clearly stated lessons for practitioners; some
-> guidance is available but the main lessons appear to be scattered throughout
-> the text. I believe consolidating these into a single discussion section could
-> be valuable.
-
-TO DO
-
 ### Requested Changes:
 
 > Light request: instead of labeling e.g. the design matrix $X_{ij}$, consider
