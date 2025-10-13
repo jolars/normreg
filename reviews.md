@@ -46,7 +46,7 @@ Did you have any particular other experiment or result in mind?
 > small toy datasets) to illustrate how normalization changes coefficient paths
 > for non-technical readers.
 
-We have no included a new figure (Figure 2 in the revision), which shows
+We have now included a new figure (Figure 2 in the revision), which shows
 coefficient paths along the regularization paths for balanced and
 imbalanced binary features under different types of normalization.
 
