@@ -6,12 +6,16 @@
 
 #### Weaknesses
 
-> - The study mainly focuses on binary and continuous features under
->   least-squares loss. It would be better to discuss further how the results can
->   be extended to categorical variables with more than two levels or broader
->   classes of models.
+> The study mainly focuses on binary and continuous features under
+> least-squares loss. It would be better to discuss further how the results can
+> be extended to categorical variables with more than two levels or broader
+> classes of models.
 
-TO DO
+We think it would be very interesting to extend the results to categorical
+variables, but think that this would require extensive additional work to be
+meaningful, in particular by introducing group lasso or similar methods. We
+have, however, now included an additional experiment and short discussion on
+categorical features to the appendix (Appendix F).
 
 > It would be better to discuss how the studies can be extended to some deep
 > learning scenarios, for example, distance regularization for fine-tuning
@@ -84,10 +88,11 @@ where we discuss Table 1.
 > Also, could the authors explain the possibility or the difficulty how to extend
 > the results to non-binary and non-Gaussian features?
 
-TO DO
-
-- Easy fix: poisson/t-distribution
-- Better: categorical features
+We think it would be interesting to extend the results to other distributions
+too, but this would likely require extensive additional work, which we think is
+better suited for future work. We have, however, now included an additional
+experiment and short discussion on categorical features to the appendix
+(Appendix F).
 
 ## Reviewer 3
 

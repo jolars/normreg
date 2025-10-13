@@ -224,3 +224,49 @@ the ranks of the linear regression coefficients.
     \bottomrule
   \end{tabular}
 \end{table}
+
+\section{Categorical Features}\label{sec:categorical-features}
+
+This paper has focused on binary features, but since categorical features are typically
+encoded as a set of binary (dummy) features in regression settings, similar principles
+apply. For instance, categorical features will necessarily result in imbalanced
+representations with respect to the other features given that one-hot encoding results in a
+set of mutually exclusive features. This means that the same issues with variance and
+regularization that we have discussed in the main part of the paper will also apply here.
+
+We leave a thorough investigation of this to future work, but will here present a small
+experiment to illustrate another aspect of categorical features and class imbalance that is
+related to which reference category is chosen in one-hot encoding.
+
+Consider a variable $Z \sim \operatorname{Categorical}(\boldsymbol{q})$, where
+$\boldsymbol{q} = (q_1, q_2, q_3)$. To represent this variable in a regression model, the
+standard approach is to one-hot encode it into a set of binary variables $X_1 =
+  \boldsymbol{1}\{Z=1\}$, $X_2 = \boldsymbol{1}\{Z=2\}$, and $X_3 = \boldsymbol{I}\{Z=3\}$,
+and then drop one of the variables to avoid redundancy. The dropped variable is called the
+reference category, and the coefficients of the remaining variables are interpreted in
+relation to this category.
+
+Let us assume that we either use the first or the last category as reference, and that $q_1
+  = 1/20$, $q_2 = 1/2$, and $q_3 = 9/20$. In the first case, $\beta_{C:A}$ corresponds to the
+comparison between categories C and A. In the second case, $\beta_{A:C}$ corresponds to the
+comparison between categories A and C. In other words, these coefficients correspond to the
+same comparison. Their class balances, however, of the features are very different.
+
+We set $\beta_{B:A} = \beta_{B:C} = 1/2$ and $\beta_{C:A} = \beta_{A:C} = 1$, and generate
+data according to the linear model $y = \boldsymbol{X\beta}$. Then, we fit a lasso model to
+each case, using no normalization. The results are shown in
+\Cref{fig:categorical-features}, where we plot the regularization paths for the two cases.
+The plot shows that $\beta_{C:A}$ enters the path earlier than $\beta_{A:C}$, despite
+converging to the same value as $\lambda \to 0$. This means that the choice of reference
+category affects the order in which the features enter the model, and therefore potentially
+also feature selection.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{categorical_features.pdf}
+  \caption{%
+    The coefficients along the regularization paths
+  }
+  \label{fig:categorical-features}
+\end{figure}
+
