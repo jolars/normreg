@@ -130,7 +130,29 @@ results in the lasso. Our focus in this paper is on binary data and we pay parti
 attention to the case when they are imbalanced, that is, have relatively many ones or
 zeroes. In this scenario, we demonstrate that the choice of normalization directly
 influences the estimated coefficients and that this effect depends on the particular
-combination of normalization and regularization.
+combination of normalization and regularization. For a first illustration of this, see
+\Cref{fig:small-path-experiment}, which corresponds to a small experiment in which we have
+generated two binary features with class balances 0.5 and 0.9, respectively, and fit a full
+regularization path using lasso and ridge regression. The true coefficients are set to one
+in both cases. The type of normalization affects the sizes of the resulting coefficients.
+This, for instance, leads to opposite conclusions being drawn about feature importance
+depending on whether L1 or Max--Abs normalization is used.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[]{small_path_experiment.pdf}
+  \caption{%
+    Unstandardized coefficients for lasso and ridge regression along
+    a regularization path. The models are fit to an
+    experiment with two binary features, generated to have class balances 0.5
+    and 0.9, respectively. We have generated the response as $y_i =
+      \boldsymbol{x}_i^\intercal \boldsymbol{\beta}$, with $\boldsymbol{\beta} =
+      \boldsymbol{1}$. Note that the coefficients' paths overlap in for the L1
+    and Standardization normalization types in the lasso and ridge cases,
+    respectively.
+  }
+  \label{fig:small-path-experiment}
+\end{figure}
 
 Our key contributions are:
 \begin{enumerate}

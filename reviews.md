@@ -46,8 +46,9 @@ Did you have any particular other experiment or result in mind?
 > small toy datasets) to illustrate how normalization changes coefficient paths
 > for non-technical readers.
 
-Add some example. Maybe two paths to show different effects. Generate data
-so that we can show the effect clearly. Maybe balanced vs unbalanced.
+We have no included a new figure (Figure 2 in the revision), which shows
+coefficient paths along the regularization paths for balanced and
+imbalanced binary features under different types of normalization.
 
 ## Reviewer 2
 
@@ -83,8 +84,7 @@ where we discuss Table 1.
 > Also, could the authors explain the possibility or the difficulty how to extend
 > the results to non-binary and non-Gaussian features?
 
-For the theoretical results, it way be difficult. But we have
-added new experiments on simulated data...
+TO DO
 
 - Easy fix: poisson/t-distribution
 - Better: categorical features
@@ -98,7 +98,7 @@ added new experiments on simulated data...
 > the text. I believe consolidating these into a single discussion section could
 > be valuable.
 
-Yes, good idea.
+TO DO
 
 ### Requested Changes:
 
@@ -120,3 +120,5 @@ paper, so we believe there is little potential for confusion.
 > scheme is well selected. In particular it seems like choosing nontrivial
 > $\delta$ was beneficial in the experiments, which may lead to recommendations
 > for practitioners to use non-traditional normalization schemes.
+
+TO DO
