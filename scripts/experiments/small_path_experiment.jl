@@ -138,7 +138,6 @@ pl = plot(
     plots...,
     layout = (n_rows, n_cols),
     size = (FULL_WIDTH, 270),
-    link = :both,
 )
 
 file_path = @projectroot("plots", "small_path_experiment.pdf");
