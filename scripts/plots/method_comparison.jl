@@ -17,30 +17,30 @@ df_lasso = subset(df_raw, :alpha => a -> a .== 1.0)
 df_ridge = subset(df_raw, :alpha => a -> a .== 0.0)
 
 function plot_comparison(df, type)
-  # Sort by dataset, then method
-  sort!(df, [:dataset, :method])
+    # Sort by dataset, then method
+    sort!(df, [:dataset, :method])
 
-  xval = string.(df.dataset)
-  groups = string.(df.method)
+    xval = string.(df.dataset)
+    groups = string.(df.method)
 
-  n_xval = length(unique(xval))
-  n_groups = length(unique(groups))
+    n_xval = length(unique(xval))
+    n_groups = length(unique(groups))
 
-  yval = float.(reshape(df.err, n_groups, n_xval))
-  yerr = float.(reshape(df.hi - df.err, n_groups, n_xval))
+    yval = float.(reshape(df.err, n_groups, n_xval))
+    yerr = float.(reshape(df.hi - df.err, n_groups, n_xval))
 
-  ylims = type == "lasso" ? (0.0, 1.1) : (0.0, 1.7)
+    ylims = type == "lasso" ? (0.0, 1.1) : (0.0, 1.7)
 
-  groupedbar(
-    xval,
-    yval,
-    group = groups,
-    yerr = yerr,
-    ylims = ylims,
-    size = (660, 300),
-    legend = :outerright,
-    ylab = "NMSE",
-  )
+    return groupedbar(
+        xval,
+        yval,
+        group = groups,
+        yerr = yerr,
+        ylims = ylims,
+        size = (660, 300),
+        legend = :outerright,
+        ylab = "NMSE",
+    )
 end
 
 plot_comparison(df_lasso, "lasso")

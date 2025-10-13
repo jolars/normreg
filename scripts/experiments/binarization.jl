@@ -91,46 +91,45 @@ expanded_params = dict_list(param_dict);
 results = [];
 
 for (i, d) in enumerate(expanded_params)
-  @unpack method, beta = d
+    @unpack method, beta = d
 
-  # Random.seed!(it)
+    # Random.seed!(it)
 
-  x_norm, centers, scales = normalize_features_unadjusted(x, method, 1, adjust = false)
+    x_norm, centers, scales = normalize_features_unadjusted(x, method, 1, adjust = false)
 
-  res = elasticnet(x_norm, y, α = 1.0)
+    res = elasticnet(x_norm, y, α = 1.0)
 
-  _, beta_out = unstandardize_coefficients(res.β0, res.β, centers, scales)
+    _, beta_out = unstandardize_coefficients(res.β0, res.β, centers, scales)
 
-  order = sortperm([findfirst(row) for row in eachrow(beta_out .!= 0)])
-  rank = ordinalrank([findfirst(row) for row in eachrow(beta_out .!= 0)])
+    order = sortperm([findfirst(row) for row in eachrow(beta_out .!= 0)])
+    rank = ordinalrank([findfirst(row) for row in eachrow(beta_out .!= 0)])
 
-  d_exp = copy(d)
-  d_exp["beta"] = beta_out
-  d_exp["order"] = order
-  d_exp["rank"] = rank
+    d_exp = copy(d)
+    d_exp["beta"] = beta_out
+    d_exp["order"] = order
+    d_exp["rank"] = rank
 
-  push!(results, d_exp)
+    push!(results, d_exp)
 end
 
 plots = []
 
 for (i, d) in enumerate(results)
-  @unpack method, beta = d
+    @unpack method, beta = d
 
-  ylab = i == 1 ? "Coefficient" : ""
+    ylab = i == 1 ? "Coefficient" : ""
 
-  yformatter = i == 1 ? :auto : _ -> ""
+    yformatter = i == 1 ? :auto : _ -> ""
 
-  plot_lasso_path(
-    abs.(d["beta"]),
-    1:p,
-    ylims = (-0.2, 7.8),
-    ylabel = ylab,
-    yformatter = yformatter,
-  )
-  # scatter!(repeat([60.0], p), abs.(beta_ols_std))
+    plot_lasso_path(
+        abs.(d["beta"]),
+        1:p,
+        ylims = (-0.2, 7.8),
+        ylabel = ylab,
+        yformatter = yformatter,
+    )
 
-  push!(plots, plot!(title = method))
+    push!(plots, plot!(title = method))
 end
 
 plot(plots..., layout = (1, 3), size = (FULL_WIDTH, 300))
@@ -139,35 +138,35 @@ true_order = sortperm(abs.(beta_ols), rev = true)
 
 # Compare estimated orders against true order
 function compare_rankings(true_order, estimated_orders)
-  metrics = Dict()
+    metrics = Dict()
 
-  metrics["spearman"] =
-    [corspearman(true_order, est_order) for est_order in estimated_orders]
+    metrics["spearman"] =
+        [corspearman(true_order, est_order) for est_order in estimated_orders]
 
-  # 2. Kendall's tau rank correlation (higher is better)
-  metrics["kendall"] = [corkendall(true_order, est_order) for est_order in estimated_orders]
+    # 2. Kendall's tau rank correlation (higher is better)
+    metrics["kendall"] = [corkendall(true_order, est_order) for est_order in estimated_orders]
 
-  # 3. Mean absolute difference in ranks (lower is better)
-  metrics["mean_abs_diff"] =
-    [mean(abs.(true_order .- est_order)) for est_order in estimated_orders]
+    # 3. Mean absolute difference in ranks (lower is better)
+    metrics["mean_abs_diff"] =
+        [mean(abs.(true_order .- est_order)) for est_order in estimated_orders]
 
-  # 4. Normalized Discounted Cumulative Gain (higher is better)
-  # Focuses on the importance of correct ordering at the top of the list
-  function ndcg(true_ranks, pred_ranks)
-    n = length(true_ranks)
-    # Create relevance scores (higher true rank = higher relevance)
-    relevance = n + 1 .- true_ranks
+    # 4. Normalized Discounted Cumulative Gain (higher is better)
+    # Focuses on the importance of correct ordering at the top of the list
+    function ndcg(true_ranks, pred_ranks)
+        n = length(true_ranks)
+        # Create relevance scores (higher true rank = higher relevance)
+        relevance = n + 1 .- true_ranks
 
-    # Calculate DCG: rel_i / log2(i+1)
-    idcg = sum(relevance[sortperm(relevance, rev = true)] ./ log2.(2:(n + 1)))
-    dcg = sum(relevance[sortperm(pred_ranks)] ./ log2.(2:(n + 1)))
+        # Calculate DCG: rel_i / log2(i+1)
+        idcg = sum(relevance[sortperm(relevance, rev = true)] ./ log2.(2:(n + 1)))
+        dcg = sum(relevance[sortperm(pred_ranks)] ./ log2.(2:(n + 1)))
 
-    return dcg / idcg
-  end
+        return dcg / idcg
+    end
 
-  metrics["ndcg"] = [ndcg(true_order, est_order) for est_order in estimated_orders]
+    metrics["ndcg"] = [ndcg(true_order, est_order) for est_order in estimated_orders]
 
-  return metrics
+    return metrics
 end
 
 # Use with your results
@@ -177,73 +176,73 @@ ranking_metrics = compare_rankings(true_order, estimated_orders)
 
 # Print the results
 for (metric_name, values) in ranking_metrics
-  println("$metric_name: ", values)
-  best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
-  println("Best method ($metric_name): ", methods[best_idx])
+    println("$metric_name: ", values)
+    best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
+    println("Best method ($metric_name): ", methods[best_idx])
 end
 
 # Create a formatted table of results
 
 function print_table()
-  println("\n" * "="^72)
-  println("Method Comparison Results")
-  println("="^72)
+    println("\n" * "="^72)
+    println("Method Comparison Results")
+    println("="^72)
 
-  # Header row
-  headers = ["Metric", methods..., "Best Method"]
-  println(
-    rpad("Metric", 15),
-    " | ",
-    join([rpad(m, 10) for m in methods], " | "),
-    " | Best Method",
-  )
-  println("-"^15 * "-+-" * "-"^10 * "-+-" * "-"^10 * "-+-" * "-"^10 * "-+-" * "-"^15)
-
-  # Data rows
-  for (metric_name, values) in ranking_metrics
-    best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
-    formatted_vals = [round(v, digits = 4) for v in values]
+    # Header row
+    headers = ["Metric", methods..., "Best Method"]
     println(
-      rpad(metric_name, 15),
-      " | ",
-      join([rpad(string(v), 10) for v in formatted_vals], " | "),
-      " | ",
-      methods[best_idx],
+        rpad("Metric", 15),
+        " | ",
+        join([rpad(m, 10) for m in methods], " | "),
+        " | Best Method",
     )
-  end
+    println("-"^15 * "-+-" * "-"^10 * "-+-" * "-"^10 * "-+-" * "-"^10 * "-+-" * "-"^15)
 
-  println("="^72)
+    # Data rows
+    for (metric_name, values) in ranking_metrics
+        best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
+        formatted_vals = [round(v, digits = 4) for v in values]
+        println(
+            rpad(metric_name, 15),
+            " | ",
+            join([rpad(string(v), 10) for v in formatted_vals], " | "),
+            " | ",
+            methods[best_idx],
+        )
+    end
+
+    return println("="^72)
 end
 
 print_table()
 
 function print_latex_table()
-  println("\\begin{table}[htbp]")
-  println("  \\centering")
-  println("  \\caption{Method Comparison Results}")
-  println("  \\label{tab:method_comparison}")
-  println(
-    "  \\begin{tabular}{l S[table-format=1.4] S[table-format=1.4] S[table-format=1.4]}",
-  )
-  println("    \\toprule")
-  println("    Metric & {", join(methods, "} & {"), "} \\\\")
-  println("    \\midrule")
+    println("\\begin{table}[htbp]")
+    println("  \\centering")
+    println("  \\caption{Method Comparison Results}")
+    println("  \\label{tab:method_comparison}")
+    println(
+        "  \\begin{tabular}{l S[table-format=1.4] S[table-format=1.4] S[table-format=1.4]}",
+    )
+    println("    \\toprule")
+    println("    Metric & {", join(methods, "} & {"), "} \\\\")
+    println("    \\midrule")
 
-  # Data rows
-  for (metric_name, values) in ranking_metrics
-    best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
-    formatted_vals = []
+    # Data rows
+    for (metric_name, values) in ranking_metrics
+        best_idx = metric_name == "mean_abs_diff" ? argmin(values) : argmax(values)
+        formatted_vals = []
 
-    for (i, v) in enumerate(values)
-      push!(formatted_vals, string(round(v, digits = 4)))
+        for (i, v) in enumerate(values)
+            push!(formatted_vals, string(round(v, digits = 4)))
+        end
+
+        println("    ", metric_name, " & ", join(formatted_vals, " & "), " \\\\")
     end
 
-    println("    ", metric_name, " & ", join(formatted_vals, " & "), " \\\\")
-  end
-
-  println("    \\bottomrule")
-  println("  \\end{tabular}")
-  println("\\end{table}")
+    println("    \\bottomrule")
+    println("  \\end{tabular}")
+    return println("\\end{table}")
 end
 
 print_latex_table()

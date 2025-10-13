@@ -13,12 +13,12 @@ df = DataFrame(json_data);
 df_flat = DataFrames.flatten(df, [:n, :beta, :distribution]);
 
 pl = @df df_flat plot(
-  :n,
-  :beta,
-  groups = :distribution,
-  ylabel = L"\beta",
-  xlabel = L"n",
-  size = (235, 175),
+    :n,
+    :beta,
+    groups = :distribution,
+    ylabel = L"\beta",
+    xlabel = L"n",
+    size = (235, 175),
 )
 
 file_name = "maxabs_n"

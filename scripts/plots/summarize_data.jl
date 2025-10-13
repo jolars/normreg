@@ -9,36 +9,36 @@ using StatsBase
 set_plot_defaults()
 
 function datatype(a)
-  return length(unique(a)) <= 2 ? "binary" : "continuous"
+    return length(unique(a)) <= 2 ? "binary" : "continuous"
 end
 
 function propones(a)
-  sum(a .== mode(a)) / length(a)
+    return sum(a .== mode(a)) / length(a)
 end
 
 datasets =
-  ["a1a", "w1a", "rhee2006", "leukemia", "triazines", "eunite2001", "australian", "heart"]
+    ["a1a", "w1a", "rhee2006", "leukemia", "triazines", "eunite2001", "australian", "heart"]
 
 plots = []
 
 for dataset in datasets
-  x, y = datagrabber(dataset)
+    x, y = datagrabber(dataset)
 
-  n, p = size(x)
+    n, p = size(x)
 
-  response_type = datatype(y)
-  feature_types = map(datatype, eachcol(x))
-  design_type = all(feature_types .== feature_types[1]) ? feature_types[1] : "mixed"
+    response_type = datatype(y)
+    feature_types = map(datatype, eachcol(x))
+    design_type = all(feature_types .== feature_types[1]) ? feature_types[1] : "mixed"
 
-  q = if design_type in ["mixed" "binary"]
-    map(propones, eachcol(x[:, feature_types .== "binary"]))
-  else
-    continue
-  end
+    q = if design_type in ["mixed" "binary"]
+        map(propones, eachcol(x[:, feature_types .== "binary"]))
+    else
+        continue
+    end
 
-  pl = histogram(q, title = dataset, fillcolor = :black, bins = range(0.5, 1, length = 21))
+    pl = histogram(q, title = dataset, fillcolor = :black, bins = range(0.5, 1, length = 21))
 
-  push!(plots, pl)
+    push!(plots, pl)
 end
 
 plot_output = plot(plots..., size = (FULL_WIDTH, 250))

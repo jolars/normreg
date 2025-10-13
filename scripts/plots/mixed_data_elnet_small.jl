@@ -25,70 +25,66 @@ labels = [L"\operatorname{Bernoulli}(q)" L"\operatorname{Normal}(0,0.5)"]
 dd = df_subset
 groups = groupby(dd, :delta, sort = true)
 for (i, d) in enumerate(groups)
-  alpha = d.alpha[1]
+    alpha = d.alpha[1]
 
-  yguide = i == 1 ? L"\hat{\beta}_j" : ""
+    yguide = i == 1 ? L"\hat{\beta}_j" : ""
 
-  yformatter = i == 1 ? :auto : _ -> ""
+    yformatter = i == 1 ? :auto : _ -> ""
 
-  xformatter = x -> round(x, digits = 2)
+    xformatter = x -> round(x, digits = 2)
 
-  omega = d.delta[1]
+    omega = d.delta[1]
 
-  title = L"\omega = %$(omega)"
+    title = L"\omega = %$(omega)"
 
-  xlabel = i == 2 ? L"q" : ""
+    xlabel = i == 2 ? L"q" : ""
 
-  betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
-  yerr = Float64.(mapreduce(permutedims, vcat, d.betas_std[1]))
+    betas = Float64.(mapreduce(permutedims, vcat, d.betas[1]))
+    yerr = Float64.(mapreduce(permutedims, vcat, d.betas_std[1]))
 
-  pl = plot(
-    d.qs[1],
-    betas,
-    yguide = yguide,
-    ribbon = yerr,
-    yformatter = yformatter,
-    xformatter = xformatter,
-    xlabel = xlabel,
-    title = title,
-    xticks = 0.5:0.2:0.9,
-    ylim = (-0.1, 1.1),
-    legendposition = :none,
-    # legendposition = i == 2 ? :top : :none,
-    # legend_background_color = :white,
-    legendcolumns = 1,
-    labels = labels,
-  )
+    pl = plot(
+        d.qs[1],
+        betas,
+        yguide = yguide,
+        ribbon = yerr,
+        yformatter = yformatter,
+        xformatter = xformatter,
+        xlabel = xlabel,
+        title = title,
+        xticks = 0.5:0.2:0.9,
+        ylim = (-0.1, 1.1),
+        legendposition = :none,
+        # legendposition = i == 2 ? :top : :none,
+        # legend_background_color = :white,
+        legendcolumns = 1,
+        labels = labels,
+    )
 
-  push!(plots, pl)
+    push!(plots, pl)
 end
 
 l = (n_rows, n_cols)
 
 labvals = zeros(1, length(labels))
 legend = plot(
-  labvals,
-  showaxis = false,
-  grid = false,
-  label = labels,
-  ribbon = 1,
-  legend_position = :top,
-  frametitle = :none,
-  # legend_title = L"\delta",
-  background_color_subplot = :transparent,
-  legendcolumns = -1,
-  # color = colors,
+    labvals,
+    showaxis = false,
+    grid = false,
+    label = labels,
+    ribbon = 1,
+    legend_position = :top,
+    frametitle = :none,
+    background_color_subplot = :transparent,
+    legendcolumns = -1,
 )
 
 l = @layout[a{0.18h}; grid(n_rows, n_cols)]
 
 pl = plot(
-  legend,
-  plots...,
-  layout = l,
-  size = (320, 160),
-  # left_margin = [0mm 0mm 0mm],
-  # bottom_margin = 1mm,
+    legend,
+    plots...,
+    layout = l,
+    size = (320, 160),
 )
 
 file_path = @projectroot("plots", "mixed_data_elnet_small.pdf");

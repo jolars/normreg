@@ -21,64 +21,64 @@ n_cols = length(unique(df_subset.delta))
 plots = []
 
 for (i, df_group) in enumerate(df_grouped)
-  d = df_group
+    d = df_group
 
-  b = d.betas
-  res = dropdims(mapreduce(permutedims, hcat, b), dims = 1)
-  out = Float64.(mapreduce(permutedims, vcat, res))[:, 1:30]
+    b = d.betas
+    res = dropdims(mapreduce(permutedims, hcat, b), dims = 1)
+    out = Float64.(mapreduce(permutedims, vcat, res))[:, 1:30]
 
-  xvar = 1:size(out, 2)
-  yvar = mean(out, dims = 1)'
-  yerror = std(out, dims = 1)'
+    xvar = 1:size(out, 2)
+    yvar = mean(out, dims = 1)'
+    yerror = std(out, dims = 1)'
 
-  rho = d.rho[1]
-  delta = d.delta[1]
+    rho = d.rho[1]
+    delta = d.delta[1]
 
-  title = L"\delta = %$(delta)"
+    title = L"\delta = %$(delta)"
 
-  yformatter = i == 1 ? :auto : _ -> ""
-  xformatter = :auto
+    yformatter = i == 1 ? :auto : _ -> ""
+    xformatter = :auto
 
-  xlabel = "Feature Index"
+    xlabel = "Feature Index"
 
-  ylabel = if i == 1
-    L"\hat\beta"
-  else
-    ""
-  end
+    ylabel = if i == 1
+        L"\hat\beta"
+    else
+        ""
+    end
 
-  yguideposition = if i == n_cols
-    :right
-  else
-    :left
-  end
+    yguideposition = if i == n_cols
+        :right
+    else
+        :left
+    end
 
-  pl = scatter(
-    xvar,
-    yvar;
-    legend = false,
-    markercolor = :transparent,
-    markersize = 0,
-    title = title,
-    xformatter = xformatter,
-    xlabel = xlabel,
-    yformatter = yformatter,
-    ylabel = ylabel,
-    ylims = (-0.5, 2),
-    yguideposition = yguideposition,
-  )
+    pl = scatter(
+        xvar,
+        yvar;
+        legend = false,
+        markercolor = :transparent,
+        markersize = 0,
+        title = title,
+        xformatter = xformatter,
+        xlabel = xlabel,
+        yformatter = yformatter,
+        ylabel = ylabel,
+        ylims = (-0.5, 2),
+        yguideposition = yguideposition,
+    )
 
-  yerror!(
-    1:size(out, 2),
-    yvar;
-    yerror = yerror,
-    markercolor = :transparent,
-    markerstrokecolor = :grey,
-  )
+    yerror!(
+        1:size(out, 2),
+        yvar;
+        yerror = yerror,
+        markercolor = :transparent,
+        markerstrokecolor = :grey,
+    )
 
-  scatter!(1:size(out, 2), yvar; markercolor = :black, markersize = 2)
+    scatter!(1:size(out, 2), yvar; markercolor = :black, markersize = 2)
 
-  push!(plots, pl)
+    push!(plots, pl)
 end
 
 layout = (n_rows, n_cols)

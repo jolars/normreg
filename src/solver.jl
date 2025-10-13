@@ -218,7 +218,6 @@ function elasticnet(
                     if !screened[j]
                         c_j = dot(x[:, j], residual) - lambda2[j] * beta[j]
                         if abs(c_j) >= w1[j] .* α * λ[i]
-                            # println("Violation: Adding $j to the working set")
                             screened[j] = true
                             any_violations = true
                         end

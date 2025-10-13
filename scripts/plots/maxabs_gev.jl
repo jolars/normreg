@@ -8,15 +8,15 @@ using LaTeXStrings
 using NormReg
 
 function max_abs(n::Int, X::UnivariateDistribution = Normal(0, 1))
-  x = rand(X, n)
-  maximum(abs.(x))
+    x = rand(X, n)
+    return maximum(abs.(x))
 end
 
 function gev_mean(n, Y)
-  b_n = quantile(Y, 1 - 1 / n)
-  a_n = 1 / (n * pdf(Y, b_n))
+    b_n = quantile(Y, 1 - 1 / n)
+    a_n = 1 / (n * pdf(Y, b_n))
 
-  b_n + gamma * a_n
+    return b_n + gamma * a_n
 end
 
 set_plot_defaults()
@@ -40,9 +40,9 @@ y_true = zeros(n_n);
 y_err = zeros(n_n);
 
 for i in 1:n_n
-  tmp = [max_abs(n[i], X) for _ in 1:n_it]
-  y_true[i] = mean(tmp)
-  y_err[i] = std(tmp) / sqrt(n_it)
+    tmp = [max_abs(n[i], X) for _ in 1:n_it]
+    y_true[i] = mean(tmp)
+    y_err[i] = std(tmp) / sqrt(n_it)
 end
 
 # Calculate the standard error
@@ -50,12 +50,12 @@ lo = y_true .- y_err;
 hi = y_true .+ y_err;
 
 pl = plot(
-  n,
-  y_true;
-  ribbon = (y_err, y_err),
-  label = "Empirical",
-  size = (235, 175),
-  legend = :bottomright,
+    n,
+    y_true;
+    ribbon = (y_err, y_err),
+    label = "Empirical",
+    size = (235, 175),
+    legend = :bottomright,
 )
 plot!(n, y, label = "Theoretical")
 xaxis!(L"n")
