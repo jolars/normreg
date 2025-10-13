@@ -115,7 +115,7 @@ for (i, alpha) in enumerate(alpha_types)
 
         legendposition = j == n_cols && i == 1 ? :outerright : :none
 
-        normtype_label = normtype == "std" ? "Standardization" : normtype == "l1" ? "L1" : "Max-Abs"
+        normtype_label = normtype == "std" ? "Standardization" : normtype == "l1" ? "L1" : "Max–Abs"
 
         title = i == 1 ? normtype_label : ""
 
