@@ -1,3 +1,64 @@
+\section{Practical Recommendations}
+
+The results presented in this paper directly concern practitioners working with regularized
+regression on data with binary features. In general, we want to stress that the choice of
+normalization affects not only the computational aspects of fitting the model, but also the
+model itself. The bias introduced by ridge, lasso, and elastic net regression depends on
+the normalization scheme used, and does so in a penalty-specific manner, which means there
+exists no one-size-fits-all solution. In the following sections, we provide some concrete
+guidelines for practitioners on how to normalize.
+
+\subsection{Feature Selection}
+
+We have shown that, to avoid bias against class-imbalanced binary features, we need to
+scale them with their standard deviations for ridge regression and with their variances for
+the lasso. Therefore, if the goal is feature selection and the cost of missing a relevant
+feature is high, then scaling with variance may be preferable. Scaling with variance,
+however, will increase the variability of the estimates, which means that the choice of
+normalization is a bias--variance trade-off. Naturally, this also means that the size of
+the dataset matters: with more data, users may be able to afford the increased variance
+that comes with scaling with variance.
+
+\subsection{Prediction}
+
+If the goal is prediction, then scaling with standard deviation or even not scaling at
+all\footnote{Or equivalently, using max--abs or min--max normalization.} will typically
+prove the better choice. If the practitioner can afford the computational cost, we also
+recommend treating normalization as a hyper-parameter optimization problem, which will
+allow users to look for a normalization scheme that is optimal for their specific dataset
+and prediction task. The user can, for instance, cross-validate over a few common
+normalization schemes or alternatively use the parameterization through $\delta$ that we
+have proposed in \Cref{sec:theory-binary-features}.
+
+\subsection{The Elastic Net}
+
+For ridge and lasso regression, the class imbalance can be controlled through the choice of
+normalization. This is not, however, the case for the elastic net. In this case, we
+therefore recommend users scale the penalty weights instead of the features themselves, as
+described in \Cref{sec:binary-weighting}. We believe this is a more intuitive approach,
+given that the elastic net is a mix of two different norms, which interact with the
+features' scales in separate ways.
+
+\subsection{Mixed Data}
+
+For mixed data, the choice of normalization is tricky since it implicitly affects the
+relative penalization of binary and normal features. Practitioners need to decide how they
+want to treat binary features relative to normal features. We discuss this topic in
+\Cref{sec:mixed-data} and introduce the parameter $\kappa$ that allows practitioners to
+control this effect through the normalization strategy. While we provide no concrete
+recommendations for setting this parameter, we believe that awareness of this implicit
+relationship is important.
+
+\subsection{Interactions}
+
+Interactions introduce another layer of complexity because normalization will affect the
+correlation between the original features and their interaction terms. We recommend always
+centering the features before creating the interaction terms, since the means of the
+features otherwise affect the estimates. Second, we suggest a new type of normalization for
+interaction features, which is to scale them based on the \emph{product} of the scales of
+the normalized original features. We have shown that this can mitigate the class-balance
+bias effect.
+
 \section{Discussion}
 
 % TODO: Consider reducing the content here now that the introduction contains
