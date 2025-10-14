@@ -132,11 +132,13 @@ zeroes. In this scenario, we demonstrate that the choice of normalization direct
 influences the estimated coefficients and that this effect depends on the particular
 combination of normalization and regularization. For a first illustration of this, see
 \Cref{fig:small-path-experiment}, which corresponds to a small experiment in which we have
-generated two binary features with class balances 0.5 and 0.9, respectively, and fit a full
-regularization path using lasso and ridge regression. The true coefficients are set to one
+generated two binary features with class balances 0.5 and 0.9, respectively, and fit full
+lasso and ridge regression paths. The coefficients when generating the data were set to one
 in both cases. The type of normalization affects the sizes of the resulting coefficients.
 This, for instance, leads to opposite conclusions being drawn about feature importance
-depending on whether L1 or Max--Abs normalization is used.
+depending on whether L1 or Max--Abs normalization is used. For instance, at the point where
+the coefficient of the balanced feature is 0.5, the coefficient of the imbalanced features
+is roughly 0.75 with L1 normalization compared to 0.25 with Max--Abs normalization.
 
 \begin{figure}[htpb]
   \centering
