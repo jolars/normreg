@@ -103,7 +103,7 @@ experiment and short discussion on categorical features to the appendix
 > clarity of which quantities are in feature space vs data space.
 
 Thank you for the suggestion, but we would like to argue that the current
-notation is standard and that mixing greek and roman indices would likely
+notation is standard and that mixing greek and roman indices might
 lead to more confusion, particularly since greek letters are often used
 for other purposes (e.g. parameters). We have, however,
 added a phrase to clarify the notation when it is first introduced. Please also
@@ -117,4 +117,7 @@ paper, so we believe there is little potential for confusion.
 > $\delta$ was beneficial in the experiments, which may lead to recommendations
 > for practitioners to use non-traditional normalization schemes.
 
-TO DO
+We agree that this is a good idea and
+have added a new section (Section 5 in the revision) called
+"Practical Recommendations", which summarizes the main
+practical takeaways from our theoretical and empirical results.
