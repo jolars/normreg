@@ -29,6 +29,13 @@
             pkgs.pkg-config
             pkgs.julia-bin
             pkgs.go-task
+            (pkgs.python3.withPackages (ps: [
+              ps.pandas
+              ps.ipython
+              ps.matplotlib
+              ps.numpy
+              ps.scikit-learn
+            ]))
           ];
         };
       in

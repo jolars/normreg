@@ -1,18 +1,18 @@
 import importlib
 import sys
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 # import advstat
-from pyprojroot.here import here
 from sklearn.linear_model import ElasticNet
 
 plt.rcParams["text.usetex"] = True
-plt.rcParams["font.size"] = 8
+plt.rcParams["font.size"] = 9
 plt.rcParams["lines.markersize"] = 3
 plt.rcParams["text.latex.preamble"] = (
-    r"\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{mathtools}"
+    r"\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{mathtools}\usepackage{bm}"
 )
 
 
@@ -90,8 +90,8 @@ def plot_penalty(ax, alpha, t0):
     y_upper = np.concatenate((y_nw, y_ne))
     y_lower = np.flip(np.concatenate((y_se, y_sw)))
 
-    ax.plot(x_upper, y_upper, "k", zorder=3)
-    ax.plot(x_lower, y_lower, "k", zorder=3)
+    ax.plot(x_upper, y_upper, "k", zorder=3, linewidth=1)
+    ax.plot(x_lower, y_lower, "k", zorder=3, linewidth=1)
 
     ax.fill_between(x_upper, y_lower, y_upper, color="green", alpha=0.3, zorder=2)
 
@@ -112,8 +112,8 @@ fit = model.fit(X, y)
 
 w_opt = fit.coef_
 
-fig_width = 4
-fig_height = 2
+fig_width = 5
+fig_height = 3
 
 t0 = l1_norm(w_opt)
 lim = (-1.3, 2.2)
@@ -155,16 +155,16 @@ for i, alpha in enumerate(alphas):
 
     ax[i].set_aspect("equal")
 
-    ax[i].contour(B1, B2, Z, levels=np.logspace(0, 5, 50), colors="grey", zorder=1)
+    ax[i].contour(B1, B2, Z, levels=np.logspace(0, 5, 50), colors="lightgrey", zorder=1)
 
-    ax[i].hlines(0, lim[0], lim[1], "grey", ":", zorder=2)
-    ax[i].vlines(0, lim[0], lim[1], "grey", ":", zorder=2)
+    ax[i].hlines(0, lim[0], lim[1], "grey", ":", zorder=2, linewidth=1)
+    ax[i].vlines(0, lim[0], lim[1], "grey", ":", zorder=2, linewidth=1)
 
-    ax[i].plot(w_opt[0], w_opt[1], "ko")
+    ax[i].plot(w_opt[0], w_opt[1], "ko", zorder=5)
     ax[i].annotate(
-        r"$\beta^*$",
+        r"$\hat{\bm{\beta}}$",
         w_opt,
-        w_opt + np.array([0.0, -0.2]),
+        w_opt + np.array([0.0, -0.3]),
         horizontalalignment="left",
         verticalalignment="center",
         zorder=10,
@@ -179,7 +179,7 @@ for i, alpha in enumerate(alphas):
 
     ax[i].set_title(title)
 
-path = here() / "talks" / "uppsala" / "figures" / "elasticnet-balls.pdf"
+path = Path.cwd() / "talks" / "tmlr" / "figures" / "elasticnet-balls.pdf"
 
 fig.savefig(
     path,
