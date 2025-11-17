@@ -130,8 +130,10 @@
   \begin{exampleblock}{Example}
     Assume
     \[
-      \mat{X} \sim \operatorname{Normal}\left(\begin{bmatrix}0 \\ 0\end{bmatrix}, \begin{bmatrix} 4 & 0 \\ 0 & 1\end{bmatrix}\right), \qquad \vec{\beta}^* = \begin{bmatrix} \frac{1}{2} \\ 1 \end{bmatrix}.
+      \mat{X} \sim \operatorname{Normal}\left(\begin{bmatrix}0 \\ 0\end{bmatrix}, \begin{bmatrix} 4 & 0 \\ 0 & 1\end{bmatrix}\right), \qquad \vec{\beta}^* = \begin{bmatrix} \frac{1}{2} \\ 1 \end{bmatrix}
     \]
+    and set \(\symbf{y} = \symbf{X}\symbf{\beta} + \varepsilon\), with
+    \(\varepsilon \sim \operatorname{Normal}(0, \sigma_\varepsilon^2)\).
 
     \medskip\pause
 
@@ -150,7 +152,8 @@
 
   \pause
 
-  \alert{Large} scale means \alert{less} penalization because the size of \(\beta_j\) can be smaller for an equivalent effect (on \(\vec{y}\)).
+  \alert{Large} scale means \alert{less} penalization because the size of
+  \(\beta_j\) can be smaller for an equivalent effect (on \(\vec{y}\)).
 
 \end{frame}
 
@@ -392,7 +395,7 @@
     % \includegraphics[width=0.86\textwidth]{figures/binary_decreasing.pdf}
     \includegraphics[width=\textwidth]{figures/binary_decreasing.pdf}
     \caption{%
-      Lasso estimates for first 30 coefficients. First 20 features are true signals with a geometrically decreasing class balance from 0.5 to 0.99. \(\rho\) is
+      Lasso estimates for first 30 coefficients in an example where \(n = 500\) and \(p = 1000\). The first 20 features are true signals with a geometrically decreasing class balance from 0.5 to 0.99. \(\rho\) is
       a measure of autocorrelation.
     }
   \end{figure}
@@ -405,7 +408,9 @@
     \centering
     \includegraphics[width=\textwidth]{figures/mixed-data.pdf}
     \caption{%
-      Comparison between lasso and ridge estimators for features generated to resemble features from various distributions.}
+      Comparison between different normalization strategies on a two-feature problem with one binary and one normal feature.
+      The normal feature is always standardized, while the binary feature is scaled with \(s_j \propto (q - q^2)^\delta\).
+    }
   \end{figure}
 \end{frame}
 
@@ -420,27 +425,32 @@
       lasso and ridge.
     }
   \end{figure}
-
 \end{frame}
 
 \begin{frame}[c]
   \frametitle{Summary}
-  \begin{exampleblock}{Conclusions}
-    Class balance plays a crucial role when using regularized regression on binary data.
+  Class balance plays a crucial role when using regularized regression on binary data.
 
-    \medskip\pause
+  \medskip\pause
 
-    As far as we know, this is the first paper to investigate the interplay between
-    normalization and regularization
+  This is the first paper to investigate the interplay between normalization and
+  regularization.
 
-    \medskip\pause
+  \medskip\pause
 
-    We introduced a new scaling approach to deal with class-imbalanced binary features.
+  We introduced a new scaling approach to deal with class-imbalanced binary features.
 
-    \medskip\pause
+  \medskip\pause
 
-    See the paper for more details!
-  \end{exampleblock}
+  \begin{block}{More Details in Paper}
+
+    \begin{itemize}[<+->]
+      \item Mixed data
+      \item Interactions
+      \item The Weighted Elastic Net
+      \item Many more experiments on real and simulated data
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}[standout]
