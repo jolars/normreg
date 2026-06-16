@@ -9,7 +9,6 @@
 \usepackage[size=a0,scale=1.2]{beamerposter} \usetheme{jolars}
 
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \usepackage{amssymb,amsmath,mathtools,amsthm}
 \usepackage{textcomp}
 % \usepackage[varqu,varl,scale=0.93]{inconsolata}
@@ -26,8 +25,8 @@
 \hypersetup{
   pdftitle={The Choice of Normalization Influences Shrinkage in Regularized Regression},
   pdfsubject={statistics},
-  pdfauthor={'{' + cookiecutter.author + '}'},
-  pdfkeywords={'{' + cookiecutter.keyword + '}'},
+  pdfauthor={Johan Larsson, Jonas Wallin},
+  pdfkeywords={lasso, ridge, elastic net, normalization, regularization},
   colorlinks=true,
   linkcolor=Maroon,
   filecolor=Maroon,
@@ -43,9 +42,10 @@
 % \pgfplotsset{width=7cm,compat=1.11}
 % \tikzexternalize[export=false]
 
-% bibliography
-\usepackage[backend=biber,style=authoryear,locallabelwidth,url=false]{biblatex}
-\addbibresource{icml2026.bib}
+% References are hard-coded as a static list (see the References block). biblatex
+% + biber under beamerposter produced an unstable aux loop (page-tracking entries
+% flipped the layout between one and two pages, then errored on re-read), so it
+% was dropped in favor of a handful of plain-text references.
 
 %\beamertemplategridbackground[1cm] % for layout out the design
 
@@ -90,8 +90,17 @@
 
 \renewcommand{\indent}{\hspace*{2.5ex}}
 
-\newcommand{\pkg}[1]{\textsf{#1}} \renewcommand{\vec}{\vectorsym}
-\newcommand{\mat}{\matrixsym}
+% fontsetup loads unicode-math, where \bm misparses math letters (\mitbeta etc.)
+% as alphabetic constants; use unicode-math's \symbf for bold symbols instead
+\newcommand{\pkg}[1]{\textsf{#1}} \renewcommand{\vec}{\symbf}
+\newcommand{\mat}{\symbf}
+\newcommand{\st}{\operatorname{ST}}
+\newcommand{\data}[1]{\textsf{#1}}
+% math-safe highlight: \alert tries to embolden and breaks in math mode, so
+% color the content with the alerted-text color instead
+\newcommand{\amath}[1]{{\usebeamercolor[fg]{alerted text}#1}}
+
+\graphicspath{{../../plots/}}
 
 \makeatletter \newcommand{\vast}{\bBigg@{5}} \newcommand{\Vast}{\bBigg@{6}}
 \makeatother
@@ -132,44 +141,165 @@
 
   \vspace{\titlesep}
 
-  % first column
+  % first column -- the problem
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{block}{A block}
-      \blindtext
+    \begin{alertblock}{The takeaway}
+      Normalization is not neutral preprocessing. For \alert{binary features},
+      the \emph{class balance} (proportion of ones) leaks into your lasso, ridge,
+      and elastic net coefficients---and \emph{which} normalization you pick
+      decides whether it does.
+    \end{alertblock}
+
+    \begin{block}{The problem}
+      Regularized models are scale-sensitive, so we \emph{normalize} (center and
+      scale) features first. But there are many ways to do this, and for binary
+      features there is no obvious choice. Despite this, the effect of that choice
+      has gone unstudied.
+
+      \medskip
+
+      Below: two binary features, both with true coefficient \(1\), differing only
+      in class balance (\(0.5\) vs.\ \(0.9\)). The normalization type alone flips
+      which feature looks more important.
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{small_path_experiment.pdf}
+        \caption{Noiseless lasso and ridge paths for two binary features.
+          \(L_1\)/standardization paths overlap; max--abs disagrees.}
+      \end{figure}
+    \end{block}
+
+    \begin{block}{Setup}
+      We study the elastic net~(Zou \& Hastie, 2005),
+      \[
+        \tfrac{1}{2}\lVert\vec y - \beta_0 - \tilde{\mat X}\vec\beta\rVert_2^2
+        + \lambda_1\lVert\vec\beta\rVert_1
+        + \tfrac{\lambda_2}{2}\lVert\vec\beta\rVert_2^2,
+      \]
+      which gives the \alert{lasso} (\(\lambda_2=0\)) and \alert{ridge}
+      (\(\lambda_1=0\)) as special cases. Each binary feature \(\vec x_j\) is
+      centered and scaled by \(s_j = (q_j - q_j^2)^{\delta}\), \(\delta\geq 0\),
+      covering no scaling (\(\delta=0\)), standard deviation (\(\delta=\tfrac12\)),
+      and variance (\(\delta=1\)).
     \end{block}
   \end{minipage}
   \hfill
   %
-  % second column
+  % second column -- the theory
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{block}{A block}
-      \blindtext
+    \begin{block}{Class balance enters the estimate}
+      With orthogonal features and no noise, the estimate on the original scale is
+      \[
+        \hat\beta_j =
+        \frac{\st_{\lambda_1}\!\left(\dfrac{\beta_j^*\, n\,\amath{(q_j-q_j^2)}}{s_j}\right)}
+             {s_j\left(\dfrac{n\,\amath{(q_j-q_j^2)}}{s_j^2} + \lambda_2\right)} .
+      \]
+      The feature variance \(\amath{q_j-q_j^2}\) couples class balance to the
+      estimate, mediated entirely by the scale \(s_j\). The right \(\delta\) makes
+      it cancel:
+      \begin{center}
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{@{}lll@{}}
+          \toprule
+          \textbf{Penalty} & \textbf{Cancelling scale} & \(\symbf{\delta}\) \\
+          \midrule
+          Lasso       & variance        & \(1\)            \\
+          Ridge       & standard dev.   & \(\tfrac12\)     \\
+          Elastic net & \alert{none exists} & ---          \\
+          \bottomrule
+        \end{tabular}
+      \end{center}
+      For the elastic net, \emph{no} \(s_j\) removes the bias---instead weight the
+      \emph{penalty} (\(u_j=v_j=(q_j-q_j^2)^{\omega}\), \(\omega=1\)).
+    \end{block}
+
+    \begin{block}{Selection follows \(\delta\)}
+      Lower \(\delta\) means imbalanced features are far less likely to be
+      selected; as \(q\to1\), selection probability \(\to 0\) for
+      \(\delta<\tfrac12\) and \(\to 1\) for \(\delta>\tfrac12\).
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{selection_probability.pdf}
+        \caption{Lasso selection probability vs.\ class balance \(q\) for several
+          \(\delta\). Dotted line: asymptotic limit at \(\delta=\tfrac12\).}
+      \end{figure}
     \end{block}
   \end{minipage}
   \hfill
   %
-  % third column
+  % third column -- trade-off and extensions
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{block}{A block}
-      \blindtext
+    \begin{block}{A bias--variance trade-off}
+      Larger \(\delta\) removes class-balance bias but inflates variance, so the
+      best \(\delta\) depends on the noise level---which suggests tuning it.
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{binary_onedim_bias_var_lasso.pdf}
+        \caption{Bias, variance, and MSE for a one-dimensional lasso across class
+          balance \(q\), noise \(\sigma_\varepsilon\), and scaling \(\delta\).}
+      \end{figure}
+    \end{block}
+
+    \begin{block}{Mixed and interaction features}
+      With both binary and continuous features, normalization implicitly sets
+      their \emph{relative} penalization (via a comparability constant
+      \(\kappa\)~(Gelman, 2008))---even at perfect balance. The lasso needs variance scaling, ridge
+      needs standard-deviation scaling, to keep effects comparable.
+      \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{mixed_data.pdf}
+        \caption{Lasso and ridge estimates for one binary and one quasi-normal
+          feature; only the matching \(\delta\) removes the class-balance effect.}
+      \end{figure}
+      For \alert{interactions}, scale by the \emph{product} of the parent scales
+      (not by standardizing the interaction, as in
+      Bien et al., 2013; Lim \& Hastie, 2015)---a new recommendation that removes
+      class-balance bias.
     \end{block}
   \end{minipage}
   \hfill
   %
-  % fourth column
+  % fourth column -- recommendations, references, contact
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{block}{A block}
-      \blindtext
+    \begin{alertblock}{Recommendations}
+      \begin{description}
+        \item[Selection] If missing a feature is costly, scale by
+          \emph{variance} (\(\delta=1\)).
+        \item[Prediction] Standard deviation or no scaling; better, \emph{tune}
+          \(\delta\) as a hyperparameter.
+        \item[Elastic net] Weight the \emph{penalty} (\(\omega=1\)), not the
+          features.
+        \item[Mixed/interactions] Center before interacting; scale interactions by
+          the product of parent scales.
+      \end{description}
+    \end{alertblock}
+
+    \begin{block}{Why it matters}
+      The two most common defaults are \emph{both} biased: standardization (the
+      \pkg{glmnet} default; Friedman et al., 2010) and no scaling (recommended for
+      sparse data in \pkg{scikit-learn}). The class-balance effect is therefore likely pervasive
+      in published analyses. Our theory assumes orthogonality, but the experiments
+      show the findings hold well beyond it.
     \end{block}
 
     \vfill
 
     \begin{block}{References}
-      \renewcommand*{\bibfont}{\footnotesize} \printbibliography[heading=none]
+      {\footnotesize
+        Zou \& Hastie (2005). Regularization and variable selection via the
+        elastic net. \emph{JRSS-B}.\par\smallskip
+        Gelman (2008). Scaling regression inputs by dividing by two standard
+        deviations. \emph{Statistics in Medicine}.\par\smallskip
+        Friedman, Hastie \& Tibshirani (2010). Regularization paths for
+        generalized linear models via coordinate descent. \emph{JSS}.\par\smallskip
+        Bien, Taylor \& Tibshirani (2013). A lasso for hierarchical
+        interactions. \emph{Annals of Statistics}.\par\smallskip
+        Lim \& Hastie (2015). Learning interactions via hierarchical group-lasso
+        regularization. \emph{JCGS}.\par}
     \end{block}
 
     \vfill
@@ -179,8 +309,8 @@
         \begin{description}
           \item[E-mail] \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}
           \item[Homepage] \href{https://jolars.co}{\url{https://jolars.co}}
-          \item[Mastodon] \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
-          \item[BlueSky] \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
+          \item[Mastodon] \href{https://mastodon.social/web/@jolars}{\nolinkurl{@jolars@mastodon.social}}
+          \item[BlueSky] \href{https://bsky.app/profile/jolars.co}{\nolinkurl{@jolars.co}}
         \end{description}
       \end{minipage}
       \hfill%
