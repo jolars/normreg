@@ -1,0 +1,169 @@
+%! TEX program = luatex
+%
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref} \PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[final,20pt]{beamer}
+
+\usepackage[size=a0,scale=1.2]{beamerposter} \usetheme{jolars}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsmath,mathtools,amsthm}
+\usepackage{textcomp}
+% \usepackage[varqu,varl,scale=0.93]{inconsolata}
+\usepackage[fira]{fontsetup}
+
+\usepackage{calc}
+\usepackage{xpatch}
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{blindtext}
+
+\hypersetup{
+  pdftitle={The Choice of Normalization Influences Shrinkage in Regularized Regression},
+  pdfsubject={statistics},
+  pdfauthor={'{' + cookiecutter.author + '}'},
+  pdfkeywords={'{' + cookiecutter.keyword + '}'},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=Blue
+}
+
+% tikz and pgfplots
+% \usepackage{tikz}
+% \usetikzlibrary{arrows,shapes,positioning,intersections}
+% \usepackage{pgfplots}
+% \usepgfplotslibrary{external,colormaps}
+% \pgfplotsset{width=7cm,compat=1.11}
+% \tikzexternalize[export=false]
+
+% bibliography
+\usepackage[backend=biber,style=authoryear,locallabelwidth,url=false]{biblatex}
+\addbibresource{icml2026.bib}
+
+%\beamertemplategridbackground[1cm] % for layout out the design
+
+\usepackage{ragged2e} \usepackage{etoolbox} \usepackage{lipsum}
+
+\let\olditem\item \renewcommand{\item}{\olditem\justifying}
+
+\newlength{\sepwid} \newlength{\onecolwidth} \newlength{\twocolwidth}
+\newlength{\threecolwidth} \newlength{\colheight} \newlength{\titleheight}
+\setlength{\sepwid}{0.024\paperwidth} \setlength{\onecolwidth}{0.21\paperwidth}
+\setlength{\twocolwidth}{0.461\paperwidth}
+\setlength{\threecolwidth}{0.695\paperwidth}
+\setlength{\colheight}{0.649\textheight}
+\setlength{\titleheight}{0.23\textheight}
+
+\usepackage{graphicx} \usepackage[export]{adjustbox} \usepackage{booktabs}
+
+% title block
+\title{The Choice of Normalization Influences Shrinkage in Regularized Regression}
+
+\author[shortname]{
+  \texorpdfstring{\alert{Johan Larsson}}{Johan Larsson}\inst{1,2,*}
+  \and
+  \texorpdfstring{Jonas Wallin}{Jonas Wallin}\inst{2}
+}
+
+\institute[shortinst]{
+  %
+  \inst{1} Department of Mathematical Sciences, University of Copenhagen, Denmark\\
+  \inst{2} The Department of Statistics, Lund University, Sweden\\
+  \inst{*} \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}
+}
+
+\renewcommand{\indent}{\hspace*{2.5ex}}
+
+\newcommand{\pkg}[1]{\textsf{#1}} \renewcommand{\vec}{\vectorsym}
+\newcommand{\mat}{\matrixsym}
+
+\makeatletter \newcommand{\vast}{\bBigg@{5}} \newcommand{\Vast}{\bBigg@{6}}
+\makeatother
+
+\usepackage{geometry} \geometry{margin=4cm}
+
+\begin{document}
+\begin{frame}[t]
+  % title
+  \begin{minipage}[b][\titleheight][t]{\threecolwidth}%
+  {\usebeamerfont{title}\usebeamercolor{title in headline}%
+    \raggedright\hyphenpenalty=10000\exhyphenpenalty=10000%
+    \linespread{1.15}\selectfont
+    \inserttitle\par\vspace{1ex}}
+  {\usebeamerfont{author}\usebeamercolor{author}\insertauthor\\[1ex]}
+  {\usebeamerfont{institute}\usebeamercolor{institute}\insertinstitute\\[1ex]}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b][\titleheight][t]{\onecolwidth}
+    %
+    \hfill \includegraphics[height=4.5in]{logo}
+  \end{minipage}
+
+  % first column
+  %
+  \begin{minipage}[t][\colheight][t]{\onecolwidth}
+    \begin{block}{A block}
+      \blindtext
+    \end{block}
+  \end{minipage}
+  \hfill
+  %
+  % second column
+  %
+  \begin{minipage}[t][\colheight][t]{\onecolwidth}
+    \begin{block}{A block}
+      \blindtext
+    \end{block}
+  \end{minipage}
+  \hfill
+  %
+  % third column
+  %
+  \begin{minipage}[t][\colheight][t]{\onecolwidth}
+    \begin{block}{A block}
+      \blindtext
+    \end{block}
+  \end{minipage}
+  \hfill
+  %
+  % fourth column
+  %
+  \begin{minipage}[t][\colheight][t]{\onecolwidth}
+    \begin{block}{A block}
+      \blindtext
+    \end{block}
+
+    \vfill
+
+    \begin{block}{References}
+      \renewcommand*{\bibfont}{\footnotesize} \printbibliography[heading=none]
+    \end{block}
+
+    \vfill
+
+    \begin{block}{Contact}
+      \begin{minipage}[b]{0.6\linewidth}
+        \begin{itemize}
+          \item E-mail:
+                \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}\\
+          \item Homepage: \href{https://jolars.co}{\url{https://jolars.co}} \\
+          \item Mastodon:
+                \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
+          \item BlueSky
+                \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
+        \end{itemize}
+      \end{minipage}
+      \hfill%
+      \includegraphics[width=7cm,valign=b]{qr.pdf}
+    \end{block}
+  \end{minipage}
+  \hfill
+\end{frame}
+\end{document}
