@@ -51,15 +51,24 @@
 
 \usepackage{ragged2e} \usepackage{etoolbox} \usepackage{lipsum}
 
-\let\olditem\item \renewcommand{\item}{\olditem\justifying}
+\let\olditem\item
+\RenewDocumentCommand{\item}{o}{%
+  \IfNoValueTF{#1}{\olditem}{\olditem[#1]}\justifying}
 
 \newlength{\sepwid} \newlength{\onecolwidth} \newlength{\twocolwidth}
 \newlength{\threecolwidth} \newlength{\colheight} \newlength{\titleheight}
+\newlength{\titlesep} \newlength{\contentheight}
 \setlength{\sepwid}{0.024\paperwidth} \setlength{\onecolwidth}{0.21\paperwidth}
 \setlength{\twocolwidth}{0.461\paperwidth}
 \setlength{\threecolwidth}{0.695\paperwidth}
-\setlength{\colheight}{0.649\textheight}
-\setlength{\titleheight}{0.23\textheight}
+% total vertical budget for title + gap + columns (the rest is bottom margin)
+\setlength{\contentheight}{0.88\textheight}
+% vertical gap between the title block and the columns
+\setlength{\titlesep}{2cm}
+% \titleheight and \colheight are computed automatically in the frame below,
+% from the natural height of the title content (see \sbox\titlebox).
+\newlength{\logoheight} \setlength{\logoheight}{4.5in}
+\newsavebox{\titlebox}
 
 \usepackage{graphicx} \usepackage[export]{adjustbox} \usepackage{booktabs}
 
@@ -91,20 +100,37 @@
 
 \begin{document}
 \begin{frame}[t]
-  % title
+  % title -- typeset the title content into a box so we can measure it
+  \sbox
+  \titlebox{%
+    \begin{minipage}[t]{\threecolwidth}%
+    {
+      \usebeamerfont{title}\usebeamercolor{title in headline}%
+      \raggedright\hyphenpenalty=10000\exhyphenpenalty=10000%
+      \linespread{1.15}\selectfont
+      \inserttitle\par\vspace{1ex}
+    }
+    {\usebeamerfont{author}\usebeamercolor{author}\insertauthor\\[1ex]}
+    {\usebeamerfont{institute}\usebeamercolor{institute}\insertinstitute}
+    \end{minipage}%
+  }
+  %
+  % title height = natural height of the title content, but at least the logo
+  \setlength{\titleheight}{\dimexpr\ht\titlebox+\dp\titlebox\relax}%
+  \ifdim\titleheight<\logoheight \setlength{\titleheight}{\logoheight}\fi
+  % columns fill whatever vertical space is left in the content budget
+  \setlength{\colheight}{\dimexpr\contentheight-\titleheight-\titlesep\relax}%
+  %
   \begin{minipage}[b][\titleheight][t]{\threecolwidth}%
-  {\usebeamerfont{title}\usebeamercolor{title in headline}%
-    \raggedright\hyphenpenalty=10000\exhyphenpenalty=10000%
-    \linespread{1.15}\selectfont
-    \inserttitle\par\vspace{1ex}}
-  {\usebeamerfont{author}\usebeamercolor{author}\insertauthor\\[1ex]}
-  {\usebeamerfont{institute}\usebeamercolor{institute}\insertinstitute\\[1ex]}
+    \usebox\titlebox
   \end{minipage}
+  %
   \hfill
-  \begin{minipage}[b][\titleheight][t]{\onecolwidth}
-    %
-    \hfill \includegraphics[height=4.5in]{logo}
+  \begin{minipage}[b][\titleheight][t]{\onecolwidth}%
+    \hfill \includegraphics[height=\logoheight]{logo}
   \end{minipage}
+
+  \vspace{\titlesep}
 
   % first column
   %
@@ -150,15 +176,12 @@
 
     \begin{block}{Contact}
       \begin{minipage}[b]{0.6\linewidth}
-        \begin{itemize}
-          \item E-mail:
-                \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}\\
-          \item Homepage: \href{https://jolars.co}{\url{https://jolars.co}} \\
-          \item Mastodon:
-                \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
-          \item BlueSky
-                \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
-        \end{itemize}
+        \begin{description}
+          \item[E-mail] \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}
+          \item[Homepage] \href{https://jolars.co}{\url{https://jolars.co}}
+          \item[Mastodon] \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
+          \item[BlueSky] \href{https://mastodon.social/web/@jolars}{\url{mastodon.social/web/@jolars}}
+        \end{description}
       \end{minipage}
       \hfill%
       \includegraphics[width=7cm,valign=b]{qr.pdf}
