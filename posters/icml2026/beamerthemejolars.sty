@@ -9,10 +9,14 @@
 
 % list environment spacing
 \makeatletter
-\def\@listi{\leftmargin\leftmarginii
-\topsep 2ex % Spacing before lists
-\parsep 20\p@ \@plus\p@
-\itemsep 0pt} % Spacing between items
+\def
+\@listi{
+  \leftmargin\leftmarginii
+  \topsep 2ex % Spacing before lists
+  \parsep 20\p@ \@plus\p@
+  \itemsep 0pt
+}
+% Spacing between items
 \makeatother
 
 % remove navigation symbols
@@ -24,7 +28,7 @@
 \setbeamerfont{institute}{size = \large, series = \mdseries, shape = \itshape, family = \rmfamily}
 \setbeamerfont{date}{size = \large, series = \bfseries, family = \rmfamily}
 \setbeamerfont{section in head/foot}{series=\bfseries}
-\setbeamerfont{block title}{size = \huge, series = \bfseries, family = \sffamily}
+\setbeamerfont{block title}{size = \LARGE, series = \bfseries, family = \sffamily}
 \setbeamerfont{block alerted title}{size = \huge, series = \bfseries, family = \sffamily}
 \setbeamerfont{caption name}{family = \sffamily}
 
@@ -37,7 +41,8 @@
 \setbeamertemplate{bibliography item}{\insertbiblabel}
 \addtobeamertemplate{block alerted begin}{}{\justifying}
 \addtobeamertemplate{block begin}{}
-  {\vspace{2ex plus 0.5ex minus 0.5ex}\justifying
+{
+  \vspace{2ex plus 0.5ex minus 0.5ex}\justifying
 }
 \addtobeamertemplate{block end}{}{\vspace{2ex}}
 \addtobeamertemplate{block alerted end}{}{\vspace{2ex}}
@@ -56,4 +61,3 @@
 \setlength{\belowcaptionskip}{0ex}
 %\setlength{\belowdisplayskip}{2.5ex} \setlength{\belowdisplayshortskip}{2ex}
 %\setlength{\abovedisplayskip}{2.5ex} \setlength{\abovedisplayshortskip}{2ex}
-

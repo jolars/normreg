@@ -21,6 +21,7 @@ export soft_threshold
 
 include("plot_settings.jl")
 export set_plot_defaults
+export save_poster
 export FULL_WIDTH
 export delta_palette
 
