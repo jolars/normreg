@@ -23,6 +23,8 @@
 \usepackage{blindtext}
 \usepackage{caption}
 
+\definecolor{alertcolor}{rgb}{0.0, 0.48, 0.65}
+
 \hypersetup{
   pdftitle={The Choice of Normalization Influences Shrinkage in Regularized Regression},
   pdfsubject={statistics},
@@ -217,8 +219,8 @@
       With orthogonal features and no noise, the estimate on the original scale
       is
       \[
-        \hat\beta_j = \frac{\st_{\lambda_1}\!\left(\dfrac{\beta_j^*\, n\,\amath{(q_j-q_j^2)}}{\textcolor{red}{s_j}}\right)}
-             {s_j\left(\dfrac{n\,\amath{(q_j-q_j^2)}}{s_j^2} + \lambda_2\right)} .
+        \hat\beta_j = \frac{\st_{\lambda_1}\!\left(\dfrac{\beta_j^*\, n\,\amath{(q_j-q_j^2)}}{\textcolor{alertcolor}{s_j}}\right)}
+        {\textcolor{alertcolor}{s_j}\left(\dfrac{n\,\amath{(q_j-q_j^2)}}{\textcolor{alertcolor}{s_j}^2} + \lambda_2\right)} .
       \]
 
       \medskip
@@ -251,7 +253,7 @@
       \bigskip\bigskip
 
       For the elastic net, \emph{no} $s$ choice removes the bias. Instead weight
-      the \emph{penalty} (\(u_j=v_j=(q_j-q_j^2)^\omega\), \(\omega=1\)).
+      the \emph{penalty}.
     \end{block}
 
     \vfill
@@ -340,7 +342,7 @@
       \bigskip
 
       \textbf{Elastic net}\\
-      Weight the \emph{penalty} (\(\omega=1\)), not the features.
+      Weight the \emph{penalty}, not the features.
     \end{block}
 
     \vfill
