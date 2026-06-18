@@ -84,7 +84,7 @@ for (i, d) in enumerate(df_dataset)
     push!(plots, pl)
 end
 
-pl = plot(plots..., layout = (1, n_cols), size = (900, 320))
+pl = plot(plots..., layout = (1, n_cols), size = (1000, 360), left_margin = [3mm -10mm -10mm])
 
 out = @projectroot("posters", "icml2026", "figures", "hyperopt_surfaces.pdf")
 mkpath(dirname(out))

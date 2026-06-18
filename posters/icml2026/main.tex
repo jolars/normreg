@@ -12,7 +12,6 @@
 \usepackage[T1]{fontenc}
 \usepackage{amssymb,amsmath,mathtools,amsthm}
 \usepackage{textcomp}
-% \usepackage[varqu,varl,scale=0.93]{inconsolata}
 \usepackage[fira]{fontsetup}
 
 \usepackage{calc}
@@ -22,6 +21,7 @@
 \usepackage{bookmark}
 \usepackage{hyperref}
 \usepackage{blindtext}
+\usepackage{caption}
 
 \hypersetup{
   pdftitle={The Choice of Normalization Influences Shrinkage in Regularized Regression},
@@ -66,7 +66,7 @@
 \setlength{\twocolwidth}{0.461\paperwidth}
 \setlength{\threecolwidth}{0.695\paperwidth}
 % total vertical budget for title + gap + columns (the rest is bottom margin)
-\setlength{\contentheight}{0.88\textheight}
+\setlength{\contentheight}{0.9\textheight}
 % vertical gap between the title block and the columns
 \setlength{\titlesep}{0.5cm}
 % \titleheight and \colheight are computed automatically in the frame below,
@@ -91,7 +91,7 @@
 \institute[shortinst]{
   %
   \inst{1} Department of Mathematical Sciences, University of Copenhagen, Denmark;
-  \inst{2} The Department of Statistics, Lund University, Sweden\\[0.9ex]
+  \inst{2} Department of Statistics, Lund University, Sweden\\[0.9ex]
   Published in \emph{
     Transactions on Machine Learning Research
   } (2025), \alert{Featured Certification}
@@ -149,7 +149,6 @@
   %
   \hfill
   \begin{minipage}[b][\titleheight][t]{\onecolwidth}%
-    \hfill
     \includegraphics[height=\logoheight]{logo-ucph}
     \hfill
     \includegraphics[height=\logoheight]{logo}
@@ -160,15 +159,17 @@
 
   % first column -- the problem
   %
-  \begin{minipage}[t][\colheight][t]{\onecolwidth}
+  \begin{minipage}[t][\colheight][t]{\onecolwidth}%
     \begin{block}{Take-Home Message}
       Normalization is \textbf{not} neutral preprocessing. For
       \alert{binary features}, the \emph{class balance} (proportion of ones)
       influences your lasso, ridge, and elastic net coefficients---and
       \emph{which} normalization you pick decides \emph{how} it does so.
-      \alert{The good news:} the right choice is predictable---match the scaling
+      \alert{The good news:} the right choice is predictable. Match the scaling
       (\(\delta\)) to your penalty and goal, or tune it.
     \end{block}
+
+    \vfill
 
     \begin{block}{The Problem}
       Regularized models are scale-sensitive, so we \emph{normalize} (center and
@@ -178,7 +179,7 @@
 
       \bigskip
 
-      \Cref{fig:realdata-paths} shows lasso coefficient paths for a real dataset
+      \Cref{fig:realdata-paths} shows lasso paths for a real data set
       (\data{w1a}) under two types of normalization. The normalization choice
       alone decides which features look important.
 
@@ -187,11 +188,13 @@
         \includegraphics{realdata_paths.pdf}
         \caption{
           Lasso paths for \data{w1a} under standardization (\(\delta=0.5\)) and
-          max--abs (\(\delta=0\)), with first features to enter highlighted.
+          max-abs (\(\delta=0\)), with first features to enter highlighted.
           \label{fig:realdata-paths}
         }
       \end{figure}
     \end{block}
+
+    \vfill
 
     \begin{block}{Setup}
       We study the elastic net~(Zou \& Hastie, 2005),
@@ -210,48 +213,58 @@
   % second column -- the theory
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{block}{Class Balance Enters the Estimate}
+    \begin{block}{Class Balance and Estimation}
       With orthogonal features and no noise, the estimate on the original scale
       is
       \[
         \hat\beta_j = \frac{\st_{\lambda_1}\!\left(\dfrac{\beta_j^*\, n\,\amath{(q_j-q_j^2)}}{s_j}\right)}
              {s_j\left(\dfrac{n\,\amath{(q_j-q_j^2)}}{s_j^2} + \lambda_2\right)} .
       \]
+
+      \medskip
+
       The feature variance \(\amath{q_j-q_j^2}\) couples class balance to the
       estimate, mediated entirely by the scale \(s_j\). The right \(\delta\)
-      makes it cancel:
+      makes it cancel~(\Cref{tab:table}).
 
-      \bigskip
+      \bigskip\bigskip
 
       \begin{table}
         \centering
-        \renewcommand{\arraystretch}{1.3}
-        \begin{tabular}{@{}lll@{}}
+        \renewcommand{\arraystretch}{1.1}
+        \caption{
+          The \(\delta\) that cancels class-balance bias for each penalty.
+          \label{tab:table}
+        }
+        \bigskip
+        \begin{tabular}{lll}
           \toprule
-          \textbf{Penalty} & \textbf{Cancelling Scale} & \(\symbf{\delta}\) \\
+          \textbf{Penalty} & \textbf{Canceling Scale} & \(\symbf{\delta}\) \\
           \midrule
-          Lasso            & variance                  & \(1\) \\
-          Ridge            & standard dev.             & \(\tfrac12\) \\
-          Elastic net      & \alert{none exists}       &  \\
+          Lasso            & Variance                 & \(1\)\; \\
+          Ridge            & Standard deviation \;    & \(\tfrac12\)\; \\
+          Elastic net \;   & \alert{None exists!}     &  \\
           \bottomrule
         \end{tabular}
       \end{table}
 
-      \bigskip
+      \bigskip\bigskip
 
-      For the elastic net, \emph{no} \(s_j\) removes the bias---instead weight
+      For the elastic net, \emph{no} $s$ choice removes the bias. Instead weight
       the \emph{penalty} (\(u_j=v_j=(q_j-q_j^2)^\omega\), \(\omega=1\)).
     \end{block}
 
+    \vfill
+
     \begin{block}{Selection Follows \(\delta\)}
       Lower \(\delta\) means imbalanced features are far less likely to be
-      selected; as \(q\to1\), selection probability \(\to 0\) for
+      selected. As \(q\to1\), selection probability \(\to 0\) for
       \(\delta<\tfrac12\) and \(\to 1\) for \(\delta>\tfrac12\).
       \begin{figure}
         \centering
         \includegraphics{selection_probability.pdf}
         \caption{
-          Lasso selection probability vs.\ class balance \(q\) for several
+          Lasso selection probability vs.~class balance \(q\) for several
           \(\delta\). Dotted line: asymptotic limit at \(\delta=\tfrac12\).
         }
       \end{figure}
@@ -263,11 +276,14 @@
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
     \begin{block}{Beyond Orthogonality}
-      The class-balance bias is not just an artifact of the orthogonal
-      theory---it persists with many noisy, correlated features. With 20 signals
-      whose class balance rises \(0.5\to0.99\), no scaling (\(\delta=0\))
-      shrinks the most imbalanced signals to zero, while variance scaling
-      (\(\delta=1\)) recovers them.
+      The class-balance bias is not just an artifact of the orthogonal theory.
+      It persists with many noisy, correlated features.
+
+      \bigskip
+
+      With 20 signals whose class balance rises \(0.5\to0.99\), no scaling
+      (\(\delta=0\)) shrinks the most imbalanced signals to zero, while variance
+      scaling (\(\delta=1\)) recovers them~(\Cref{fig:binary-decreasing}).
       \begin{figure}
         \centering
         \includegraphics{binary_decreasing.pdf}
@@ -276,23 +292,28 @@
           (the first 20 features are signals with class balance \(0.5\to0.99\);
           first 30 shown). No scaling drops the imbalanced signals; variance
           scaling recovers them.
+          \label{fig:binary-decreasing}
         }
       \end{figure}
     \end{block}
 
+    \vfill
+
     \begin{block}{Tuning \(\delta\)}
       Larger \(\delta\) removes class-balance bias but inflates variance, so
       there is no universal best \(\delta\). On real data, the cross-validated
-      error is minimized at an \emph{interior} \(\delta\) that differs by
-      dataset---so treat \(\delta\) as a hyperparameter and tune it.
+      error is minimized at an \emph{interior} \(\delta\) that differs by data
+      set---so treat \(\delta\) as a hyperparameter and tune
+      it~(\Cref{fig:hyperopt-surfaces}).
       \begin{figure}
         \centering
         \includegraphics{hyperopt_surfaces.pdf}
         \caption{
           Hold-out (validation) NMSE over \((\lambda, \delta)\) for the lasso on
-          three datasets. White dot: tuned optimum; dotted line: best \(\delta\)
-          at each \(\lambda\). The optimal \(\delta\) is interior and
-          dataset-dependent.
+          three data sets. White dot: tuned optimum; dotted line: best
+          \(\delta\) at each \(\lambda\). The optimal \(\delta\) is interior and
+          data set-dependent.
+          \label{fig:hyperopt-surfaces}
         }
       \end{figure}
     \end{block}
@@ -303,18 +324,24 @@
   % fourth column -- recommendations, references, contact
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \medskip
 
     \begin{block}{Recommendations}
-      \begin{description}
-        \item[Selection] If missing a feature is costly, scale by
-              \emph{variance} (\(\delta=1\)).
-        \item[Prediction] Standard deviation or no scaling; better, \emph{tune}
-              \(\delta\) as a hyperparameter.
-        \item[Elastic net] Weight the \emph{penalty} (\(\omega=1\)), not the
-              features.
-      \end{description}
+      \textbf{Selection}\\
+      If missing a feature is costly, scale by \emph{variance} (\(\delta=1\)).
+
+      \bigskip
+
+      \textbf{Prediction}\\
+      Standard deviation or no scaling; better, \emph{tune} \(\delta\) as a
+      hyperparameter.
+
+      \bigskip
+
+      \textbf{Elastic net}\\
+      Weight the \emph{penalty} (\(\omega=1\)), not the features.
     \end{block}
+
+    \vfill
 
     \begin{block}{Why It Matters}
       The two most common defaults are \emph{both} biased: standardization (the
@@ -328,18 +355,31 @@
     \begin{block}{References}
     {
       \footnotesize
-      Zou \& Hastie (2005). Regularization and variable selection via the
-      elastic net. \emph{JRSS-B}.\par\smallskip
-      Gelman (2008). Scaling regression inputs by dividing by two standard
-      deviations. \emph{Statistics in Medicine}.\par\smallskip
+
+      Zou \& Hastie (2005). Regularization and variable selection via
+      the elastic net. \emph{JRSS-B}.
+
+      \bigskip
+
+      Gelman (2008). Scaling regression inputs by dividing by two
+      standard deviations. \emph{Statistics in Medicine}.
+
+      \bigskip
+
       Friedman, Hastie \& Tibshirani (2010). Regularization paths for
-      generalized linear models via coordinate descent. \emph{
-        JSS
-      }.\par\smallskip
+      generalized linear models via coordinate descent. \emph{JSS}.
+
+      \bigskip
+
       Bien, Taylor \& Tibshirani (2013). A lasso for hierarchical
-      interactions. \emph{Annals of Statistics}.\par\smallskip
-      Lim \& Hastie (2015). Learning interactions via hierarchical group-lasso
-      regularization. \emph{JCGS}.\par
+      interactions. \emph{Annals of Statistics}.
+
+      \bigskip
+
+      Lim \& Hastie (2015). Learning interactions via hierarchical
+      group-lasso regularization. \emph{JCGS}.
+
+      \par
     }
     \end{block}
 
@@ -347,18 +387,29 @@
 
     \begin{block}{Contact}
       \begin{minipage}[b]{0.6\linewidth}
-        \begin{description}
-          \item[E-mail] \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}
-          \item[Homepage] \href{https://jolars.co}{\url{https://jolars.co}}
-          \item[Mastodon] \href{https://mastodon.social/web/@jolars}{\nolinkurl{@jolars@mastodon.social}}
-          \item[BlueSky] \href{https://bsky.app/profile/jolars.co}{\nolinkurl{@jolars.co}}
-        \end{description}
+        \textbf{Email}\\
+        \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}
+
+        \bigskip
+
+        \textbf{Homepage}\\
+        \href{https://jolars.co}{\url{https://jolars.co}}
+
+        \bigskip
+
+        \textbf{Mastodon}\\
+        \href{https://mastodon.social/web/@jolars}{\nolinkurl{@jolars@mastodon.social}}
+
+        \bigskip
+
+        \textbf{Bluesky}\\
+        \href{https://bsky.app/profile/jolars.co}{\nolinkurl{@jolars.co}}
       \end{minipage}
       \hfill%
       \begin{minipage}[b]{7cm}
         \centering
         \includegraphics[width=7cm]{qr.pdf}\\[0.5ex]
-        Read the paper
+        {\itshape Read the paper!}
       \end{minipage}
     \end{block}
   \end{minipage}

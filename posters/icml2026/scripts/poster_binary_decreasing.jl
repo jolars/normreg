@@ -22,6 +22,7 @@ df_subset = subset(df, :rho => r -> r .== 0.0, :delta => d -> d .∈ Ref([0.0, 1
 df_grouped = groupby(df_subset, [:delta], sort = true)
 
 n_cols = length(unique(df_subset.delta))
+n_signals = 20
 plots = []
 
 for (i, d) in enumerate(df_grouped)
@@ -38,28 +39,39 @@ for (i, d) in enumerate(df_grouped)
     yformatter = i == 1 ? :auto : _ -> ""
     ylabel = i == 1 ? L"\hat\beta" : ""
 
-    # error bars (grey) with invisible markers, then the means as black dots
-    pl = scatter(
-        xvar,
-        yvar;
-        yerror = yerr,
+    # color true signals (first n_signals features) differently from the rest
+    is_signal = collect(xvar) .<= n_signals
+    ptcolors = [s ? "#2c5d8a" : "#404040" for s in is_signal]
+
+    # light grey grid line at 0, behind the data
+    pl = hline(
+        [0.0];
+        linecolor = :lightgrey,
+        linewidth = 1,
         legend = false,
-        markersize = 0,
-        markercolor = :transparent,
-        linecolor = :grey,
-        markerstrokecolor = :grey,
         title = L"\delta = %$(delta)",
         xlabel = "Feature Index",
         ylabel = ylabel,
         yformatter = yformatter,
         ylims = (-0.5, 2),
     )
-    scatter!(pl, xvar, yvar; markercolor = :black, markersize = 3, markerstrokecolor = :black)
+    # error bars (grey) with invisible markers, then the means colored by signal
+    scatter!(
+        pl,
+        xvar,
+        yvar;
+        yerror = yerr,
+        markersize = 0,
+        markercolor = :transparent,
+        linecolor = :grey,
+        markerstrokecolor = :grey,
+    )
+    scatter!(pl, xvar, yvar; markercolor = ptcolors, markersize = 3, markerstrokecolor = ptcolors)
 
     push!(plots, pl)
 end
 
-pl = plot(plots..., layout = (1, n_cols), size = (760, 360))
+pl = plot(plots..., layout = (1, n_cols), size = (900, 400))
 
 out = @projectroot("posters", "icml2026", "figures", "binary_decreasing.pdf")
 mkpath(dirname(out))
