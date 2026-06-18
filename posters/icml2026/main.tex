@@ -35,6 +35,8 @@
   urlcolor=Blue
 }
 
+\usepackage{cleveref}
+
 % tikz and pgfplots
 % \usepackage{tikz}
 % \usetikzlibrary{arrows,shapes,positioning,intersections}
@@ -66,14 +68,16 @@
 % total vertical budget for title + gap + columns (the rest is bottom margin)
 \setlength{\contentheight}{0.88\textheight}
 % vertical gap between the title block and the columns
-\setlength{\titlesep}{1cm}
+\setlength{\titlesep}{0.5cm}
 % \titleheight and \colheight are computed automatically in the frame below,
 % from the natural height of the title content (see \sbox\titlebox).
 \newlength{\logoheight}
-\setlength{\logoheight}{4.5in}
+\setlength{\logoheight}{5in}
 \newsavebox{\titlebox}
 
-\usepackage{graphicx} \usepackage[export]{adjustbox} \usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{booktabs}
 
 % title block
 \title{The Choice of Normalization Influences Shrinkage in Regularized Regression}
@@ -86,10 +90,11 @@
 
 \institute[shortinst]{
   %
-  \inst{1} Department of Mathematical Sciences, University of Copenhagen, Denmark\\
-  \inst{2} The Department of Statistics, Lund University, Sweden\\
-  \inst{*} \href{mailto:johan@jolars.co}{\nolinkurl{johan@jolars.co}}\\[0.5ex]
-  Published in \emph{Transactions on Machine Learning Research} (2025), \alert{Featured Certification}
+  \inst{1} Department of Mathematical Sciences, University of Copenhagen, Denmark;
+  \inst{2} The Department of Statistics, Lund University, Sweden\\[0.9ex]
+  Published in \emph{
+    Transactions on Machine Learning Research
+  } (2025), \alert{Featured Certification}
 }
 
 \renewcommand{\indent}{\hspace*{2.5ex}}
@@ -121,7 +126,7 @@
     {
       \usebeamerfont{title}\usebeamercolor{title in headline}%
       \raggedright\hyphenpenalty=10000\exhyphenpenalty=10000%
-      \linespread{1.15}\selectfont
+      \selectfont
       \inserttitle\par\vspace{1ex}
     }
     {\usebeamerfont{author}\usebeamercolor{author}\insertauthor\\[1ex]}
@@ -144,7 +149,11 @@
   %
   \hfill
   \begin{minipage}[b][\titleheight][t]{\onecolwidth}%
-    \hfill \includegraphics[height=\logoheight]{logo}
+    \hfill
+    \includegraphics[height=\logoheight]{logo-ucph}
+    \hfill
+    \includegraphics[height=\logoheight]{logo}
+    \hfill
   \end{minipage}
 
   \vspace{\titlesep}
@@ -152,14 +161,14 @@
   % first column -- the problem
   %
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
-    \begin{alertblock}{Take-Home Message}
+    \begin{block}{Take-Home Message}
       Normalization is \textbf{not} neutral preprocessing. For
       \alert{binary features}, the \emph{class balance} (proportion of ones)
-      leaks into your lasso, ridge, and elastic net coefficients---and
-      \emph{which} normalization you pick decides whether it does.
+      influences your lasso, ridge, and elastic net coefficients---and
+      \emph{which} normalization you pick decides \emph{how} it does so.
       \alert{The good news:} the right choice is predictable---match the scaling
       (\(\delta\)) to your penalty and goal, or tune it.
-    \end{alertblock}
+    \end{block}
 
     \begin{block}{The Problem}
       Regularized models are scale-sensitive, so we \emph{normalize} (center and
@@ -167,20 +176,19 @@
       features there is no obvious choice. Despite this, the effect of that
       choice has gone unstudied.
 
-      \medskip
+      \bigskip
 
-      Below: lasso coefficient paths for a real dataset (\data{w1a}) under two
-      normalizations. Standardization makes several features stand out, while
-      max--abs flattens them---the normalization choice alone decides which
-      features look important.
+      \Cref{fig:realdata-paths} shows lasso coefficient paths for a real dataset
+      (\data{w1a}) under two types of normalization. The normalization choice
+      alone decides which features look important.
+
       \begin{figure}
         \centering
         \includegraphics{realdata_paths.pdf}
         \caption{
-          Lasso paths for \data{w1a} under standardization (\(\delta=\tfrac12\))
-          and max--abs (no scaling, \(\delta=0\)), with the first features to
-          enter highlighted. The normalization alone changes which features
-          dominate.
+          Lasso paths for \data{w1a} under standardization (\(\delta=0.5\)) and
+          max--abs (\(\delta=0\)), with first features to enter highlighted.
+          \label{fig:realdata-paths}
         }
       \end{figure}
     \end{block}
@@ -192,9 +200,9 @@
       \]
       which gives the \alert{lasso} (\(\lambda_2=0\)) and \alert{ridge}
       (\(\lambda_1=0\)) as special cases. Each binary feature \(\vec x_j\) is
-      centered and scaled by \(s_j = (q_j - q_j^2)^\delta\), \(\delta\geq 0\),
-      covering no scaling (\(\delta=0\)), standard deviation
-      (\(\delta=\tfrac12\)), and variance (\(\delta=1\)).
+      scaled by \(s_j = (q_j - q_j^2)^\delta\), \(\delta\geq 0\), covering no
+      scaling (\(\delta=0\)), standard deviation (\(\delta=0.5\)), and variance
+      (\(\delta=1\)).
     \end{block}
   \end{minipage}
   \hfill
@@ -297,7 +305,7 @@
   \begin{minipage}[t][\colheight][t]{\onecolwidth}
     \medskip
 
-    \begin{alertblock}{Recommendations}
+    \begin{block}{Recommendations}
       \begin{description}
         \item[Selection] If missing a feature is costly, scale by
               \emph{variance} (\(\delta=1\)).
@@ -306,7 +314,7 @@
         \item[Elastic net] Weight the \emph{penalty} (\(\omega=1\)), not the
               features.
       \end{description}
-    \end{alertblock}
+    \end{block}
 
     \begin{block}{Why It Matters}
       The two most common defaults are \emph{both} biased: standardization (the

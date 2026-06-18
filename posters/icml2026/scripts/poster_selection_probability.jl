@@ -91,7 +91,7 @@ for (j, dd) in enumerate(subgrouped_df)
         xlabel = L"q",
         yformatter = yformatter,
         ylabel = ylab,
-        ylims = (-0.05, 1.05),
+        ylims = (-0.1, 1.1),
         xticks = 0.5:0.15:0.95,
     )
 
@@ -100,7 +100,7 @@ for (j, dd) in enumerate(subgrouped_df)
     push!(plots, pl)
 end
 
-pl = plot(plots..., layout = (1, n_sigma), size = (850, 350))
+pl = plot(plots..., layout = (1, n_sigma), size = (900, 400))
 
 out = @projectroot("posters", "icml2026", "figures", "selection_probability.pdf")
 mkpath(dirname(out))

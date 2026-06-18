@@ -50,13 +50,13 @@ for (j, normalization) in enumerate(norm_order)
         legend = false,
         title = norm_label[normalization],
         xlabel = "Step",
-        ylims = (-1.1, 1.1),
+        ylims = (-0.7, 1.1),
         yguide = yguide,
         yformatter = yformatter,
     )
 
     for i in grey_vars
-        plot!(p, Array(x_var), coefs[i, :], color = :gray90)
+        plot!(p, Array(x_var), coefs[i, :], color = :gray80)
     end
     for i in var_ind
         plot!(p, Array(x_var), coefs[i, :], color = i)
@@ -65,7 +65,7 @@ for (j, normalization) in enumerate(norm_order)
     push!(plots, p)
 end
 
-pl = plot(plots..., layout = (1, n_cols), size = (820, 430))
+pl = plot(plots..., layout = (1, n_cols), size = (900, 420))
 
 out = @projectroot("posters", "icml2026", "figures", "realdata_paths.pdf")
 mkpath(dirname(out))
